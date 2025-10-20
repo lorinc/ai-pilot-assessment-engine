@@ -1,0 +1,680 @@
+{
+  "Organizational_Maturity": {
+    "description": "Defines an organization's readiness to successfully identify, adopt, and scale AI solutions.",
+    "subdimensions": [
+      {
+        "name": "AI Maturity Stage",
+        "description": "Overall stage of AI adoption within the organization.",
+        "levels": [
+          "Exploring — limited experimentation, no formal strategy.",
+          "Piloting — small-scale prototypes or departmental initiatives.",
+          "Scaling — AI integrated into multiple workflows, with governance.",
+          "Operationalized — AI embedded in core systems, continuous improvement loop."
+        ],
+        "metrics": [
+          "Number of live AI systems",
+          "Presence of AI strategy or roadmap",
+          "Cross-departmental AI alignment"
+        ]
+      },
+      {
+        "name": "Data Maturity",
+        "description": "Degree of data readiness and reliability for AI deployment.",
+        "levels": [
+          "Siloed — fragmented datasets, minimal governance.",
+          "Governed — unified sources, data catalog and access control.",
+          "Automated — pipelines, lineage tracking, data quality monitoring."
+        ],
+        "metrics": [
+          "Data integration coverage",
+          "Data quality and freshness KPIs",
+          "Existence of centralized governance policies"
+        ]
+      },
+      {
+        "name": "Process Automation Level",
+        "description": "Extent to which organizational processes are automated or AI-assisted.",
+        "levels": [
+          "Manual — primarily human-driven, no automation.",
+          "Semi-automated — rule-based tools assist repetitive work.",
+          "AI-assisted — learning systems augment or make decisions autonomously."
+        ],
+        "metrics": [
+          "Percentage of automated workflows",
+          "Cycle-time reduction achieved",
+          "AI adoption in daily operations"
+        ]
+      },
+      {
+        "name": "Technical Stack Sophistication",
+        "description": "Breadth and modernity of the technology and infrastructure supporting AI.",
+        "levels": [
+          "Excel-only — limited or local tool usage.",
+          "Hybrid — mix of local tools and basic cloud integration.",
+          "Modern cloud stack — scalable infrastructure, CI/CD, and MLops practices."
+        ],
+        "metrics": [
+          "Cloud vs on-premise workload ratio",
+          "Existence of CI/CD pipelines",
+          "Availability of AI/ML toolkits (Vertex, SageMaker, etc.)"
+        ]
+      }
+    ]
+  },
+  "Business_Function": {
+    "description": "Where inside an organization AI can add value.",
+    "categories": [
+      {
+        "category": "Core Value Creation",
+        "functions": [
+          {
+            "name": "R&D / Product Development",
+            "tools_and_processes": ["Product roadmap planning", "Requirements gathering", "Prototyping", "CAD/CAE software", "Design reviews", "User research", "A/B testing", "Patent filing", "Technical specifications", "Innovation management platforms", "Stage-gate processes"]
+          },
+          {
+            "name": "Manufacturing / Production",
+            "tools_and_processes": ["Production scheduling", "MES (Manufacturing Execution Systems)", "Quality control inspections", "Lean manufacturing", "Six Sigma", "Standard operating procedures (SOPs)", "Equipment maintenance", "Yield tracking", "Work order management", "Production line balancing", "Inventory control"]
+          },
+          {
+            "name": "Supply Chain & Logistics",
+            "tools_and_processes": ["Demand forecasting", "Inventory optimization", "Supplier relationship management", "Transportation management systems (TMS)", "Warehouse management systems (WMS)", "Order fulfillment", "S&OP (Sales and Operations Planning)", "Logistics coordination", "Freight management", "Supply chain visibility platforms"]
+          },
+          {
+            "name": "Service Delivery / Operations",
+            "tools_and_processes": ["Service level agreements (SLAs)", "Ticketing systems", "Resource scheduling", "Field service management", "Operations manuals", "Performance dashboards", "Incident management", "Service quality monitoring", "Customer feedback systems", "Capacity planning"]
+          }
+        ]
+      },
+      {
+        "category": "Revenue & Growth",
+        "functions": [
+          {
+            "name": "Sales",
+            "tools_and_processes": ["CRM systems (Salesforce, HubSpot)", "Sales pipeline management", "Lead qualification", "Proposal creation", "Contract negotiation", "Sales forecasting", "Account planning", "Sales enablement", "Quota management", "Commission tracking", "Sales training"]
+          },
+          {
+            "name": "Marketing",
+            "tools_and_processes": ["Marketing automation", "Campaign management", "Content creation", "SEO/SEM", "Social media management", "Email marketing", "Marketing analytics", "Brand management", "Event planning", "Lead generation", "Marketing mix modeling", "Customer segmentation"]
+          },
+          {
+            "name": "Customer Success / Support",
+            "tools_and_processes": ["Help desk software", "Knowledge base management", "Customer onboarding", "Health score tracking", "Churn analysis", "Customer feedback surveys", "Escalation procedures", "Support ticket routing", "Live chat", "Customer training programs", "Renewal management"]
+          },
+          {
+            "name": "Partnerships / Business Development",
+            "tools_and_processes": ["Partner relationship management", "Deal sourcing", "Partnership agreements", "Channel management", "Co-marketing programs", "Strategic alliance planning", "Market opportunity analysis", "Negotiation frameworks", "Partner enablement", "Revenue sharing models"]
+          }
+        ]
+      },
+      {
+        "category": "Finance & Compliance",
+        "functions": [
+          {
+            "name": "Accounting & Treasury",
+            "tools_and_processes": ["General ledger systems", "Accounts payable/receivable", "Financial close processes", "Bank reconciliation", "Cash flow management", "Treasury operations", "Financial reporting", "Audit preparation", "Tax compliance", "Fixed asset management", "Expense management"]
+          },
+          {
+            "name": "Financial Planning & Analysis (FP&A)",
+            "tools_and_processes": ["Budgeting and forecasting", "Variance analysis", "Financial modeling", "Business intelligence tools", "Management reporting", "Scenario planning", "KPI tracking", "Investment analysis", "Profitability analysis", "Rolling forecasts", "Board presentations"]
+          },
+          {
+            "name": "Compliance & Risk",
+            "tools_and_processes": ["Risk assessment frameworks", "Compliance monitoring", "Policy management", "Regulatory reporting", "Internal controls testing", "Risk registers", "Audit management", "Incident reporting", "Compliance training", "Third-party risk assessment", "GRC platforms"]
+          },
+          {
+            "name": "Procurement",
+            "tools_and_processes": ["E-procurement systems", "Vendor selection", "RFP/RFQ processes", "Contract negotiation", "Purchase order management", "Supplier performance evaluation", "Spend analysis", "Strategic sourcing", "Vendor onboarding", "Procurement analytics", "Cost savings tracking"]
+          }
+        ]
+      },
+      {
+        "category": "People & Culture",
+        "functions": [
+          {
+            "name": "Human Resources (HR)",
+            "tools_and_processes": ["HRIS (Human Resource Information Systems)", "Applicant tracking systems (ATS)", "Performance management", "Talent acquisition", "Onboarding programs", "Employee engagement surveys", "Succession planning", "Learning and development", "Compensation planning", "HR analytics", "Employee relations"]
+          },
+          {
+            "name": "Payroll & Benefits",
+            "tools_and_processes": ["Payroll processing systems", "Time and attendance tracking", "Benefits administration", "Tax withholding", "Payroll compliance", "Benefits enrollment", "Retirement plan management", "Leave management", "Payroll reconciliation", "Compensation statements", "Benefits communication"]
+          },
+          {
+            "name": "Workplace & Safety",
+            "tools_and_processes": ["Safety inspections", "Incident reporting", "OSHA compliance", "Safety training programs", "Workplace ergonomics", "Emergency response plans", "Safety audits", "PPE management", "Hazard assessments", "Safety metrics tracking", "Workplace wellness programs"]
+          }
+        ]
+      },
+      {
+        "category": "Strategy & Intelligence",
+        "functions": [
+          {
+            "name": "Corporate Strategy / BI",
+            "tools_and_processes": ["Strategic planning frameworks", "Business intelligence platforms", "Competitive analysis", "Market research", "Data visualization", "Executive dashboards", "Strategic initiatives tracking", "Portfolio management", "M&A analysis", "Scenario planning", "OKR (Objectives and Key Results)"]
+          },
+          {
+            "name": "Innovation / Digital Transformation",
+            "tools_and_processes": ["Innovation pipelines", "Digital maturity assessments", "Proof of concept development", "Change management", "Technology scouting", "Innovation labs", "Agile transformation", "Digital roadmaps", "Pilot programs", "Innovation metrics", "Stakeholder engagement"]
+          },
+          {
+            "name": "Knowledge Management",
+            "tools_and_processes": ["Document management systems", "Knowledge bases", "Collaboration platforms", "Content curation", "Best practices repositories", "Lessons learned databases", "Taxonomy and metadata management", "Search and retrieval systems", "Knowledge sharing sessions", "Communities of practice", "Information governance"]
+          }
+        ]
+      },
+      {
+        "category": "Technology & Infrastructure",
+        "functions": [
+          {
+            "name": "IT Operations",
+            "tools_and_processes": ["IT service management (ITSM)", "Infrastructure monitoring", "Incident management", "Change management", "Server administration", "Network management", "Backup and recovery", "Patch management", "IT asset management", "Service desk operations", "ITIL processes"]
+          },
+          {
+            "name": "Data Engineering / Analytics Platforms",
+            "tools_and_processes": ["ETL/ELT pipelines", "Data warehousing", "Data modeling", "Data quality management", "Data catalog", "Data governance", "Analytics platform administration", "Data pipeline orchestration", "Metadata management", "Data lake management", "Performance tuning"]
+          },
+          {
+            "name": "Cybersecurity",
+            "tools_and_processes": ["Security monitoring (SIEM)", "Vulnerability management", "Penetration testing", "Security incident response", "Identity and access management (IAM)", "Security awareness training", "Threat intelligence", "Security policy enforcement", "Compliance audits", "Endpoint protection", "Security architecture review"]
+          },
+          {
+            "name": "Architecture & Integration",
+            "tools_and_processes": ["Enterprise architecture frameworks", "API management", "Integration platforms (iPaaS)", "Solution design", "Technical standards", "Architecture review boards", "System integration", "Middleware management", "Microservices architecture", "Cloud architecture", "Technology roadmaps"]
+          }
+        ]
+      }
+    ]
+  },
+  "Business_Sector": {
+    "description": "Industry or domain context for the AI use case.",
+    "categories": [
+      {
+        "category": "Primary, Industrial & Manufacturing",
+        "sectors": [
+          {
+            "sector": "Agriculture & Agritech",
+            "examples": ["Crop farming", "Precision agriculture", "Fertilizers", "Vertical farming"],
+            "tools_and_processes": ["Soil sensors", "Drone mapping", "Yield prediction models", "Irrigation management systems", "Crop rotation planning", "Pest detection", "Weather forecasting integration"]
+          },
+          {
+            "sector": "Forestry & Wood Products",
+            "examples": ["Logging", "Pulp & paper", "Timber processing"],
+            "tools_and_processes": ["Forest inventory systems", "Timber cruising", "Harvest planning software", "Log grading", "Sawmill optimization", "Reforestation tracking", "Carbon sequestration monitoring"]
+          },
+          {
+            "sector": "Fishing & Aquaculture",
+            "examples": ["Marine fisheries", "Aquaculture", "Fish logistics"],
+            "tools_and_processes": ["Sonar fish detection", "Water quality monitoring", "Feed optimization", "Stock assessment", "Catch reporting systems", "Disease surveillance", "Vessel tracking (VMS)"]
+          },
+          {
+            "sector": "Mining & Quarrying",
+            "examples": ["Coal", "Metals", "Rare earths", "Stone quarrying"],
+            "tools_and_processes": ["Geological surveying", "Ore grade analysis", "Blast optimization", "Haul truck dispatch systems", "Ventilation monitoring", "Ground stability sensors", "Mine planning software (Surpac, Deswik)"]
+          },
+          {
+            "sector": "Oil, Gas & Petrochemicals",
+            "examples": ["Exploration", "Refining", "Petrochemicals", "Trading"],
+            "tools_and_processes": ["Seismic data analysis", "Reservoir simulation", "Drilling optimization", "Process control systems (DCS)", "Refinery yield modeling", "Pipeline integrity monitoring", "SCADA systems"]
+          },
+          {
+            "sector": "Basic Materials & Chemicals",
+            "examples": ["Plastics", "Industrial gases", "Paints"],
+            "tools_and_processes": ["Batch process control", "Chemical formulation software", "Quality control testing (LIMS)", "Reactor optimization", "Material safety data sheets (MSDS)", "Hazard analysis (HAZOP)", "Polymer characterization"]
+          },
+          {
+            "sector": "Metals & Metallurgy",
+            "examples": ["Steel", "Aluminum", "Recycling", "Smelting"],
+            "tools_and_processes": ["Blast furnace control", "Alloy composition analysis", "Heat treatment scheduling", "Rolling mill optimization", "Scrap sorting systems", "Metallurgical testing", "Continuous casting control"]
+          },
+          {
+            "sector": "Textiles & Apparel Manufacturing",
+            "examples": ["Garments", "Footwear", "Fabric production"],
+            "tools_and_processes": ["Pattern making software (Gerber, Lectra)", "Fabric inspection systems", "Dyeing recipe management", "Cut planning optimization", "Sewing line balancing", "Quality control checkpoints", "Textile testing (tensile, colorfastness)"]
+          },
+          {
+            "sector": "Automotive & Mobility Manufacturing",
+            "examples": ["EVs", "Components", "Batteries"],
+            "tools_and_processes": ["CAD/CAE design (CATIA, SolidWorks)", "Assembly line robotics", "Just-in-time (JIT) manufacturing", "Battery management systems", "Crash testing simulation", "Paint shop automation", "Supplier quality management (PPAP)"]
+          },
+          {
+            "sector": "Aerospace & Defense Manufacturing",
+            "examples": ["Aircraft", "Drones", "Military systems"],
+            "tools_and_processes": ["Composite layup automation", "Non-destructive testing (NDT)", "AS9100 quality management", "Flight testing protocols", "Configuration management", "Stress analysis (FEA)", "Supply chain security (CMMC)"]
+          },
+          {
+            "sector": "Machinery & Industrial Equipment",
+            "examples": ["Robotics", "Tools", "Engines", "Turbines"],
+            "tools_and_processes": ["CNC programming", "Hydraulic system design", "Tolerance stack-up analysis", "Vibration testing", "Predictive maintenance sensors", "Performance testing rigs", "Technical documentation (service manuals)"]
+          },
+          {
+            "sector": "Electronics & Semiconductors",
+            "examples": ["Chip design", "IoT hardware", "PCB fabrication"],
+            "tools_and_processes": ["EDA tools (Cadence, Synopsys)", "Wafer fabrication (lithography)", "Yield analysis", "Design for testability (DFT)", "PCB layout software (Altium, Eagle)", "Semiconductor testing (ATE)", "Clean room protocols"]
+          },
+          {
+            "sector": "Food & Beverage Manufacturing",
+            "examples": ["Packaged food", "Breweries", "Food tech"],
+            "tools_and_processes": ["HACCP compliance", "Batch tracking systems", "Pasteurization control", "Recipe management software", "Shelf-life testing", "Sensory evaluation", "Packaging line automation"]
+          },
+          {
+            "sector": "Pharmaceutical Manufacturing",
+            "examples": ["APIs", "Generics", "Biologics"],
+            "tools_and_processes": ["GMP compliance", "Batch record management", "Cleanroom validation", "Stability testing", "Process validation (IQ/OQ/PQ)", "Serialization and track-and-trace", "Pharmacovigilance systems"]
+          },
+          {
+            "sector": "Biotechnology & Life Sciences Production",
+            "examples": ["Synthetic biology", "Gene editing", "Cell culture"],
+            "tools_and_processes": ["Bioreactor control", "Cell line development", "Gene sequencing (NGS)", "CRISPR design tools", "Protein purification (chromatography)", "Bioprocess modeling", "Regulatory submission (IND/BLA)"]
+          },
+          {
+            "sector": "Furniture & Consumer Goods",
+            "examples": ["Home goods", "Toys", "Personal care"],
+            "tools_and_processes": ["3D rendering for design", "Material sourcing", "Assembly instructions creation", "Safety testing (ASTM, CPSC)", "Packaging design", "Retail merchandising planning", "Product lifecycle management (PLM)"]
+          },
+          {
+            "sector": "Printing & Packaging",
+            "examples": ["Labels", "Packaging materials", "Design"],
+            "tools_and_processes": ["Prepress workflow", "Color management systems", "Die cutting", "Flexographic printing", "Substrate selection", "Proof approval systems", "Packaging structural design"]
+          }
+        ]
+      },
+      {
+        "category": "Supply Chain, Construction & Infrastructure",
+        "sectors": [
+          {
+            "sector": "Construction & Civil Engineering",
+            "examples": ["Infrastructure", "Prefabrication", "Smart buildings"],
+            "tools_and_processes": ["BIM (Building Information Modeling)", "Project scheduling (Primavera, MS Project)", "Site surveying (total stations)", "Concrete testing", "Safety inspections", "Change order management", "As-built documentation"]
+          },
+          {
+            "sector": "Real Estate Development & Management",
+            "examples": ["Residential", "Commercial", "REITs"],
+            "tools_and_processes": ["Property management software (Yardi, AppFolio)", "Lease administration", "Tenant screening", "Maintenance work orders", "Cap rate analysis", "Zoning compliance", "Property valuation (DCF models)"]
+          },
+          {
+            "sector": "Transportation & Logistics",
+            "examples": ["Freight", "Warehousing", "Ports", "Air cargo"],
+            "tools_and_processes": ["Transportation Management Systems (TMS)", "Route optimization", "Load planning", "Freight audit", "Customs documentation", "Cross-docking", "Carrier performance tracking"]
+          },
+          {
+            "sector": "Shipping & Maritime Services",
+            "examples": ["Shipbuilding", "Port operations", "Container lines"],
+            "tools_and_processes": ["Vessel scheduling systems", "Container tracking", "Port call optimization", "Ballast water management", "Maritime safety protocols (ISM Code)", "Cargo stowage planning", "AIS (Automatic Identification System)"]
+          },
+          {
+            "sector": "Aviation & Airlines",
+            "examples": ["Passenger carriers", "Cargo operations", "Ground handling"],
+            "tools_and_processes": ["Flight planning systems", "Crew scheduling", "Revenue management", "Aircraft maintenance tracking (MRO)", "Baggage handling systems", "Slot coordination", "Safety management systems (SMS)"]
+          },
+          {
+            "sector": "Public Infrastructure",
+            "examples": ["Utilities", "PPP", "Smart cities"],
+            "tools_and_processes": ["Asset management systems", "GIS mapping", "Infrastructure condition assessment", "Public-private partnership contracts", "Smart meter networks", "Traffic management systems", "Citizen engagement platforms"]
+          },
+          {
+            "sector": "Procurement & Sourcing",
+            "examples": ["Vendor management", "Sourcing platforms"],
+            "tools_and_processes": ["E-procurement systems (Ariba, Coupa)", "RFx management", "Supplier scorecards", "Contract lifecycle management", "Spend analysis", "Supplier risk assessment", "Purchase order automation"]
+          },
+          {
+            "sector": "Warehousing & Inventory",
+            "examples": ["Automation", "Cold chain", "Fulfillment centers"],
+            "tools_and_processes": ["Warehouse Management Systems (WMS)", "Barcode/RFID scanning", "Slotting optimization", "Cycle counting", "Pick-pack-ship workflows", "Temperature monitoring", "Automated storage and retrieval systems (AS/RS)"]
+          },
+          {
+            "sector": "Last-Mile Delivery & Courier Services",
+            "examples": ["Postal", "Gig logistics", "Parcel delivery"],
+            "tools_and_processes": ["Delivery route optimization", "Real-time tracking", "Proof of delivery (POD)", "Driver mobile apps", "Geofencing", "Time-window scheduling", "Failed delivery management"]
+          },
+          {
+            "sector": "Construction Materials & Equipment",
+            "examples": ["Cement", "Steel", "Machinery"],
+            "tools_and_processes": ["Material testing labs", "Batch plant control", "Equipment rental management", "Aggregate grading", "Concrete mix design", "Equipment telematics", "Delivery scheduling"]
+          }
+        ]
+      },
+      {
+        "category": "Finance, Risk & Professional Services",
+        "sectors": [
+          {
+            "sector": "Retail & Commercial Banking",
+            "examples": ["Loans", "Deposits", "Payments"],
+            "tools_and_processes": ["Core banking systems", "Credit scoring models", "KYC/AML compliance", "Loan origination systems", "Payment processing", "Branch operations management", "Customer relationship management (CRM)"]
+          },
+          {
+            "sector": "Investment Banking & Capital Markets",
+            "examples": ["M&A", "Trading", "Securities"],
+            "tools_and_processes": ["Deal pipeline management", "Valuation models (DCF, comps)", "Trading platforms (Bloomberg Terminal)", "Risk management systems", "Pitch book creation", "Due diligence checklists", "Regulatory filings (SEC)"]
+          },
+          {
+            "sector": "Wealth & Asset Management",
+            "examples": ["Private banking", "Funds", "Robo-advisors"],
+            "tools_and_processes": ["Portfolio management systems", "Risk profiling", "Asset allocation models", "Performance attribution", "Client reporting", "Rebalancing algorithms", "Tax-loss harvesting"]
+          },
+          {
+            "sector": "Insurance & Reinsurance",
+            "examples": ["Life", "Health", "Actuarial services"],
+            "tools_and_processes": ["Policy administration systems", "Claims management", "Underwriting guidelines", "Actuarial modeling", "Catastrophe modeling", "Fraud detection", "Reinsurance treaty management"]
+          },
+          {
+            "sector": "Fintech & Payments",
+            "examples": ["Digital wallets", "BNPL", "Blockchain"],
+            "tools_and_processes": ["Payment gateway integration", "Tokenization", "PCI-DSS compliance", "Fraud scoring", "API-first architecture", "Real-time settlement", "Chargeback management"]
+          },
+          {
+            "sector": "Accounting, Audit & Tax Advisory",
+            "examples": ["Corporate finance", "Tax services", "Assurance"],
+            "tools_and_processes": ["General ledger systems", "Audit workpapers", "Tax preparation software", "Financial statement consolidation", "Internal controls testing", "Transfer pricing analysis", "GAAP/IFRS compliance"]
+          },
+          {
+            "sector": "Legal Services & Compliance",
+            "examples": ["Corporate law", "IP law", "Regtech"],
+            "tools_and_processes": ["Legal research databases (Westlaw, LexisNexis)", "Contract management systems", "E-discovery tools", "Docket management", "Compliance monitoring", "Patent filing systems", "Matter management"]
+          },
+          {
+            "sector": "Management Consulting",
+            "examples": ["Operations", "Strategy", "Transformation"],
+            "tools_and_processes": ["Stakeholder interviews", "Process mapping", "Benchmarking studies", "Business case development", "Change management frameworks", "Project governance", "Slide deck creation (PowerPoint)"]
+          },
+          {
+            "sector": "Market Research & Analytics",
+            "examples": ["Consumer insights", "Surveys", "Data monetization"],
+            "tools_and_processes": ["Survey platforms (Qualtrics, SurveyMonkey)", "Focus group facilitation", "Conjoint analysis", "Segmentation modeling", "Data visualization (Tableau, Power BI)", "Panel management", "Sentiment analysis"]
+          },
+          {
+            "sector": "Human Capital Consulting",
+            "examples": ["Compensation", "Leadership", "HR analytics"],
+            "tools_and_processes": ["Compensation benchmarking", "Job evaluation frameworks", "Talent assessment tools", "Succession planning", "Employee engagement surveys", "Organizational design", "HR metrics dashboards"]
+          }
+        ]
+      },
+      {
+        "category": "Technology, Digital & Data",
+        "sectors": [
+          {
+            "sector": "Software Development & SaaS",
+            "examples": ["B2B SaaS", "Productivity tools", "APIs"],
+            "tools_and_processes": ["Version control (Git)", "CI/CD pipelines", "Agile/Scrum methodology", "Code review processes", "API documentation (Swagger)", "Unit testing", "Product roadmap management"]
+          },
+          {
+            "sector": "Cloud Computing & Infrastructure",
+            "examples": ["IaaS", "PaaS", "Multi-cloud management"],
+            "tools_and_processes": ["Infrastructure as Code (Terraform, CloudFormation)", "Container orchestration (Kubernetes)", "Cloud cost optimization", "Auto-scaling policies", "Disaster recovery planning", "Service level agreements (SLAs)", "Multi-cloud management platforms"]
+          },
+          {
+            "sector": "Data Engineering & Analytics",
+            "examples": ["ETL", "BI dashboards", "Data governance"],
+            "tools_and_processes": ["ETL tools (Informatica, Talend)", "Data warehousing (Snowflake, Redshift)", "Data catalog systems", "Data quality rules", "Master data management", "Data lineage tracking", "SQL query optimization"]
+          },
+          {
+            "sector": "AI, ML & Automation",
+            "examples": ["Generative AI", "MLOps", "Computer vision"],
+            "tools_and_processes": ["Model training pipelines", "Feature engineering", "Hyperparameter tuning", "Model versioning", "A/B testing frameworks", "Model monitoring", "Annotation tools (Labelbox)"]
+          },
+          {
+            "sector": "Cybersecurity & Privacy",
+            "examples": ["Threat detection", "IAM", "Pen testing"],
+            "tools_and_processes": ["SIEM systems (Splunk, QRadar)", "Vulnerability scanning", "Penetration testing", "Identity and access management", "Incident response playbooks", "Security awareness training", "Compliance frameworks (ISO 27001, SOC 2)"]
+          },
+          {
+            "sector": "IT Services & Integration",
+            "examples": ["Managed services", "Enterprise IT"],
+            "tools_and_processes": ["Service desk ticketing (ServiceNow)", "ITIL framework", "System integration", "Vendor management", "SLA monitoring", "Change management", "Asset management"]
+          },
+          {
+            "sector": "Telecommunications & Connectivity",
+            "examples": ["5G", "Broadband", "IoT networks"],
+            "tools_and_processes": ["Network planning tools", "Spectrum management", "Base station optimization", "OSS/BSS systems", "Network monitoring (NOC)", "Subscriber provisioning", "Quality of service (QoS) management"]
+          },
+          {
+            "sector": "Semiconductors & Hardware Design",
+            "examples": ["Microcontrollers", "Sensors", "Edge computing"],
+            "tools_and_processes": ["RTL design (Verilog, VHDL)", "Simulation tools (ModelSim)", "Physical design (place and route)", "Timing analysis", "Power optimization", "Hardware-software co-design", "Prototyping (FPGA)"]
+          },
+          {
+            "sector": "Gaming & Interactive Media",
+            "examples": ["Esports", "Metaverse", "Game development"],
+            "tools_and_processes": ["Game engines (Unity, Unreal)", "3D modeling and animation", "Level design", "Playtesting", "Monetization strategies", "Player analytics", "Live ops management"]
+          },
+          {
+            "sector": "Blockchain & Web3",
+            "examples": ["Crypto exchanges", "Smart contracts", "NFTs"],
+            "tools_and_processes": ["Smart contract development (Solidity)", "Blockchain explorers", "Wallet integration", "Consensus mechanisms", "Token economics design", "Security audits", "DeFi protocols"]
+          }
+        ]
+      },
+      {
+        "category": "Healthcare & Life Sciences",
+        "sectors": [
+          {
+            "sector": "Hospitals & Clinics",
+            "examples": ["Inpatient", "Outpatient", "Surgery", "Telehealth"],
+            "tools_and_processes": ["Electronic Health Records (EHR)", "Patient scheduling", "Clinical decision support", "Bed management", "Medication administration records", "Telehealth platforms", "Quality metrics tracking (HEDIS)"]
+          },
+          {
+            "sector": "Pharmaceutical R&D",
+            "examples": ["Clinical trials", "Drug discovery", "Regulatory affairs"],
+            "tools_and_processes": ["Molecular modeling", "High-throughput screening", "Clinical trial management systems (CTMS)", "Electronic data capture (EDC)", "Pharmacokinetics modeling", "Regulatory submission (NDA, IND)", "Adverse event reporting"]
+          },
+          {
+            "sector": "Medical Devices & Equipment",
+            "examples": ["Diagnostics", "Implants", "Wearables"],
+            "tools_and_processes": ["Design controls (FDA 21 CFR 820)", "Biocompatibility testing", "Clinical validation studies", "Risk management (ISO 14971)", "Sterilization validation", "Post-market surveillance", "Device registration (510k, PMA)"]
+          },
+          {
+            "sector": "Biotech & Genomics",
+            "examples": ["CRISPR", "Bioinformatics", "Gene therapy"],
+            "tools_and_processes": ["Next-generation sequencing (NGS)", "Genome annotation", "Variant calling pipelines", "CRISPR guide RNA design", "Gene expression analysis", "Phylogenetic analysis", "Protein structure prediction"]
+          },
+          {
+            "sector": "Healthcare IT & Digital Health",
+            "examples": ["EHR", "Remote monitoring", "Telemedicine"],
+            "tools_and_processes": ["HL7/FHIR integration", "Patient portals", "Remote patient monitoring devices", "Health information exchange (HIE)", "Clinical data analytics", "HIPAA compliance", "Interoperability standards"]
+          },
+          {
+            "sector": "Public Health & Epidemiology",
+            "examples": ["Disease tracking", "Vaccination logistics"],
+            "tools_and_processes": ["Disease surveillance systems", "Outbreak investigation protocols", "Vaccination campaign management", "Epidemiological modeling", "Contact tracing", "Public health registries", "Health equity analysis"]
+          },
+          {
+            "sector": "Health Insurance & Benefits",
+            "examples": ["Claims automation", "Underwriting"],
+            "tools_and_processes": ["Claims adjudication systems", "Medical necessity review", "Provider network management", "Utilization management", "Risk adjustment models", "Member enrollment", "Explanation of benefits (EOB)"]
+          },
+          {
+            "sector": "Mental Health & Wellness",
+            "examples": ["Therapy apps", "Mindfulness", "Employee wellbeing"],
+            "tools_and_processes": ["Teletherapy platforms", "Mental health screening tools", "Crisis intervention protocols", "Cognitive behavioral therapy (CBT) programs", "Mood tracking", "Peer support networks", "Outcome measurement (PHQ-9, GAD-7)"]
+          },
+          {
+            "sector": "Nutrition & Supplements",
+            "examples": ["Functional foods", "Nutraceuticals"],
+            "tools_and_processes": ["Nutritional analysis software", "Dietary assessment tools", "Supplement formulation", "Clinical nutrition protocols", "Food labeling compliance", "Ingredient sourcing", "Bioavailability testing"]
+          }
+        ]
+      },
+      {
+        "category": "Consumer, Commerce & Lifestyle",
+        "sectors": [
+          {
+            "sector": "Retail",
+            "examples": ["Supermarkets", "Fashion", "Omnichannel commerce"],
+            "tools_and_processes": ["Point of sale (POS) systems", "Inventory management", "Planogram optimization", "Customer loyalty programs", "Markdown optimization", "Store operations management", "Omnichannel fulfillment"]
+          },
+          {
+            "sector": "E-Commerce Marketplaces",
+            "examples": ["D2C", "Cross-border", "B2B platforms"],
+            "tools_and_processes": ["Product catalog management", "Shopping cart optimization", "Payment gateway integration", "Recommendation engines", "Seller onboarding", "Fraud prevention", "Marketplace analytics"]
+          },
+          {
+            "sector": "Food Services & Hospitality",
+            "examples": ["Restaurants", "Catering", "Delivery apps"],
+            "tools_and_processes": ["Restaurant POS systems", "Table management", "Menu engineering", "Kitchen display systems", "Food cost analysis", "Reservation systems", "Delivery fleet management"]
+          },
+          {
+            "sector": "Luxury & Fashion",
+            "examples": ["Jewelry", "Cosmetics", "Designer brands"],
+            "tools_and_processes": ["Trend forecasting", "Collection planning", "Clienteling", "Authentication and provenance", "Visual merchandising", "Exclusive event management", "Brand heritage storytelling"]
+          },
+          {
+            "sector": "Consumer Electronics",
+            "examples": ["Smartphones", "Appliances", "Wearables"],
+            "tools_and_processes": ["Product lifecycle management", "Warranty management", "Repair and service networks", "Firmware updates", "User experience testing", "Retail demo programs", "Trade-in programs"]
+          },
+          {
+            "sector": "Home Improvement & Furniture",
+            "examples": ["DIY", "Smart homes", "Design"],
+            "tools_and_processes": ["Room design software", "Installation guides", "Smart home integration", "Material calculators", "Project planning tools", "Contractor networks", "Customer design consultations"]
+          },
+          {
+            "sector": "Sports & Recreation",
+            "examples": ["Fitness", "Outdoor", "Sports tech"],
+            "tools_and_processes": ["Fitness tracking apps", "Training program design", "Performance analytics", "Facility booking systems", "Equipment maintenance", "Membership management", "Event organization"]
+          },
+          {
+            "sector": "Travel & Tourism",
+            "examples": ["Airlines", "Cruises", "Booking platforms"],
+            "tools_and_processes": ["Global distribution systems (GDS)", "Dynamic pricing", "Itinerary planning", "Destination management", "Guest experience management", "Tour operator systems", "Travel insurance integration"]
+          },
+          {
+            "sector": "Media, Entertainment & Publishing",
+            "examples": ["Streaming", "Film", "Music", "News"],
+            "tools_and_processes": ["Content management systems", "Digital rights management (DRM)", "Streaming infrastructure (CDN)", "Content recommendation algorithms", "Audience analytics", "Ad insertion systems", "Editorial workflows"]
+          },
+          {
+            "sector": "Advertising, Marketing & PR",
+            "examples": ["Agencies", "SEO", "Branding", "Influencer marketing"],
+            "tools_and_processes": ["Marketing automation platforms", "Campaign management", "SEO/SEM tools", "Social media management", "Influencer discovery platforms", "Brand monitoring", "Media planning and buying"]
+          }
+        ]
+      },
+      {
+        "category": "Energy, Environment & Utilities",
+        "sectors": [
+          {
+            "sector": "Electric Power & Renewables",
+            "examples": ["Solar", "Wind", "Hydro", "Nuclear"],
+            "tools_and_processes": ["Grid management systems", "Energy forecasting", "Power plant optimization", "Renewable energy certificates (RECs)", "Load balancing", "Transmission planning", "Outage management"]
+          },
+          {
+            "sector": "Oil, Gas & Energy Trading",
+            "examples": ["Refining", "Distribution", "Wholesale"],
+            "tools_and_processes": ["Commodity trading platforms", "Risk management (VaR)", "Pipeline scheduling", "Storage optimization", "Price forecasting", "Regulatory compliance (FERC)", "Hedge accounting"]
+          },
+          {
+            "sector": "Water & Waste Utilities",
+            "examples": ["Treatment", "Sanitation", "Desalination"],
+            "tools_and_processes": ["Water quality monitoring", "Treatment plant automation", "Distribution network management", "Leak detection systems", "Billing and metering", "Wastewater treatment processes", "Regulatory reporting (EPA)"]
+          },
+          {
+            "sector": "Environmental Services",
+            "examples": ["Recycling", "Waste management", "Remediation"],
+            "tools_and_processes": ["Waste sorting systems", "Route optimization for collection", "Landfill management", "Environmental impact assessments", "Hazardous waste tracking", "Remediation project management", "Recycling rate analytics"]
+          },
+          {
+            "sector": "Climate & Carbon Management",
+            "examples": ["Offsets", "Carbon accounting", "Sustainability analytics"],
+            "tools_and_processes": ["Carbon footprint calculation", "GHG emissions tracking", "Carbon credit verification", "ESG reporting frameworks", "Life cycle assessment (LCA)", "Climate risk modeling", "Sustainability dashboards"]
+          },
+          {
+            "sector": "Smart Grids & Energy Tech",
+            "examples": ["IoT energy optimization", "Demand response"],
+            "tools_and_processes": ["Advanced metering infrastructure (AMI)", "Demand response programs", "Distributed energy resource management", "Grid analytics", "Energy storage optimization", "Microgrid control", "Virtual power plants"]
+          }
+        ]
+      },
+      {
+        "category": "Government, Defense & Nonprofit",
+        "sectors": [
+          {
+            "sector": "Public Administration & Governance",
+            "examples": ["Municipal services", "Policy"],
+            "tools_and_processes": ["Citizen service portals", "Permit and licensing systems", "Policy analysis frameworks", "Budget management", "Public records management", "Regulatory compliance tracking", "E-government platforms"]
+          },
+          {
+            "sector": "Defense & Security",
+            "examples": ["Intelligence", "Procurement", "Logistics"],
+            "tools_and_processes": ["Intelligence analysis tools", "Defense acquisition systems", "Mission planning software", "Supply chain security", "Threat assessment", "Classified information management", "Readiness tracking"]
+          },
+          {
+            "sector": "Justice & Law Enforcement",
+            "examples": ["Courts", "Police", "Prisons"],
+            "tools_and_processes": ["Case management systems", "Evidence tracking", "Records management systems (RMS)", "Computer-aided dispatch (CAD)", "Inmate management", "Court scheduling", "Crime analytics"]
+          },
+          {
+            "sector": "Disaster Response & Civil Protection",
+            "examples": ["Emergency management", "Resilience planning"],
+            "tools_and_processes": ["Emergency operations centers (EOC)", "Incident command systems", "Resource allocation", "Early warning systems", "Evacuation planning", "Damage assessment", "Recovery coordination"]
+          },
+          {
+            "sector": "International Organizations & NGOs",
+            "examples": ["Humanitarian", "Advocacy", "Development"],
+            "tools_and_processes": ["Program management systems", "Donor management", "Field data collection", "Impact measurement", "Grant administration", "Beneficiary tracking", "Advocacy campaign tools"]
+          },
+          {
+            "sector": "Public Finance & Taxation",
+            "examples": ["Budgeting", "Social programs", "Customs"],
+            "tools_and_processes": ["Tax administration systems", "Budget planning and execution", "Revenue forecasting", "Customs declaration processing", "Benefits administration", "Public debt management", "Fiscal reporting"]
+          }
+        ]
+      },
+      {
+        "category": "Emerging & Specialized Domains",
+        "sectors": [
+          {
+            "sector": "Space Industry",
+            "examples": ["Satellites", "Launch services", "Space tourism"],
+            "tools_and_processes": ["Orbital mechanics simulation", "Satellite telemetry", "Launch vehicle design", "Ground station operations", "Space debris tracking", "Mission control systems", "Payload integration"]
+          },
+          {
+            "sector": "Agrifood Tech",
+            "examples": ["Alternative proteins", "Food waste AI", "Vertical farming"],
+            "tools_and_processes": ["Controlled environment agriculture", "Fermentation process control", "Food waste analytics", "Supply chain traceability", "Protein extraction processes", "Sensory testing", "Regulatory approval (FDA, EFSA)"]
+          },
+          {
+            "sector": "Ocean Economy",
+            "examples": ["Marine renewables", "Shipping tech", "Blue carbon"],
+            "tools_and_processes": ["Ocean energy systems", "Underwater robotics", "Marine spatial planning", "Blue carbon accounting", "Oceanographic data collection", "Sustainable fishing technologies", "Coastal zone management"]
+          },
+          {
+            "sector": "Mobility & Transport Tech",
+            "examples": ["EVs", "Autonomous vehicles", "Micromobility"],
+            "tools_and_processes": ["Autonomous driving systems", "Fleet management platforms", "Charging infrastructure networks", "Vehicle-to-everything (V2X) communication", "Ride-sharing algorithms", "Battery swapping systems", "Mobility-as-a-Service (MaaS) platforms"]
+          },
+          {
+            "sector": "Smart Cities & Urban Tech",
+            "examples": ["Traffic optimization", "IoT infrastructure", "Civic data"],
+            "tools_and_processes": ["Urban IoT platforms", "Traffic flow optimization", "Smart parking systems", "Air quality monitoring", "Urban planning simulations", "Civic engagement apps", "Integrated operations centers"]
+          },
+          {
+            "sector": "Quantum Computing",
+            "examples": ["Cryptography", "Simulation", "Hardware design"],
+            "tools_and_processes": ["Quantum algorithm development", "Qubit characterization", "Error correction protocols", "Quantum circuit design", "Cryogenic systems", "Quantum software frameworks (Qiskit, Cirq)", "Quantum-classical hybrid systems"]
+          },
+          {
+            "sector": "Metaverse & Extended Reality",
+            "examples": ["AR/VR applications", "Digital twins"],
+            "tools_and_processes": ["3D world building", "Avatar creation systems", "Spatial computing", "Digital twin modeling", "Virtual event platforms", "Haptic feedback systems", "Cross-platform interoperability"]
+          },
+          {
+            "sector": "Creative AI & Generative Design",
+            "examples": ["3D modeling", "Content generation", "Art AI"],
+            "tools_and_processes": ["Generative design algorithms", "AI art generation", "Procedural content generation", "Style transfer", "Prompt engineering", "Creative workflow automation", "AI-assisted design tools"]
+          }
+        ]
+      }
+    ]
+  },
+  "Problem_or_Pain_Type": {
+    "description": "Determines why AI is relevant in the first place.",
+    "subdimensions": [
+      "Cost pressure / efficiency loss",
+      "Compliance & audit risk",
+      "Growth or conversion bottleneck",
+      "Talent shortage or overload",
+      "Quality or reliability gaps",
+      "Customer churn / poor CX",
+      "Slow decision cycles"
+    ]
+  }
+}
+

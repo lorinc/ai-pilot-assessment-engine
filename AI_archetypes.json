@@ -1,0 +1,491 @@
+{
+  "AI_Use_Case_Archetypes": [
+    {
+      "archetype": "Anomaly & Outlier Detection",
+      "core_task": "Identify unusual patterns or data points that deviate from normal behavior.",
+      "analytical_purpose": ["Descriptive", "Diagnostic"],
+      "technical_family": "Unsupervised Learning",
+      "common_models": [
+        "Isolation Forest",
+        "One-Class SVM",
+        "Local Outlier Factor",
+        "Autoencoder"
+      ],
+      "example_outputs": [
+        "Fraud flagging",
+        "Equipment fault alert",
+        "Data quality anomaly"
+      ],
+      "agnostic_scope": "Applicable wherever patterns are expected in finance, IoT, operations, HR, etc."
+    },
+    {
+      "archetype": "Content Analysis / Labeling / Evaluation",
+      "core_task": "Add metadata, tags, or structured annotations to unstructured content, or evaluate content quality and characteristics.",
+      "analytical_purpose": ["Descriptive", "Diagnostic"],
+      "technical_family": "Natural Language Processing",
+      "common_models": [
+        "Sentiment analysis models",
+        "Named Entity Recognition (NER)",
+        "Text classification",
+        "Content moderation models",
+        "Quality scoring models"
+      ],
+      "example_outputs": [
+        "Sentiment labels",
+        "Entity tags",
+        "Content quality scores",
+        "Topic labels",
+        "Toxicity detection"
+      ],
+      "agnostic_scope": "Universal for enriching unstructured data with metadata, applicable to text, images, audio, and video across all domains."
+    },
+    {
+      "archetype": "Clustering & Segmentation",
+      "core_task": "Group similar entities or records based on feature similarity.",
+      "analytical_purpose": ["Descriptive", "Diagnostic"],
+      "technical_family": "Unsupervised Learning",
+      "common_models": [
+        "K-Means",
+        "DBSCAN",
+        "Gaussian Mixture Models",
+        "Agglomerative Clustering"
+      ],
+      "example_outputs": [
+        "Customer clusters",
+        "Sensor groupings",
+        "Topic clusters"
+      ],
+      "agnostic_scope": "Used for pattern discovery, behavior segmentation, or unsupervised grouping in any dataset."
+    },
+    {
+      "archetype": "Dimensionality Reduction / Embedding",
+      "core_task": "Reduce number of variables while preserving structure or variance.",
+      "analytical_purpose": ["Descriptive"],
+      "technical_family": "Unsupervised Learning",
+      "common_models": [
+        "PCA",
+        "t-SNE",
+        "UMAP",
+        "Autoencoder"
+      ],
+      "example_outputs": [
+        "Latent features",
+        "2D projections",
+        "Visualization embeddings"
+      ],
+      "agnostic_scope": "Useful for feature extraction, visualization, and pre-processing in any data-rich context."
+    },
+    {
+      "archetype": "Correlation & Association Mining",
+      "core_task": "Find co-occurrence or association patterns among variables.",
+      "analytical_purpose": ["Descriptive", "Diagnostic"],
+      "technical_family": "Pattern Mining",
+      "common_models": [
+        "Apriori",
+        "FP-Growth",
+        "Lift/Support metrics"
+      ],
+      "example_outputs": [
+        "Market basket rules",
+        "Symptom co-occurrence patterns"
+      ],
+      "agnostic_scope": "Universal for uncovering relationships between items, events, or features."
+    },
+    {
+      "archetype": "Regression & Forecasting",
+      "core_task": "Predict continuous numeric outcomes from past data.",
+      "analytical_purpose": ["Predictive"],
+      "technical_family": "Supervised Learning",
+      "common_models": [
+        "Linear Regression",
+        "Random Forest Regressor",
+        "XGBoost",
+        "ARIMA",
+        "Prophet"
+      ],
+      "example_outputs": [
+        "Sales forecast",
+        "Temperature prediction",
+        "Price estimation"
+      ],
+      "agnostic_scope": "Applicable to any continuous variable in sales, demand, energy, cost, etc."
+    },
+    {
+      "archetype": "Classification",
+      "core_task": "Assign categorical labels to new instances based on training data.",
+      "analytical_purpose": ["Predictive"],
+      "technical_family": "Supervised Learning",
+      "common_models": [
+        "Logistic Regression",
+        "Decision Tree",
+        "Naive Bayes",
+        "SVM",
+        "Neural Network"
+      ],
+      "example_outputs": [
+        "Spam detection",
+        "Defect classification",
+        "Churn label"
+      ],
+      "agnostic_scope": "Universal supervised learning task across domains."
+    },
+    {
+      "archetype": "Intent Detection & Routing",
+      "core_task": "Classify user intent and route input to the appropriate downstream pipeline or handler.",
+      "analytical_purpose": ["Predictive"],
+      "technical_family": "Natural Language Understanding",
+      "common_models": [
+        "BERT-based classifiers",
+        "Intent classification models",
+        "Few-shot learning",
+        "Semantic similarity matching"
+      ],
+      "example_outputs": [
+        "Helpdesk triage routing",
+        "Chatbot intent classification",
+        "Action router decisions"
+      ],
+      "agnostic_scope": "Essential for conversational AI, customer support automation, and multi-function systems requiring intelligent routing."
+    },
+    {
+      "archetype": "Time-Series Forecasting",
+      "core_task": "Model temporal dependencies and trends for sequential data.",
+      "analytical_purpose": ["Predictive", "Descriptive"],
+      "technical_family": "Temporal Modeling",
+      "common_models": [
+        "ARIMA",
+        "LSTM",
+        "Temporal Fusion Transformer",
+        "Exponential Smoothing"
+      ],
+      "example_outputs": [
+        "Energy load forecast",
+        "Web traffic forecast",
+        "Demand seasonality prediction"
+      ],
+      "agnostic_scope": "Any process with time-indexed data—finance, manufacturing, web analytics."
+    },
+    {
+      "archetype": "Survival / Churn Modeling",
+      "core_task": "Estimate time until an event occurs or probability of attrition.",
+      "analytical_purpose": ["Predictive"],
+      "technical_family": "Survival Analysis",
+      "common_models": [
+        "Cox Proportional Hazards",
+        "Kaplan-Meier",
+        "Gradient Boosting Survival Models"
+      ],
+      "example_outputs": [
+        "Customer churn probability",
+        "Machine failure likelihood"
+      ],
+      "agnostic_scope": "Any process where entities may 'drop off'—customers, devices, employees, etc."
+    },
+    {
+      "archetype": "Optimization & Scheduling",
+      "core_task": "Find best combination of actions or resources to maximize objective function.",
+      "analytical_purpose": ["Prescriptive"],
+      "technical_family": "Mathematical Optimization",
+      "common_models": [
+        "Linear Programming",
+        "Genetic Algorithms",
+        "Reinforcement Learning"
+      ],
+      "example_outputs": [
+        "Optimal shift plan",
+        "Delivery routing",
+        "Inventory allocation"
+      ],
+      "agnostic_scope": "Applies to any constrained optimization problem—production, logistics, staffing."
+    },
+    {
+      "archetype": "Causal Inference & Uplift Modeling",
+      "core_task": "Estimate the impact of interventions, distinguish correlation from causation, and explain causal drivers behind observed outcomes.",
+      "analytical_purpose": ["Prescriptive", "Diagnostic"],
+      "technical_family": "Causal Analysis",
+      "common_models": [
+        "DoWhy",
+        "Double ML",
+        "A/B Testing",
+        "Propensity Score Matching",
+        "Structural Causal Models"
+      ],
+      "example_outputs": [
+        "Marketing lift",
+        "Policy impact estimation",
+        "Why-sales-dropped analytics",
+        "Root cause explanations"
+      ],
+      "agnostic_scope": "Cross-domain for understanding cause–effect relationships and explaining drivers of business outcomes."
+    },
+    {
+      "archetype": "Scenario Simulation / What-If Engines",
+      "core_task": "Generate alternative futures under different assumptions.",
+      "analytical_purpose": ["Prescriptive"],
+      "technical_family": "Simulation",
+      "common_models": [
+        "Monte Carlo Simulation",
+        "Agent-Based Models"
+      ],
+      "example_outputs": [
+        "Risk distribution",
+        "Performance envelope"
+      ],
+      "agnostic_scope": "Used for uncertainty modeling in finance, ops, or policy design."
+    },
+    {
+      "archetype": "Generative Modeling",
+      "core_task": "Produce new synthetic data resembling training distribution.",
+      "analytical_purpose": ["Generative"],
+      "technical_family": "Deep Generative Models",
+      "common_models": [
+        "GAN",
+        "VAE",
+        "Diffusion Models"
+      ],
+      "example_outputs": [
+        "Synthetic images",
+        "Simulated sensor data",
+        "Text samples"
+      ],
+      "agnostic_scope": "Any domain requiring simulation, augmentation, or creative generation."
+    },
+    {
+      "archetype": "Language & Sequence Generation",
+      "core_task": "Generate coherent text or sequences from learned patterns for creative, productive, or conversational purposes.",
+      "analytical_purpose": ["Generative"],
+      "technical_family": "Natural Language Generation",
+      "common_models": [
+        "Transformer (GPT, T5)",
+        "Seq2Seq RNN",
+        "LSTM",
+        "Claude",
+        "Gemini"
+      ],
+      "example_outputs": [
+        "Summaries",
+        "Dialogues",
+        "Code completions",
+        "Proposal drafts",
+        "Creative writing",
+        "Documentation generation"
+      ],
+      "agnostic_scope": "Text, code, dialogue, or sequential data generation tasks. Encompasses creative writing, code assistance, proposal generation, and content creation."
+    },
+    {
+      "archetype": "Style Transfer & Augmentation",
+      "core_task": "Reinterpret data from one domain into another style or modality.",
+      "analytical_purpose": ["Generative"],
+      "technical_family": "Cross-Domain Transfer",
+      "common_models": [
+        "CycleGAN",
+        "Diffusion Models",
+        "Prompt-guided transformations"
+      ],
+      "example_outputs": [
+        "Artistic filters",
+        "Cross-domain rephrasing"
+      ],
+      "agnostic_scope": "Cross-domain creative and re-expression tasks."
+    },
+    {
+      "archetype": "Information Retrieval / RAG",
+      "core_task": "Retrieve and synthesize relevant knowledge to answer queries, ranging from direct search to retrieval-augmented generation.",
+      "analytical_purpose": ["Retrieval"],
+      "technical_family": "Information Retrieval",
+      "common_models": [
+        "BM25",
+        "Dense Embeddings",
+        "Vector Search",
+        "LLMs with RAG",
+        "Semantic Search"
+      ],
+      "example_outputs": [
+        "Search results",
+        "Contextual chat answers",
+        "Enterprise search results",
+        "Legal precedent lookup",
+        "Internal Q&A bot responses"
+      ],
+      "agnostic_scope": "Universal—knowledge discovery, support automation, or data Q&A. Includes both direct retrieval and grounded generation.",
+      "variants": [
+        {
+          "name": "Direct Retrieval / Search",
+          "focus": "Fetch and rank relevant documents or data points directly without generation."
+        },
+        {
+          "name": "Retrieval-Augmented Generation (RAG)",
+          "focus": "Combine retrieval and generation for grounded, contextual answers."
+        }
+      ]
+    },
+    {
+      "archetype": "Knowledge Graph & Entity Linking",
+      "core_task": "Represent and connect entities with relationships for reasoning.",
+      "analytical_purpose": ["Retrieval", "Reasoning"],
+      "technical_family": "Knowledge Representation",
+      "common_models": [
+        "Graph Neural Networks",
+        "Entity Embeddings",
+        "Ontology Learning"
+      ],
+      "example_outputs": [
+        "Knowledge graphs",
+        "Entity relations"
+      ],
+      "agnostic_scope": "Cross-domain for structured knowledge representation and reasoning."
+    },
+    {
+      "archetype": "Multi-hop Reasoning / Chain-of-Thought",
+      "core_task": "Decompose complex queries and reason across multiple evidence sources or logical steps to reach conclusions.",
+      "analytical_purpose": ["Reasoning"],
+      "technical_family": "Reasoning Systems",
+      "common_models": [
+        "Chain-of-Thought prompting",
+        "ReAct",
+        "Self-Ask",
+        "Tree-of-Thoughts",
+        "Multi-hop QA models"
+      ],
+      "example_outputs": [
+        "Step-by-step explanations",
+        "Investigative analysis reports",
+        "Multi-source evidence synthesis",
+        "Complex problem decomposition"
+      ],
+      "agnostic_scope": "Critical for complex analytical tasks requiring logical decomposition, investigative work, or multi-step inference."
+    },
+    {
+      "archetype": "Summarization & Compression",
+      "core_task": "Condense long or complex information into concise summaries.",
+      "analytical_purpose": ["Retrieval", "Generative"],
+      "technical_family": "Natural Language Processing",
+      "common_models": [
+        "LexRank",
+        "BERTSum",
+        "T5",
+        "LLMs"
+      ],
+      "example_outputs": [
+        "Executive summary",
+        "Meeting digest"
+      ],
+      "agnostic_scope": "Applies wherever long documents or transcripts exist."
+    },
+    {
+      "archetype": "Reinforcement Learning / Policy Optimization",
+      "core_task": "Learn optimal sequential actions via feedback and reward signals.",
+      "analytical_purpose": ["Prescriptive"],
+      "technical_family": "Reinforcement Learning",
+      "common_models": [
+        "Q-Learning",
+        "PPO",
+        "DDPG"
+      ],
+      "example_outputs": [
+        "Autonomous control policy",
+        "Dynamic pricing policy"
+      ],
+      "agnostic_scope": "Any adaptive control or decision-making environment."
+    },
+    {
+      "archetype": "Adaptive Feedback Loops",
+      "core_task": "Continuously improve model or system behavior using user or environment feedback.",
+      "analytical_purpose": ["Prescriptive"],
+      "technical_family": "Online Learning",
+      "common_models": [
+        "Bandit Algorithms",
+        "Online Learning",
+        "Bayesian Optimization"
+      ],
+      "example_outputs": [
+        "Personalized recommendations",
+        "Real-time tuning"
+      ],
+      "agnostic_scope": "Real-time personalization and self-learning applications."
+    },
+    {
+      "archetype": "Bias / Drift Detection",
+      "core_task": "Monitor statistical drift or bias in models or datasets over time.",
+      "analytical_purpose": ["Diagnostic", "Governance"],
+      "technical_family": "Model Monitoring",
+      "common_models": [
+        "Population Stability Index",
+        "Kolmogorov-Smirnov Test",
+        "Domain Classifiers"
+      ],
+      "example_outputs": [
+        "Model drift alert",
+        "Bias report"
+      ],
+      "agnostic_scope": "Any environment with evolving data distributions or fairness concerns."
+    },
+    {
+      "archetype": "Explainability / Interpretability",
+      "core_task": "Explain model decisions and feature importance transparently.",
+      "analytical_purpose": ["Diagnostic", "Governance"],
+      "technical_family": "Explainable AI",
+      "common_models": [
+        "SHAP",
+        "LIME",
+        "Counterfactual Explanations"
+      ],
+      "example_outputs": [
+        "Feature contribution plot",
+        "Decision explanation"
+      ],
+      "agnostic_scope": "Universal requirement for regulated or high-stakes AI."
+    },
+    {
+      "archetype": "Human-in-the-Loop Validation",
+      "core_task": "Blend AI predictions with human expert feedback loops.",
+      "analytical_purpose": ["Governance"],
+      "technical_family": "Active Learning",
+      "common_models": [
+        "Active Learning",
+        "Review Loop Frameworks"
+      ],
+      "example_outputs": [
+        "Reviewed AI outputs",
+        "Feedback-improved model"
+      ],
+      "agnostic_scope": "High-assurance tasks across medicine, law, audit, and compliance."
+    },
+    {
+      "archetype": "Multimodal Fusion",
+      "core_task": "Combine diverse data types (text, vision, tabular, IoT) into one reasoning model.",
+      "analytical_purpose": ["Reasoning"],
+      "technical_family": "Multimodal Learning",
+      "common_models": [
+        "Early/Late Fusion",
+        "CLIP",
+        "Multimodal Transformers"
+      ],
+      "example_outputs": [
+        "Cross-signal analysis",
+        "Vision-language reasoning"
+      ],
+      "agnostic_scope": "Useful in contexts combining images, text, and sensor or structured data."
+    },
+    {
+      "archetype": "Agentic Orchestration",
+      "core_task": "Coordinate multiple tools, models, or APIs through reasoning agents to autonomously reach goals.",
+      "analytical_purpose": ["Reasoning", "Prescriptive"],
+      "technical_family": "Agent Systems",
+      "common_models": [
+        "LangChain",
+        "ReAct",
+        "Toolformer",
+        "AutoGPT",
+        "Function Calling APIs"
+      ],
+      "example_outputs": [
+        "Workflow copilots",
+        "Analytical assistants",
+        "Multi-step calculation agents",
+        "Tool-augmented retrieval systems"
+      ],
+      "agnostic_scope": "Meta-level orchestration layer applicable to all complex workflows, including retrieval-focused and general task automation."
+    }
+  ]
+}
