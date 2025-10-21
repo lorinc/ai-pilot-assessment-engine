@@ -1,0 +1,96 @@
+{
+  "schema_version": "1.0",
+  "description": "Mapping of AI archetypes to minimum organizational maturity requirements",
+  "archetype_maturity_map": [
+    {
+      "archetype_id": "A_Anomaly_and_Outlier_Detection",
+      "archetype_name": "Anomaly & Outlier Detection",
+      "min_ai_maturity": "Exploring",
+      "min_data_maturity": "Siloed",
+      "min_technical_stack": "Excel-only",
+      "complexity_level": "Basic",
+      "rationale": "Unsupervised learning with simple algorithms, can work on fragmented data, suitable for early AI experimentation"
+    },
+    {
+      "archetype_id": "A_Classification",
+      "archetype_name": "Classification",
+      "min_ai_maturity": "Piloting",
+      "min_data_maturity": "Governed",
+      "min_technical_stack": "Hybrid",
+      "complexity_level": "Intermediate",
+      "rationale": "Requires labeled training data and unified data sources, suitable for departmental prototypes"
+    },
+    {
+      "archetype_id": "A_Regression_and_Forecasting",
+      "archetype_name": "Regression & Forecasting",
+      "min_ai_maturity": "Piloting",
+      "min_data_maturity": "Governed",
+      "min_technical_stack": "Hybrid",
+      "complexity_level": "Intermediate",
+      "rationale": "Needs historical data with good quality and consistency, common in pilot projects"
+    },
+    {
+      "archetype_id": "A_Optimization_and_Scheduling",
+      "archetype_name": "Optimization & Scheduling",
+      "min_ai_maturity": "Scaling",
+      "min_data_maturity": "Automated",
+      "min_technical_stack": "Modern cloud stack",
+      "complexity_level": "Advanced",
+      "rationale": "Prescriptive AI requiring sophisticated optimization algorithms, real-time data pipelines, and integration with operational systems"
+    },
+    {
+      "archetype_id": "A_Generative_Modeling",
+      "archetype_name": "Generative Modeling",
+      "min_ai_maturity": "Scaling",
+      "min_data_maturity": "Automated",
+      "min_technical_stack": "Modern cloud stack",
+      "complexity_level": "Advanced",
+      "rationale": "Deep generative models require GPU infrastructure, large datasets, and MLOps capabilities"
+    },
+    {
+      "archetype_id": "A_Language_and_Sequence_Generation",
+      "archetype_name": "Language & Sequence Generation",
+      "min_ai_maturity": "Piloting",
+      "min_data_maturity": "Governed",
+      "min_technical_stack": "Modern cloud stack",
+      "complexity_level": "Intermediate",
+      "rationale": "Can leverage pre-trained models (Gemini, GPT) reducing infrastructure needs, but requires API integration and prompt engineering"
+    },
+    {
+      "archetype_id": "A_Information_Retrieval_RAG",
+      "archetype_name": "Information Retrieval / RAG",
+      "min_ai_maturity": "Exploring",
+      "min_data_maturity": "Siloed",
+      "min_technical_stack": "Hybrid",
+      "complexity_level": "Basic",
+      "rationale": "Can start with simple document search, scales to RAG with managed services (Vertex AI), good entry point for AI adoption"
+    },
+    {
+      "archetype_id": "A_Time-Series_Forecasting",
+      "archetype_name": "Time-Series Forecasting",
+      "min_ai_maturity": "Piloting",
+      "min_data_maturity": "Governed",
+      "min_technical_stack": "Hybrid",
+      "complexity_level": "Intermediate",
+      "rationale": "Requires consistent time-indexed data with minimal gaps, common in operational forecasting"
+    },
+    {
+      "archetype_id": "A_Clustering_and_Segmentation",
+      "archetype_name": "Clustering & Segmentation",
+      "min_ai_maturity": "Exploring",
+      "min_data_maturity": "Siloed",
+      "min_technical_stack": "Excel-only",
+      "complexity_level": "Basic",
+      "rationale": "Unsupervised learning suitable for exploratory data analysis, minimal infrastructure needs"
+    },
+    {
+      "archetype_id": "A_Reinforcement_Learning_Policy_Optimization",
+      "archetype_name": "Reinforcement Learning / Policy Optimization",
+      "min_ai_maturity": "Operationalized",
+      "min_data_maturity": "Automated",
+      "min_technical_stack": "Modern cloud stack",
+      "complexity_level": "Advanced",
+      "rationale": "Requires continuous feedback loops, simulation environments, and advanced MLOps for policy deployment and monitoring"
+    }
+  ]
+}

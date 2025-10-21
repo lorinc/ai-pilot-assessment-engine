@@ -4,13 +4,16 @@
 Build the foundational knowledge layer that combines a NetworkX-based knowledge graph with vector embeddings for RAG, demonstrating hybrid retrieval (structured graph + semantic search) producing coherent responses through LangChain + Gemini.
 
 ## Success Criteria
-- ✅ Knowledge graph loaded from JSON with nodes (archetypes, pains, prerequisites) and edges (relationships)
+- ✅ Knowledge graph loaded from existing JSON with nodes (archetypes, models, outputs, prerequisites, functions, maturity) and edges (relationships)
 - ✅ Vector embeddings created for knowledge chunks using Vertex AI
-- ✅ Graph traversal queries work (e.g., "pain → archetypes → prerequisites")
+- ✅ Graph traversal queries work with 3 test cases proving multi-hop reasoning:
+  - Archetype → Prerequisites → Maturity feasibility check
+  - Function → Tool → Pain → Solution discovery
+  - Maturity-constrained archetype filtering
 - ✅ Vector similarity search retrieves relevant chunks
 - ✅ LangChain orchestrates hybrid retrieval: graph + RAG
 - ✅ Simple CLI/notebook interface demonstrates coherent response combining both sources
-- ✅ All components testable with mock data
+- ✅ Minimal mapping files created for maturity constraints
 
 ## Architecture Layers Touched
 ```
@@ -33,22 +36,37 @@ Build the foundational knowledge layer that combines a NetworkX-based knowledge 
 
 ## User Stories
 
-### Story 1.1: Load Knowledge Graph from JSON
+### Story 1.1: Load Knowledge Graph from Existing JSON
 **As a** developer  
-**I want to** load AI archetypes, pain points, and prerequisites from JSON into a NetworkX graph  
-**So that** I can perform structured queries on relationships
+**I want to** load AI archetypes, models, outputs, prerequisites, functions, and maturity from existing JSON files into a NetworkX graph  
+**So that** I can perform structured multi-hop queries on relationships
 
 **Acceptance Criteria:**
-- JSON schema defined for archetypes, pains, prerequisites
-- Python module `src/knowledge/graph_builder.py` loads JSON → NetworkX
-- Graph has typed nodes: `Archetype`, `Pain`, `Prerequisite`, `Function`, `Maturity`
-- Edges represent relationships: `Pain → Archetype`, `Archetype → Prerequisite`, etc.
-- Unit tests verify graph structure
+- Pydantic schemas defined for 6 core node types and 5 edge types
+- Python module `src/knowledge/graph_builder.py` loads from:
+  - `src/data/AI_archetypes.json` → Archetype, Model, Output nodes
+  - `src/data/AI_prerequisites.json` → Prerequisite nodes
+  - `src/data/AI_discovery.json` → Function, Maturity nodes
+- Graph has typed nodes: `AI_ARCHETYPE`, `COMMON_MODEL`, `AI_OUTPUT`, `AI_PREREQUISITE`, `BUSINESS_FUNCTION`, `MATURITY_DIMENSION`
+- Edges: `IMPLEMENTED_BY`, `PRODUCES_OUTPUT`, `REQUIRES`, `APPLIES_TO_FUNCTION`, `OPERATES_IN`
+- Two mapping files created:
+  - `data/mappings/archetype_maturity_requirements.json` (3+ archetypes mapped)
+  - `data/mappings/maturity_prerequisite_constraints.json` (maturity levels → prerequisites)
+- Unit tests verify graph structure and node counts
 
 **Technical Notes:**
 - Use NetworkX `DiGraph` for directed relationships
-- Node attributes store descriptions, metadata
-- Edge attributes store relationship types/weights
+- Node attributes store all JSON properties as dict
+- Edge attributes store relationship metadata
+- Pydantic models validate data integrity
+- Graph builder handles missing/malformed data gracefully
+
+**Out of Scope (Deferred to Epic 02):**
+- OPERATIONAL_PAIN_POINT nodes (M1 granularity)
+- MEASURABLE_FAILURE_MODE nodes (M2 granularity)
+- MITIGATES_FAILURE edges
+- Comprehensive pain taxonomy
+- Business tool nodes (use simple string references)
 
 ---
 
@@ -72,23 +90,32 @@ Build the foundational knowledge layer that combines a NetworkX-based knowledge 
 
 ---
 
-### Story 1.3: Implement Graph Traversal Queries
+### Story 1.3: Implement Graph Traversal Queries with 3 Test Cases
 **As a** developer  
-**I want to** query the knowledge graph using traversal patterns  
-**So that** I can retrieve structured relationships
+**I want to** query the knowledge graph using multi-hop traversal patterns  
+**So that** I can prove the graph enables complex reasoning
 
 **Acceptance Criteria:**
 - `src/knowledge/graph_queries.py` module with query functions:
-  - `get_archetypes_for_pain(pain_id)` → list of archetype nodes
-  - `get_prerequisites_for_archetype(archetype_id)` → list of prerequisite nodes
-  - `get_maturity_constraints(archetype_id)` → maturity requirements
-- Queries return node data with attributes
-- Tests cover multi-hop traversals
+  - `get_prerequisites_for_archetype(archetype_id)` → prerequisites with maturity check
+  - `get_archetypes_by_maturity(maturity_level)` → feasible archetypes
+  - `get_models_for_archetype(archetype_id)` → implementation models
+  - `check_prerequisite_feasibility(prereq_id, user_maturity)` → gap analysis
+- **3 Test Queries Implemented:**
+  1. **Query 1:** "What prerequisites does 'Optimization & Scheduling' need and can we satisfy them?"
+     - Traversal: Archetype → Models → Prerequisites → Maturity constraints
+  2. **Query 2:** "What archetypes are feasible for 'Exploring' maturity stage?"
+     - Traversal: Maturity → Archetype requirements → Filter by complexity
+  3. **Query 3:** "What models implement 'Anomaly Detection' and what data do they need?"
+     - Traversal: Archetype → Models → Prerequisites (filtered by Data_Quality category)
+- Queries return structured dicts with full node attributes
+- Tests cover all 3 queries with assertions
 
 **Technical Notes:**
-- Use NetworkX `neighbors()`, `successors()`, `predecessors()`
-- Return structured dicts, not raw NetworkX objects
-- Handle missing nodes gracefully
+- Use NetworkX `neighbors()`, `successors()`, `predecessors()`, `shortest_path()`
+- Return Pydantic models or structured dicts
+- Handle missing nodes/edges gracefully with informative errors
+- Add query result caching for performance
 
 ---
 
