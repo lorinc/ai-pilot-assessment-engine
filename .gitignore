@@ -111,3 +111,7 @@ models/
 # Uncomment if you don't want to commit large data files
 # data/raw/
 # data/processed/
+
+# KB Enrichment Tool Output
+tools/kb_enrichment/output/
+tools/kb_enrichment/*.log

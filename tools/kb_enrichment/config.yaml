@@ -1,0 +1,47 @@
+# Knowledge Base Enrichment Tool Configuration
+
+# Run mode: "test" limits processing to a small subset for validation
+# "full" processes the entire dataset
+mode: "test"  # "test" or "full"
+
+test_mode:
+  # Number of nodes to process per category in test mode
+  nodes_per_category: 3
+  
+# Gemini/Vertex AI Configuration
+gemini:
+  model: "gemini-1.5-pro"
+  temperature: 0.2
+  max_output_tokens: 8192
+  location: "us-central1"
+  # Project ID will be read from GOOGLE_CLOUD_PROJECT env var or gcloud config
+  
+# File Paths
+paths:
+  input_data: "../../src/data"
+  output_dir: "./output"
+  checkpoint_file: "./output/checkpoint.json"
+  
+# Processing Configuration
+chunking:
+  # Number of inference triplets per chunk for Phase III.1
+  inference_chunk_size: 15
+  
+# Deduplication Configuration (Phase III.2)
+deduplication:
+  method: "semantic"  # Uses Vertex AI embeddings for similarity
+  similarity_threshold: 0.85  # Nodes above this threshold are considered duplicates
+  embedding_model: "text-embedding-004"
+  batch_size: 100  # Number of nodes to embed at once
+  
+# Business Sector Configuration
+business_sector:
+  # Use category-level nodes only (not individual sectors)
+  use_category_level: true
+  
+# Logging Configuration
+logging:
+  level: "INFO"  # DEBUG, INFO, WARNING, ERROR
+  console: true
+  file: "./output/enrichment.log"
+  format: "%(asctime)s - %(name)s - %(levelname)s - %(message)s"

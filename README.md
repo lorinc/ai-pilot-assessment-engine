@@ -61,16 +61,26 @@ ai-pilot-assessment-engine/
 │   │   ├── AI_archetypes.json         # 28 AI use-case archetypes
 │   │   ├── AI_prerequisites.json      # Implementation prerequisites
 │   │   └── AI_discovery.json          # Maturity dimensions, functions
-│   └── knowledge/                     # NEW: Graph construction
+│   └── knowledge/                     # Graph construction
 │       ├── schemas.py                 # Pydantic models for nodes/edges
 │       └── graph_builder.py           # NetworkX graph builder
+├── tools/
+│   └── kb_enrichment/                 # NEW: Gemini-powered KB enrichment tool
+│       ├── main.py                    # CLI entry point
+│       ├── orchestrator.py            # Phase coordination
+│       ├── config.yaml                # Configuration
+│       ├── phases/                    # 4-phase enrichment pipeline
+│       ├── gemini/                    # Vertex AI integration
+│       ├── utils/                     # Utilities (deduplication, validation)
+│       └── README.md                  # Tool documentation
 ├── data/
-│   └── mappings/                      # NEW: Maturity mappings
+│   └── mappings/                      # Maturity mappings
 │       ├── archetype_maturity_requirements.json
 │       └── maturity_prerequisite_constraints.json
 ├── tests/
 │   └── test_graph_builder.py         # Unit tests
 ├── scripts/
+│   ├── setup_and_test.sh              # Automated setup
 │   └── test_graph_construction.py    # Standalone test script
 ├── docs/
 │   ├── system_architecture_specification.md
@@ -79,6 +89,7 @@ ai-pilot-assessment-engine/
 │   ├── remaining_epics_overview.md
 │   ├── E1S1_enrichment_structure.md
 │   ├── E1S1_enrichment_dimansions_v2.md
+│   ├── E1S1_enrichment_tool_specification.md
 │   └── E1S1_implementation_summary.md
 └── requirements.txt
 ```
@@ -195,6 +206,38 @@ for node_id, data in graph.nodes(data=True):
 
 ---
 
+## Tools
+
+### KB Enrichment Tool (NEW)
+
+A Gemini-powered tool for iteratively scaffolding and enriching the knowledge base to its intended shape.
+
+**Location:** `tools/kb_enrichment/`
+
+**Features:**
+- ✅ **4-Phase Pipeline:** Pre-processing → Node extraction → Edge generation → LLM inference
+- ✅ **Test Mode:** Process 2-3 nodes per category for validation before full runs
+- ✅ **Semantic Deduplication:** Uses Vertex AI embeddings to merge similar pain points
+- ✅ **Checkpointing:** Resume from interruption at phase/chunk level
+- ✅ **Gemini Integration:** Powered by Gemini 1.5 Pro via Vertex AI
+
+**Quick Start:**
+```bash
+cd tools/kb_enrichment
+pip install -r requirements.txt
+python main.py --all  # Run in test mode (default)
+```
+
+**Output:** Enriched knowledge graph with operational pain points (M1) and measurable failure modes (M2)
+
+**Documentation:**
+- [Tool README](tools/kb_enrichment/README.md) - Full documentation
+- [Quick Start Guide](tools/kb_enrichment/QUICKSTART.md) - 5-minute setup
+- [Design Document](tools/kb_enrichment/DESIGN.md) - Architecture decisions
+- [Enrichment Specification](docs/E1S1_enrichment_tool_specification.md) - Requirements
+
+---
+
 ## Documentation
 
 - **[System Architecture Specification](docs/system_architecture_specification.md)** - Overall system design
@@ -203,6 +246,7 @@ for node_id, data in graph.nodes(data=True):
 - **[E1S1 Implementation Summary](docs/E1S1_implementation_summary.md)** - Story 1.1 details
 - **[Knowledge Graph Structure](docs/E1S1_enrichment_structure.md)** - Node/edge design
 - **[Traversal Patterns](docs/E1S1_enrichment_dimansions_v2.md)** - Multi-hop reasoning
+- **[Enrichment Tool Spec](docs/E1S1_enrichment_tool_specification.md)** - KB enrichment requirements
 
 ---
 
@@ -275,6 +319,15 @@ Project maintained as part of AI solution discovery research.
 
 ## Recent Updates
 
+**October 21, 2025 - KB Enrichment Tool Complete ✅**
+- Built Gemini-powered KB enrichment tool (`tools/kb_enrichment/`)
+- 4-phase pipeline: Pre-processing → Extraction → Edges → LLM Inference
+- Semantic deduplication using Vertex AI embeddings (text-embedding-004)
+- Checkpointing system for resumable processing
+- Test mode (2-3 nodes per category) for validation before full runs
+- Comprehensive documentation (README, QUICKSTART, DESIGN)
+- Ready for production use
+
 **October 21, 2025 - Story 1.1 Complete ✅**
 - Implemented Pydantic schemas for 6 node types and 6 edge types
 - Built NetworkX graph loader from 3 existing JSON files
@@ -286,4 +339,4 @@ Project maintained as part of AI solution discovery research.
 ---
 
 **Last Updated:** October 21, 2025  
-**Version:** 0.1.0 (Epic 01, Story 1.1 Complete ✅)
+**Version:** 0.1.1 (Epic 01, Story 1.1 Complete + KB Enrichment Tool ✅)
