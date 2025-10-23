@@ -40,7 +40,6 @@ venv.bak/
 
 # Jupyter Notebook
 .ipynb_checkpoints
-*.ipynb
 
 # pytest
 .pytest_cache/
@@ -107,7 +106,8 @@ models/
 *.ckpt
 *.pth
 
-# Data files (if large)
+# Data files
+/docs/obsolete/
 # Uncomment if you don't want to commit large data files
 # data/raw/
 # data/processed/

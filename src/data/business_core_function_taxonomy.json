@@ -1,0 +1,252 @@
+{
+  "Business_Function": {
+    "description": "Core Process Areas categorized into Business Functions",
+    "categories": [
+      {
+        "category": "Core Value Creation",
+        "functions": [
+          {
+            "name": "R&D / Product Development",
+            "tools_and_processes": [
+              "Requirements Management & Definition",
+              "Product Strategy & Roadmapping",
+              "Generative Design & Engineering (CAD/CAE)",
+              "Testing & Product Validation",
+              "Intellectual Property (IP) & Portfolio Governance",
+              "Stage-Gate & Lifecycle Management"
+            ]
+          },
+          {
+            "name": "Manufacturing / Production",
+            "tools_and_processes": [
+              "Production Planning & Scheduling",
+              "Shop Floor Execution & Control",
+              "Quality Assurance & Process Improvement",
+              "Asset Maintenance & Reliability",
+              "Yield & Waste Optimization"
+            ]
+          },
+          {
+            "name": "Supply Chain & Logistics",
+            "tools_and_processes": [
+              "Demand Forecasting & Planning",
+              "Strategic Sourcing & Supplier Management",
+              "Inventory & Materials Optimization",
+              "Transportation & Route Optimization",
+              "Warehouse Operations & Fulfillment",
+              "Supply Chain Visibility & Resilience"
+            ]
+          },
+          {
+            "name": "Service Delivery / Operations",
+            "tools_and_processes": [
+              "Service Desk & Ticketing Management",
+              "Incident & Problem Resolution",
+              "Field Service Management & Scheduling",
+              "Resource Capacity Planning",
+              "Performance Monitoring & Service Quality"
+            ]
+          }
+        ]
+      },
+      {
+        "category": "Revenue & Growth",
+        "functions": [
+          {
+            "name": "Sales",
+            "tools_and_processes": [
+              "Lead Qualification & Opportunity Management",
+              "Sales Forecasting & Pipeline Analysis",
+              "Configure, Price, Quote (CPQ) & Deal Governance",
+              "Sales Enablement & Content Generation",
+              "Account & Relationship Management"
+            ]
+          },
+          {
+            "name": "Marketing",
+            "tools_and_processes": [
+              "Customer Segmentation & Targeting",
+              "Campaign Execution & Optimization",
+              "Content Creation & Asset Management",
+              "Digital Strategy (SEO, SEM, Social Media)",
+              "Marketing Performance & Attribution",
+              "Customer Feedback & Sentiment Analysis"
+            ]
+          },
+          {
+            "name": "Customer Success / Support",
+            "tools_and_processes": [
+              "Support Triage & Intent Routing",
+              "Agent Assistance & Escalation Management",
+              "Self-Service & Knowledge Base Management",
+              "Customer Experience (CX) Monitoring & Sentiment",
+              "Account Health & Churn Prevention"
+            ]
+          },
+          {
+            "name": "Partnerships / Business Development",
+            "tools_and_processes": [
+              "Partner Identification & Sourcing",
+              "Alliance Strategy & Governance",
+              "Deal Negotiation & Contract Management",
+              "Channel Enablement & Performance Tracking"
+            ]
+          }
+        ]
+      },
+      {
+        "category": "Finance & Compliance",
+        "functions": [
+          {
+            "name": "Accounting & Treasury",
+            "tools_and_processes": [
+              "Accounts Payable (AP) & Invoice Processing",
+              "Accounts Receivable (AR) & Billing Management",
+              "General Ledger & Financial Close",
+              "Treasury & Cash Flow Management",
+              "Fixed Asset & Expense Management"
+            ]
+          },
+          {
+            "name": "Financial Planning & Analysis (FP&A)",
+            "tools_and_processes": [
+              "Forecasting, Budgeting & Planning",
+              "Management Reporting & Business Intelligence (BI)",
+              "Profitability & Investment Analysis",
+              "Scenario Modeling & Stress Testing"
+            ]
+          },
+          {
+            "name": "Compliance & Risk",
+            "tools_and_processes": [
+              "Regulatory Monitoring & Reporting",
+              "Internal Controls & Audit Management",
+              "Enterprise Risk Assessment (ERM)",
+              "Fraud & Financial Crime Detection"
+            ]
+          },
+          {
+            "name": "Procurement",
+            "tools_and_processes": [
+              "Spend Analysis & Strategy",
+              "Strategic Sourcing & RFx Management",
+              "Contract Lifecycle Management (CLM)",
+              "Purchase Order (PO) & Requisition Processing",
+              "Supplier Risk & Performance Management"
+            ]
+          }
+        ]
+      },
+      {
+        "category": "People & Culture",
+        "functions": [
+          {
+            "name": "Human Resources (HR)",
+            "tools_and_processes": [
+              "Talent Acquisition & Recruiting",
+              "Employee Onboarding & Offboarding",
+              "Performance Management & Feedback",
+              "Learning & Development (L&D)",
+              "HR Analytics & Workforce Planning",
+              "Employee Engagement & Culture Monitoring"
+            ]
+          },
+          {
+            "name": "Payroll & Benefits",
+            "tools_and_processes": [
+              "Time & Attendance Tracking",
+              "Payroll Processing & Tax Compliance",
+              "Benefits Administration & Enrollment",
+              "Leave & Absence Management"
+            ]
+          },
+          {
+            "name": "Workplace & Safety",
+            "tools_and_processes": [
+              "EHS Compliance & Policy Management",
+              "Incident Reporting & Response Planning",
+              "Safety Audits & Hazard Assessment",
+              "Workplace Operations & Wellness"
+            ]
+          }
+        ]
+      },
+      {
+        "category": "Strategy & Intelligence",
+        "functions": [
+          {
+            "name": "Corporate Strategy / BI",
+            "tools_and_processes": [
+              "Strategic Planning & Goal Setting (OKR/KPI)",
+              "Competitive Intelligence & Market Analysis",
+              "Portfolio Management & M&A Analysis",
+              "Business Intelligence & Data Visualization"
+            ]
+          },
+          {
+            "name": "Innovation / Digital Transformation",
+            "tools_and_processes": [
+              "Innovation Portfolio Management",
+              "Technology Scouting & Experimentation",
+              "Digital Transformation Roadmapping",
+              "Organizational Change Management & Adoption"
+            ]
+          },
+          {
+            "name": "Knowledge Management",
+            "tools_and_processes": [
+              "Content Curation & Lifecycle Management",
+              "Information Retrieval & Enterprise Search",
+              "Taxonomy, Metadata & Governance",
+              "Knowledge Sharing & Collaboration"
+            ]
+          }
+        ]
+      },
+      {
+        "category": "Technology & Infrastructure",
+        "functions": [
+          {
+            "name": "IT Operations",
+            "tools_and_processes": [
+              "IT Service Management (ITSM) & Service Desk",
+              "Infrastructure Monitoring & AIOps",
+              "Incident, Problem & Change Management",
+              "Security Patching & Configuration Management",
+              "IT Asset & Inventory Management"
+            ]
+          },
+          {
+            "name": "Data Engineering / Analytics Platforms",
+            "tools_and_processes": [
+              "Data Ingestion & Pipeline Orchestration",
+              "Data Warehouse & Lake Management",
+              "Data Governance & Quality Assurance",
+              "Metadata & Data Cataloging",
+              "MLOps & Platform Operations"
+            ]
+          },
+          {
+            "name": "Cybersecurity",
+            "tools_and_processes": [
+              "Threat Detection & Security Monitoring",
+              "Vulnerability & Remediation Management",
+              "Identity & Access Management (IAM)",
+              "Incident Response & Digital Forensics",
+              "Security Compliance & Auditing"
+            ]
+          },
+          {
+            "name": "Architecture & Integration",
+            "tools_and_processes": [
+              "Enterprise Architecture & Governance",
+              "System Integration & Middleware Management",
+              "Solution Design & Technical Standards",
+              "Technology Roadmapping & Lifecycle Planning"
+            ]
+          }
+        ]
+      }
+    ]
+  }
+}
