@@ -1,0 +1,359 @@
+{
+  "Broken Knowledge & Documentation Systems": {
+    "Knowledge management quality": [
+      "capture gaps",
+      "retrieval failure",
+      "stale/obsolete content",
+      "no ownership of updates"
+    ],
+    "Documentation maturity": [
+      "missing docs",
+      "inaccurate/how-to errors",
+      "not maintained",
+      "scattered across tools"
+    ],
+    "Version control hygiene": [
+      "branching chaos",
+      "no release notes",
+      "manual merges",
+      "unknown latest version"
+    ],
+    "Knowledge silos": [
+      "single points of failure",
+      "tribal knowledge gatekeeping",
+      "expert burnout risks"
+    ],
+    "Search/discoverability": [
+      "irrelevant ranking",
+      "duplicate results first",
+      "poor filters/facets"
+    ],
+    "Metadata/ontology maturity": [
+      "no taxonomy",
+      "inconsistent tags",
+      "missing entity graph"
+    ],
+    "Feedback synthesis": [
+      "conflicting inputs unsynthesized",
+      "themes unknown",
+      "no prioritization"
+    ],
+    "Knowledge base health": [
+      "coverage gaps",
+      "low freshness",
+      "broken links"
+    ]
+  },
+  "Process Design Gaps & Workarounds": {
+    "Process clarity": [
+      "ambiguous steps",
+      "conflicting procedures",
+      "hidden constraints"
+    ],
+    "Process adherence": [
+      "guideline avoidance",
+      "workarounds normalized",
+      "audit failures"
+    ],
+    "Standardization level": [
+      "one-off approaches",
+      "template drift",
+      "no canonical playbooks"
+    ],
+    "Reuse potential": [
+      "reinventing the wheel",
+      "no component library",
+      "copy-paste proliferation"
+    ],
+    "Work prioritization": [
+      "firefighting culture",
+      "no WIP limits",
+      "low-value work crowds out high-value"
+    ],
+    "Ticket hygiene": [
+      "misrouting",
+      "duplicates",
+      "stale backlog"
+    ],
+    "Feature discovery/education": [
+      "users unaware of capability",
+      "docs too dense",
+      "no in-product guidance"
+    ],
+    "Adoption barriers": [
+      "poor UX",
+      "low trust",
+      "unclear value proposition"
+    ]
+  },
+  "Missing Ownership, Misaligned Incentives & Skills": {
+    "Ownership clarity (RACI)": [
+      "no accountable owner",
+      "confused escalation paths",
+      "decision paralysis"
+    ],
+    "Incentive alignment": [
+      "KPIs reward output not outcomes",
+      "perverse incentives",
+      "no recognition for fixes"
+    ],
+    "Training/enablement": [
+      "thin onboarding",
+      "no refresh cadence",
+      "irrelevant courseware"
+    ],
+    "Skill availability (SME bottlenecks)": [
+      "few experts",
+      "overloaded reviewers",
+      "handoff delays"
+    ],
+    "Workforce impact (reskilling need)": [
+      "role fear",
+      "skill gap unaddressed",
+      "talent attrition"
+    ],
+    "Union/works-council sensitivity": [
+      "late consultation",
+      "negotiation delays",
+      "pilot blocked"
+    ]
+  },
+  "Broken Communication & Decision Flow": {
+    "Communication flow": [
+      "handoff gaps",
+      "feedback loops missing",
+      "context lost across channels"
+    ],
+    "Decision latency": [
+      "approval queues",
+      "batching delays",
+      "unclear thresholds"
+    ],
+    "Stakeholder alignment": [
+      "conflicting goals",
+      "consensus deadlock",
+      "scope churn"
+    ],
+    "Visibility preference": [
+      "quiet win required",
+      "internal showcase pressure",
+      "public case study demands"
+    ]
+  },
+  "Data Management Failures": {
+    "Data availability": [
+      "coverage gaps",
+      "access blocked",
+      "slow provisioning"
+    ],
+    "Data quality": [
+      "incompleteness",
+      "inaccuracy",
+      "untimeliness"
+    ],
+    "Data consistency": [
+      "competing truths",
+      "forked datasets",
+      "schema drift"
+    ],
+    "Data lineage transparency": [
+      "unknown sources",
+      "opaque transforms",
+      "no impact analysis"
+    ],
+    "Data sovereignty": [
+      "region constraints unclear",
+      "cross-border risk",
+      "vendor residency gaps"
+    ],
+    "Privacy mode (PII handling)": [
+      "excess data collection",
+      "weak minimization",
+      "inconsistent redaction"
+    ]
+  },
+  "Fragmented Tooling, Integrations & Shadow IT": {
+    "Toolchain fragmentation": [
+      "overlap and redundancy",
+      "gaps between tools",
+      "license sprawl"
+    ],
+    "Integration depth": [
+      "one-way sync only",
+      "manual rekeying",
+      "no eventing"
+    ],
+    "Spreadsheet reliance": [
+      "mission-critical spreadsheets",
+      "brittle formulas",
+      "version chaos"
+    ],
+    "Shadow IT prevalence": [
+      "unauthorized tools",
+      "untracked data flows",
+      "security blind spots"
+    ],
+    "Procurement friction": [
+      "RFP bottlenecks",
+      "slow approvals",
+      "unclear vendor policy"
+    ],
+    "Vendor dependency (lock-in)": [
+      "hard to exit",
+      "proprietary formats",
+      "limited portability"
+    ]
+  },
+  "Ops Reliability, Observability & Continuity Gaps": {
+    "Observability": [
+      "missing logs",
+      "sparse metrics",
+      "no traces"
+    ],
+    "Reliability": [
+      "frequent incidents",
+      "high MTTR",
+      "recurring root causes"
+    ],
+    "Resilience": [
+      "no fallbacks",
+      "poor degradation modes",
+      "single-region risk"
+    ],
+    "SLA/SLO adherence": [
+      "chronic breaches",
+      "weak error budgets",
+      "no blameless postmortems"
+    ],
+    "Operational continuity risk": [
+      "pilot in prod without guardrails",
+      "risky cutovers",
+      "untested runbooks"
+    ],
+    "Rollback readiness": [
+      "no kill switch",
+      "no blue/green",
+      "rollback untested"
+    ]
+  },
+  "Security, Compliance & Legal Exposure": {
+    "Security posture": [
+      "secrets in code",
+      "over-permissive RBAC",
+      "manual rotations"
+    ],
+    "Compliance pressure": [
+      "policy fit",
+      "audit gaps",
+      "new regulation impact unknown"
+    ],
+    "Legal exposure": [
+      "contractual liabilities",
+      "IP ambiguity",
+      "retention violations"
+    ],
+    "Governance readiness": [
+      "no approved policies",
+      "ad hoc approvals",
+      "poor review trails"
+    ],
+    "Standard of care vs regulation": [
+      "best-practice gap",
+      "industry baseline missed",
+      "unsafe defaults"
+    ],
+    "Auditability": [
+      "missing decision logs",
+      "non-traceable actions",
+      "weak evidence capture"
+    ]
+  },
+  "IT System Performance, Capacity & Cost Control": {
+    "Performance": [
+      "latency spikes",
+      "throughput limits",
+      "no QoS"
+    ],
+    "Capacity planning": [
+      "GPU/CPU under/over-provision",
+      "rate-limit hits",
+      "queue buildup"
+    ],
+    "Cost control": [
+      "unknown unit economics",
+      "no budgets/alerts",
+      "chargeback disputes"
+    ],
+    "Risk aggregation": [
+      "hidden dependencies",
+      "cascade failures",
+      "no blast-radius limits"
+    ]
+  },
+  "Measurement, Forecasting & Economic Blind Spots": {
+    "Measurement clarity": [
+      "no baselines",
+      "unclear success metrics",
+      "vanity KPIs"
+    ],
+    "Evaluation maturity": [
+      "no offline evals",
+      "HITL missing",
+      "no CI for prompts/models"
+    ],
+    "Forecasting quality": [
+      "high variance",
+      "systematic bias",
+      "no scenarios"
+    ],
+    "Revenue integrity": [
+      "leakage undetected",
+      "pricing errors",
+      "discount abuse"
+    ],
+    "Cost leakage": [
+      "rework tax",
+      "duplicate spend",
+      "unused licenses"
+    ]
+  },
+  "Operations, Supply Chain & Fulfillment Breakdowns": {
+    "Inventory accuracy": [
+      "stale counts",
+      "shrinkage",
+      "mismatched systems"
+    ],
+    "Scheduling efficiency": [
+      "missed constraints",
+      "idle time",
+      "expedites common"
+    ],
+    "Customer impact": [
+      "internal handoffs break CX",
+      "high-touch external failures",
+      "SLA visibility gaps"
+    ],
+    "Brand/reputation risk": [
+      "public incidents",
+      "slow responses",
+      "inconsistent messaging"
+    ]
+  },
+  "Strategic Misalignment & Competitive Pressure": {
+    "Strategic alignment": [
+      "off-OKR work",
+      "must-win themes ignored",
+      "pet projects"
+    ],
+    "Competitive pressure": [
+      "parity gap",
+      "catch-up scramble",
+      "missed leapfrog window"
+    ],
+    "Optionality creation": [
+      "premature lock-in",
+      "no path options",
+      "irreversible choices"
+    ]
+  }
+}

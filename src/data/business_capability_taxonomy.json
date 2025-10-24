@@ -1,0 +1,312 @@
+{
+  "T1_Organizational_Capabilities": [
+    {
+      "T1_Pillar": "Data_and_Information_Assets",
+      "T2_Categories": [
+        {
+          "T2_Category": "Data_Foundation_and_Feature_Engineering",
+          "T3_Capabilities": [
+            "Data availability and provisioning capability",
+            "Data quality assurance capability",
+            "Data quality management capability",
+            "Data consistency and completeness capability",
+            "Bias-free and representative dataset capability",
+            "Large historical dataset capability",
+            "Sufficient training sample capability",
+            "Continuous data stream capability",
+            "Labeled training data availability",
+            "Feature normalization and standardization capability",
+            "Centralized feature store capability"
+          ]
+        },
+        {
+          "T2_Category": "Data_Structure_and_Modality_Handling",
+          "T3_Capabilities": [
+            "Structured tabular data management capability",
+            "Transactional or event data logging infrastructure",
+            "Time-indexed sequential data handling capability",
+            "Unstructured text data preprocessing capability",
+            "Graph or network data storage capability",
+            "Multimodal data alignment and fusion capability",
+            "Multi-source data integration capability",
+            "Vector embedding and indexed document capability"
+          ]
+        },
+        {
+          "T2_Category": "Data_Governance_Privacy_and_Access",
+          "T3_Capabilities": [
+            "Formal data governance policies",
+            "Auditable governance capability",
+            "Policy documentation capability",
+            "Approval workflows capability",
+            "Data access governance capability",
+            "Data lineage tracking capability",
+            "Data lineage transparency capability ",
+            "Data sovereignty compliance capability",
+            "PII handling and privacy minimization capability ",
+            "Data privacy configuration capability for vendor cloud",
+            "Data privacy configuration capability for anonymized data",
+            "Data privacy configuration capability for VPC",
+            "Data privacy configuration capability for on-premise data",
+            "Security handling capability for public data",
+            "Security handling capability for internal data",
+            "Security handling capability for confidential data",
+            "Security handling capability for PII data",
+            "Security handling capability for PCI data"
+          ]
+        },
+        {
+          "T2_Category": "Knowledge_and_Documentation_Systems",
+          "T3_Capabilities": [
+            "Knowledge capture processes",
+            "Knowledge distribution capability",
+            "Knowledge democratization capability",
+            "Search and retrieval capability",
+            "Search result relevance capability",
+            "Feedback synthesis capability",
+            "Knowledge base health management",
+            "Content freshness/maintenance capability",
+            "Metadata and ontology maturity",
+            "Ontology and taxonomy design capability",
+            "Document indexing and chunking strategy capability",
+            "Documentation ownership model",
+            "Comprehensive documentation availability",
+            "Accurate documentation capability",
+            "Documentation maintenance capability",
+            "Centralized documentation management",
+            "Version control hygiene capability"
+          ]
+        }
+      ]
+    },
+    {
+      "T1_Pillar": "Technology_and_Engineering",
+      "T2_Categories": [
+        {
+          "T2_Category": "AI_Infrastructure_and_Compute",
+          "T3_Capabilities": [
+            "GPU compute infrastructure for training",
+            "Scalable cloud or on-premise compute infrastructure",
+            "Distributed computing systems capability",
+            "Real-time inference infrastructure",
+            "Vector database infrastructure",
+            "Model serving and API infrastructure",
+            "System performance and Quality of Service capability ",
+            "Capacity planning and provisioning capability "
+          ]
+        },
+        {
+          "T2_Category": "MLOps_and_Model_Lifecycle_Management",
+          "T3_Capabilities": [
+            "Model versioning and tracking capability",
+            "Continuous monitoring pipeline capability",
+            "Automated retraining workflow capability",
+            "A/B testing framework capability",
+            "Clear baseline definition capability",
+            "Evaluation maturity capability ",
+            "Simple metrics evaluation capability",
+            "Task evaluation capability",
+            "Human-in-the-loop evaluation capability",
+            "High quality forecasting capability "
+          ]
+        },
+        {
+          "T2_Category": "Architecture_Integration_and_Orchestration",
+          "T3_Capabilities": [
+            "Toolchain management and rationalization capability ",
+            "Existing ML stack utilization capability",
+            "Toolchain integration capability",
+            "Deep system integration capability ",
+            "Surface API integration capability",
+            "System-of-record integration capability",
+            "Bi-directional integration capability",
+            "Dependency management capability",
+            "Simple orchestration technology handling capability",
+            "Multi-agent technology handling capability",
+            "Advanced ML technology handling capability",
+            "Tool and API ecosystem integration capability",
+            "Spreadsheet reliance mitigation capability ",
+            "Shadow IT control and visibility "
+          ]
+        },
+        {
+          "T2_Category": "Performance_and_Quality_Targets",
+          "T3_Capabilities": [
+            "Batch latency performance capability",
+            "Near-real-time latency performance capability",
+            "Real-time latency performance capability",
+            "Approximate accuracy tolerance capability",
+            "Calibrated accuracy tolerance capability",
+            "High-precision accuracy tolerance capability"
+          ]
+        },
+        {
+          "T2_Category": "External_Resources_and_Sourcing_Strategy",
+          "T3_Capabilities": [
+            "Strategic build/buy posture definition",
+            "Vendor independence/management capability",
+            "Vendor lock-in avoidance capability ",
+            "Access to pre-trained models or APIs",
+            "Third-party LLM services access",
+            "Open-source framework utilization capability",
+            "Annotation and labeling services access"
+          ]
+        }
+      ]
+    },
+    {
+      "T1_Pillar": "Strategy_People_and_Process",
+      "T2_Categories": [
+        {
+          "T2_Category": "AI_Talent_and_Expertise",
+          "T3_Capabilities": [
+            "In-house ML expertise",
+            "MLOps engineering capability",
+            "NLP specialization expertise",
+            "Software engineering integration capability",
+            "Statistical foundation expertise",
+            "Optimization specialization expertise",
+            "Prompt engineering expertise",
+            "Business domain expert availability",
+            "Operations and process expertise",
+            "Subject matter expert labeling capability",
+            "Expert workload management",
+            "SME bottleneck management capability ",
+            "Talent upskilling capability",
+            "Talent reassign capability",
+            "Talent hiring capability",
+            "Talent outsourcing capability",
+            "Workforce reskilling strategy "
+          ]
+        },
+        {
+          "T2_Category": "Business_Alignment_and_Strategic_Ownership",
+          "T3_Capabilities": [
+            "AI executive sponsorship and budget availability",
+            "Strategic alignment enforcement capability ",
+            "Competitive posture advancement capability ",
+            "Optionality creation capability ",
+            "Visibility management capability ",
+            "RACI ownership clarity ",
+            "Business-led ownership model",
+            "Tech-led ownership model",
+            "Joint ownership model"
+          ]
+        },
+        {
+          "T2_Category": "Process_Efficiency_and_Standardization",
+          "T3_Capabilities": [
+            "Process clarity and definition capability",
+            "Process adherence enforcement capability",
+            "Standardized playbook capability",
+            "Work prioritization processes ",
+            "Ticket hygiene processes ",
+            "One-off standardization avoidance",
+            "Templateable standardization capability",
+            "Platformable standardization capability",
+            "Component library reuse capability ",
+            "Single case reuse capability avoidance",
+            "Cross-functional reuse capability",
+            "Inventory accuracy capability ",
+            "Scheduling efficiency capability "
+          ]
+        },
+        {
+          "T2_Category": "Organizational_Change_and_Adoption_Enablement",
+          "T3_Capabilities": [
+            "Organizational change management capability",
+            "Cross-functional collaboration capability",
+            "Stakeholder alignment capability ",
+            "Light training change management capability",
+            "Process redesign capability",
+            "Role redesign capability",
+            "Training and enablement capability ",
+            "User feature education capability ",
+            "System adoption capability ",
+            "Communication flow optimization ",
+            "Decision latency reduction capability ",
+            "Union/works-council engagement capability "
+          ]
+        },
+        {
+          "T2_Category": "Value_Measurement_and_Specialized_Modeling",
+          "T3_Capabilities": [
+            "SLA KPI linkage capability",
+            "NPS KPI linkage capability",
+            "Cycle time KPI linkage capability",
+            "Error rate KPI linkage capability",
+            "Margin KPI linkage capability",
+            "Externalizable IP capability",
+            "Learning value capture capability",
+            "Causal graph or domain theory modeling capability",
+            "Reward signal design expertise",
+            "Simulation environment capability"
+          ]
+        }
+      ]
+    },
+    {
+      "T1_Pillar": "Governance_Risk_and_Resilience",
+      "T2_Categories": [
+        {
+          "T2_Category": "Security_Compliance_and_Legal_Postures",
+          "T3_Capabilities": [
+            "Compliance and legal expert availability",
+            "Strong security posture capability ",
+            "Compliance monitoring capability ",
+            "Legal exposure management capability ",
+            "Governance policy definition and auditability ",
+            "Standard of care adherence capability ",
+            "Auditability and trace logging capability ",
+            "Incentive alignment capability ",
+            "Procurement friction reduction capability "
+          ]
+        },
+        {
+          "T2_Category": "Operational_Resilience_and_Continuity",
+          "T3_Capabilities": [
+            "Comprehensive observability capability ",
+            "System reliability improvement capability ",
+            "System resilience capability ",
+            "SLA/SLO adherence capability ",
+            "Operational continuity risk mitigation ",
+            "Risk aggregation and blast-radius limiting capability ",
+            "System reversibility capability (easy rollback)",
+            "System reversibility capability (moderate)",
+            "System reversibility capability (hard to unwind)",
+            "Rollback readiness capability ",
+            "Monitoring capability for incident readiness",
+            "Rollback playbook capability",
+            "Auditable end-to-end incident readiness"
+          ]
+        },
+        {
+          "T2_Category": "Deployment_Assurance_and_Human_Oversight",
+          "T3_Capabilities": [
+            "Ethics and fairness review board oversight",
+            "Shadow testing capability",
+            "Production piloting capability",
+            "Operational cutover capability",
+            "Review-on-fail human oversight capability",
+            "Spot-check human oversight capability",
+            "Continuous human-in-the-loop capability",
+            "Internal support capability",
+            "Center of Excellence support capability",
+            "Vendor management support capability",
+            "Customer experience continuity capability ",
+            "Brand and reputation risk management "
+          ]
+        },
+        {
+          "T2_Category": "Financial_Risk_and_Economic_Control",
+          "T3_Capabilities": [
+            "Cost control and unit economics visibility ",
+            "Clear success metric definition capability ",
+            "Revenue integrity assurance capability ",
+            "Cost leakage detection and prevention capability "
+          ]
+        }
+      ]
+    }
+  ]
+}

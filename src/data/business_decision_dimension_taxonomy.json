@@ -1,0 +1,443 @@
+{
+  "Delivery Timing": {
+    "Urgency": {
+      "levels": {
+        "1": "immediate fire",
+        "2": "this quarter",
+        "3": "this fiscal year",
+        "4": "multi-year"
+      }
+    },
+    "Time-to-impact": {
+      "levels": {
+        "1": "weeks",
+        "2": "quarter",
+        "3": "long-cycle"
+      }
+    },
+    "ROI horizon": {
+      "levels": {
+        "1": "fast payback",
+        "2": "medium",
+        "3": "strategic"
+      }
+    }
+  },
+  "Scope & Scale": {
+    "Scope": {
+      "levels": {
+        "1": "team",
+        "2": "function",
+        "3": "business unit",
+        "4": "enterprise"
+      }
+    },
+    "Scalability path": {
+      "levels": {
+        "1": "pilot only",
+        "2": "scale within function",
+        "3": "org-wide"
+      }
+    },
+    "Process criticality": {
+      "levels": {
+        "1": "supporting",
+        "2": "core",
+        "3": "mission-critical"
+      }
+    }
+  },
+  "Stakeholders, Politics & Comms": {
+    "Sponsor level": {
+      "levels": {
+        "1": "individual contributor",
+        "2": "manager",
+        "3": "VP",
+        "4": "C-suite",
+        "5": "board"
+      }
+    },
+    "Consensus required": {
+      "levels": {
+        "1": "solo owner",
+        "2": "small coalition",
+        "3": "broad consensus"
+      }
+    },
+    "Political capital required": {
+      "levels": {
+        "1": "low",
+        "2": "medium",
+        "3": "high"
+      }
+    },
+    "Visibility preference": {
+      "levels": {
+        "1": "quiet win",
+        "2": "internal showcase",
+        "3": "public case study"
+      }
+    },
+    "Success narrative strength": {
+      "levels": {
+        "1": "technical only",
+        "2": "department-ready",
+        "3": "board-friendly"
+      }
+    }
+  },
+  "Strategy & Market Position": {
+    "Strategic alignment": {
+      "levels": {
+        "1": "OKR fit",
+        "2": "must-win theme",
+        "3": "distraction"
+      }
+    },
+    "Competitive pressure": {
+      "levels": {
+        "1": "parity",
+        "2": "catch-up",
+        "3": "leapfrog",
+        "4": "preemptive"
+      }
+    },
+    "Optionality created": {
+      "levels": {
+        "1": "locks in",
+        "2": "neutral",
+        "3": "opens paths"
+      }
+    },
+    "Cannibalization risk": {
+      "levels": {
+        "1": "none",
+        "2": "partial",
+        "3": "material"
+      }
+    },
+    "Brand visibility": {
+      "levels": {
+        "1": "internal",
+        "2": "customer-facing",
+        "3": "PR-ready"
+      }
+    }
+  },
+  "Economics & Funding": {
+    "Revenue link": {
+      "levels": {
+        "1": "indirect",
+        "2": "retention",
+        "3": "cross-sell",
+        "4": "direct growth"
+      }
+    },
+    "Cost lever": {
+      "levels": {
+        "1": "opex reduction",
+        "2": "capex avoidance",
+        "3": "vendor spend cut"
+      }
+    },
+    "Budget type": {
+      "levels": {
+        "1": "opex",
+        "2": "capex",
+        "3": "pilot fund",
+        "4": "innovation grant"
+      }
+    },
+    "Funding trigger": {
+      "levels": {
+        "1": "OKR",
+        "2": "savings commitment",
+        "3": "executive mandate"
+      }
+    }
+  },
+  "Risk, Safety & Compliance": {
+    "Compliance pressure": {
+      "levels": {
+        "1": "none",
+        "2": "pending",
+        "3": "active audit/regulation"
+      }
+    },
+    "Regulatory domain": {
+      "levels": {
+        "1": "none",
+        "2": "GDPR",
+        "3": "AI Act",
+        "4": "sector-specific"
+      }
+    },
+    "Legal exposure": {
+      "levels": {
+        "1": "low",
+        "2": "reputational",
+        "3": "contractual",
+        "4": "regulatory"
+      }
+    },
+    "Safety posture": {
+      "levels": {
+        "1": "assistive only",
+        "2": "semi-autonomous",
+        "3": "autonomous"
+      }
+    },
+    "Reversibility": {
+      "levels": {
+        "1": "easy rollback",
+        "2": "moderate",
+        "3": "hard to unwind"
+      }
+    },
+    "Incident readiness": {
+      "levels": {
+        "1": "monitoring only",
+        "2": "rollback playbook",
+        "3": "auditable end-to-end"
+      }
+    },
+    "Union/works council sensitivity": {
+      "levels": {
+        "1": "none",
+        "2": "consult",
+        "3": "negotiate"
+      }
+    }
+  },
+  "Data, Security & Governance": {
+    "Data readiness": {
+      "levels": {
+        "1": "availability",
+        "2": "quality",
+        "3": "lineage",
+        "4": "access"
+      }
+    },
+    "Security sensitivity": {
+      "levels": {
+        "1": "public",
+        "2": "internal",
+        "3": "confidential",
+        "4": "PII",
+        "5": "PCI"
+      }
+    },
+    "Data privacy mode": {
+      "levels": {
+        "1": "vendor cloud",
+        "2": "anonymized",
+        "3": "VPC",
+        "4": "on-prem"
+      }
+    },
+    "Data sovereignty constraints": {
+      "levels": {
+        "1": "none",
+        "2": "EU-only",
+        "3": "country-specific"
+      }
+    },
+    "Governance readiness": {
+      "levels": {
+        "1": "policies drafted",
+        "2": "approvals defined",
+        "3": "auditable"
+      }
+    }
+  },
+  "Architecture, Integration & Tech Complexity": {
+    "Build vs buy posture": {
+      "levels": {
+        "1": "buy",
+        "2": "extend",
+        "3": "hybrid",
+        "4": "build"
+      }
+    },
+    "Vendor dependency": {
+      "levels": {
+        "1": "single vendor",
+        "2": "multi-vendor",
+        "3": "in-house"
+      }
+    },
+    "Toolchain fit": {
+      "levels": {
+        "1": "existing stack",
+        "2": "minor gaps",
+        "3": "major new stack"
+      }
+    },
+    "Integration depth": {
+      "levels": {
+        "1": "surface API",
+        "2": "system-of-record",
+        "3": "bi-directional"
+      }
+    },
+    "Dependency graph": {
+      "levels": {
+        "1": "few dependencies",
+        "2": "cross-team",
+        "3": "ecosystem"
+      }
+    },
+    "Tech complexity": {
+      "levels": {
+        "1": "simple orchestration",
+        "2": "multi-agent",
+        "3": "advanced ML"
+      }
+    },
+    "Latency tolerance": {
+      "levels": {
+        "1": "batch",
+        "2": "near-real-time",
+        "3": "real-time"
+      }
+    },
+    "Accuracy tolerance": {
+      "levels": {
+        "1": "approximate OK",
+        "2": "calibrated",
+        "3": "high-precision"
+      }
+    }
+  },
+  "Operations, Ownership & Change": {
+    "Change-management load": {
+      "levels": {
+        "1": "light training",
+        "2": "process redesign",
+        "3": "role redesign"
+      }
+    },
+    "Ownership model": {
+      "levels": {
+        "1": "business-led",
+        "2": "tech-led",
+        "3": "joint"
+      }
+    },
+    "Talent strategy": {
+      "levels": {
+        "1": "upskill",
+        "2": "reassign",
+        "3": "hire",
+        "4": "outsource"
+      }
+    },
+    "Support model": {
+      "levels": {
+        "1": "team can own",
+        "2": "needs Center of Excellence",
+        "3": "needs vendor"
+      }
+    },
+    "Operational continuity risk": {
+      "levels": {
+        "1": "shadow test",
+        "2": "pilot in prod",
+        "3": "cutover"
+      }
+    },
+    "Human oversight level": {
+      "levels": {
+        "1": "review-on-fail",
+        "2": "spot-check",
+        "3": "continuous human-in-the-loop"
+      }
+    }
+  },
+  "Measurement, Evaluation & Reuse": {
+    "KPI linkage": {
+      "levels": {
+        "1": "SLA",
+        "2": "NPS",
+        "3": "cycle time",
+        "4": "error rate",
+        "5": "margin"
+      }
+    },
+    "Measurement clarity": {
+      "levels": {
+        "1": "none",
+        "2": "partial baseline",
+        "3": "clear baseline"
+      }
+    },
+    "Evaluation complexity": {
+      "levels": {
+        "1": "simple metrics",
+        "2": "task evals",
+        "3": "human-in-the-loop"
+      }
+    },
+    "Standardization potential": {
+      "levels": {
+        "1": "one-off",
+        "2": "templateable",
+        "3": "platformable"
+      }
+    },
+    "Reuse potential": {
+      "levels": {
+        "1": "single case",
+        "2": "many functions",
+        "3": "externalizable IP"
+      }
+    },
+    "Learning value": {
+      "levels": {
+        "1": "low",
+        "2": "template creation",
+        "3": "high lessons"
+      }
+    }
+  },
+  "User, Customer & Accessibility Impact": {
+    "Customer impact": {
+      "levels": {
+        "1": "internal only",
+        "2": "limited external",
+        "3": "high-touch external"
+      }
+    },
+    "Internationalization needs": {
+      "levels": {
+        "1": "single locale",
+        "2": "multilingual"
+      }
+    },
+    "Accessibility impact": {
+      "levels": {
+        "1": "none",
+        "2": "content accessibility",
+        "3": "workflow accessibility"
+      }
+    }
+  },
+  "Procurement & Sourcing": {
+    "Procurement friction": {
+      "levels": {
+        "1": "none",
+        "2": "light",
+        "3": "RFP"
+      }
+    }
+  },
+  "Sustainability": {
+    "Carbon/energy sensitivity": {
+      "levels": {
+        "1": "untracked",
+        "2": "measured",
+        "3": "optimized"
+      }
+    }
+  }
+}
