@@ -1,342 +1,93 @@
 # AI Pilot Assessment Engine
 
-A knowledge graph-powered system for discovering and recommending AI solutions based on organizational context, maturity, and business needs.
+A **Decision-to-Act system** that bridges the gap from "we think we have a problem" to "we authorize action" through structured problem formation, option evaluation, and evidence-based decision rules.
 
-## Project Status
+## Vision
 
-**Current Epic:** Epic 01 - Knowledge Graph Foundation  
-**Current Story:** Story 1.1 - Load Knowledge Graph from Existing JSON  
-**Status:** ✅ **COMPLETE & TESTED**
+This system guides leaders through a **linear discovery process** that stops at a clear **Go/No-Go/Time-boxed Try** decision while capturing projections (plans, metrics, risks) without executing them. It transforms vague signals into defensible, auditable decisions.
 
-**Latest Test Results:**
-- ✅ 281 nodes created (27 archetypes, 96 models, 79 outputs, 53 prerequisites, 22 functions, 4 maturity dimensions)
-- ✅ 758 edges created (101 IMPLEMENTED_BY, 79 PRODUCES_OUTPUT, 578 REQUIRES)
-- ✅ Multi-hop traversal working (Archetype → Models → Prerequisites)
-- ✅ All validation checks passing
+### Core Process
 
----
+**Signal → Problem → Options → Evidence → Decision**
 
-## Quick Start
+1. **Problem Formation** - Convert signals and interpretations into falsifiable problem statements with clear stakes and scope
+2. **Objective Setting** - Define time-bound business outcomes with measurable targets
+3. **Option Generation** - Force consideration of ≥3 options (including "Do Nothing" and "Delay")
+4. **Evidence Collection** - Gather internal data and external sources with quality ratings
+5. **Impact Projection** - Model how each option moves objectives, including risks and reversibility
+6. **Decision Rule Definition** - Set metric thresholds that trigger action (e.g., "Proceed if pilot ≤€25k and cycle time reduction ≥15% at p90")
+7. **Decision Record** - Document the Go/No-Go/Try decision with rationale and owner
 
-### Prerequisites
+### Decision Readiness Checklist
 
-- Python 3.10+
-- pip or conda
+Before any decision, the system ensures:
+- Problem statement is **falsifiable** and **valuable**
+- At least **3 options** considered (including "Do Nothing")
+- Evidence quality rated; key assumptions listed with confidence
+- Objectives mapped to **measurable metrics** with targets
+- Constraints acknowledged; **reversibility** scored
+- **Decision rule** formulated with clear thresholds
+- **Decision owner** named; **Decision Record** drafted
 
-### Installation & Testing
+### Observability Monitor
 
-**Automated Setup (Recommended):**
-```bash
-# One command to create venv, install dependencies, and run tests
-bash scripts/setup_and_test.sh
-```
+The system includes an **observability monitor** that tracks:
+- Decision quality metrics (completeness, evidence strength, assumption confidence)
+- Process adherence (checklist completion, option diversity)
+- Projection accuracy (when decisions proceed to action)
+- Assumption validation status
+- Decision velocity and bottlenecks
 
-**Manual Setup:**
-```bash
-# Create virtual environment
-python3 -m venv venv
-source venv/bin/activate
-
-# Install minimal dependencies for Story 1.1
-pip install pydantic networkx pytest
-
-# Run tests
-python3 scripts/test_graph_construction.py
-```
-
-**Full Installation (for future stories):**
-```bash
-# Install all dependencies including LangChain, Vertex AI, FAISS
-pip install -r requirements.txt
-```
+This monitor surfaces patterns across decisions, enabling continuous improvement of the decision-making process itself
 
 ---
 
-## Project Structure
+## Key Concepts
 
-```
-ai-pilot-assessment-engine/
-├── src/
-│   ├── data/                          # Existing knowledge base JSON files
-│   │   ├── AI_archetypes.json         # 28 AI use-case archetypes
-│   │   ├── AI_prerequisites.json      # Implementation prerequisites
-│   │   └── AI_discovery.json          # Maturity dimensions, functions
-│   └── knowledge/                     # Graph construction
-│       ├── schemas.py                 # Pydantic models for nodes/edges
-│       └── graph_builder.py           # NetworkX graph builder
-├── tools/
-│   └── kb_enrichment/                 # NEW: Gemini-powered KB enrichment tool
-│       ├── main.py                    # CLI entry point
-│       ├── orchestrator.py            # Phase coordination
-│       ├── config.yaml                # Configuration
-│       ├── phases/                    # 4-phase enrichment pipeline
-│       ├── gemini/                    # Vertex AI integration
-│       ├── utils/                     # Utilities (deduplication, validation)
-│       └── README.md                  # Tool documentation
-├── data/
-│   └── mappings/                      # Maturity mappings
-│       ├── archetype_maturity_requirements.json
-│       └── maturity_prerequisite_constraints.json
-├── tests/
-│   └── test_graph_builder.py         # Unit tests
-├── scripts/
-│   ├── setup_and_test.sh              # Automated setup
-│   └── test_graph_construction.py    # Standalone test script
-├── docs/
-│   ├── system_architecture_specification.md
-│   ├── GEMINI_STREAMLIT_BOILERPLATE.md
-│   ├── epic_01_knowledge_graph_foundation.md
-│   ├── remaining_epics_overview.md
-│   ├── E1S1_enrichment_structure.md
-│   ├── E1S1_enrichment_dimansions_v2.md
-│   ├── E1S1_enrichment_tool_specification.md
-│   └── E1S1_implementation_summary.md
-└── requirements.txt
-```
+### Object Model
 
----
+The system structures decisions around these core objects:
 
-## Architecture
+- **Signal/Data → Interpretation** - Raw observations transformed into meaning
+- **Norms/Policies → Expectations** - Organizational standards that shape problem framing
+- **Problem** - Falsifiable statement with stake & scope
+- **Objectives** - Time-bound business outcomes
+- **Constraints** - Budget, time, capabilities
+- **Assumptions/Hypotheses** - With confidence levels
+- **Options** - Including "Do Nothing" and "Delay"
+- **Evidence** - Internal data and external sources with quality ratings
+- **Impact Model** - Projection per option showing how it moves objectives
+- **Risks & Reversibility** - Per option assessment
+- **Effort & Cost** - One-off and recurring
+- **Metrics & Guardrails** - Leading/lagging indicators (projections only)
+- **Decision Rule** - Thresholds on metrics/conditions that trigger action
+- **Decision Record** - Go/No-Go/Try decision with rationale
 
-### Knowledge Graph Structure
+### Scoring Framework
 
-The system uses a **NetworkX directed graph** with 6 node types and 6 edge types:
+**Value** = Expected Impact × Confidence  
+**Speed** = Reversibility ÷ Effort  
+**Priority** = Value × Cost-of-Delay factor
 
-#### Node Types
-1. **AI_ARCHETYPE** - AI use-case patterns (e.g., "Optimization & Scheduling")
-2. **COMMON_MODEL** - ML algorithms (e.g., "XGBoost", "LSTM")
-3. **AI_OUTPUT** - System outputs (e.g., "Sales forecast", "Fraud flagging")
-4. **AI_PREREQUISITE** - Implementation requirements (e.g., "Clean_and_validated_data")
-5. **BUSINESS_FUNCTION** - Organizational functions (e.g., "Manufacturing", "Sales")
-6. **MATURITY_DIMENSION** - Readiness dimensions (e.g., "AI Maturity Stage", "Data Maturity")
+Results surface as a 2×2 matrix (Impact vs Effort) with Confidence labels, supporting quick Go/No-Go/Try decisions.
 
-#### Edge Types
-1. **IMPLEMENTED_BY** - Archetype → Model
-2. **PRODUCES_OUTPUT** - Archetype → Output
-3. **REQUIRES** - Model/Output → Prerequisite
-4. **APPLIES_TO_FUNCTION** - Archetype → Function
-5. **OPERATES_IN** - Function → Tool/Process
-6. **GOVERNS_READINESS_FOR** - Maturity → Prerequisite
+### Outputs
 
-### Multi-Hop Reasoning
-
-The graph enables complex queries like:
-
-```
-Query: "What prerequisites does 'Optimization & Scheduling' need for a 'Piloting' stage org?"
-
-Traversal:
-  Archetype "Optimization & Scheduling"
-    → IMPLEMENTED_BY → Models ["Linear Programming", "Genetic Algorithms"]
-      → REQUIRES → Prerequisites ["Clean_and_validated_data", "Historical_process_data"]
-        → Check against Maturity "Piloting" constraints
-          → Gap Analysis: Can satisfy "Clean data" but may lack "Optimization experts"
-```
-
----
-
-## Current Implementation (Story 1.1)
-
-### What's Built
-
-✅ **Pydantic Schemas** (`src/knowledge/schemas.py`)
-- Type-safe models for 6 node types and 6 edge types
-- 10 prerequisite categories, 8 analytical purposes, 3 complexity levels
-- Full validation and serialization support
-- ~280 lines of code
-
-✅ **Graph Builder** (`src/knowledge/graph_builder.py`)
-- Loads 3 existing JSON files into NetworkX DiGraph
-- Creates 281 nodes, 758 edges from real data
-- Handles duplicates, missing data, and validation errors gracefully
-- Provides statistics and helper methods
-- ~450 lines of code
-
-✅ **Maturity Mappings** (`data/mappings/`)
-- 10 archetypes mapped to minimum maturity requirements
-- 10 maturity levels mapped to prerequisite constraints
-- Enables gap analysis and feasibility checks
-- JSON format for easy updates
-
-✅ **Test Suite**
-- 20+ unit tests covering all node/edge types (`tests/test_graph_builder.py`)
-- Standalone test script for quick validation (`scripts/test_graph_construction.py`)
-- Automated setup script (`scripts/setup_and_test.sh`)
-- Multi-hop traversal verification
-
-### What's Next
-
-**Story 1.2:** Vector Embeddings (Vertex AI + FAISS)  
-**Story 1.3:** Graph Traversal Queries (3 test cases)  
-**Story 1.4:** Vector Similarity Search  
-**Story 1.5:** LangChain Hybrid Retrieval Tool  
-**Story 1.6:** CLI/Notebook Interface
-
----
-
-## Usage Example
-
-```python
-from pathlib import Path
-from src.knowledge.graph_builder import KnowledgeGraphBuilder
-
-# Build the graph
-data_dir = Path("src/data")
-builder = KnowledgeGraphBuilder(data_dir)
-graph = builder.build()
-
-# Get statistics
-stats = builder.get_statistics()
-print(f"Nodes: {stats['total_nodes']}, Edges: {stats['total_edges']}")
-
-# Find an archetype
-for node_id, data in graph.nodes(data=True):
-    if data.get("name") == "Optimization & Scheduling":
-        print(f"Found: {node_id}")
-        
-        # Get connected models
-        models = [
-            graph.nodes[n]["name"] 
-            for n in graph.successors(node_id)
-            if graph.nodes[n]["node_type"] == "COMMON_MODEL"
-        ]
-        print(f"Models: {models}")
-        break
-```
-
----
-
-## Tools
-
-### KB Enrichment Tool (NEW)
-
-A Gemini-powered tool for iteratively scaffolding and enriching the knowledge base to its intended shape.
-
-**Location:** `tools/kb_enrichment/`
-
-**Features:**
-- ✅ **4-Phase Pipeline:** Pre-processing → Node extraction → Edge generation → LLM inference
-- ✅ **Test Mode:** Process 2-3 nodes per category for validation before full runs
-- ✅ **Semantic Deduplication:** Uses Vertex AI embeddings to merge similar pain points
-- ✅ **Checkpointing:** Resume from interruption at phase/chunk level
-- ✅ **Gemini Integration:** Powered by Gemini 1.5 Pro via Vertex AI
-
-**Quick Start:**
-```bash
-cd tools/kb_enrichment
-pip install -r requirements.txt
-python main.py --all  # Run in test mode (default)
-```
-
-**Output:** Enriched knowledge graph with operational pain points (M1) and measurable failure modes (M2)
-
-**Documentation:**
-- [Tool README](tools/kb_enrichment/README.md) - Full documentation
-- [Quick Start Guide](tools/kb_enrichment/QUICKSTART.md) - 5-minute setup
-- [Design Document](tools/kb_enrichment/DESIGN.md) - Architecture decisions
-- [Enrichment Specification](docs/E1S1_enrichment_tool_specification.md) - Requirements
+Each decision produces:
+- **Decision Packet** - Complete record of problem, objectives, options, evidence, projections, risks, and decision
+- **Assumption Register** - What to test if action proceeds
+- **Metric Template** - Names, formulas, target thresholds (projection only)
 
 ---
 
 ## Documentation
 
-- **[System Architecture Specification](docs/system_architecture_specification.md)** - Overall system design
-- **[Epic 01: Knowledge Graph Foundation](docs/epic_01_knowledge_graph_foundation.md)** - Current epic details
-- **[Remaining Epics Overview](docs/remaining_epics_overview.md)** - Future work (Epics 2-13)
-- **[E1S1 Implementation Summary](docs/E1S1_implementation_summary.md)** - Story 1.1 details
-- **[Knowledge Graph Structure](docs/E1S1_enrichment_structure.md)** - Node/edge design
-- **[Traversal Patterns](docs/E1S1_enrichment_dimansions_v2.md)** - Multi-hop reasoning
-- **[Enrichment Tool Spec](docs/E1S1_enrichment_tool_specification.md)** - KB enrichment requirements
+- **[Linear Discovery Process](docs/linear_discovery_process.md)** - Full vision and methodology
+- **[System Architecture](docs/system_architecture_specification.md)** - Technical design
+- **[Epic Documentation](docs/)** - Implementation details
 
 ---
 
-## Technology Stack
+## Status
 
-### Current (Story 1.1)
-- **Python 3.10+** - Core language
-- **Pydantic 2.5+** - Schema validation
-- **NetworkX 3.2+** - Graph structure
-- **pytest** - Testing
-
-### Future (Stories 1.2-1.6)
-- **LangChain** - Agent orchestration
-- **Vertex AI** - Gemini LLM + Embeddings
-- **FAISS** - Vector similarity search
-- **Streamlit** - UI (Epic 05)
-- **Firebase** - Session persistence (Epic 09)
-
----
-
-## Development Roadmap
-
-### Phase 1: Foundation (Epics 1-4) - **IN PROGRESS**
-- [x] **Epic 01 Story 1.1: Knowledge Graph Loading** ✅ **COMPLETE**
-  - 281 nodes, 758 edges from existing JSON
-  - Pydantic schemas with full validation
-  - NetworkX graph builder with statistics
-  - Maturity mapping files created
-  - Test suite passing
-- [ ] Epic 01 Story 1.2: Vector Embeddings (Vertex AI + FAISS)
-- [ ] Epic 01 Story 1.3: Graph Queries (3 test cases)
-- [ ] Epic 02: Test Data Preparation
-- [ ] Epic 03: LangChain ReAct Agent
-- [ ] Epic 04: Multi-Stage Flow
-
-### Phase 2: User Interface (Epics 5-7)
-- [ ] Epic 05: Streamlit Chat UI
-- [ ] Epic 06: Observability Panel
-- [ ] Epic 07: Evaluation Metrics
-
-### Phase 3: Production (Epics 8-9)
-- [ ] Epic 08: GCP Deployment
-- [ ] Epic 09: Firebase Persistence
-
-### Phase 4: Enhancements (Epics 10-13)
-- [ ] Epic 10: Intent Clarification
-- [ ] Epic 11: Report Generation
-- [ ] Epic 12: Advanced Graph Queries
-- [ ] Epic 13: Knowledge Management
-
----
-
-## Contributing
-
-This is a portfolio/demonstration project. For questions or suggestions, please refer to the documentation in `docs/`.
-
----
-
-## License
-
-[To be determined]
-
----
-
-## Contact
-
-Project maintained as part of AI solution discovery research.
-
----
-
-## Recent Updates
-
-**October 21, 2025 - KB Enrichment Tool Complete ✅**
-- Built Gemini-powered KB enrichment tool (`tools/kb_enrichment/`)
-- 4-phase pipeline: Pre-processing → Extraction → Edges → LLM Inference
-- Semantic deduplication using Vertex AI embeddings (text-embedding-004)
-- Checkpointing system for resumable processing
-- Test mode (2-3 nodes per category) for validation before full runs
-- Comprehensive documentation (README, QUICKSTART, DESIGN)
-- Ready for production use
-
-**October 21, 2025 - Story 1.1 Complete ✅**
-- Implemented Pydantic schemas for 6 node types and 6 edge types
-- Built NetworkX graph loader from 3 existing JSON files
-- Created maturity mapping files (archetype requirements + prerequisite constraints)
-- Fixed enum handling and prerequisite category validation
-- All tests passing: 281 nodes, 758 edges successfully created
-- Automated setup script for venv creation and testing
-
----
-
-**Last Updated:** October 21, 2025  
-**Version:** 0.1.1 (Epic 01, Story 1.1 Complete + KB Enrichment Tool ✅)
+This project is under active development. See `docs/` for current implementation status and roadmap.
