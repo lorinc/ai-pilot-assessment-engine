@@ -2,9 +2,13 @@
 
 A **Decision-to-Act system** that bridges the gap from "we think we have a problem" to "we authorize action" through structured problem formation, option evaluation, and evidence-based decision rules.
 
+**No effort is ever lost.** Every piece of context, evidence, and decision pattern is preserved and reused—making each decision faster and better informed than the last.
+
 ## Vision
 
 This system guides leaders through a **linear discovery process** that stops at a clear **Go/No-Go/Time-boxed Try** decision while capturing projections (plans, metrics, risks) without executing them. It transforms vague signals into defensible, auditable decisions.
+
+The system operates on a **"do once, benefit forever"** principle: organizational context is captured once and applied to all future decisions. Conversations can be paused and resumed via email links. Everything can be exported as detailed AI prompts—no lock-in, full portability.
 
 ### Core Process
 
@@ -38,7 +42,25 @@ The system includes an **observability monitor** that tracks:
 - Assumption validation status
 - Decision velocity and bottlenecks
 
-This monitor surfaces patterns across decisions, enabling continuous improvement of the decision-making process itself
+This monitor surfaces patterns across decisions, enabling continuous improvement of the decision-making process itself.
+
+### Persistence & Portability
+
+The system operates on a **"do once, benefit forever"** principle:
+
+**Zero Effort Loss**
+- All user-provided information is automatically preserved and reusable across future decisions
+- Organizational context (norms, policies, constraints) is captured once and applied to all subsequent decisions
+- Evidence, assumptions, and decision patterns build a growing knowledge base
+- Conversations can be paused and resumed via email links—no work is ever lost, even accidentally
+
+**No Lock-In**
+- Every piece of information can be exported as detailed AI prompts
+- Users can "smarten up" their favorite AI with their organizational context
+- Exported prompts create a transferable, intelligent sparring partner
+- Decision history and patterns remain portable across tools
+
+This ensures that the system becomes more valuable over time while keeping users in full control of their data.
 
 ---
 
