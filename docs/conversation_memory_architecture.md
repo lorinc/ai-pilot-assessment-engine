@@ -20,6 +20,19 @@
 
 ---
 
+## Quick Navigation
+
+- **[Recommended Architecture](#recommended-architecture-factor-centric-journal)** - Factor-centric journal design
+- **[Data Model](#data-model)** - FactorJournal and JournalEntry schemas
+- **[Storage Structure](#storage-structure)** - Firestore collections layout
+- **[Query Patterns](#query-patterns)** - "Why?" questions and user challenges
+- **[Implementation](#implementation)** - FactorJournalStore class
+- **[Alternative Approaches](#alternative-approaches-for-comparison)** - Event sourcing, hybrid, logs
+- **[Why This Wins](#why-factor-centric-journal-wins)** - Comparison with alternatives
+- **[Implementation Roadmap](#implementation-roadmap)** - 8-week phased approach
+
+---
+
 ## Current Persistence Model
 
 ### What Exists (from architecture docs):
@@ -772,40 +785,53 @@ def get_context_for_question(question: str, user_id: str):
 
 ---
 
-## Next Steps
+## Implementation Roadmap
 
-### Immediate (Week 1):
-1. **Design event schema** - Define ConversationEvent and AssessmentSnapshot
-2. **Set up Firestore collections** - /users/{id}/events, /factors
-3. **Implement basic logging** - Log user statements and LLM inferences
-4. **Test retrieval** - Query events by factor, timestamp
+### Phase 1: Core Journal System (Week 1-2)
+1. **Define factor taxonomy** - List all trackable factors
+2. **Implement FactorJournalStore** - Basic CRUD operations
+3. **Set up Firestore collections** - `/factors/{id}` and `/factors/{id}/journal/{entry_id}`
+4. **Test basic logging** - Create journal entries, retrieve current state
 
-### Short-term (Week 2-3):
-1. **Add factor history tracking** - Maintain current state + change log
-2. **Implement "Why?" queries** - Fetch relevant events, format explanation
-3. **Add semantic search** - Embed key events, index in vector store
-4. **Test with real conversations** - Verify provenance chains work
+### Phase 2: LLM Integration (Week 3-4)
+1. **Extract factor updates from conversation** - Parse LLM reasoning for value changes
+2. **Auto-generate rationales** - LLM summarizes why value changed
+3. **Create conversation excerpts** - Format relevant exchanges
+4. **Implement confidence scoring** - LLM assesses certainty
 
-### Medium-term (Month 2):
-1. **Optimize context loading** - Summarization strategy for old events
-2. **Add cross-session reasoning** - "You said X in our last conversation..."
-3. **Build provenance UI** - Show reasoning chains in interface
-4. **Performance tuning** - Index optimization, caching
+### Phase 3: Query & Explanation (Week 5-6)
+1. **"Why can't we do X?" queries** - Fetch prerequisites, explain blockers
+2. **"Why is Y only Z%?" queries** - Show reasoning chain with evidence
+3. **User challenges** - Detect corrections, update journal
+4. **Cross-factor propagation** - Update dependent factors
+
+### Phase 4: Optimization (Week 7-8)
+1. **Add semantic search** - Embed journal entries for similarity search
+2. **Context window management** - Smart retrieval based on question type
+3. **Performance tuning** - Index optimization, caching
+4. **UI integration** - Display provenance in interface
 
 ---
 
 ## Conclusion
 
-**Your instinct is correct:** Temporal persistence with provenance is essential for this system.
+**Your intuition is spot-on:** Build the memory system around factors, not events or conversations.
 
-**Recommended approach:** Event-sourced conversation store (Option 1) with pragmatic simplifications.
+**Recommended approach:** Factor-Centric Journal with Firestore + Knowledge Graph integration.
 
-**Key insight:** Don't just persist "what changed" → Persist "why it changed" with full reasoning chain.
+**Key insight:** Factors are the natural aggregation boundary—everything worth remembering maps to a factor value change.
 
 **This enables:**
-- ✅ "Why can't we do X?" → Reference past evidence with timestamps
-- ✅ "Why is Y only 20%?" → Show inference chain from conversations
-- ✅ Users can challenge values → LLM explains reasoning
-- ✅ Audit trail → Track how assessments evolved
+- ✅ "Why can't we do X?" → Show prerequisite gaps with dated evidence
+- ✅ "Why is Y only 20%?" → Display reasoning chain from journal entries
+- ✅ Users challenge values → LLM explains with conversation excerpts
+- ✅ Audit trail → Track how assessments evolved over time
+- ✅ Cross-factor reasoning → `inferred_from` links show dependencies
 
-**Challenge accepted:** This is not just persistence—it's building a **memory system that reasons about its own past inferences**. That's the hard part, and it's what makes this system valuable.
+**Architecture benefits:**
+- 83% less storage than event sourcing
+- Simpler queries (no event replay)
+- Graph-native (leverages existing edges)
+- Domain-aligned (factors are first-class entities)
+
+**This is not just persistence—it's building a memory system that reasons about its own past inferences, grounded in the domain model.**
