@@ -104,10 +104,49 @@ class JournalEntry:
 
 ```yaml
 Firestore:
+  /users/{user_id}/metadata:
+    # Aggregate metrics for fast orientative queries
+    assessment_summary:
+      categories:
+        data_readiness:
+          completeness: 0.60  # 60% of factors assessed
+          avg_confidence: 0.70
+          factor_count: 15
+          total_factors: 25
+          last_updated: "2024-10-28T10:30:00Z"
+        
+        ai_capability:
+          completeness: 0.40
+          avg_confidence: 0.50
+          factor_count: 10
+          total_factors: 25
+          last_updated: "2024-10-27T14:20:00Z"
+      
+      overall:
+        total_factors_assessed: 25
+        total_factors: 50
+        avg_confidence: 0.60
+        decision_tier: "low_risk"  # <€25k decisions
+        
+      capabilities:
+        can_evaluate:
+          - "basic_forecasting_annual"
+          - "simple_automation"
+        cannot_evaluate_yet:
+          - "complex_forecasting_seasonal"
+          - "ml_automation"
+        
+      last_conversation:
+        topic: "data_quality"
+        factor_id: "data_quality"
+        timestamp: "2024-10-28T10:30:00Z"
+        excerpt: "User mentioned data scattered across 5 systems"
+  
   /factors/{factor_id}:
     current_value: 20
     current_confidence: 0.75
     last_updated: "2024-10-28T10:30:00Z"
+    category: "data_readiness"  # For aggregation
     
   /factors/{factor_id}/journal/{entry_id}:
     timestamp: "2024-10-28T10:30:00Z"
@@ -623,6 +662,7 @@ class FactorJournalStore:
     
     def update_factor(
         self,
+        user_id: str,
         factor_id: str,
         new_value: Any,
         rationale: str,
@@ -632,13 +672,13 @@ class FactorJournalStore:
         session_id: str = None
     ):
         # Get current value
-        current = self.get_current_state(factor_id)
+        current = self.get_current_state(user_id, factor_id)
         
         # Create journal entry
         entry = {
             "entry_id": generate_id(),
             "timestamp": datetime.now(),
-            "previous_value": current.value if current else None,
+            "previous_value": current["value"] if current else None,
             "new_value": new_value,
             "change_rationale": rationale,
             "conversation_excerpt": conversation_excerpt,
@@ -651,18 +691,127 @@ class FactorJournalStore:
         self.db.collection("factors").document(factor_id).collection("journal").add(entry)
         
         # Update current state
-        self.db.collection("factors").document(factor_id).set({
+        factor_doc = self.db.collection("factors").document(factor_id)
+        factor_doc.set({
             "current_value": new_value,
             "current_confidence": confidence,
-            "last_updated": entry["timestamp"]
+            "last_updated": entry["timestamp"],
+            "category": self.graph.get_factor_category(factor_id)
         }, merge=True)
         
         # Update graph
         self.graph.update_factor_state(factor_id, new_value, confidence)
+        
+        # Update aggregate metrics
+        self.update_assessment_summary(user_id, factor_id, entry["timestamp"], rationale[:100])
     
-    def get_current_state(self, factor_id: str):
+    def update_assessment_summary(self, user_id: str, factor_id: str, timestamp: datetime, excerpt: str):
+        """
+        Recalculate aggregate metrics for orientative queries
+        """
+        # Get all factors for this user
+        all_factors = self.get_all_factors(user_id)
+        
+        # Group by category
+        categories = {}
+        for factor in all_factors:
+            cat = factor.get("category", "uncategorized")
+            if cat not in categories:
+                categories[cat] = {
+                    "factors": [],
+                    "total_factors": self.graph.get_category_factor_count(cat)
+                }
+            categories[cat]["factors"].append(factor)
+        
+        # Calculate per-category metrics
+        category_summary = {}
+        for cat, data in categories.items():
+            assessed = [f for f in data["factors"] if f.get("current_value") is not None]
+            category_summary[cat] = {
+                "completeness": len(assessed) / data["total_factors"],
+                "avg_confidence": sum(f["current_confidence"] for f in assessed) / len(assessed) if assessed else 0,
+                "factor_count": len(assessed),
+                "total_factors": data["total_factors"],
+                "last_updated": max(f["last_updated"] for f in assessed) if assessed else None
+            }
+        
+        # Calculate overall metrics
+        all_assessed = [f for f in all_factors if f.get("current_value") is not None]
+        total_factors = sum(data["total_factors"] for data in categories.values())
+        avg_confidence = sum(f["current_confidence"] for f in all_assessed) / len(all_assessed) if all_assessed else 0
+        
+        # Determine decision tier
+        decision_tier = self.calculate_decision_tier(avg_confidence, len(all_assessed), total_factors)
+        
+        # Determine capabilities
+        capabilities = self.calculate_capabilities(all_assessed)
+        
+        # Update metadata document
+        metadata_doc = self.db.collection("users").document(user_id).collection("metadata").document("assessment")
+        metadata_doc.set({
+            "assessment_summary": {
+                "categories": category_summary,
+                "overall": {
+                    "total_factors_assessed": len(all_assessed),
+                    "total_factors": total_factors,
+                    "avg_confidence": avg_confidence,
+                    "decision_tier": decision_tier
+                },
+                "capabilities": capabilities,
+                "last_conversation": {
+                    "topic": self.graph.get_factor_name(factor_id),
+                    "factor_id": factor_id,
+                    "timestamp": timestamp,
+                    "excerpt": excerpt
+                }
+            }
+        }, merge=True)
+    
+    def calculate_decision_tier(self, avg_confidence: float, assessed_count: int, total_count: int) -> str:
+        """
+        Determine what decision tier user can make based on completeness and confidence
+        """
+        completeness = assessed_count / total_count if total_count > 0 else 0
+        
+        if avg_confidence >= 0.75 and completeness >= 0.50:
+            return "medium_risk"  # €25k-€100k decisions
+        elif avg_confidence >= 0.60 and completeness >= 0.30:
+            return "low_risk"  # <€25k pilot decisions
+        else:
+            return "exploratory"  # Can explore, not decide yet
+    
+    def calculate_capabilities(self, assessed_factors: List[dict]) -> dict:
+        """
+        Determine what project types user can evaluate based on assessed factors
+        Uses graph to map factors → project archetypes
+        """
+        factor_ids = [f["factor_id"] for f in assessed_factors if f.get("current_confidence", 0) >= 0.6]
+        
+        # Query graph for project archetypes enabled by these factors
+        can_evaluate = self.graph.get_enabled_archetypes(factor_ids)
+        cannot_evaluate = self.graph.get_disabled_archetypes(factor_ids)
+        
+        return {
+            "can_evaluate": can_evaluate,
+            "cannot_evaluate_yet": cannot_evaluate[:5]  # Top 5 next unlocks
+        }
+    
+    def get_assessment_summary(self, user_id: str) -> dict:
+        """
+        Fast retrieval of aggregate metrics for orientative queries
+        """
+        metadata_doc = self.db.collection("users").document(user_id).collection("metadata").document("assessment").get()
+        return metadata_doc.to_dict() if metadata_doc.exists else None
+    
+    def get_current_state(self, user_id: str, factor_id: str):
         doc = self.db.collection("factors").document(factor_id).get()
         return doc.to_dict() if doc.exists else None
+    
+    def get_all_factors(self, user_id: str):
+        """Get all factors for a user (for aggregation)"""
+        # In practice, filter by user_id if factors are user-specific
+        # For now, return all factors
+        return [doc.to_dict() for doc in self.db.collection("factors").stream()]
     
     def get_journal_entries(self, factor_id: str, limit: int = None):
         query = (
@@ -688,6 +837,87 @@ class FactorJournalStore:
             "reasoning_chain": history
         }
 ```
+
+### Orientative Query Support
+
+The system maintains aggregate metrics for fast "where are we?" queries without scanning all factors.
+
+```python
+def handle_orientative_query(query_type: str, user_id: str):
+    """
+    Fast retrieval for orientative conversation patterns
+    """
+    # Get pre-calculated summary
+    summary = journal_store.get_assessment_summary(user_id)
+    
+    if query_type == "status":
+        # "Where are we?"
+        return format_status_response(summary)
+    
+    elif query_type == "next_tier":
+        # "What's missing?"
+        return format_next_tier_response(summary)
+    
+    elif query_type == "where_were_we":
+        # "Where were we?"
+        last_conv = summary["last_conversation"]
+        return format_continuity_response(last_conv, summary)
+    
+    elif query_type == "milestone":
+        # Proactive milestone offer
+        return format_milestone_response(summary)
+
+def format_status_response(summary: dict) -> str:
+    """
+    Generate "where are we?" response from aggregate metrics
+    """
+    categories = summary["assessment_summary"]["categories"]
+    overall = summary["assessment_summary"]["overall"]
+    capabilities = summary["assessment_summary"]["capabilities"]
+    
+    response = "Here's what we've mapped out:\n\n"
+    
+    # Per-category status
+    for cat_name, cat_data in categories.items():
+        completeness_pct = int(cat_data["completeness"] * 100)
+        confidence_pct = int(cat_data["avg_confidence"] * 100)
+        
+        response += f"**{cat_name.replace('_', ' ').title()}: {completeness_pct}% mapped, {confidence_pct}% confident**\n"
+        
+        # What this enables (from capabilities)
+        enabled = [c for c in capabilities["can_evaluate"] if cat_name in c]
+        if enabled:
+            response += f"With this, you can evaluate {enabled[0].replace('_', ' ')}.\n\n"
+    
+    # Overall capability
+    response += "**What you can do now:**\n"
+    if capabilities["can_evaluate"]:
+        response += f"You can evaluate {capabilities['can_evaluate'][0].replace('_', ' ')}"
+        if len(capabilities["can_evaluate"]) > 1:
+            response += f" and {len(capabilities['can_evaluate']) - 1} other types"
+        response += ".\n\n"
+    
+    # Next steps
+    response += "**Next steps:**\n"
+    tier = overall["decision_tier"]
+    if tier == "exploratory":
+        response += "- Continue mapping factors → Unlock pilot decisions\n"
+    elif tier == "low_risk":
+        response += "- Continue mapping → Unlock medium-risk decisions (€25k-€100k)\n"
+    
+    if capabilities["cannot_evaluate_yet"]:
+        response += f"- Assess {capabilities['cannot_evaluate_yet'][0].replace('_', ' ')} → Would unlock new project types\n"
+    
+    response += "\nWhat sounds most useful?"
+    
+    return response
+```
+
+**Key Benefits:**
+- ✅ **O(1) retrieval** - No scanning all factors
+- ✅ **Real-time updates** - Metrics recalculated on every factor update
+- ✅ **Category-aware** - Shows progress per factor category
+- ✅ **Capability-driven** - Maps factors → project archetypes via graph
 
 ### Migration from Current Architecture
 

@@ -219,6 +219,229 @@ This is a decision support system, not a decision tracking system. Help decide, 
 
 ---
 
+## 8. Orientative Conversation Patterns
+
+Users need to understand: "What are we doing? Where are we? What can I do next?"
+
+### Pattern 1: Status Query - "Where Are We?"
+
+**Trigger:** User asks explicitly OR system offers when discussion reaches natural conclusion
+
+**Response Structure:**
+```yaml
+assessment_status:
+  per_category:
+    - category: "Data Readiness"
+      completeness: "60% mapped"
+      confidence: "70% confident"
+      what_this_enables: "You can evaluate basic forecasting projects"
+      
+    - category: "AI Capability"  
+      completeness: "40% mapped"
+      confidence: "50% confident"
+      what_this_enables: "You can assess simple automation, not complex ML yet"
+
+  overall_capability:
+    can_do_now: "You can now evaluate basic forecasting of annual sales results, but not monthly predictions that consider seasonal trends"
+    
+  next_logical_step:
+    to_improve: "To evaluate more complex projects, we need to know more about [ML infrastructure, data governance, team skills]"
+    or_proceed: "Or we can start evaluating that sales forecasting project you mentioned"
+```
+
+**Example:**
+```
+User: "Where are we with all this?"
+
+System: "Here's what we've mapped out:
+
+**Data Readiness: 60% mapped, 70% confident**
+With this, you can evaluate basic forecasting projects that use historical sales data.
+
+**AI Capability: 40% mapped, 50% confident**  
+You can assess simple automation, but not complex ML projects yet.
+
+**What you can do now:**
+You can evaluate basic forecasting of your annual sales results, but not monthly predictions that consider seasonal trends.
+
+**Next steps:**
+- Continue mapping data readiness → Would unlock quarterly forecasting
+- Start evaluating that sales forecasting project you mentioned
+- Explore AI capability → Would unlock 3 more project types
+
+What sounds most useful?"
+```
+
+### Pattern 2: Next Tier Query - "What's Missing?"
+
+**Trigger:** User asks "what do we need?" OR system suggests when approaching tier boundary
+
+**Response Structure:**
+```yaml
+current_tier:
+  factor_completeness: "15/50 factors assessed"
+  confidence_level: "60% average confidence"
+  decision_capability: "Can make low-risk pilot decisions (<€25k)"
+
+next_tier:
+  requires:
+    factor_completeness: "25/50 factors"
+    confidence_level: "75% average"
+    specific_gaps: ["data_governance", "ml_infrastructure", "team_skills"]
+  
+  unlocks:
+    decision_capability: "Can make medium-risk decisions (€25k-€100k)"
+    project_types: ["Complex forecasting", "Basic ML automation"]
+  
+  options:
+    - "Tell me about your data governance (5 min)"
+    - "Describe your ML infrastructure (5 min)"
+    - "Or start evaluating projects with current knowledge"
+```
+
+**Example:**
+```
+User: "What do we need to evaluate bigger projects?"
+
+System: "Right now you're at 60% confidence across data factors. With this, you can make low-risk pilot decisions under €25k.
+
+**To reach the next tier** (medium-risk decisions €25k-€100k):
+- Need 75% confidence in data factors
+- Missing: data governance, ML infrastructure, team skills
+
+**This would unlock:**
+- Complex forecasting (seasonal trends, multiple variables)
+- Basic ML automation projects
+
+**Your options:**
+1. Tell me about your data governance (5 min) → Biggest confidence boost
+2. Describe your ML infrastructure (5 min) → Unlocks 2 project types
+3. Start evaluating projects now with current knowledge
+
+What makes sense?"
+```
+
+### Pattern 3: Conversation Continuity - "Where Were We?"
+
+**Trigger:** User returns after break OR explicitly asks
+
+**Default (no scope provided):** Show last meaningful factor update + quick status
+
+**With scope:** Show last conversation about that topic
+
+**Response Structure:**
+```yaml
+last_conversation:
+  topic: "data_quality"
+  excerpt: "You mentioned data is scattered across 5 systems, no catalog yet"
+  impact: "This moved data_quality from unknown to 20% (confidence: 75%)"
+  
+benefit_of_continuing:
+  factor_dependencies: "Finishing data quality assessment unlocks data governance and ML infrastructure assessments"
+  confidence_gain: "Would raise confidence from 75% to 85%"
+  
+other_options:
+  - "Explore AI capability instead"
+  - "Start evaluating a forecasting project"
+  
+current_capability:
+  can_evaluate: "Basic forecasting with annual data"
+  next_unlock: "Quarterly forecasting (need data governance)"
+```
+
+**Example:**
+```
+User: "Where were we?"
+
+System: "Last time we discussed **data quality**. You mentioned data is scattered across 5 systems with no catalog yet. This moved data_quality from unknown to 20% (75% confident).
+
+**If we continue:**
+Finishing this would unlock assessments of data governance and ML infrastructure—basically, we'd understand your full data landscape.
+
+**Or you could:**
+- Explore AI capability instead (team skills, infrastructure)
+- Start evaluating that sales forecasting project
+
+**What you can do now:**
+You can evaluate basic forecasting with annual data. To unlock quarterly forecasting, we need to map data governance next.
+
+What would be most useful?"
+```
+
+### Pattern 4: Proactive Milestone Offers
+
+**Trigger:** Discussion reaches natural conclusion (factor assessed, topic exhausted)
+
+**Response Structure:**
+```yaml
+milestone_reached:
+  what_completed: "Data quality assessment complete"
+  new_capability: "You can now evaluate projects requiring historical data"
+  
+progress_indicator:
+  before: "Could assess 2 project archetypes"
+  now: "Can assess 5 project archetypes"
+  
+next_options:
+  continue_thread: "Explore data governance (related to what we just discussed)"
+  new_thread: "Assess AI capability (team, infrastructure)"
+  apply_knowledge: "Evaluate a specific project idea"
+```
+
+**Example:**
+```
+System: "Okay, we've mapped out your data quality pretty well.
+
+**New capability unlocked:**
+You can now evaluate projects that need historical sales data—things like demand forecasting, trend analysis.
+
+**Progress:** You could assess 2 project types before, now you can assess 5.
+
+**What next?**
+- Continue with data governance (builds on what we just discussed)
+- Switch to AI capability (team skills, infrastructure)  
+- Evaluate that forecasting project you mentioned
+
+What sounds good?"
+```
+
+---
+
+## Orientative Pattern Principles
+
+### 1. **Always Show Current Capability**
+Every orientative response includes: "What you can evaluate now" with concrete examples
+- ✅ "You can evaluate basic forecasting of annual sales"
+- ❌ "You have 60% data readiness"
+
+### 2. **Progress, Not Completeness**
+Frame as "what you can do now" vs "what's missing"
+- ✅ "You can assess 5 project types now, up from 2"
+- ❌ "You've only completed 30% of factors"
+
+### 3. **Risk-Based Tiers**
+Tie completeness to decision stakes, not arbitrary percentages
+- ✅ "Can make €25k pilot decisions, need more for €100k projects"
+- ❌ "Need 80% completeness to proceed"
+
+### 4. **Diminishing Returns Awareness**
+Signal when additional assessment has low ROI
+- ✅ "Assessing 3 more factors would only improve confidence by 5%"
+- ❌ Never mention this, keep pushing for completeness
+
+### 5. **Agency Through Options**
+Always give 2-3 concrete next actions
+- ✅ "Continue this thread | Switch topics | Evaluate a project"
+- ❌ "What would you like to do?"
+
+### 6. **Brevity**
+Keep orientative responses under 150 words
+- Show structure, not walls of text
+- Use bullets and clear sections
+- One example per capability
+
+---
+
 ## Core Interaction Principles
 
 ### 1. LLM Generates, User Validates
