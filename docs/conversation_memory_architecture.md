@@ -54,9 +54,368 @@
 
 ---
 
-## Proposed Architecture Options
+## Recommended Architecture: Factor-Centric Journal
 
-### Option 1: Event-Sourced Conversation Store (Recommended)
+### Data Model
+
+```python
+@dataclass
+class FactorJournal:
+    factor_id: str              # e.g., "data_quality", "ai_readiness.governance"
+    current_value: Any          # Latest assessed value
+    current_confidence: float   # LLM confidence in current value
+    last_updated: datetime
+    
+    entries: List[JournalEntry]  # Chronological log
+
+@dataclass
+class JournalEntry:
+    entry_id: str
+    timestamp: datetime
+    
+    # Change tracking
+    previous_value: Any
+    new_value: Any
+    change_rationale: str       # Brief: "User mentioned lack of data catalog"
+    
+    # Evidence
+    conversation_excerpt: str   # 2-3 relevant exchanges
+    confidence: float           # How certain is this inference?
+    
+    # Provenance
+    inferred_from: List[str]    # Other factor_ids that influenced this
+    session_id: str             # Link back to full conversation if needed
+```
+
+### Storage Structure
+
+```yaml
+Firestore:
+  /factors/{factor_id}:
+    current_value: 20
+    current_confidence: 0.75
+    last_updated: "2024-10-28T10:30:00Z"
+    
+  /factors/{factor_id}/journal/{entry_id}:
+    timestamp: "2024-10-28T10:30:00Z"
+    previous_value: null
+    new_value: 20
+    change_rationale: "User mentioned scattered data across 5 systems, no catalog"
+    conversation_excerpt: |
+      User: "Our data is all over the place, 5 different systems"
+      Assistant: "That suggests limited data governance. Would you say you have a data catalog?"
+      User: "No, nothing like that yet"
+    confidence: 0.75
+    inferred_from: ["data_governance", "data_infrastructure"]
+    session_id: "session_abc123"
+```
+
+### Knowledge Graph Integration
+
+The graph already has factor nodes—just add journal edges:
+
+```python
+# Existing graph structure
+(Problem)-[:REQUIRES]->(Factor)
+(Option)-[:DEPENDS_ON]->(Factor)
+(Factor)-[:PREREQUISITE_FOR]->(AIArchetype)
+
+# New journal edges
+(Factor)-[:CURRENT_STATE]->(LatestJournalEntry)
+(JournalEntry)-[:INFLUENCED_BY]->(OtherFactor)
+(JournalEntry)-[:PART_OF]->(Session)
+```
+
+### Query Patterns
+
+#### "Why can't we do Project X?"
+
+```python
+def explain_blockers(project_name: str, user_id: str):
+    # 1. Get project prerequisites from graph
+    required_factors = graph.query(
+        "MATCH (p:Project {name: $project})-[:REQUIRES]->(f:Factor) RETURN f",
+        project=project_name
+    )
+    
+    # 2. For each unmet factor, get latest journal entry
+    blockers = []
+    for factor in required_factors:
+        current = get_factor_current_state(factor.id)
+        if not current.meets_threshold(factor.required_value):
+            latest_entry = get_latest_journal_entry(factor.id)
+            blockers.append({
+                "factor": factor.name,
+                "required": factor.required_value,
+                "current": current.value,
+                "confidence": current.confidence,
+                "evidence": {
+                    "date": latest_entry.timestamp,
+                    "rationale": latest_entry.change_rationale,
+                    "excerpt": latest_entry.conversation_excerpt
+                }
+            })
+    
+    return format_blockers(project_name, blockers)
+```
+
+**Output:**
+```
+Project X requires AI Archetype: Predictive Analytics, which depends on:
+
+1. Data Quality ≥ 60% (currently 20%, confidence: 75%)
+   Last assessed: Oct 28, 2024
+   
+   Rationale: User mentioned scattered data across 5 systems, no catalog
+   
+   From our conversation:
+   > User: "Our data is all over the place, 5 different systems"
+   > Assistant: "That suggests limited data governance. Would you say you have a data catalog?"
+   > User: "No, nothing like that yet"
+
+2. Historical Data Availability (currently: Limited, confidence: 80%)
+   Last assessed: Oct 20, 2024
+   
+   Rationale: User noted only 6 months of clean data available
+   ...
+```
+
+#### "Why do you think data_governance is only 20%?"
+
+```python
+def explain_factor_value(factor_id: str, user_id: str):
+    # Get current state
+    current = get_factor_current_state(factor_id)
+    
+    # Get recent journal entries (last 3-5 changes)
+    history = get_journal_entries(factor_id, limit=5)
+    
+    # Show evolution with evidence
+    return {
+        "factor": factor_id,
+        "current_value": current.value,
+        "confidence": current.confidence,
+        "reasoning_chain": [
+            {
+                "date": entry.timestamp,
+                "change": f"{entry.previous_value} → {entry.new_value}",
+                "why": entry.change_rationale,
+                "evidence": entry.conversation_excerpt,
+                "influenced_by": [
+                    get_factor_name(fid) for fid in entry.inferred_from
+                ]
+            }
+            for entry in history
+        ]
+    }
+```
+
+#### User Challenges Value
+
+```python
+User: "Actually, we DO have a data catalog now"
+
+# 1. LLM detects challenge to existing factor value
+# 2. Create new journal entry
+log_journal_entry(
+    factor_id="data_quality",
+    previous_value=20,
+    new_value=45,  # Inferred from new information
+    change_rationale="User corrected: data catalog now exists",
+    conversation_excerpt="""
+        User: "Actually, we DO have a data catalog now"
+        Assistant: "That's significant! When was it implemented?"
+        User: "Last month, covers about 60% of our data sources"
+    """,
+    confidence=0.85,
+    inferred_from=["data_governance", "data_infrastructure"]
+)
+
+# 3. Update current state
+update_factor_current_state("data_quality", value=45, confidence=0.85)
+
+# 4. Propagate to dependent factors
+propagate_factor_update("data_quality")
+```
+
+### Advantages
+
+✅ **Natural aggregation** - Factor is the domain boundary  
+✅ **Simple queries** - No complex event replay  
+✅ **Graph-native** - Leverages existing knowledge graph  
+✅ **Minimal storage** - Only meaningful changes, not every utterance  
+✅ **Easy "latest state"** - Stored directly on factor node  
+✅ **Provenance built-in** - `inferred_from` links factors  
+
+### Storage Efficiency
+
+```
+Event Sourcing Approach:
+- 100 events/user/week
+- 2 KB/event
+- 10.4 MB/user/year
+
+Factor Journal Approach:
+- ~50 factors tracked
+- ~2-3 updates/factor/month (only when value changes)
+- 1 KB/journal entry (more compact, just the delta)
+- 50 factors × 3 updates/month × 12 months × 1 KB = 1.8 MB/user/year
+
+Savings: 83% less storage
+```
+
+### Context Window Management
+
+```python
+def get_context_for_question(question: str, user_id: str):
+    # 1. Identify relevant factors from question
+    relevant_factors = extract_factors_from_question(question)
+    
+    # 2. Get current state + latest journal entry for each
+    context = []
+    for factor_id in relevant_factors:
+        current = get_factor_current_state(factor_id)
+        latest = get_latest_journal_entry(factor_id)
+        
+        context.append({
+            "factor": factor_id,
+            "value": current.value,
+            "confidence": current.confidence,
+            "last_change": {
+                "date": latest.timestamp,
+                "rationale": latest.change_rationale,
+                "excerpt": latest.conversation_excerpt
+            }
+        })
+    
+    # 3. If user asks "why?", get full history
+    if is_why_question(question):
+        for item in context:
+            item["history"] = get_journal_entries(
+                item["factor"], 
+                limit=5
+            )
+    
+    return context
+```
+
+**Token budget:**
+- Current state: ~50 tokens/factor
+- Latest journal entry: ~200 tokens/factor
+- Full history (5 entries): ~1000 tokens/factor
+
+For "Why?" question about 3 factors: ~3K tokens (very manageable)
+
+### Implementation
+
+```python
+# /src/persistence/factor_journal.py
+
+class FactorJournalStore:
+    def __init__(self, firestore_client, graph):
+        self.db = firestore_client
+        self.graph = graph
+    
+    def update_factor(
+        self,
+        factor_id: str,
+        new_value: Any,
+        rationale: str,
+        conversation_excerpt: str,
+        confidence: float,
+        inferred_from: List[str] = None,
+        session_id: str = None
+    ):
+        # Get current value
+        current = self.get_current_state(factor_id)
+        
+        # Create journal entry
+        entry = {
+            "entry_id": generate_id(),
+            "timestamp": datetime.now(),
+            "previous_value": current.value if current else None,
+            "new_value": new_value,
+            "change_rationale": rationale,
+            "conversation_excerpt": conversation_excerpt,
+            "confidence": confidence,
+            "inferred_from": inferred_from or [],
+            "session_id": session_id
+        }
+        
+        # Write to Firestore
+        self.db.collection("factors").document(factor_id).collection("journal").add(entry)
+        
+        # Update current state
+        self.db.collection("factors").document(factor_id).set({
+            "current_value": new_value,
+            "current_confidence": confidence,
+            "last_updated": entry["timestamp"]
+        }, merge=True)
+        
+        # Update graph
+        self.graph.update_factor_state(factor_id, new_value, confidence)
+    
+    def get_current_state(self, factor_id: str):
+        doc = self.db.collection("factors").document(factor_id).get()
+        return doc.to_dict() if doc.exists else None
+    
+    def get_journal_entries(self, factor_id: str, limit: int = None):
+        query = (
+            self.db.collection("factors")
+            .document(factor_id)
+            .collection("journal")
+            .order_by("timestamp", direction="DESCENDING")
+        )
+        if limit:
+            query = query.limit(limit)
+        
+        return [doc.to_dict() for doc in query.stream()]
+    
+    def explain_factor(self, factor_id: str):
+        current = self.get_current_state(factor_id)
+        history = self.get_journal_entries(factor_id, limit=5)
+        
+        return {
+            "factor": factor_id,
+            "current_value": current["current_value"],
+            "confidence": current["current_confidence"],
+            "last_updated": current["last_updated"],
+            "reasoning_chain": history
+        }
+```
+
+### Migration from Current Architecture
+
+```python
+# Current: In-memory logs lost after session
+# New: Extract factor updates during conversation
+
+def process_conversation_turn(user_input: str, llm_response: str, session_id: str):
+    # Existing LLM reasoning
+    reasoning = llm.process(user_input)
+    
+    # NEW: Extract factor updates
+    factor_updates = extract_factor_updates(reasoning)
+    
+    for update in factor_updates:
+        journal_store.update_factor(
+            factor_id=update.factor_id,
+            new_value=update.value,
+            rationale=update.rationale,
+            conversation_excerpt=format_excerpt(user_input, llm_response),
+            confidence=update.confidence,
+            inferred_from=update.dependencies,
+            session_id=session_id
+        )
+    
+    return llm_response
+```
+
+---
+
+## Alternative Approaches (For Comparison)
+
+### Option A: Event-Sourced Conversation Store
 
 **Concept:** Treat every user statement and LLM inference as an **immutable event** in a temporal log.
 
