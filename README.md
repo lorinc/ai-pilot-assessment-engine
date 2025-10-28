@@ -66,6 +66,25 @@ This ensures that the system becomes more valuable over time while keeping users
 
 ## Key Concepts
 
+### UX Design Philosophy
+
+The system is designed with **user experience as a core principle**. The LLM is **not inquisitive**—users are not burdened with answering deep, difficult questions. Instead, the LLM infers data points for the comprehensive model (described below) through **deep but natural conversation**.
+
+**Inference-Driven Interaction**
+- The system infers assessment values from conversational context rather than explicit questioning
+- Inferred data points are displayed transparently to the user
+- Users can challenge inferences: *"Why do you think our data governance is only at 20%?"*
+- The LLM provides insights and reasoning to support or adjust values
+
+**Evidence-Based Updates**
+- Users cannot arbitrarily change values (*"Set data governance readiness to 80%"*) without backing them up with narrative evidence
+- Every adjustment must be grounded in context, examples, or reasoning provided through conversation
+- This maintains assessment integrity while keeping the interaction natural
+
+**Scope Discipline**
+- This is **not a what-if tool**—the scope is already substantial
+- The system focuses on inference and evidence-based assessment, not hypothetical scenario modeling
+
 ### Object Model
 
 The system structures decisions around these core objects:
