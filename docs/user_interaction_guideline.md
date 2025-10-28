@@ -261,13 +261,20 @@ With this, you can evaluate basic forecasting projects that use historical sales
 **AI Capability: 40% mapped, 50% confident**  
 You can assess simple automation, but not complex ML projects yet.
 
+**Confirmed factors:**
+- data_availability: 80% ✓ (you explicitly said "3 years of sales data")
+
+**Unconfirmed inferences:**
+- data_quality: 20% (75% confident, based on 3 mentions: scattered data, no catalog, duplicates)
+- data_governance: 15% (60% confident, based on 2 mentions: no formal policies, no data steward)
+
 **What you can do now:**
 You can evaluate basic forecasting of your annual sales results, but not monthly predictions that consider seasonal trends.
 
 **Next steps:**
+- Confirm those inferences (2 min) → Boost confidence
 - Continue mapping data readiness → Would unlock quarterly forecasting
 - Start evaluating that sales forecasting project you mentioned
-- Explore AI capability → Would unlock 3 more project types
 
 What sounds most useful?"
 ```
@@ -439,6 +446,15 @@ Keep orientative responses under 150 words
 - Show structure, not walls of text
 - Use bullets and clear sections
 - One example per capability
+
+### 7. **Surface Unconfirmed Inferences**
+Always mention factors the LLM inferred but user hasn't validated
+- ✅ "data_quality: 20% (75% confident, based on 3 mentions)"
+- ✅ Show confirmed vs unconfirmed in status queries
+- ✅ Offer quick validation: "Confirm these (2 min) → boost confidence"
+- ✅ Cumulative evidence: confidence increases with more consistent mentions
+- ❌ Single mention: "from 'scattered data'" (too weak)
+- ❌ Treat inferences as facts without validation
 
 ---
 

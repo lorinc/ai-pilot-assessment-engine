@@ -1,0 +1,666 @@
+# Exploratory Assessment Architecture
+
+## Core Principle
+
+**The system is a thinking partner, not a checklist enforcer.**
+
+Users explore freely. The system remembers context, suggests next moves, shows confidence, but never blocks exploration. "What's missing, what would be the gain?" replaces rigid linear processes.
+
+---
+
+## Key Architectural Changes
+
+### 1. Drop Linear Process Entirely
+
+**Old approach:** Problem → Options → Evidence → Impact → Decision (enforced sequence)
+
+**New approach:** Start anywhere, jump freely, system tracks context
+
+- ✅ User can start with: project idea | problem | "what's possible?" | factor exploration
+- ✅ User can jump: discuss KPIs → back to data quality → forward to project feasibility
+- ✅ System never blocks: "You can't evaluate yet, need X first" ❌
+- ✅ System always proceeds: "Low confidence (40%), here's why..." ✅
+
+### 2. Always-On Confidence Scoring
+
+Every assessment, every project evaluation shows:
+- **Current confidence level** (40%, 70%, 90%)
+- **What's driving low confidence** (missing: data governance, team skills)
+- **What would improve it** (10 min on data governance → +20% confidence)
+- **Diminishing returns signal** (assessing 3 more factors → only +5% confidence)
+
+**User decides when "good enough":**
+- €10k pilot? 40% confidence might be fine
+- €100k project? Probably want 75%+
+- System suggests, user decides
+
+### 3. Unconfirmed Inferences Tracking
+
+**Problem:** LLM infers "data_quality = 20%" from conversation, but user never explicitly validated it.
+
+**Solution:** Track inference status, derive value from cumulative evidence
+
+```yaml
+/factors/{factor_id}:
+  current_value: 20  # Derived from ALL journal entries, not single mention
+  current_confidence: 0.75  # Based on evidence quality + quantity
+  inference_status: "unconfirmed"  # or "confirmed" or "user_provided"
+  last_updated: "2024-10-28T10:30:00Z"
+  # NO inferred_from_conversation - that's in the journal
+```
+
+**How inference works:**
+```python
+def calculate_factor_value(factor_id: str, user_id: str) -> tuple[int, float]:
+    """
+    Cumulative inference from ALL journal entries
+    """
+    # Get all journal entries for this factor
+    entries = get_journal_entries(factor_id)
+    
+    # Each entry contributes evidence
+    evidence_pieces = []
+    for entry in entries:
+        evidence_pieces.append({
+            "text": entry.conversation_excerpt,
+            "timestamp": entry.timestamp,
+            "context": entry.change_rationale
+        })
+    
+    # LLM synthesizes ALL evidence
+    synthesis = llm.synthesize_evidence(
+        factor_id=factor_id,
+        evidence_pieces=evidence_pieces,
+        scale=knowledge_graph.get_factor_scale(factor_id)
+    )
+    
+    return synthesis.value, synthesis.confidence
+
+# Example synthesis prompt:
+"""
+Factor: data_quality
+Scale: 0=no quality controls, 50=basic checks, 100=comprehensive governance
+
+Evidence from 3 conversations:
+1. [Oct 20] "Our data is scattered across 5 systems"
+2. [Oct 22] "We don't have a data catalog"
+3. [Oct 25] "Sales data has lots of duplicates"
+
+Synthesize: What's the data_quality score (0-100)?
+How confident are you (0-1)?
+"""
+
+# LLM returns:
+# value: 20 (scattered + no catalog + quality issues = very low)
+# confidence: 0.75 (3 consistent pieces of evidence)
+```
+
+**In status/summary responses:**
+```
+System: "Here's what we've mapped out:
+
+**Data Readiness: 60% mapped, 70% confident**
+
+**Confirmed factors:**
+- data_availability: 80% ✓ (you explicitly said "we have 3 years of sales data")
+
+**Unconfirmed inferences:**
+- data_quality: 20% (75% confident, based on 3 mentions: scattered data, no catalog, duplicates)
+- data_governance: 15% (60% confident, based on 2 mentions: no formal policies, no data steward)
+
+Want to confirm these, or should we move on?"
+```
+
+**Key difference:**
+- ❌ "inferred from 'data scattered across 5 systems'" (single mention)
+- ✅ "75% confident, based on 3 mentions" (cumulative evidence)
+- ✅ Confidence increases with more consistent evidence
+- ✅ Full evidence trail is in journal, not duplicated in status
+
+**Persistence:**
+```python
+class FactorJournalStore:
+    def update_factor(
+        self,
+        user_id: str,
+        factor_id: str,
+        new_value: Any,
+        rationale: str,
+        confidence: float,
+        inference_status: str = "unconfirmed",  # NEW
+        user_confirmed: bool = False  # NEW
+    ):
+        # ... existing code ...
+        
+        factor_doc.set({
+            "current_value": new_value,
+            "current_confidence": confidence,
+            "inference_status": "confirmed" if user_confirmed else "unconfirmed",
+            "inferred_from": rationale,
+            "last_updated": entry["timestamp"]
+        }, merge=True)
+```
+
+### 4. Project-Specific "Good Enough" Thresholds
+
+**Not:** "You need 80% completeness to proceed"  
+**Instead:** "For this €10k pilot, you have enough. For a €100k project, I'd want more on governance."
+
+```python
+def evaluate_project_feasibility(
+    project_idea: str,
+    estimated_cost: int,
+    user_id: str
+) -> dict:
+    """
+    Always proceed with evaluation, show confidence + gaps
+    """
+    # Get current factor state
+    factors = get_all_assessed_factors(user_id)
+    
+    # Identify relevant factors for this project
+    relevant_factors = identify_relevant_factors(project_idea, factors)
+    
+    # Calculate confidence
+    confidence = calculate_confidence(relevant_factors)
+    
+    # Identify gaps
+    missing_factors = identify_missing_factors(project_idea, factors)
+    
+    # Risk-based threshold
+    recommended_confidence = get_recommended_confidence(estimated_cost)
+    
+    return {
+        "feasibility": "proceed_with_caution" if confidence < recommended_confidence else "good_to_go",
+        "confidence": confidence,
+        "confidence_breakdown": {
+            "data_readiness": 0.60,
+            "ai_capability": 0.40,
+            "cultural_fit": 0.50
+        },
+        "gaps": [
+            {
+                "factor": "data_governance",
+                "impact": "Would raise confidence from 45% to 60%",
+                "time_to_assess": "10 minutes"
+            },
+            {
+                "factor": "team_skills",
+                "impact": "Would raise confidence from 60% to 70%",
+                "time_to_assess": "5 minutes"
+            }
+        ],
+        "recommendation": f"For a €{estimated_cost} project, I'd recommend {recommended_confidence}% confidence. You're at {confidence}%. {'Good to proceed' if confidence >= recommended_confidence else 'Consider assessing: ' + ', '.join([g['factor'] for g in missing_factors[:2]])}",
+        "diminishing_returns": "Assessing 3 more factors would only improve confidence by 5%"
+    }
+
+def get_recommended_confidence(estimated_cost: int) -> float:
+    """Risk-based confidence thresholds"""
+    if estimated_cost < 25000:
+        return 0.40  # Low-risk pilot
+    elif estimated_cost < 100000:
+        return 0.60  # Medium-risk project
+    else:
+        return 0.75  # High-stakes project
+```
+
+### 5. Conversation Memory Integration
+
+**Auto-populate from factor journal:**
+
+```python
+User: "Can we do a sales forecasting project?"
+
+System: 
+# 1. Retrieve relevant factors from journal
+factors = {
+    "data_quality": 20,  # From: "data scattered across 5 systems"
+    "data_availability": 80,  # From: "we have 3 years of sales data"
+    "ml_infrastructure": None  # Never discussed
+}
+
+# 2. Evaluate with available data
+evaluation = evaluate_project_feasibility("sales_forecasting", 15000, user_id)
+
+# 3. Respond with context
+"Based on what we've discussed:
+
+**Feasibility: Proceed with caution (45% confidence)**
+
+Why 45%?
+- ✅ Data availability is strong (80%) - you have 3 years of sales data
+- ⚠️ Data quality is low (20%) - data scattered across 5 systems
+- ❓ ML infrastructure unknown - haven't discussed this yet
+
+**For a €15k pilot, 45% confidence is borderline.**
+
+**To improve confidence:**
+- Discuss data governance (10 min) → +15% confidence
+- Assess ML infrastructure (5 min) → +10% confidence
+
+Or we can proceed now and treat this as a high-risk pilot. Your call."
+```
+
+### 6. "What's Next" Driven by Pareto Principle
+
+**Always show ROI of continuing:**
+
+```python
+def suggest_next_steps(user_id: str, context: str = None) -> dict:
+    """
+    Pareto-driven suggestions: 20% of factors explain 80% of feasibility
+    """
+    summary = get_assessment_summary(user_id)
+    
+    # Identify high-impact gaps
+    gaps = identify_high_impact_gaps(summary)
+    
+    # Calculate ROI for each potential action
+    suggestions = []
+    for gap in gaps:
+        roi = calculate_roi(gap)
+        suggestions.append({
+            "action": f"Assess {gap['factor']}",
+            "time": gap["time_to_assess"],
+            "confidence_gain": gap["confidence_gain"],
+            "unlocks": gap["unlocks"],  # What project types this enables
+            "roi": roi  # confidence_gain / time
+        })
+    
+    # Sort by ROI
+    suggestions.sort(key=lambda x: x["roi"], reverse=True)
+    
+    # Signal diminishing returns
+    top_3_gain = sum(s["confidence_gain"] for s in suggestions[:3])
+    rest_gain = sum(s["confidence_gain"] for s in suggestions[3:])
+    
+    return {
+        "top_suggestions": suggestions[:3],
+        "diminishing_returns": f"Top 3 actions would gain {top_3_gain}% confidence in 20 min. Remaining actions would only gain {rest_gain}% more.",
+        "current_capability": summary["capabilities"]["can_evaluate"],
+        "next_unlock": suggestions[0]["unlocks"] if suggestions else None
+    }
+```
+
+**Example output:**
+```
+System: "Here's where you'd get the most value:
+
+**Top 3 next steps:**
+1. Assess data governance (10 min) → +15% confidence, unlocks 3 project types
+2. Discuss team skills (5 min) → +10% confidence, unlocks 2 project types
+3. Explore ML infrastructure (5 min) → +8% confidence
+
+After these, you'd be at 78% confidence—good for most medium-risk projects.
+
+Assessing the remaining 12 factors would only add another 10% confidence. 
+Probably not worth it unless you're planning something high-stakes.
+
+What sounds most useful?"
+```
+
+### 7. Flexible Entry Points
+
+**User can start anywhere:**
+
+```python
+def handle_user_intent(user_input: str, user_id: str):
+    """
+    Detect intent and route appropriately
+    """
+    intent = llm.classify_intent(user_input, [
+        "evaluate_project",
+        "explore_possibilities",
+        "assess_factor",
+        "status_check",
+        "what_next",
+        "general_question"
+    ])
+    
+    if intent == "evaluate_project":
+        # "Can we do sales forecasting?"
+        return evaluate_project_with_context(user_input, user_id)
+    
+    elif intent == "explore_possibilities":
+        # "What AI projects could we do?"
+        return generate_project_ideas_from_factors(user_id)
+    
+    elif intent == "assess_factor":
+        # "Let me tell you about our data quality"
+        return conversational_factor_assessment(user_input, user_id)
+    
+    elif intent == "status_check":
+        # "Where are we?"
+        return format_status_response(user_id)
+    
+    elif intent == "what_next":
+        # "What should we discuss next?"
+        return suggest_next_steps(user_id)
+    
+    else:
+        # General conversation
+        return llm.respond_with_context(user_input, user_id)
+```
+
+### 8. Multi-Session Continuity Pattern
+
+**When user returns:**
+
+```python
+def welcome_back(user_id: str, days_since_last: int):
+    """
+    Adaptive welcome based on time elapsed
+    """
+    summary = get_assessment_summary(user_id)
+    last_conv = summary["last_conversation"]
+    
+    if days_since_last < 1:
+        # Same day - resume
+        return f"Welcome back! We were discussing {last_conv['topic']}. Want to continue, or switch topics?"
+    
+    elif days_since_last < 7:
+        # Within a week - status + resume option
+        return f"""
+        Welcome back! Quick status:
+        
+        **What you can do now:**
+        {format_capabilities(summary['capabilities'])}
+        
+        **Last time:** We discussed {last_conv['topic']}. 
+        {format_last_conversation_impact(last_conv)}
+        
+        **Options:**
+        - Continue with {last_conv['topic']}
+        - Evaluate a project idea
+        - Explore what's next
+        
+        What sounds good?
+        """
+    
+    else:
+        # Long gap - full status
+        return format_status_response(user_id) + "\n\nWhat would you like to work on?"
+```
+
+---
+
+## Unconfirmed Inferences in Practice
+
+### Scenario 1: Status Check
+
+```
+User: "Where are we?"
+
+System: "Here's what we've mapped out:
+
+**Data Readiness: 60% mapped, 70% confident**
+
+Confirmed:
+- data_availability: 80% ✓ (you said "3 years of sales data")
+
+Unconfirmed (I inferred these, but you haven't validated):
+- data_quality: 20% (from "data scattered across 5 systems")
+- data_governance: 15% (from "no formal policies")
+
+**What you can do now:**
+You can evaluate basic forecasting projects, but confidence is lower on data quality.
+
+Want to confirm those inferences, or should we move on?"
+```
+
+### Scenario 2: Project Evaluation
+
+```
+User: "Can we do predictive maintenance?"
+
+System: "Let me check... 
+
+**Feasibility: Low confidence (35%)**
+
+Based on what we've discussed:
+- ✅ You have sensor data (confirmed)
+- ⚠️ Data quality unclear (I inferred 20% from earlier comments—not confirmed)
+- ❓ ML infrastructure unknown
+
+**For predictive maintenance, I'd want 60%+ confidence.**
+
+**Quick wins to improve:**
+1. Confirm data quality (2 min) → Would clarify biggest uncertainty
+2. Discuss ML infrastructure (5 min) → +15% confidence
+
+Or we can proceed with high uncertainty. Your call."
+```
+
+### Scenario 3: Proactive Validation
+
+```
+System: "By the way, I've been assuming your data governance is around 15% 
+based on you mentioning 'no formal policies.' 
+
+If that's changed, or if I misunderstood, let me know—it affects 3 project types."
+```
+
+---
+
+## TBD Items (Future Work)
+
+### 1. Project Ideas Persistence & UX
+
+**Need:**
+- Store project ideas separately from assessments
+- Track: idea, rough feasibility, confidence, last evaluated
+- Allow: "Let's revisit that forecasting project we discussed last month"
+
+**Data model:**
+```yaml
+/users/{user_id}/projects/{project_id}:
+  name: "Sales forecasting"
+  description: "Monthly sales predictions with seasonal trends"
+  estimated_cost: 50000
+  last_evaluated: "2024-10-28"
+  feasibility_snapshot:
+    confidence: 0.45
+    gaps: ["data_governance", "ml_infrastructure"]
+    recommendation: "Assess data governance first"
+  status: "exploring" | "ready" | "blocked" | "archived"
+```
+
+**UX:**
+- "Show me all project ideas we've discussed"
+- "What's the status of that forecasting project?"
+- "Re-evaluate forecasting with updated knowledge"
+
+### 2. Factor Export/Import (Spreadsheet)
+
+**Use case:** User wants to:
+- Export all factors to Excel for review
+- Share with colleagues to gather input
+- Import back with colleague assessments
+
+**Export format:**
+```csv
+factor_id,factor_name,current_value,confidence,rationale,status
+data_quality,Data Quality,20,0.75,"Data scattered across 5 systems, no catalog",unconfirmed
+data_availability,Data Availability,80,0.90,"3 years of sales data in warehouse",confirmed
+data_governance,Data Governance,15,0.60,"No formal policies mentioned",unconfirmed
+```
+
+**Import behavior:**
+```python
+def import_factors(user_id: str, csv_file: str):
+    """
+    Import factors from spreadsheet
+    - Flag all as very low confidence (0.30)
+    - LLM compares rationale against knowledge graph scale
+    - If LLM agrees with value, raise confidence to 0.70
+    - If LLM disagrees, flag for user review
+    """
+    imported_factors = parse_csv(csv_file)
+    
+    for factor in imported_factors:
+        # LLM validates
+        validation = llm.validate_factor_value(
+            factor_id=factor["factor_id"],
+            value=factor["current_value"],
+            rationale=factor["rationale"],
+            scale=knowledge_graph.get_factor_scale(factor["factor_id"])
+        )
+        
+        if validation["agrees"]:
+            confidence = 0.70  # LLM confirmed
+            status = "confirmed"
+        else:
+            confidence = 0.30  # Needs review
+            status = "needs_review"
+            validation_notes = validation["reason"]
+        
+        # Store with import metadata
+        journal_store.update_factor(
+            user_id=user_id,
+            factor_id=factor["factor_id"],
+            new_value=factor["current_value"],
+            rationale=factor["rationale"],
+            confidence=confidence,
+            inference_status=status,
+            import_metadata={
+                "imported_at": datetime.now(),
+                "validation": validation,
+                "original_confidence": factor.get("confidence", 0.30)
+            }
+        )
+```
+
+**Partial import (colleague input):**
+```python
+def import_partial_factors(user_id: str, csv_file: str):
+    """
+    Import subset of factors (e.g., colleague filled in 5 factors)
+    - Merge with existing factors
+    - Flag conflicts (colleague says 80%, you said 20%)
+    - Suggest resolution
+    """
+    imported = parse_csv(csv_file)
+    existing = get_all_factors(user_id)
+    
+    conflicts = []
+    for imp_factor in imported:
+        existing_factor = existing.get(imp_factor["factor_id"])
+        
+        if existing_factor and abs(existing_factor["value"] - imp_factor["value"]) > 20:
+            conflicts.append({
+                "factor": imp_factor["factor_id"],
+                "your_value": existing_factor["value"],
+                "colleague_value": imp_factor["value"],
+                "your_rationale": existing_factor["rationale"],
+                "colleague_rationale": imp_factor["rationale"]
+            })
+    
+    if conflicts:
+        return {
+            "status": "conflicts_found",
+            "conflicts": conflicts,
+            "suggestion": "Review these differences with your colleague"
+        }
+    else:
+        # No conflicts, merge
+        for imp_factor in imported:
+            update_factor_from_import(user_id, imp_factor)
+        return {"status": "success", "imported_count": len(imported)}
+```
+
+### 3. Colleague Collaboration Workflow
+
+**Scenario:** User wants input from data team lead on data factors
+
+**Workflow:**
+1. User exports partial spreadsheet (only data factors)
+2. Colleague fills in their assessment
+3. User imports back
+4. System shows conflicts, suggests discussion points
+
+**Export:**
+```python
+def export_factors_for_colleague(
+    user_id: str,
+    factor_category: str,
+    colleague_name: str
+) -> str:
+    """
+    Export subset of factors for colleague input
+    """
+    factors = get_factors_by_category(user_id, factor_category)
+    
+    # Create CSV with instructions
+    csv = f"# Assessment for {colleague_name}\n"
+    csv += f"# Please fill in your assessment for these {factor_category} factors\n"
+    csv += f"# Scale: 0-100, where 0=none, 50=moderate, 100=excellent\n\n"
+    csv += "factor_name,your_assessment,your_rationale\n"
+    
+    for factor in factors:
+        csv += f"{factor['name']},,\n"
+    
+    return csv
+```
+
+---
+
+## Implementation Priority
+
+### Phase 1: Core Exploratory Flow (Week 1-2)
+1. ✅ Drop linear process enforcement
+2. ✅ Always-proceed project evaluation with confidence
+3. ✅ Unconfirmed inferences tracking
+4. ✅ "What's next" with ROI calculation
+
+### Phase 2: Enhanced Context (Week 3-4)
+1. ✅ Auto-populate from factor journal
+2. ✅ Multi-session continuity patterns
+3. ✅ Flexible entry points
+4. ✅ Diminishing returns signaling
+
+### Phase 3: Collaboration (Week 5-6)
+1. 🔲 Factor export/import (full)
+2. 🔲 Partial import with conflict resolution
+3. 🔲 Colleague collaboration workflow
+
+### Phase 4: Project Management (Week 7-8)
+1. 🔲 Project ideas persistence
+2. 🔲 Project re-evaluation
+3. 🔲 Project status tracking
+
+---
+
+## Success Criteria
+
+**Users should feel:**
+- ✅ Free to explore without rigid structure
+- ✅ Confident in "good enough" decisions
+- ✅ Aware of what would improve confidence
+- ✅ Supported, not interrogated
+
+**Users should never feel:**
+- ❌ Blocked from exploring
+- ❌ Forced to complete everything
+- ❌ Unsure what the system "knows"
+- ❌ Like they're filling out forms
+
+**System should:**
+- ✅ Remember everything from conversations
+- ✅ Show confidence on all assessments
+- ✅ Suggest high-ROI next steps
+- ✅ Signal diminishing returns
+- ✅ Validate inferences proactively
+- ✅ Support collaboration (export/import)
+
+---
+
+## Key Architectural Principles
+
+1. **Never block exploration** - Always proceed with confidence score
+2. **Pareto everywhere** - 20% of factors, 80% of value
+3. **Validate inferences** - Track unconfirmed, surface in summaries
+4. **Risk-based thresholds** - €10k pilot ≠ €100k project
+5. **ROI-driven suggestions** - Show confidence gain per minute
+6. **Diminishing returns** - Signal when "good enough" reached
+7. **Collaboration-friendly** - Export/import for colleague input
+8. **Context-aware** - Auto-populate from conversation memory

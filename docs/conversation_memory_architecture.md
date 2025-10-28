@@ -143,10 +143,12 @@ Firestore:
         excerpt: "User mentioned data scattered across 5 systems"
   
   /factors/{factor_id}:
-    current_value: 20
-    current_confidence: 0.75
+    current_value: 20  # Derived from ALL journal entries via LLM synthesis
+    current_confidence: 0.75  # Based on evidence quality + quantity
     last_updated: "2024-10-28T10:30:00Z"
     category: "data_readiness"  # For aggregation
+    inference_status: "unconfirmed"  # or "confirmed" or "user_provided"
+    # NO inferred_from_conversation - full evidence trail is in journal entries
     
   /factors/{factor_id}/journal/{entry_id}:
     timestamp: "2024-10-28T10:30:00Z"
@@ -669,7 +671,9 @@ class FactorJournalStore:
         conversation_excerpt: str,
         confidence: float,
         inferred_from: List[str] = None,
-        session_id: str = None
+        session_id: str = None,
+        inference_status: str = "unconfirmed",  # NEW: track if user confirmed
+        user_confirmed: bool = False  # NEW: explicit confirmation flag
     ):
         # Get current value
         current = self.get_current_state(user_id, factor_id)
@@ -696,7 +700,9 @@ class FactorJournalStore:
             "current_value": new_value,
             "current_confidence": confidence,
             "last_updated": entry["timestamp"],
-            "category": self.graph.get_factor_category(factor_id)
+            "category": self.graph.get_factor_category(factor_id),
+            "inference_status": "confirmed" if user_confirmed else inference_status
+            # NO inferred_from_conversation - that's in the journal entries
         }, merge=True)
         
         # Update graph
@@ -796,12 +802,110 @@ class FactorJournalStore:
             "cannot_evaluate_yet": cannot_evaluate[:5]  # Top 5 next unlocks
         }
     
-    def get_assessment_summary(self, user_id: str) -> dict:
+    def get_assessment_summary(self, user_id: str, include_unconfirmed: bool = True) -> dict:
         """
         Fast retrieval of aggregate metrics for orientative queries
         """
         metadata_doc = self.db.collection("users").document(user_id).collection("metadata").document("assessment").get()
-        return metadata_doc.to_dict() if metadata_doc.exists else None
+        summary = metadata_doc.to_dict() if metadata_doc.exists else None
+        
+        if summary and include_unconfirmed:
+            # Add unconfirmed inferences for status queries
+            summary["unconfirmed_inferences"] = self.get_unconfirmed_factors(user_id)
+        
+        return summary
+    
+    def get_unconfirmed_factors(self, user_id: str) -> List[dict]:
+        """
+        Get all factors with inference_status = "unconfirmed"
+        """
+        all_factors = self.get_all_factors(user_id)
+        
+        unconfirmed = []
+        for f in all_factors:
+            if f.get("inference_status") == "unconfirmed":
+                # Get evidence count from journal
+                journal_entries = self.get_journal_entries(f["factor_id"])
+                
+                unconfirmed.append({
+                    "factor_id": f["factor_id"],
+                    "factor_name": self.graph.get_factor_name(f["factor_id"]),
+                    "value": f["current_value"],
+                    "confidence": f["current_confidence"],
+                    "evidence_count": len(journal_entries),  # Cumulative evidence
+                    "latest_mention": journal_entries[0]["timestamp"] if journal_entries else None
+                })
+        
+        return unconfirmed
+    
+    def recalculate_factor_from_journal(self, user_id: str, factor_id: str) -> tuple[Any, float]:
+        """
+        Recalculate factor value from ALL journal entries via LLM synthesis
+        This is the core cumulative inference mechanism
+        """
+        # Get all journal entries for this factor
+        entries = self.get_journal_entries(factor_id)
+        
+        if not entries:
+            return None, 0.0
+        
+        # Prepare evidence pieces
+        evidence_pieces = [
+            {
+                "text": entry["conversation_excerpt"],
+                "timestamp": entry["timestamp"],
+                "context": entry["change_rationale"]
+            }
+            for entry in entries
+        ]
+        
+        # LLM synthesizes ALL evidence
+        synthesis = self.llm.synthesize_evidence(
+            factor_id=factor_id,
+            evidence_pieces=evidence_pieces,
+            scale=self.graph.get_factor_scale(factor_id),
+            prompt=f"""
+            Factor: {factor_id}
+            Scale: {self.graph.get_factor_scale(factor_id)}
+            
+            Evidence from {len(evidence_pieces)} conversation(s):
+            {format_evidence_list(evidence_pieces)}
+            
+            Synthesize:
+            1. What's the {factor_id} score based on ALL evidence?
+            2. How confident are you (0-1)?
+            3. Are the evidence pieces consistent or contradictory?
+            
+            Return: {{"value": <score>, "confidence": <0-1>}}
+            """
+        )
+        
+        return synthesis.value, synthesis.confidence
+    
+    def confirm_factor(self, user_id: str, factor_id: str, confirmed_value: Any = None):
+        """
+        User explicitly confirms or adjusts an inferred factor
+        """
+        current = self.get_current_state(user_id, factor_id)
+        
+        if confirmed_value is not None and confirmed_value != current["current_value"]:
+            # User corrected the value
+            self.update_factor(
+                user_id=user_id,
+                factor_id=factor_id,
+                new_value=confirmed_value,
+                rationale=f"User corrected from {current['current_value']} to {confirmed_value}",
+                conversation_excerpt="User explicitly provided correction",
+                confidence=0.95,  # High confidence when user provides
+                user_confirmed=True
+            )
+        else:
+            # User confirmed the inferred value
+            factor_doc = self.db.collection("factors").document(factor_id)
+            factor_doc.update({
+                "inference_status": "confirmed",
+                "current_confidence": min(current["current_confidence"] + 0.1, 1.0)  # Boost confidence
+            })
     
     def get_current_state(self, user_id: str, factor_id: str):
         doc = self.db.collection("factors").document(factor_id).get()
