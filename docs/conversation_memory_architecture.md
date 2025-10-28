@@ -537,7 +537,7 @@ According to my understanding, Project X requires:
 
 ---
 
-### Option 2: Hybrid Vector + Graph Store
+### Option B: Hybrid Vector + Graph Store
 
 **Concept:** Combine vector embeddings (for semantic search) with a knowledge graph (for reasoning chains).
 
@@ -586,7 +586,7 @@ LIMIT 5
 
 ---
 
-### Option 3: Lightweight Structured Logs + Semantic Cache
+### Option C: Lightweight Structured Logs + Semantic Cache
 
 **Concept:** Persist structured conversation logs with semantic embeddings for retrieval.
 
@@ -673,92 +673,23 @@ def answer_why_question(question: str, user_id: str):
 
 ---
 
-## Recommendation: Option 1 (Event-Sourced) with Pragmatic Simplifications
+## Why Factor-Centric Journal Wins
 
-### Why Event Sourcing Fits:
+**Compared to Event Sourcing:**
+- ✅ Simpler - No event replay needed
+- ✅ More efficient - 83% less storage
+- ✅ Domain-aligned - Factors are natural boundaries
+- ✅ Easier queries - Direct factor lookup vs event reconstruction
 
-1. **Immutable audit trail** - Critical for assessment integrity
-2. **Temporal reasoning** - Native support for "when did you say X?"
-3. **Provenance tracking** - Every value change has a reason
-4. **Scalability** - Append-only log scales well
-5. **Debugging** - Replay events to understand LLM behavior
+**Compared to Hybrid Vector+Graph:**
+- ✅ Less complexity - One storage system (Firestore)
+- ✅ Lower cost - No Neo4j hosting
+- ✅ No sync issues - Single source of truth
 
-### Pragmatic Simplifications:
-
-Instead of full CQRS/Event Sourcing:
-- **Use Firestore subcollections** (not a separate event store)
-- **Snapshot every N events** (not every state change)
-- **Embed only key events** (not every turn)
-- **Summarize old events** (compress after 30 days)
-
-### Implementation Phases:
-
-#### Phase 1: Basic Event Logging
-```python
-# Log every user statement that mentions a factor
-log_event(
-    user_id=user_id,
-    event_type="user_statement",
-    raw_text=user_input,
-    extracted_factors=extract_factors(user_input),
-    timestamp=now()
-)
-
-# Log every LLM inference about a factor
-log_event(
-    user_id=user_id,
-    event_type="llm_inference",
-    raw_text=llm_reasoning,
-    inferred_factors={factor: value},
-    confidence=confidence_score,
-    inferred_from=[previous_event_ids]
-)
-```
-
-#### Phase 2: Factor History Tracking
-```python
-# Maintain current state + change log
-update_factor(
-    user_id=user_id,
-    factor_name="data_quality",
-    new_value=20,
-    reason_event_id=event_id,
-    previous_value=None
-)
-```
-
-#### Phase 3: Semantic Retrieval
-```python
-# Embed key events for semantic search
-embed_and_index(
-    event_id=event_id,
-    text=event.raw_text,
-    metadata={
-        "user_id": user_id,
-        "timestamp": event.timestamp,
-        "factors": event.affected_factors
-    }
-)
-```
-
-#### Phase 4: Provenance Queries
-```python
-# "Why is data_quality only 20%?"
-def explain_factor(factor_name: str, user_id: str):
-    current = get_current_factor(user_id, factor_name)
-    history = get_factor_history(user_id, factor_name)
-    
-    explanation = []
-    for change in history:
-        event = get_event(change.reason_event_id)
-        explanation.append({
-            "date": event.timestamp,
-            "statement": event.raw_text,
-            "impact": f"Changed from {change.previous_value} to {change.new_value}"
-        })
-    
-    return format_explanation(factor_name, current.value, explanation)
-```
+**Compared to Structured Logs:**
+- ✅ More structured - Factor-centric vs turn-centric
+- ✅ Better provenance - Explicit `inferred_from` links
+- ✅ Graph integration - Leverages existing edges
 
 ---
 
