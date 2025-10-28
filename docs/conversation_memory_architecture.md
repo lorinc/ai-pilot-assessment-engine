@@ -1,23 +1,22 @@
 # Conversation Memory & Temporal Tracking Architecture
 
-## Challenge: Your Idea & Why It's Critical
+## Core Insight: Factor-Centric Journal
 
-**Your Proposal:** Persist every user statement that adjusts tracked factors with timestamps to enable:
-1. **Temporal reasoning** - "Why can't we do X?" → "You said Y on [date] and Z on [date]"
-2. **Context-aware answers** - Reference past conversations with evidence
-3. **Audit trail** - Track how assessments evolved over time
+**Key Realization:** Everything worth remembering is directly linked to a **factor**. Instead of complex event sourcing, build a simple journal system around factors themselves.
 
-**Why This Is Essential:**
-- ✅ Conversations will exceed context windows (128K tokens = ~30-50 pages)
-- ✅ Users jump between topics ("Let's talk about data quality" → "Actually, what about project X?")
-- ✅ Hard questions require synthesizing evidence from multiple past conversations
-- ✅ Assessment integrity depends on **why** values changed, not just **what** changed
+**Why This Works:**
+- ✅ Factors are already first-class entities in the domain model
+- ✅ Knowledge graph provides natural navigation via existing edges
+- ✅ Only meaningful changes (value updates) need persistence, not every utterance
+- ✅ Current state + confidence stored directly on factor for fast access
+- ✅ Journal provides temporal audit trail when needed
 
-**Challenge to Your Idea:**
-Your instinct is **100% correct**, but I'd push further:
-- Don't just persist "adjustments to factors" → **Persist the entire inference chain**
-- Don't just timestamp statements → **Version the entire assessment state**
-- Don't just reference past conversations → **Build a queryable knowledge graph of reasoning**
+**What to Store:**
+- Value changes (before/after)
+- Brief rationale for change
+- Conversation excerpt (2-3 exchanges)
+- Confidence score
+- Links to influencing factors
 
 ---
 
