@@ -444,31 +444,42 @@ If that's changed, or if I misunderstood, let me know—it affects 3 project typ
 
 ## TBD Items (Future Work)
 
-### 1. Project Ideas Persistence & UX
+### 1. Project Evaluation Persistence
 
 **Need:**
-- Store project ideas separately from assessments
-- Track: idea, rough feasibility, confidence, last evaluated
-- Allow: "Let's revisit that forecasting project we discussed last month"
+- Store project evaluations as timestamped snapshots
+- Track: project name, feasibility confidence, gaps, timestamp
+- Allow: "Re-evaluate that forecasting project with updated knowledge"
+- No decision tracking—just evaluation history
 
 **Data model:**
 ```yaml
-/users/{user_id}/projects/{project_id}:
-  name: "Sales forecasting"
+/users/{user_id}/project_evaluations/{evaluation_id}:
+  project_name: "Sales forecasting"
   description: "Monthly sales predictions with seasonal trends"
   estimated_cost: 50000
-  last_evaluated: "2024-10-28"
-  feasibility_snapshot:
-    confidence: 0.45
+  
+  evaluation_snapshot:
+    timestamp: "2024-10-28T10:30:00Z"
+    feasibility_confidence: 0.45
+    confidence_breakdown:
+      data_readiness: 0.60
+      ai_capability: 0.40
+      cultural_fit: 0.50
     gaps: ["data_governance", "ml_infrastructure"]
-    recommendation: "Assess data governance first"
-  status: "exploring" | "ready" | "blocked" | "archived"
+    recommendation: "For €50k project, 45% is low. Assess data governance first."
+    
+  previous_evaluations:
+    - timestamp: "2024-10-20T14:00:00Z"
+      feasibility_confidence: 0.30
+      gaps: ["data_quality", "data_governance", "ml_infrastructure"]
 ```
 
 **UX:**
-- "Show me all project ideas we've discussed"
-- "What's the status of that forecasting project?"
-- "Re-evaluate forecasting with updated knowledge"
+- "Show me all projects we've evaluated"
+- "Re-evaluate sales forecasting" → Shows confidence change over time
+- "What changed since last evaluation?" → Diff of factor assessments
+- No "Did you do it?" tracking—just evaluation snapshots
 
 ### 2. Factor Export/Import (Spreadsheet)
 

@@ -4,34 +4,48 @@
 
 ---
 
-## 1. Option Generation Context (for LLM)
+## 1. Project Ideas & Next Steps Generation
 
-The system generates options at runtime based on accumulated context—never asks users to enumerate solutions.
+The system generates suggestions based on accumulated context—never asks users to enumerate solutions.
+
+### When to Generate Options
+
+**Project Ideas (3-5 options):**
+- **Trigger:** User asks "What AI projects could we do?" or "Give me some ideas"
+- **Format:** 3-5 project ideas based on assessed factors
+- **Interaction:** User picks one to refine, or asks for more/different ideas
+
+**Next Steps (2-5 options):**
+- **Trigger:** User asks "What should we do next?" or "What's next?"
+- **Format:** 3-5 concrete next actions with ROI
+- **Interaction:** User picks, or explores freely
+
+**Status Response (2-3 options):**
+- **Trigger:** User asks "Where are we?" or finishes a topic
+- **Format:** 2-3 brief next options
+- **Interaction:** User picks or ignores
 
 ```json
 {
-  "problem_summary": "user's vague problem statement",
-  "organizational_context": {
-    "budget_range": "extracted from past conversations",
-    "time_constraints": "extracted from past conversations",
-    "capabilities": ["what they've done before"],
-    "risk_tolerance": "inferred from past decisions"
-  },
-  "option_templates": [
-    {"type": "do_nothing", "always_include": true},
-    {"type": "delay", "conditions": ["if uncertainty high"]},
-    {"type": "buy", "when": ["capability exists in market"]},
-    {"type": "build", "when": ["unique requirements"]},
-    {"type": "pilot", "when": ["high uncertainty"]}
-  ],
-  "prompt": "Generate 3-5 options. Include 'Do Nothing'. Use simple language. Show trade-offs."
+  "project_ideas_context": {
+    "assessed_factors": ["data_quality: 20", "data_availability: 80"],
+    "organizational_context": {
+      "budget_range": "extracted from past conversations",
+      "time_constraints": "extracted from past conversations",
+      "capabilities": ["what they've done before"]
+    },
+    "prompt": "Generate 3-5 project ideas. Use simple language. Show feasibility."
+  }
 }
 ```
 
 **Interaction Pattern:**
-- User describes problem vaguely
-- System generates 3-5 options automatically
-- User picks, adjusts, or asks for more
+- User asks for project ideas
+- System generates 3-5 based on factors
+- User picks one to refine: "Tell me more about #2"
+- Or asks for more: "These don't fit, give me different ideas"
+- System adjusts based on feedback
+- Or user says "These are all way off" and the system displays the factors that resulted in these options and asks if something is missing or way off
 
 ---
 
@@ -65,11 +79,11 @@ conversation_flow:
 
 ## 3. Simple Confidence Language
 
-No p90, no decimals, no statistics jargon. Elementary school terminology only.
+No p90, no statistics jargon. Simple language for user input, percentages OK for system output.
 
 ```json
 {
-  "user_facing_scale": {
+  "user_input_scale": {
     "impossible": 0.0,
     "unlikely": 0.25,
     "50/50": 0.5,
@@ -77,16 +91,21 @@ No p90, no decimals, no statistics jargon. Elementary school terminology only.
     "fairly_sure": 0.9,
     "certain": 1.0
   },
-  "conversation_pattern": "How sure are you? (unlikely / 50/50 / likely / fairly sure)",
-  "internal_mapping": "Convert to 0-1 for calculations, never show decimals to user"
+  "system_output": "Can show percentages (70% confident) in status/summaries",
+  "user_input": "Simple language only (unlikely / 50/50 / likely / fairly sure)"
 }
 ```
 
 **Interaction Pattern:**
-- System asks: "How sure are you?"
-- User picks: unlikely | 50/50 | likely | fairly sure
-- System converts to numbers internally
-- User never sees 0.75 or "p90"
+- **System asks user:** "How sure are you? (unlikely / 50/50 / likely / fairly sure)"
+- **User responds:** Simple language (no numbers)
+- **System shows status:** Can use percentages ("70% confident")
+- **Never ask user for:** Decimals, p90, confidence intervals
+
+**Important:** User's confidence in their statement ≠ factor score
+- User says "fairly sure we have great data engineers"
+- But if evidence suggests no QA, no formal ETL → data_engineering score stays low
+- LLM can explain: "On our scale, these factors suggest lower readiness than you might expect"
 
 ---
 
@@ -189,33 +208,42 @@ reuse: "Next decision auto-includes these constraints without asking again"
 
 ---
 
-## 7. Decision Support Output (not capture)
+## 7. Project Evaluation (not decision tracking)
 
-This is a decision support system, not a decision tracking system. Help decide, don't track execution.
+This is an exploration and evaluation system, not a decision tracking system. Help evaluate, don't track execution.
 
 ```json
 {
   "system_produces": {
-    "recommendation": "Try Option 2 (pilot) for 8 weeks",
-    "reasoning": "Highest value/effort ratio, reversible, tests key assumptions",
-    "red_flags": ["Assumption X is critical but uncertain"],
-    "next_steps": ["Test assumption X in week 1", "Set up metrics Y"]
-  },
-  "exportable_as": {
-    "format": "detailed_prompt",
-    "content": "Full context dump for user's favorite AI",
-    "includes": ["all org context", "evidence", "assumptions", "reasoning"]
-  },
-  "user_action": "Take recommendation elsewhere, not captured in system"
+    "project_evaluation": {
+      "project_name": "Sales forecasting pilot",
+      "feasibility_confidence": 0.45,
+      "confidence_breakdown": {
+        "data_readiness": 0.60,
+        "ai_capability": 0.40,
+        "cultural_fit": 0.50
+      },
+      "gaps": ["data_governance", "ml_infrastructure"],
+      "recommendation": "For €15k pilot, 45% is borderline. Consider assessing data governance first.",
+      "timestamp": "2024-10-28T10:30:00Z"
+    },
+    "exportable_as": {
+      "format": "detailed_prompt",
+      "content": "Full context dump for user's favorite AI",
+      "includes": ["all org context", "evidence", "factor assessments", "reasoning"]
+    }
+  }
 }
 ```
 
 **Interaction Pattern:**
-- System provides recommendation with reasoning
-- User can export everything as detailed AI prompt
-- User takes recommendation and acts outside system
+- User asks: "Can we do sales forecasting?"
+- System evaluates with current knowledge: "45% confidence, here's why..."
+- User can: proceed anyway | assess more factors | ask for different project
 - System does NOT track: "Did you do it? How did it go?"
-- System DOES offer: "Want to revisit this decision later?"
+- System DOES offer: "Want to re-evaluate this project later?"
+
+**No decision record, just evaluation snapshots (TBD persistence)**
 
 ---
 
@@ -505,7 +533,7 @@ Always mention factors the LLM inferred but user hasn't validated
 ✅ **Do:** Remember and reuse automatically
 
 ❌ **Don't:** Track execution and outcomes  
-✅ **Do:** Support decision, enable export, let user own execution
+✅ **Do:** Evaluate projects, enable export, let user own execution
 
 ❌ **Don't:** Lock user into the system  
 ✅ **Do:** Export everything as portable AI prompts
