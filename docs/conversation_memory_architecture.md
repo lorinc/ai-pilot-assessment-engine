@@ -25,7 +25,7 @@
 - **[Recommended Architecture](#recommended-architecture-factor-centric-journal)** - Factor-centric journal design
 - **[Data Model](#data-model)** - FactorJournal and JournalEntry schemas
 - **[Storage Structure](#storage-structure)** - Firestore collections layout
-- **[Query Patterns](#query-patterns)** - "Why?" questions and user challenges
+- **[Generalizable Context Retrieval](#generalizable-context-retrieval)** - Two-stage system for any question
 - **[Implementation](#implementation)** - FactorJournalStore class
 - **[Alternative Approaches](#alternative-approaches-for-comparison)** - Event sourcing, hybrid, logs
 - **[Why This Wins](#why-factor-centric-journal-wins)** - Comparison with alternatives
@@ -139,117 +139,409 @@ The graph already has factor nodes—just add journal edges:
 (JournalEntry)-[:PART_OF]->(Session)
 ```
 
-### Query Patterns
+### Generalizable Context Retrieval
 
-#### "Why can't we do Project X?"
+Instead of hardcoding query patterns, use a **two-stage retrieval system**:
+
+#### Stage 1: Intent Recognition → Factor Identification
 
 ```python
-def explain_blockers(project_name: str, user_id: str):
-    # 1. Get project prerequisites from graph
-    required_factors = graph.query(
-        "MATCH (p:Project {name: $project})-[:REQUIRES]->(f:Factor) RETURN f",
-        project=project_name
+def get_context_for_question(question: str, user_id: str):
+    # 1. LLM extracts intent and identifies relevant factors
+    intent_analysis = llm.analyze_intent(
+        question=question,
+        system_prompt="""
+        Extract:
+        1. Question type: ["why_blocker", "why_value", "what_if", "how_to", "comparison"]
+        2. Mentioned entities: [projects, factors, archetypes, constraints]
+        3. Relevant factors: List factor IDs that need context
+        
+        Return JSON: {
+            "question_type": "...",
+            "entities": {...},
+            "relevant_factors": ["factor_id_1", "factor_id_2"],
+            "needs_history": true/false,
+            "needs_dependencies": true/false
+        }
+        """
     )
     
-    # 2. For each unmet factor, get latest journal entry
-    blockers = []
-    for factor in required_factors:
-        current = get_factor_current_state(factor.id)
-        if not current.meets_threshold(factor.required_value):
-            latest_entry = get_latest_journal_entry(factor.id)
-            blockers.append({
-                "factor": factor.name,
-                "required": factor.required_value,
-                "current": current.value,
-                "confidence": current.confidence,
-                "evidence": {
-                    "date": latest_entry.timestamp,
-                    "rationale": latest_entry.change_rationale,
-                    "excerpt": latest_entry.conversation_excerpt
-                }
-            })
+    # 2. Fetch context based on identified factors
+    context = build_context(
+        factor_ids=intent_analysis.relevant_factors,
+        include_history=intent_analysis.needs_history,
+        include_dependencies=intent_analysis.needs_dependencies,
+        user_id=user_id
+    )
     
-    return format_blockers(project_name, blockers)
+    # 3. LLM generates answer with retrieved context
+    return llm.answer_with_context(question, context)
 ```
 
-**Output:**
-```
-Project X requires AI Archetype: Predictive Analytics, which depends on:
-
-1. Data Quality ≥ 60% (currently 20%, confidence: 75%)
-   Last assessed: Oct 28, 2024
-   
-   Rationale: User mentioned scattered data across 5 systems, no catalog
-   
-   From our conversation:
-   > User: "Our data is all over the place, 5 different systems"
-   > Assistant: "That suggests limited data governance. Would you say you have a data catalog?"
-   > User: "No, nothing like that yet"
-
-2. Historical Data Availability (currently: Limited, confidence: 80%)
-   Last assessed: Oct 20, 2024
-   
-   Rationale: User noted only 6 months of clean data available
-   ...
-```
-
-#### "Why do you think data_governance is only 20%?"
+#### Stage 2: Smart Context Assembly
 
 ```python
-def explain_factor_value(factor_id: str, user_id: str):
-    # Get current state
-    current = get_factor_current_state(factor_id)
-    
-    # Get recent journal entries (last 3-5 changes)
-    history = get_journal_entries(factor_id, limit=5)
-    
-    # Show evolution with evidence
-    return {
-        "factor": factor_id,
-        "current_value": current.value,
-        "confidence": current.confidence,
-        "reasoning_chain": [
-            {
-                "date": entry.timestamp,
-                "change": f"{entry.previous_value} → {entry.new_value}",
-                "why": entry.change_rationale,
-                "evidence": entry.conversation_excerpt,
-                "influenced_by": [
-                    get_factor_name(fid) for fid in entry.inferred_from
-                ]
-            }
-            for entry in history
-        ]
+def build_context(
+    factor_ids: List[str],
+    include_history: bool,
+    include_dependencies: bool,
+    user_id: str
+) -> dict:
+    """
+    Assembles context by:
+    1. Fetching current factor states
+    2. Optionally fetching journal history
+    3. Optionally traversing graph for dependencies
+    """
+    context = {
+        "factors": {},
+        "dependencies": {},
+        "constraints": {}
     }
+    
+    for factor_id in factor_ids:
+        # Get current state
+        current = get_factor_current_state(factor_id)
+        context["factors"][factor_id] = {
+            "value": current.value,
+            "confidence": current.confidence,
+            "last_updated": current.last_updated
+        }
+        
+        # Add latest journal entry (always include for "why" questions)
+        latest = get_latest_journal_entry(factor_id)
+        if latest:
+            context["factors"][factor_id]["latest_change"] = {
+                "date": latest.timestamp,
+                "rationale": latest.change_rationale,
+                "excerpt": latest.conversation_excerpt
+            }
+        
+        # Optionally add full history
+        if include_history:
+            history = get_journal_entries(factor_id, limit=5)
+            context["factors"][factor_id]["history"] = [
+                {
+                    "date": entry.timestamp,
+                    "change": f"{entry.previous_value} → {entry.new_value}",
+                    "rationale": entry.change_rationale
+                }
+                for entry in history
+            ]
+        
+        # Optionally traverse graph for dependencies
+        if include_dependencies:
+            # What factors does this depend on?
+            dependencies = graph.query(
+                "MATCH (f:Factor {id: $factor_id})-[:DEPENDS_ON]->(dep:Factor) RETURN dep",
+                factor_id=factor_id
+            )
+            for dep in dependencies:
+                dep_state = get_factor_current_state(dep.id)
+                context["dependencies"][dep.id] = {
+                    "value": dep_state.value,
+                    "affects": factor_id
+                }
+            
+            # What factors depend on this?
+            dependents = graph.query(
+                "MATCH (f:Factor {id: $factor_id})<-[:DEPENDS_ON]-(dependent:Factor) RETURN dependent",
+                factor_id=factor_id
+            )
+            for dependent in dependents:
+                dep_state = get_factor_current_state(dependent.id)
+                context["dependencies"][dependent.id] = {
+                    "value": dep_state.value,
+                    "affected_by": factor_id
+                }
+    
+    return context
 ```
 
-#### User Challenges Value
+#### Example: Handling Arbitrary Questions
 
 ```python
-User: "Actually, we DO have a data catalog now"
+# Question 1: "Why can't we do Project X?"
+question = "Why can't we do predictive maintenance?"
 
-# 1. LLM detects challenge to existing factor value
-# 2. Create new journal entry
-log_journal_entry(
-    factor_id="data_quality",
-    previous_value=20,
-    new_value=45,  # Inferred from new information
-    change_rationale="User corrected: data catalog now exists",
-    conversation_excerpt="""
-        User: "Actually, we DO have a data catalog now"
-        Assistant: "That's significant! When was it implemented?"
-        User: "Last month, covers about 60% of our data sources"
-    """,
-    confidence=0.85,
-    inferred_from=["data_governance", "data_infrastructure"]
+intent = llm.analyze_intent(question)
+# Returns: {
+#   "question_type": "why_blocker",
+#   "entities": {"project": "predictive_maintenance"},
+#   "relevant_factors": ["data_quality", "sensor_data", "ml_expertise"],
+#   "needs_history": true,
+#   "needs_dependencies": true
+# }
+
+context = build_context(
+    factor_ids=["data_quality", "sensor_data", "ml_expertise"],
+    include_history=True,
+    include_dependencies=True,
+    user_id=user_id
 )
 
-# 3. Update current state
-update_factor_current_state("data_quality", value=45, confidence=0.85)
+answer = llm.answer_with_context(question, context)
+# LLM has all factor states, journal entries, and dependencies to explain blockers
 
-# 4. Propagate to dependent factors
-propagate_factor_update("data_quality")
+
+# Question 2: "What changed in our data governance since last month?"
+question = "What changed in our data governance since last month?"
+
+intent = llm.analyze_intent(question)
+# Returns: {
+#   "question_type": "what_changed",
+#   "entities": {"factor": "data_governance", "timeframe": "last_month"},
+#   "relevant_factors": ["data_governance"],
+#   "needs_history": true,
+#   "needs_dependencies": false
+# }
+
+context = build_context(
+    factor_ids=["data_governance"],
+    include_history=True,
+    include_dependencies=False,
+    user_id=user_id
+)
+
+answer = llm.answer_with_context(question, context)
+# LLM has journal history to show what changed
+
+
+# Question 3: "If we improve data quality, what becomes possible?"
+question = "If we improve data quality, what becomes possible?"
+
+intent = llm.analyze_intent(question)
+# Returns: {
+#   "question_type": "what_if",
+#   "entities": {"factor": "data_quality", "direction": "improve"},
+#   "relevant_factors": ["data_quality"],
+#   "needs_history": false,
+#   "needs_dependencies": true  # Need to know what depends on this
+# }
+
+context = build_context(
+    factor_ids=["data_quality"],
+    include_history=False,
+    include_dependencies=True,
+    user_id=user_id
+)
+
+answer = llm.answer_with_context(question, context)
+# LLM has dependency graph to explain what becomes unblocked
 ```
+
+### Semantic Fallback for Unknown Factors
+
+```python
+def get_context_for_question(question: str, user_id: str):
+    # Try structured intent extraction first
+    intent = llm.analyze_intent(question)
+    
+    # If LLM can't identify specific factors, use semantic search
+    if not intent.relevant_factors:
+        # Embed question and search journal entries
+        relevant_entries = vector_search(
+            query=question,
+            collection="journal_entries",
+            filter={"user_id": user_id},
+            top_k=5
+        )
+        
+        # Extract factor IDs from retrieved entries
+        factor_ids = list(set([entry.factor_id for entry in relevant_entries]))
+        
+        # Build context from semantically similar past discussions
+        context = build_context(
+            factor_ids=factor_ids,
+            include_history=True,
+            include_dependencies=False,
+            user_id=user_id
+        )
+    else:
+        # Use structured factor IDs from intent analysis
+        context = build_context(
+            factor_ids=intent.relevant_factors,
+            include_history=intent.needs_history,
+            include_dependencies=intent.needs_dependencies,
+            user_id=user_id
+        )
+    
+    return llm.answer_with_context(question, context)
+```
+
+### Token Budget Management
+
+```python
+def build_context(
+    factor_ids: List[str],
+    include_history: bool,
+    include_dependencies: bool,
+    user_id: str,
+    max_tokens: int = 5000  # Budget for context
+) -> dict:
+    """
+    Builds context with token budget awareness
+    """
+    context = {"factors": {}, "dependencies": {}}
+    estimated_tokens = 0
+    
+    # Priority 1: Current state (always include)
+    for factor_id in factor_ids:
+        current = get_factor_current_state(factor_id)
+        latest = get_latest_journal_entry(factor_id)
+        
+        factor_context = {
+            "value": current.value,
+            "confidence": current.confidence,
+            "latest_change": {
+                "date": latest.timestamp,
+                "rationale": latest.change_rationale,
+                "excerpt": latest.conversation_excerpt[:200]  # Truncate if needed
+            }
+        }
+        
+        tokens = estimate_tokens(factor_context)
+        if estimated_tokens + tokens > max_tokens:
+            break  # Hit budget limit
+        
+        context["factors"][factor_id] = factor_context
+        estimated_tokens += tokens
+    
+    # Priority 2: History (if requested and budget allows)
+    if include_history and estimated_tokens < max_tokens * 0.7:
+        for factor_id in factor_ids:
+            if estimated_tokens > max_tokens * 0.9:
+                break
+            
+            history = get_journal_entries(factor_id, limit=3)  # Limit history depth
+            history_summary = summarize_history(history)  # Compress old entries
+            
+            tokens = estimate_tokens(history_summary)
+            if estimated_tokens + tokens <= max_tokens:
+                context["factors"][factor_id]["history"] = history_summary
+                estimated_tokens += tokens
+    
+    # Priority 3: Dependencies (if requested and budget allows)
+    if include_dependencies and estimated_tokens < max_tokens * 0.85:
+        for factor_id in factor_ids:
+            if estimated_tokens > max_tokens:
+                break
+            
+            deps = get_factor_dependencies(factor_id)
+            context["dependencies"].update(deps)
+            estimated_tokens += estimate_tokens(deps)
+    
+    return context
+```
+
+---
+
+### Concrete Example Flow
+
+**User asks:** "Why is our AI readiness score so low?"
+
+```python
+# 1. Intent analysis
+intent = {
+    "question_type": "why_value",
+    "entities": {"metric": "ai_readiness_score"},
+    "relevant_factors": ["ai_readiness_score"],  # LLM identifies this
+    "needs_history": True,
+    "needs_dependencies": True  # Score is composite, need components
+}
+
+# 2. Build context
+context = {
+    "factors": {
+        "ai_readiness_score": {
+            "value": 35,
+            "confidence": 0.8,
+            "latest_change": {
+                "date": "2024-10-20",
+                "rationale": "Composite score from data_quality, governance, infrastructure",
+                "excerpt": "..."
+            },
+            "history": [...]
+        }
+    },
+    "dependencies": {
+        "data_quality": {"value": 20, "affects": "ai_readiness_score"},
+        "data_governance": {"value": 15, "affects": "ai_readiness_score"},
+        "ml_infrastructure": {"value": 50, "affects": "ai_readiness_score"}
+    }
+}
+
+# 3. LLM generates answer
+answer = """
+Your AI readiness score is 35% because it's a composite of:
+
+1. **Data Quality: 20%** (largest drag)
+   Last assessed: Oct 28, 2024
+   You mentioned: "Our data is scattered across 5 systems, no catalog"
+   
+2. **Data Governance: 15%** (also low)
+   Last assessed: Oct 20, 2024
+   You noted: "We don't have formal data policies yet"
+   
+3. **ML Infrastructure: 50%** (relatively strong)
+   You have basic cloud infrastructure in place
+
+The low data quality and governance are pulling down your overall score.
+"""
+```
+
+---
+
+## Key Principles
+
+### 1. **LLM as Intent Router**
+- Don't hardcode query patterns
+- Let LLM identify relevant factors from natural language
+- LLM decides what context is needed (history, dependencies, constraints)
+
+### 2. **Graph as Navigation**
+- Use knowledge graph to traverse factor relationships
+- Automatically fetch dependencies when needed
+- No manual mapping of "project → prerequisites"
+
+### 3. **Journal as Evidence**
+- Every factor has its own journal
+- Retrieve only relevant factor journals based on question
+- Latest entry always included, full history optional
+
+### 4. **Semantic Search as Fallback**
+- If structured extraction fails, use vector search
+- Find similar past discussions
+- Extract factors from retrieved journal entries
+
+### 5. **Token Budget Awareness**
+- Prioritize: current state > latest change > history > dependencies
+- Truncate or summarize when approaching limits
+- Always include enough context to answer, but no more
+
+---
+
+### Comparison: Hardcoded vs Generalizable
+
+**Hardcoded approach (doesn't scale):**
+```python
+# Need separate function for each question type
+def explain_blockers(project_name: str, user_id: str): ...
+def explain_factor_value(factor_id: str, user_id: str): ...
+def handle_user_challenge(factor_id: str, new_info: str): ...
+# ... hundreds more?
+```
+
+**Generalizable approach (scales to any question):**
+```python
+# Single entry point handles all questions
+def get_context_for_question(question: str, user_id: str):
+    intent = llm.analyze_intent(question)  # LLM figures out what's needed
+    context = build_context(intent, user_id)  # Fetch relevant data
+    return llm.answer_with_context(question, context)  # LLM generates answer
+```
+
+The key insight: **Let the LLM do the routing, use the graph for navigation, use the journal for evidence.**
 
 ### Advantages
 
