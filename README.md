@@ -4,6 +4,22 @@ An **exploratory assessment system** that helps organizations understand their A
 
 **No effort is ever lost.** Every conversation builds cumulative evidence about your organization's factors, making project evaluations more confident over time.
 
+---
+
+## Quick Links
+
+**📖 Documentation:**
+- [Technical Architecture](docs/gcp_technical_architecture.md) - Complete GCP implementation guide
+- [Architecture Summary](docs/architecture_summary.md) - High-level overview
+- [Implementation Roadmap](ARCHITECTURE_COMPLETE.md) - Next steps
+
+**🎯 Key Concepts:**
+- [Vision & Features](#vision) - What this system does
+- [Technical Architecture](#technical-architecture) - GCP deployment details
+- [Status](#status) - Current progress
+
+---
+
 ## Vision
 
 This system enables **free exploration** of organizational readiness without rigid processes. Users can:
@@ -141,14 +157,60 @@ The system produces:
 
 ---
 
-## Documentation
+## Technical Architecture
 
-- **[Conversation Memory Architecture](docs/conversation_memory_architecture.md)** - Factor journal persistence
-- **[User Interaction Guidelines](docs/user_interaction_guideline.md)** - Conversational patterns
-- **[Exploratory Assessment Architecture](docs/exploratory_assessment_architecture.md)** - System design
+The system is deployed on **Google Cloud Platform** with a Streamlit frontend and serverless backend.
+
+### Architecture Overview
+
+- **Frontend:** Streamlit app with 3-panel layout (chat | knowledge tree | technical log)
+- **Backend:** Python-based conversation orchestrator with async streaming
+- **LLM:** Vertex AI (Gemini 1.5 Flash) for intent classification, factor inference, and response generation
+- **Persistence:** Firestore for user data, factors, journal entries, and project evaluations
+- **Static Knowledge:** Cloud Storage for domain graph (factors, archetypes, relationships)
+- **Authentication:** Firebase Auth (Google OAuth + Email/Password)
+- **Hosting:** Cloud Run (serverless, scale-to-zero for cost optimization)
+
+### Key Technical Decisions
+
+**Hybrid Knowledge Model**
+- Static domain graph (factors, AI archetypes, scales) loaded into memory from Cloud Storage
+- Dynamic user data (factor values, journal entries) stored in Firestore
+- Fast graph traversal (<1ms) with clean separation of concerns
+
+**Real-Time Streaming**
+- LLM responses stream token-by-token to chat window
+- Technical events (intent classification, factor updates) stream to log window in real-time
+- Knowledge tree updates via Firestore polling (1-2 second latency)
+
+**Cost Optimization**
+- Cloud Run scales to zero when idle (free tier covers low traffic)
+- Gemini 1.5 Flash (4x cheaper than Pro, sufficient for task)
+- Estimated cost: **~$1.50/month** for 10 users, 500 conversations/month
+
+**Factor-Centric Persistence**
+- Journal entries created only for meaningful factor updates (not every utterance)
+- 83% storage savings vs full event sourcing
+- Cumulative inference: factor values synthesized from ALL journal entries via LLM
+
+### Architecture Documentation
+
+**Implementation Guides:**
+- **[GCP Technical Architecture](docs/gcp_technical_architecture.md)** - Complete system architecture, component responsibilities, data flow, deployment
+- **[Data Schemas](docs/gcp_data_schemas.md)** - Firestore schema, static graph structure, Python data classes, LLM prompts
+- **[Architecture Summary](docs/architecture_summary.md)** - High-level overview, key decisions, technology stack
+- **[System Interactions](docs/system_interactions.md)** - Component interactions, responsibility matrix, process flows
+- **[Architecture Complete](ARCHITECTURE_COMPLETE.md)** - Implementation roadmap and design summary
+
+**Domain Design:**
+- **[Conversation Memory Architecture](docs/conversation_memory_architecture.md)** - Factor journal persistence, cumulative inference
+- **[Exploratory Assessment Architecture](docs/exploratory_assessment_architecture.md)** - Assessment flow patterns, confidence scoring
+- **[User Interaction Guidelines](docs/user_interaction_guideline.md)** - Conversational UX patterns, LLM guidelines
 
 ---
 
 ## Status
 
-Active development. Core architecture documented, implementation in progress.
+**Architecture:** ✅ Complete - Full GCP technical architecture documented (49,000+ words)  
+**Implementation:** 🔄 Ready to begin - All components, schemas, and contracts defined  
+**Deployment:** 📋 Planned - Cloud Run serverless deployment with scale-to-zero cost optimization
