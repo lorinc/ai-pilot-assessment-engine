@@ -62,8 +62,15 @@ dmypy.json
 *.json
 !src/data/*.json
 !data/mappings/*.json
+!deployment/firestore.rules
+!deployment/firestore.indexes.json
 credentials.json
 service-account-key.json
+
+# Deployment secrets and keys
+deployment/.env
+deployment/keys/
+deployment/firebase-config.json
 
 # Vector stores and embeddings
 data/embeddings/*.faiss
