@@ -101,6 +101,7 @@ temp/
 # Firebase
 .firebase/
 firebase-debug.log
+# Note: firebase.json and .firebaserc are committed (project config)
 
 # Cloud Run
 .dockerignore

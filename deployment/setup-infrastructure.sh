@@ -286,22 +286,77 @@ else
 fi
 
 # =============================================================================
-# STEP 6: Firebase Authentication Setup
+# STEP 6: Firebase CLI Setup
 # =============================================================================
 echo ""
-log_info "STEP 6: Firebase Authentication setup..."
-log_warning "Firebase Auth requires manual setup in the Firebase Console."
+log_info "STEP 6: Firebase CLI setup..."
+
+# Check if firebase CLI is installed
+if ! command -v firebase &> /dev/null; then
+    log_warning "Firebase CLI not installed."
+    
+    # Check if npm is available
+    if command -v npm &> /dev/null; then
+        log_info "Installing Firebase CLI..."
+        npm install -g firebase-tools
+        log_success "Firebase CLI installed"
+    else
+        log_warning "npm not found. Firebase CLI installation skipped."
+        log_warning "Install manually: sudo apt-get install npm && npm install -g firebase-tools"
+    fi
+else
+    log_success "Firebase CLI already installed ($(firebase --version))"
+fi
+
+# Create Firebase configuration files
+log_info "Creating Firebase configuration files..."
+
+# Create .firebaserc
+cat > .firebaserc << EOF
+{
+  "projects": {
+    "default": "${GCP_PROJECT_ID}"
+  }
+}
+EOF
+log_success "Created .firebaserc"
+
+# Create firebase.json
+cat > firebase.json << EOF
+{
+  "firestore": {
+    "rules": "deployment/firestore.rules",
+    "indexes": "deployment/firestore.indexes.json"
+  }
+}
+EOF
+log_success "Created firebase.json"
+
+# Create empty indexes file if it doesn't exist
+if [ ! -f "deployment/firestore.indexes.json" ]; then
+    cat > deployment/firestore.indexes.json << EOF
+{
+  "indexes": [],
+  "fieldOverrides": []
+}
+EOF
+    log_success "Created deployment/firestore.indexes.json"
+fi
+
+# =============================================================================
+# STEP 7: Firebase Authentication Setup (Manual)
+# =============================================================================
+echo ""
+log_info "STEP 7: Firebase Authentication setup..."
+log_warning "Firebase Auth requires manual configuration in the Firebase Console."
 echo ""
 echo "Please complete these steps manually:"
-echo "  1. Go to https://console.firebase.google.com/"
-echo "  2. Select project: ${GCP_PROJECT_ID}"
-echo "  3. Navigate to Authentication → Sign-in method"
-echo "  4. Enable Google provider"
-echo "  5. Set support email and save"
+echo "  1. Go to https://console.firebase.google.com/project/${GCP_PROJECT_ID}/authentication/providers"
+echo "  2. Enable Google provider"
+echo "  3. Set support email (your email address)"
+echo "  4. Save changes"
 echo ""
-log_info "After completing Firebase setup, run: firebase apps:sdkconfig web > deployment/firebase-config.json"
-echo ""
-log_info "You can complete Firebase setup later. Continuing with infrastructure setup..."
+log_info "This can be completed later. Continuing with infrastructure setup..."
 
 # =============================================================================
 # STEP 7: Verify Setup

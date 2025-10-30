@@ -43,11 +43,27 @@ exec -l $SHELL
 # Verify installation
 gcloud --version
 
-# 2. Install Firebase CLI (for Firebase Auth setup)
+# 2. Install Node.js (required for Firebase CLI)
+# Firebase CLI requires Node.js v20+ or v22+
+
+# Option A: Using NodeSource repository (Ubuntu/Debian)
+curl -fsSL https://deb.nodesource.com/setup_20.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
+# Option B: Using nvm (Node Version Manager) - Recommended
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.0/install.sh | bash
+source ~/.bashrc
+nvm install 20
+nvm use 20
+
+# Verify Node.js version (must be 20+)
+node --version  # Should show v20.x.x or higher
+
+# 3. Install Firebase CLI
 npm install -g firebase-tools
 
 # Verify installation
-firebase --version
+firebase --version  # Should show v14.x.x or higher
 
 # 3. Install Python 3.11+ (for local development)
 python3 --version  # Should be 3.11 or higher
@@ -423,32 +439,37 @@ gsutil versioning get gs://${BUCKET_NAME}
 
 ## Firebase Authentication Setup
 
-### Step 1: Initialize Firebase Project
+> **Note:** The setup script (`deployment/setup-infrastructure.sh`) automates Firebase CLI installation and project initialization. Manual steps are only required for enabling authentication providers.
 
-```bash
-# Login to Firebase
-firebase login
+### Automated Setup (via setup script)
 
-# Initialize Firebase in project directory
-cd /path/to/ai-pilot-assessment-engine
-firebase init
+The setup script automatically:
+- Installs Firebase CLI (if npm is available)
+- Creates `.firebaserc` with project configuration
+- Creates `firebase.json` with Firestore rules configuration
+- Creates `deployment/firestore.indexes.json` for index management
 
-# Select:
-# - Authentication
-# - Use existing project: ai-pilot-assessment-prod
-```
+### Manual Steps Required
 
-**Manual steps (Firebase Console):**
+#### 1. Enable Google OAuth Provider
 
-1. Go to [Firebase Console](https://console.firebase.google.com/)
-2. Select your project: `ai-pilot-assessment-prod`
-3. Navigate to **Authentication** → **Sign-in method**
-4. Enable **Google** provider:
-   - Click "Google"
-   - Toggle "Enable"
-   - Set public-facing name: "AI Pilot Assessment Engine"
-   - Set support email: your-email@example.com
-   - Click "Save"
+**This must be done manually in the Firebase Console:**
+
+1. Go to: `https://console.firebase.google.com/project/${GCP_PROJECT_ID}/authentication/providers`
+2. Click on **Google** provider
+3. Toggle **Enable**
+4. Set **Support email**: your-email@example.com
+5. Click **Save**
+
+**Why manual?** Firebase Authentication provider configuration requires interactive consent and email verification that cannot be automated via CLI.
+
+#### 2. (Optional) Enable Additional Providers
+
+If you want to support email/password authentication:
+1. In the same Authentication → Sign-in method page
+2. Click on **Email/Password**
+3. Toggle **Enable**
+4. Click **Save**
 
 ### Step 2: Get Firebase Configuration
 

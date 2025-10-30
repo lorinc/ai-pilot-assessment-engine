@@ -13,6 +13,7 @@ Changelogs are organized by date and topic:
 ### 2025-10-30
 - [Infrastructure Setup](2025-10-30-infrastructure-setup.md) - GCP infrastructure setup and deployment script improvements
 - [Setup Improvements](2025-10-30-setup-improvements.md) - Technical details of setup script enhancements
+- [Firebase Automation](2025-10-30-firebase-automation.md) - Automated Firebase CLI setup and configuration
 
 ### 2025-10-29
 - [Architecture Complete](2025-10-29-architecture-complete.md) - Complete system architecture design and documentation
