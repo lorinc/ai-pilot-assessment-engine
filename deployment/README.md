@@ -92,6 +92,8 @@ Common issues:
 2. **Billing not enabled** - Link billing account in GCP Console
 3. **API not enabled** - Re-run `setup-infrastructure.sh`
 4. **Service account key invalid** - Delete and regenerate key
+5. **Invalid locationId error** - Make sure `GCP_REGION` is a region (e.g., `europe-west1`), not a zone (e.g., `europe-west1-b`)
+6. **Firestore deploy error** - Install Firebase CLI: `npm install -g firebase-tools`
 
 ## File Permissions
 

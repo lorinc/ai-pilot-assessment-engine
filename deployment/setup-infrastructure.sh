@@ -56,6 +56,14 @@ log_info "Loading configuration from deployment/.env..."
 source deployment/.env
 log_success "Configuration loaded"
 
+# Validate region format (should not end with a zone suffix like -a, -b, -c)
+if [[ ${GCP_REGION} =~ -[a-z]$ ]]; then
+    log_error "GCP_REGION appears to be a zone (${GCP_REGION}), not a region!"
+    log_error "Firestore requires a region-level location (e.g., 'europe-west1', not 'europe-west1-b')"
+    log_error "Please update GCP_REGION in deployment/.env and re-run this script."
+    exit 1
+fi
+
 # Display configuration
 echo ""
 log_info "Configuration Summary:"
@@ -119,7 +127,11 @@ log_success "All APIs enabled"
 
 # Wait for APIs to propagate
 log_info "Waiting 60 seconds for APIs to propagate..."
-sleep 60
+sleep 2
+log_info "Please listen to this elevator music, while you're waiting..."
+sleep 10
+log_info "Pumm-purumm-pum, pamm-pamm-parapm-pam, pumm-param-pum, pumm..."
+sleep 48
 
 # =============================================================================
 # STEP 3: Create Service Account
@@ -195,24 +207,31 @@ else
     sleep 30
 fi
 
-# Create Firestore indexes
-log_info "Creating Firestore indexes..."
-gcloud firestore indexes composite create \
+# Create Firestore indexes (optional - single field indexes are automatic)
+log_info "Checking Firestore indexes..."
+if gcloud firestore indexes composite create \
     --collection-group=journal \
     --query-scope=COLLECTION \
     --field-config field-path=timestamp,order=descending \
     --project=${GCP_PROJECT_ID} \
-    --quiet || log_warning "Index may already exist"
-
-log_success "Firestore indexes configured"
+    --quiet 2>&1 | grep -q "not necessary"; then
+    log_success "Firestore indexes not needed (single field indexes are automatic)"
+else
+    log_success "Firestore indexes configured"
+fi
 
 # Deploy security rules
 log_info "Deploying Firestore security rules..."
 if [ -f "deployment/firestore.rules" ]; then
-    gcloud firestore deploy \
-        --rules=deployment/firestore.rules \
-        --project=${GCP_PROJECT_ID}
-    log_success "Security rules deployed"
+    # Use Firebase CLI to deploy rules (gcloud doesn't support this directly)
+    if command -v firebase &> /dev/null; then
+        firebase deploy --only firestore:rules --project=${GCP_PROJECT_ID}
+        log_success "Security rules deployed"
+    else
+        log_warning "Firebase CLI not installed. Skipping rules deployment."
+        log_warning "Install with: npm install -g firebase-tools"
+        log_warning "Then run: firebase deploy --only firestore:rules --project=${GCP_PROJECT_ID}"
+    fi
 else
     log_warning "firestore.rules not found. You'll need to deploy security rules manually."
 fi
@@ -226,25 +245,36 @@ log_info "STEP 5: Creating Cloud Storage bucket..."
 if gsutil ls gs://${BUCKET_NAME} &>/dev/null; then
     log_success "Bucket already exists"
 else
-    gsutil mb \
+    log_info "Creating bucket gs://${BUCKET_NAME}..."
+    if gsutil mb \
         -p ${GCP_PROJECT_ID} \
         -c STANDARD \
         -l ${GCP_REGION} \
-        gs://${BUCKET_NAME}
-    log_success "Bucket created"
+        gs://${BUCKET_NAME}; then
+        log_success "Bucket created"
+    else
+        log_error "Failed to create bucket. Check if the name is globally unique."
+        exit 1
+    fi
 fi
 
 # Grant service account access
 log_info "Granting service account access to bucket..."
-gsutil iam ch \
+if gsutil iam ch \
     serviceAccount:${SERVICE_ACCOUNT_EMAIL}:objectViewer \
-    gs://${BUCKET_NAME}
-log_success "Bucket permissions configured"
+    gs://${BUCKET_NAME} 2>/dev/null; then
+    log_success "Bucket permissions configured"
+else
+    log_warning "Failed to set bucket permissions (may already be set)"
+fi
 
 # Enable versioning
 log_info "Enabling object versioning..."
-gsutil versioning set on gs://${BUCKET_NAME}
-log_success "Versioning enabled"
+if gsutil versioning set on gs://${BUCKET_NAME} 2>/dev/null; then
+    log_success "Versioning enabled"
+else
+    log_warning "Failed to enable versioning (may already be enabled)"
+fi
 
 # Upload static graph if it exists
 if [ -f "src/data/static-graph/factors.json" ]; then
@@ -270,7 +300,8 @@ echo "  4. Enable Google provider"
 echo "  5. Set support email and save"
 echo ""
 log_info "After completing Firebase setup, run: firebase apps:sdkconfig web > deployment/firebase-config.json"
-prompt_continue
+echo ""
+log_info "You can complete Firebase setup later. Continuing with infrastructure setup..."
 
 # =============================================================================
 # STEP 7: Verify Setup
