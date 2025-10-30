@@ -4,19 +4,19 @@ This directory contains detailed changelogs for the AI Pilot Assessment Engine p
 
 ## Format
 
-Changelogs are organized by date and topic:
-- **Filename:** `YYYY-MM-DD-topic-name.md`
+Changelogs are organized by date, time, and topic:
+- **Filename:** `YYYY-MM-DD-HHMM-topic-name.md`
 - **Content:** Detailed summary of changes, improvements, and decisions made
 
 ## Index
 
 ### 2025-10-30
-- [Infrastructure Setup](2025-10-30-infrastructure-setup.md) - GCP infrastructure setup and deployment script improvements
-- [Setup Improvements](2025-10-30-setup-improvements.md) - Technical details of setup script enhancements
-- [Firebase Automation](2025-10-30-firebase-automation.md) - Automated Firebase CLI setup and configuration
+- [Setup Improvements](2025-10-30-1121-setup-improvements.md) - Technical details of setup script enhancements
+- [Infrastructure Setup](2025-10-30-1124-infrastructure-setup.md) - GCP infrastructure setup and deployment script improvements
+- [Firebase Automation](2025-10-30-1251-firebase-automation.md) - Automated Firebase CLI setup and configuration
 
 ### 2025-10-29
-- [Architecture Complete](2025-10-29-architecture-complete.md) - Complete system architecture design and documentation
+- [Architecture Complete](2025-10-29-1523-architecture-complete.md) - Complete system architecture design and documentation
 
 ## Purpose
 
