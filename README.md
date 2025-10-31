@@ -3,7 +3,7 @@
 An **exploratory assessment system** that helps organizations understand their AI readiness through conversational factor assessment and project evaluation. (Everything that influences the feasibility of an AI pilot is a "factor" in this system.)
 
 **No effort is ever lost.** 
-- Every conversation builds cumulative evidence about your organization's factors, making project evaluations more confident over time.
+- Every conversation builds cumulative evidence about your organization's factors (your effort keeps working for you)
 - Your data is yours, always available to export in LLM or human-friendly formats.
 - Your data is safe, LLM will send you a signed NDA the second you ask for it.
 
