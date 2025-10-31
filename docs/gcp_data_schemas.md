@@ -51,28 +51,54 @@
         }
       }
   
-  factors/{factor_id}/
-    # Current state (derived from ALL journal entries)
-    current_value: 20,
-    current_confidence: 0.75,
-    last_updated: "2024-10-29T12:00:00Z",
-    category: "data_readiness",
-    inference_status: "unconfirmed",     # or "confirmed" or "user_provided"
-    
-    journal/{entry_id}/
-      # Chronological evidence trail
-      entry_id: "uuid",
-      timestamp: "2024-10-29T12:00:00Z",
-      previous_value: null,              # null if first entry
-      new_value: 20,
-      change_rationale: "User mentioned scattered data across 5 systems, no catalog",
-      conversation_excerpt: |
-        User: "Our data is all over the place, 5 different systems"
-        Assistant: "That suggests limited data governance. Would you say you have a data catalog?"
-        User: "No, nothing like that yet"
-      confidence: 0.75,
-      inferred_from: ["data_governance", "data_infrastructure"],
-      session_id: "session_abc123"
+  factor_instances/{instance_id}/
+    # Scoped factor instance (e.g., data_quality for sales/Salesforce)
+    instance_id: "dq_sales_sfdc_002",
+    factor_id: "data_quality",
+    scope: {
+      domain: "sales",                 # or null for generic
+      system: "salesforce_crm",        # or null for generic
+      team: null                        # or specific team name
+    },
+    scope_label: "Salesforce CRM",     # Human-readable label
+    value: 30,
+    confidence: 0.80,
+    evidence: [
+      {
+        statement: "Salesforce has incomplete data",
+        timestamp: "2024-10-29T12:00:00Z",
+        specificity: "system-specific",
+        conversation_id: "conv_123"
+      },
+      {
+        statement: "Duplicate customer records in SFDC",
+        timestamp: "2024-10-29T12:05:00Z",
+        specificity: "system-specific",
+        conversation_id: "conv_123"
+      }
+    ],
+    refines: "dq_sales_generic_001",   # instance_id of more generic instance
+    refined_by: [],                     # instance_ids of more specific instances
+    synthesized_from: [],               # instance_ids if synthesized from multiple
+    discovered_in_context: "sales_forecasting_discussion",
+    inference_status: "unconfirmed",    # or "confirmed" or "user_provided"
+    created_at: "2024-10-29T12:00:00Z",
+    updated_at: "2024-10-29T12:05:00Z"
+  
+  scope_registry/
+    metadata/
+      # Registry of known domains, systems, and teams
+      domains: ["sales", "finance", "operations", "hr", "manufacturing"],
+      systems: {
+        sales: ["salesforce_crm", "hubspot", "spreadsheets"],
+        finance: ["sap_erp", "quickbooks", "custom_db"],
+        operations: ["erp_system", "mes"]
+      },
+      teams: {
+        sales: ["enterprise_sales", "smb_sales"],
+        finance: ["accounting", "fp_and_a"]
+      },
+      last_updated: "2024-10-29T12:00:00Z"
   
   projects/{project_id}/
     # Project evaluation snapshots
@@ -120,19 +146,29 @@
 ```javascript
 // Required composite indexes
 {
-  collectionGroup: "journal",
+  collectionGroup: "factor_instances",
   queryScope: "COLLECTION",
   fields: [
-    { fieldPath: "timestamp", order: "DESCENDING" }
+    { fieldPath: "factor_id", order: "ASCENDING" },
+    { fieldPath: "updated_at", order: "DESCENDING" }
   ]
 }
 
 {
-  collectionGroup: "factors",
+  collectionGroup: "factor_instances",
   queryScope: "COLLECTION",
   fields: [
-    { fieldPath: "category", order: "ASCENDING" },
-    { fieldPath: "last_updated", order: "DESCENDING" }
+    { fieldPath: "scope.domain", order: "ASCENDING" },
+    { fieldPath: "factor_id", order: "ASCENDING" }
+  ]
+}
+
+{
+  collectionGroup: "factor_instances",
+  queryScope: "COLLECTION",
+  fields: [
+    { fieldPath: "scope.system", order: "ASCENDING" },
+    { fieldPath: "factor_id", order: "ASCENDING" }
   ]
 }
 
@@ -410,37 +446,48 @@ from typing import List, Dict, Any, Optional
 from enum import Enum
 
 @dataclass
-class FactorValue:
-    """Current state of a factor for a user."""
-    factor_id: str
-    current_value: int  # 0-100
-    current_confidence: float  # 0.0-1.0
-    last_updated: datetime
-    category: str
-    inference_status: str  # "unconfirmed" | "confirmed" | "user_provided"
+class FactorScope:
+    """Scope dimensions for a factor instance."""
+    domain: Optional[str]  # e.g., "sales", "finance", or None for generic
+    system: Optional[str]  # e.g., "salesforce_crm", or None for generic
+    team: Optional[str]    # e.g., "enterprise_sales", or None for generic
 
 @dataclass
-class JournalEntry:
-    """Single evidence entry in factor journal."""
-    entry_id: str
-    timestamp: datetime
-    previous_value: Optional[int]
-    new_value: int
-    change_rationale: str
-    conversation_excerpt: str
-    confidence: float
-    inferred_from: List[str]
-    session_id: str
+class FactorInstance:
+    """Scoped factor instance (e.g., data_quality for sales/Salesforce)."""
+    instance_id: str
+    factor_id: str
+    scope: FactorScope
+    scope_label: str       # Human-readable: "Salesforce CRM"
+    value: int             # 0-100
+    confidence: float      # 0.0-1.0
+    evidence: List[Dict[str, Any]]  # Evidence statements
+    refines: Optional[str]          # instance_id of more generic instance
+    refined_by: List[str]           # instance_ids of more specific instances
+    synthesized_from: List[str]     # instance_ids if synthesized
+    discovered_in_context: str
+    inference_status: str  # "unconfirmed" | "confirmed" | "user_provided"
+    created_at: datetime
+    updated_at: datetime
+
+@dataclass
+class ScopeMatch:
+    """Result of scope matching query."""
+    instance: FactorInstance
+    match_score: float     # 0.0-1.0, where 1.0 is exact match
+    match_type: str        # "exact" | "generic_fallback" | "partial"
 
 @dataclass
 class FactorInference:
     """LLM-inferred factor update from conversation."""
     factor_id: str
+    scope: FactorScope     # Inferred scope for this assessment
     old_value: Optional[int]
     new_value: int
     confidence: float
     rationale: str
     inferred_from: List[str]
+    specificity: str       # "generic" | "domain-specific" | "system-specific"
 
 class IntentType(Enum):
     """User intent classification."""
@@ -552,10 +599,12 @@ Assistant: {assistant_response}
 **Task:**
 Extract any factor values mentioned or implied. For each factor:
 - factor_id (from knowledge graph)
+- scope (domain, system, team - infer from context)
 - new_value (0-100, based on factor scale)
 - confidence (0.0-1.0, how certain are you?)
 - rationale (brief explanation of why this value)
 - inferred_from (related factor_ids that influenced this)
+- specificity ("generic", "domain-specific", "system-specific")
 
 **Factor scales:**
 {factor_scales}
@@ -572,10 +621,16 @@ Return JSON array:
 [
     {{
         "factor_id": "data_quality",
-        "new_value": 20,
-        "confidence": 0.75,
-        "rationale": "User mentioned data scattered across 5 systems with no catalog",
-        "inferred_from": ["data_governance", "data_infrastructure"]
+        "scope": {{
+            "domain": "sales",
+            "system": "salesforce_crm",
+            "team": null
+        }},
+        "new_value": 30,
+        "confidence": 0.80,
+        "rationale": "User mentioned Salesforce has incomplete data and duplicates",
+        "inferred_from": ["data_governance"],
+        "specificity": "system-specific"
     }}
 ]
 

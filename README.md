@@ -35,12 +35,14 @@ The system shows **confidence scores** and **what would improve them**, letting 
 
 ### Core Principle
 
-**Factor-centric assessment** - Everything links to factors (data_quality, ai_capability, cultural_fit, etc.). The system:
+**Factor-centric assessment with intelligent scoping** - Everything links to factors (data_quality, ai_capability, cultural_fit, etc.). The system:
 1. Accumulates evidence from conversations
 2. Infers factor values cumulatively (not from single mentions)
 3. Tracks confirmed vs unconfirmed inferences
-4. Evaluates project feasibility based on assessed factors
-5. Shows ROI of continuing assessment
+4. **Assesses factors at multiple levels of specificity** (organization-wide, domain-specific, system-specific)
+5. **Intelligently matches scopes** to find most applicable assessments
+6. Evaluates project feasibility based on assessed factors
+7. Shows ROI of continuing assessment
 
 ### What This Is NOT
 
@@ -66,9 +68,11 @@ The system shows **confidence scores** and **what would improve them**, letting 
 - System never blocks exploration
 - Always proceed with confidence score
 
-### 2. Cumulative Inference
-- Factor values derived from ALL conversation history
+### 2. Cumulative Inference with Intelligent Scoping
+- Factor values derived from ALL conversation history for that scope
 - Confidence increases with consistent evidence
+- **Scoped instances:** Assess factors at domain/system level (e.g., "Salesforce data quality" vs "sales data quality")
+- **Scope matching:** Automatically finds most applicable assessment (exact match or generic fallback)
 - Even confirmed claims stay low-confidence without examples
 - User can validate or correct anytime
 
@@ -83,9 +87,11 @@ The system shows **confidence scores** and **what would improve them**, letting 
 - Signals diminishing returns
 - User decides when "good enough"
 
-### 5. Context Accumulation
+### 5. Context Accumulation & Intelligent Scope Discovery
 - Never ask twice
-- Auto-populate from factor journal
+- Auto-populate from factor instances using scope matching
+- **Cross-project reuse:** Assessments discovered in one context apply to all relevant contexts
+- **Unknown system detection:** Asks clarifying questions when unfamiliar systems mentioned
 - Organizational context reused forever
 
 ---
@@ -116,11 +122,21 @@ This ensures that the system becomes more valuable over time while keeping users
 
 The system is designed with **user experience as a core principle**. The LLM is **not inquisitive**—users are not burdened with answering deep, difficult questions. Instead, the LLM infers factor values through **deep but natural conversation**.
 
-**Inference-Driven Interaction**
-- The system infers factor values from conversational context rather than explicit questioning
-- Inferred values are displayed transparently to the user
-- Users can challenge inferences: *"Why do you think our data governance is only at 20%?"*
+**Intelligent Scope Discovery**
+- The system asks targeted clarifying questions to determine scope (domain, system, team)
+- Distinguishes between organization-wide issues and domain/system-specific problems
+- Examples:
+  - "Is this across all sales systems, or specific to certain tools?"
+  - "Do other domains have similar issues, or is this isolated to sales?"
+- Resolves contradictions between generic and specific assessments
+- Detects patterns across multiple systems and synthesizes generic assessments
+
+**Inference-Driven Interaction with Scope Awareness**
+- The system infers factor values AND their scope from conversational context
+- Inferred values are displayed transparently with scope labels (e.g., "Salesforce CRM: 30%")
+- Users can challenge inferences: *"Why do you think our Salesforce data quality is only at 30%?"*
 - The LLM provides insights and reasoning to support or adjust values
+- **Cross-project reuse:** Factor assessed during sales forecasting discussion automatically applies to customer segmentation discussion
 
 **Evidence-Based Updates**
 - Users cannot arbitrarily change values (*"Set data governance readiness to 80%"*) without backing them up with narrative evidence
@@ -169,7 +185,7 @@ The system is deployed on **Google Cloud Platform** with a Streamlit frontend an
 - **Frontend:** Streamlit app with 3-panel layout (chat | knowledge tree | technical log)
 - **Backend:** Python-based conversation orchestrator with async streaming
 - **LLM:** Vertex AI (Gemini 1.5 Flash) for intent classification, factor inference, and response generation
-- **Persistence:** Firestore for user data, factors, journal entries, and project evaluations
+- **Persistence:** Firestore for user data, scoped factor instances, evidence trails, and project evaluations
 - **Static Knowledge:** Cloud Storage for domain graph (factors, archetypes, relationships)
 - **Authentication:** Firebase Auth (Google OAuth + Email/Password)
 - **Hosting:** Cloud Run (serverless, scale-to-zero for cost optimization)
@@ -191,10 +207,12 @@ The system is deployed on **Google Cloud Platform** with a Streamlit frontend an
 - Gemini 1.5 Flash (4x cheaper than Pro, sufficient for task)
 - Estimated cost: **~$1.50/month** for 10 users, 500 conversations/month
 
-**Factor-Centric Persistence**
-- Journal entries created only for meaningful factor updates (not every utterance)
+**Factor-Centric Persistence with Scoped Instances**
+- Factor instances created for each unique scope (domain/system/team combination)
+- Evidence tracked per instance with specificity markers
 - 83% storage savings vs full event sourcing
-- Cumulative inference: factor values synthesized from ALL journal entries via LLM
+- Cumulative inference: factor values synthesized from ALL evidence for that scope via LLM
+- Scope matching algorithm finds most applicable instance (<1ms overhead)
 
 ### Architecture Documentation
 

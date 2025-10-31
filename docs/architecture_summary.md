@@ -8,18 +8,25 @@ The AI Pilot Assessment Engine is a **factor-centric conversational assessment s
 
 ## Core Architecture Principles
 
-### 1. Factor-Centric Design
+### 1. Factor-Centric Design with Scoped Instances
 **Everything links to factors.** The system doesn't track arbitrary conversations—it extracts evidence about specific organizational factors (data_quality, ml_infrastructure, team_skills, etc.) and maintains a cumulative journal for each.
 
-**Key insight:** Instead of event sourcing every utterance, we journal only meaningful factor updates. This reduces storage by 83% while maintaining full provenance.
+**Key insight:** Factors can have multiple scoped instances (e.g., data_quality for "sales/Salesforce CRM" vs "finance/SAP ERP"). This enables domain/system-specific assessments while maintaining organizational truth across projects.
+
+**Scoped Factor Model:** Each factor instance has a scope defined by domain, system, and team dimensions. The system intelligently matches the most specific applicable instance for any query, falling back to generic assessments when specific ones don't exist.
 
 ### 2. Hybrid Knowledge Model
 - **Static domain knowledge** (factors, archetypes, scales) → Cloud Storage, loaded into memory (NetworkX graph)
 - **Dynamic user data** (factor values, journal entries) → Firestore, queried on-demand
 - **Lookup pattern:** Static graph provides structure, Firestore provides user-specific values
 
-### 3. Cumulative Inference
-Factor values are **synthesized from ALL journal entries**, not single mentions. Confidence increases with consistent evidence. LLM re-synthesizes on demand for "why?" questions.
+### 3. Cumulative Inference with Scope Matching
+Factor values are **synthesized from ALL evidence for that scope**, not single mentions. Confidence increases with consistent evidence. The system uses intelligent scope matching to find the most applicable assessment:
+- **Exact match:** Query for "sales/Salesforce" finds exact instance (confidence: 1.0)
+- **Generic fallback:** Query for "sales/data_warehouse" falls back to "sales/all systems" (confidence: 0.86)
+- **No match:** Query for "manufacturing" returns None if not assessed
+
+LLM re-synthesizes on demand for "why?" questions, considering scope hierarchy.
 
 ### 4. Real-Time Streaming
 - **LLM responses:** Stream tokens as generated (Vertex AI streaming API)
@@ -129,16 +136,21 @@ Factor values are **synthesized from ALL journal entries**, not single mentions.
    - Emit: "⚙️ SYSTEM: Analyzing intent..."
    - LLM call: classify_intent()
    - Result: {type: "evaluate_project", entities: {project: "sales_forecasting"}, 
-             relevant_factors: ["data_quality", "data_availability", "ml_infrastructure"]}
-   - Emit: "⚙️ SYSTEM: Intent: evaluate_project"
+             relevant_factors: ["data_quality", "data_availability", "ml_infrastructure"],
+             scope: {domain: "sales", system: null}}
+   - Emit: "⚙️ SYSTEM: Intent: evaluate_project (scope: sales)"
    ↓
-4. CONTEXT RETRIEVAL
-   - Emit: "⚙️ SYSTEM: Retrieving factors..."
-   - Firestore query: /users/{user_id}/factors/data_quality → {value: 20, confidence: 0.75}
-   - Firestore query: /users/{user_id}/factors/data_availability → {value: 80, confidence: 0.90}
-   - Firestore query: /users/{user_id}/factors/ml_infrastructure → null (not assessed)
+4. CONTEXT RETRIEVAL WITH SCOPE MATCHING
+   - Emit: "⚙️ SYSTEM: Retrieving factors for sales domain..."
+   - Scope matching query: data_quality for {domain: "sales", system: null}
+     • Found: {domain: "sales", system: "salesforce_crm"} = 30 (match_score: 0.86)
+     • Found: {domain: "sales", system: null} = 45 (match_score: 1.0) ← Best match
+   - Scope matching query: data_availability for {domain: "sales", system: null}
+     • Found: {domain: "sales", system: null} = 80 (match_score: 1.0)
+   - Scope matching query: ml_infrastructure for {domain: "sales", system: null}
+     • No match found → null
    - Graph traversal: get_dependencies("data_quality") → ["data_governance", "data_infrastructure"]
-   - Emit: "⚙️ SYSTEM: Retrieved 3 factors: data_quality(20), data_availability(80), ml_infrastructure(null)"
+   - Emit: "⚙️ SYSTEM: Retrieved 3 factor instances: data_quality[sales]=45, data_availability[sales]=80, ml_infrastructure=null"
    ↓
 5. LLM RESPONSE GENERATION
    - Emit: "⚙️ SYSTEM: Generating response..."
@@ -175,8 +187,12 @@ Factor values are **synthesized from ALL journal entries**, not single mentions.
   ```
   📁 Factors
     └─ Data Readiness (60%)
-        ├─ data_quality: 20% ⚠️
-        └─ data_availability: 80% ✓
+        ├─ 📊 data_quality
+        │   ├─ 💼 Sales Department: 45% ⚠️ (moderate confidence)
+        │   │   └─ 🔧 Salesforce CRM: 30% ⚠️ (high confidence)
+        │   └─ 💰 Finance: Not assessed
+        └─ 📊 data_availability
+            └─ 💼 Sales Department: 80% ✓ (high confidence)
     └─ AI Capability (40%)
         └─ ml_infrastructure: Not assessed
   📁 Projects
@@ -344,21 +360,32 @@ async for chunk in orchestrator.process_message(user_input):
         display_in_chat(chunk)
 ```
 
-### Orchestrator ↔ JournalStore
+### Orchestrator ↔ FactorInstanceStore
 ```python
-await journal_store.update_factor(
+await instance_store.update_factor_instance(
     factor_id="data_quality",
-    new_value=20,
-    rationale="User mentioned scattered data",
+    scope={"domain": "sales", "system": "salesforce_crm", "team": None},
+    new_value=30,
+    rationale="User mentioned Salesforce data is incomplete",
     conversation_excerpt="User: ...\nAssistant: ...",
-    confidence=0.75
+    confidence=0.80,
+    refines="dq_sales_generic_001"  # Links to generic sales instance
 )
 ```
 
-### ContextBuilder ↔ Graph
+### ContextBuilder ↔ Graph & ScopeMatcher
 ```python
+# Get factor metadata from graph
 deps = graph.get_dependencies("data_quality")
 scale = graph.get_factor_scale("data_quality")
+
+# Get applicable instance using scope matching
+instance = scope_matcher.get_applicable_value(
+    factor_id="data_quality",
+    needed_scope={"domain": "sales", "system": "salesforce_crm"}
+)
+# Returns: (instance, match_score) or None
+
 archetypes = graph.get_enabled_archetypes(["data_quality", "data_availability"])
 ```
 

@@ -22,15 +22,20 @@
 ```
 1. User visits app → Authenticates with Google
 2. User types: "Our data is scattered across 5 different systems"
-3. System responds conversationally, acknowledging the challenge
-4. System infers: data_quality = 20 (confidence: 0.75)
-5. User sees in UI:
-   - Chat: Natural conversation
-   - Knowledge Tree: data_quality: 20% (unconfirmed)
-   - Technical Log: "Inferred data_quality=20 (conf=0.75)"
-6. User continues: "We also don't have a data catalog"
-7. System updates: data_quality = 15 (confidence: 0.85, cumulative from 2 mentions)
-8. User refreshes page → Data persists, conversation continues
+3. System: "Which data are you thinking about - sales, finance, operations?"
+4. User: "Sales data"
+5. System infers: data_quality {domain: "sales"} = 20 (confidence: 0.75)
+6. System: "Is this across all sales systems, or specific tools?"
+7. User: "Mainly our CRM"
+8. System updates: data_quality {domain: "sales", system: "crm"} = 15 (confidence: 0.85)
+9. User sees in UI:
+   - Chat: Natural conversation with clarifying questions
+   - Knowledge Tree: 
+     └─ Data Quality
+        └─ Sales Department: 20% (moderate confidence)
+           └─ CRM: 15% (high confidence)
+   - Technical Log: "Inferred data_quality[sales/crm]=15 (conf=0.85)"
+10. User refreshes page → Data persists, conversation continues
 ```
 
 ### Technical Scope
@@ -44,8 +49,10 @@
 **Backend Components**
 - `ConversationOrchestrator`: Single entry point, coordinates flow
 - `IntentAnalyzer`: Classify intent (for now: "assess_factor" or "general")
-- `FactorInferenceEngine`: Extract factor updates from conversation
-- `FactorJournalStore`: CRUD operations on Firestore
+- `FactorInferenceEngine`: Extract factor updates with scope from conversation
+- `FactorInstanceStore`: CRUD operations on scoped factor instances in Firestore
+- `ScopeMatcher`: Find most applicable factor instance for given scope
+- `ClarifyingQuestionGenerator`: Generate scope discovery questions
 - `VertexAIClient`: Streaming LLM calls
 
 **LLM Integration**
@@ -57,10 +64,12 @@
 
 **Data Layer**
 - Firestore schema:
-  - `/users/{user_id}/factors/{factor_id}` - Current state
-  - `users/{user_id}/factors/{factor_id}/journal/{entry_id}` - Evidence trail
+  - `/users/{user_id}/factor_instances/{instance_id}` - Scoped factor instances
+  - `/users/{user_id}/scope_registry/metadata` - Known domains, systems, teams
 - Static knowledge graph (in-memory):
-  - Single factor: `data_quality` with scale definition
+  - Single factor: `data_quality` with scale definition and scope_dimensions
+  - Common domains: ["sales", "finance", "operations"]
+  - Common systems by domain
   - No dependencies yet
 
 **Deployment**
@@ -84,10 +93,13 @@
 - [ ] Write unit tests for graph loading
 
 #### 3. Firestore Persistence (2 days)
-- [ ] Implement `FactorJournalStore` class
-  - `update_factor()` - Create journal entry + update current state
-  - `get_current_state()` - Retrieve factor current value/confidence
-  - `get_journal_entries()` - Retrieve evidence trail
+- [ ] Implement `FactorInstanceStore` class
+  - `update_factor_instance()` - Create/update scoped instance with evidence
+  - `get_applicable_instance()` - Retrieve instance using scope matching
+  - `get_factor_instances()` - Retrieve all instances for a factor
+- [ ] Implement `ScopeMatcher` class
+  - `calculate_scope_match()` - Score how well instance matches needed scope
+  - `get_applicable_value()` - Find best matching instance
 - [ ] Write integration tests with Firestore emulator
 - [ ] Implement retry logic for transient errors
 
@@ -105,14 +117,20 @@
 - [ ] Implement `ConversationOrchestrator.process_message()`
   - Yield technical log events as special tokens
   - Call intent analyzer
-  - Build context from Firestore
+  - Build context from Firestore using scope matching
   - Stream LLM response
-  - Infer factor updates
+  - Infer factor updates with scope
+  - Generate clarifying questions when scope ambiguous
   - Persist to Firestore
 - [ ] Implement `IntentAnalyzer` (simple: "assess_factor" vs "general")
 - [ ] Implement `FactorInferenceEngine`
-  - Parse LLM output for factor updates
-  - Calculate cumulative value from journal entries
+  - Parse LLM output for factor updates AND scope
+  - Infer scope from context (domain, system, team)
+  - Calculate cumulative value from evidence for that scope
+- [ ] Implement `ClarifyingQuestionGenerator`
+  - Detect ambiguous scope in user statements
+  - Generate "narrow from generic" questions
+  - Generate "identify domain" questions
 - [ ] Write integration tests
 
 #### 6. Streamlit Frontend (3 days)
@@ -126,8 +144,9 @@
   - Message history
   - Streaming response display
 - [ ] Implement knowledge tree panel
-  - Display single factor with value/confidence
-  - Show "unconfirmed" badge
+  - Display hierarchical scoped instances
+  - Show generic and specific instances in tree structure
+  - Show "unconfirmed" badge per instance
   - Poll Firestore for updates (every 2 seconds)
 - [ ] Implement technical log panel
   - Parse special tokens from orchestrator
@@ -152,12 +171,14 @@
 **Must Have:**
 - ✅ User can authenticate with Google
 - ✅ User can have natural conversation about data quality
-- ✅ System infers `data_quality` value from conversation
-- ✅ Factor appears in knowledge tree with confidence score
-- ✅ Technical log shows inference events in real-time
+- ✅ System asks clarifying questions to determine scope (domain, system)
+- ✅ System infers `data_quality` value AND scope from conversation
+- ✅ Factor instances appear in knowledge tree hierarchically (generic → specific)
+- ✅ Technical log shows inference events with scope in real-time
 - ✅ Data persists across page refreshes
-- ✅ Journal entries stored with conversation excerpts
-- ✅ Cumulative inference: value derived from ALL journal entries
+- ✅ Evidence stored per scoped instance
+- ✅ Cumulative inference: value derived from ALL evidence for that scope
+- ✅ Scope matching: queries find most applicable instance
 
 **Nice to Have:**
 - ⭐ User can challenge inference: "Why do you think it's 20%?"
@@ -165,13 +186,16 @@
 - ⭐ Cold start shows loading message
 
 ### Out of Scope for Epic 1
-- ❌ Multiple factors
+- ❌ Multiple factors (only data_quality)
 - ❌ Factor dependencies
 - ❌ Project evaluation
 - ❌ "What's next" suggestions
 - ❌ Email/password auth (Google OAuth only)
 - ❌ Export/import
 - ❌ Multi-user collaboration
+- ❌ Unknown system detection (only predefined domains/systems)
+- ❌ Contradiction resolution (Pattern 4 from UX guidelines)
+- ❌ Generic synthesis from multiple specifics (Pattern 5)
 
 ### Technical Debt & Future Work
 - Token budget management (not needed for single factor)
@@ -365,28 +389,54 @@ What sounds most useful?"
 #### Firestore Schema
 
 ```python
-# /users/{user_id}/factors/{factor_id}
+# /users/{user_id}/factor_instances/{instance_id}
 {
+    "instance_id": "dq_sales_crm_001",
     "factor_id": "data_quality",
-    "current_value": 20,
-    "current_confidence": 0.75,
-    "inference_status": "unconfirmed",  # or "confirmed" or "user_provided"
-    "last_updated": "2024-10-29T10:30:00Z",
-    "last_conversation_id": "conv_abc123"
+    "scope": {
+        "domain": "sales",
+        "system": "crm",
+        "team": None
+    },
+    "scope_label": "Sales CRM",
+    "value": 15,
+    "confidence": 0.85,
+    "evidence": [
+        {
+            "statement": "Our data is scattered across 5 different systems",
+            "timestamp": "2024-10-29T10:30:00Z",
+            "specificity": "domain-specific",
+            "conversation_id": "conv_abc123"
+        },
+        {
+            "statement": "Mainly our CRM",
+            "timestamp": "2024-10-29T10:32:00Z",
+            "specificity": "system-specific",
+            "conversation_id": "conv_abc123"
+        }
+    ],
+    "refines": "dq_sales_generic_001",  # instance_id of more generic instance
+    "refined_by": [],
+    "synthesized_from": [],
+    "discovered_in_context": "data_quality_discussion",
+    "inference_status": "unconfirmed",
+    "created_at": "2024-10-29T10:30:00Z",
+    "updated_at": "2024-10-29T10:32:00Z"
 }
 
-# /users/{user_id}/factors/{factor_id}/journal/{entry_id}
+# /users/{user_id}/scope_registry/metadata
 {
-    "entry_id": "entry_xyz789",
-    "timestamp": "2024-10-29T10:30:00Z",
-    "previous_value": None,  # First entry
-    "new_value": 20,
-    "confidence": 0.75,
-    "change_rationale": "User mentioned data scattered across 5 systems",
-    "conversation_excerpt": "User: Our data is scattered across 5 different systems\nAssistant: That suggests fragmented data management...",
-    "conversation_id": "conv_abc123",
-    "inference_method": "llm_inference",  # or "user_confirmed" or "imported"
-    "inferred_from": []  # Empty for now, will have dependencies later
+    "domains": ["sales", "finance", "operations"],
+    "systems": {
+        "sales": ["crm", "spreadsheets"],
+        "finance": ["erp", "accounting_software"],
+        "operations": ["mes", "custom_db"]
+    },
+    "teams": {
+        "sales": ["enterprise_sales", "smb_sales"],
+        "finance": ["accounting", "fp_and_a"]
+    },
+    "last_updated": "2024-10-29T10:30:00Z"
 }
 ```
 
@@ -407,9 +457,21 @@ What sounds most useful?"
         "80": "Comprehensive quality framework, mostly automated",
         "100": "World-class data quality, continuous monitoring"
       },
+      "scope_dimensions": ["domain", "system", "team"],
+      "allows_generic_scope": true,
       "dependencies": [],
       "typical_assessment_time_minutes": 10
     }
+  },
+  "common_domains": [
+    {"id": "sales", "name": "Sales"},
+    {"id": "finance", "name": "Finance"},
+    {"id": "operations", "name": "Operations"}
+  ],
+  "common_systems": {
+    "sales": [{"id": "crm", "name": "CRM"}, {"id": "spreadsheets", "name": "Spreadsheets"}],
+    "finance": [{"id": "erp", "name": "ERP"}, {"id": "accounting_software", "name": "Accounting Software"}],
+    "operations": [{"id": "mes", "name": "MES"}, {"id": "custom_db", "name": "Custom Database"}]
   }
 }
 ```

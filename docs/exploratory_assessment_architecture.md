@@ -49,64 +49,85 @@ Every assessment, every project evaluation shows:
   # NO inferred_from_conversation - that's in the journal
 ```
 
-**How inference works:**
+**How inference works with scoped instances:**
 ```python
-def calculate_factor_value(factor_id: str, user_id: str) -> tuple[int, float]:
+def calculate_factor_value(factor_id: str, scope: dict, user_id: str) -> tuple[int, float]:
     """
-    Cumulative inference from ALL journal entries
+    Cumulative inference from ALL evidence for this scope
     """
-    # Get all journal entries for this factor
-    entries = get_journal_entries(factor_id)
+    # Get the most applicable instance using scope matching
+    instance = get_applicable_instance(factor_id, scope, user_id)
     
-    # Each entry contributes evidence
+    if not instance:
+        return None, 0.0
+    
+    # Each evidence piece contributes
     evidence_pieces = []
-    for entry in entries:
+    for evidence in instance.evidence:
         evidence_pieces.append({
-            "text": entry.conversation_excerpt,
-            "timestamp": entry.timestamp,
-            "context": entry.change_rationale
+            "text": evidence["statement"],
+            "timestamp": evidence["timestamp"],
+            "specificity": evidence["specificity"]
         })
     
-    # LLM synthesizes ALL evidence
+    # LLM synthesizes ALL evidence for this scope
     synthesis = llm.synthesize_evidence(
         factor_id=factor_id,
+        scope=scope,
         evidence_pieces=evidence_pieces,
         scale=knowledge_graph.get_factor_scale(factor_id)
     )
     
     return synthesis.value, synthesis.confidence
 
-# Example synthesis prompt:
+def get_applicable_instance(factor_id: str, needed_scope: dict, user_id: str):
+    """
+    Find most specific applicable instance using scope matching
+    """
+    instances = get_factor_instances(factor_id, user_id)
+    candidates = []
+    
+    for instance in instances:
+        match_score = calculate_scope_match(instance.scope, needed_scope)
+        if match_score > 0:
+            candidates.append((instance, match_score))
+    
+    # Return most specific match (highest score, then highest confidence)
+    candidates.sort(key=lambda x: (x[1], x[0].confidence), reverse=True)
+    return candidates[0][0] if candidates else None
+
+# Example synthesis prompt with scope:
 """
 Factor: data_quality
+Scope: {domain: "sales", system: "salesforce_crm"}
 Scale: 0=no quality controls, 50=basic checks, 100=comprehensive governance
 
-Evidence from 3 conversations:
-1. [Oct 20] "Our data is scattered across 5 systems"
-2. [Oct 22] "We don't have a data catalog"
-3. [Oct 25] "Sales data has lots of duplicates"
+Evidence from 2 conversations:
+1. [Oct 20] "Salesforce has incomplete data" (system-specific)
+2. [Oct 22] "Duplicate customer records in SFDC" (system-specific)
 
-Synthesize: What's the data_quality score (0-100)?
+Synthesize: What's the data_quality score for Salesforce CRM (0-100)?
 How confident are you (0-1)?
 """
 
 # LLM returns:
-# value: 20 (scattered + no catalog + quality issues = very low)
-# confidence: 0.75 (3 consistent pieces of evidence)
+# value: 30 (incomplete + duplicates = low quality)
+# confidence: 0.80 (2 consistent system-specific pieces of evidence)
 ```
 
-**In status/summary responses:**
+**In status/summary responses with scoped instances:**
 ```
 System: "Here's what we've mapped out:
 
 **Data Readiness: 60% mapped, 70% confident**
 
 **Confirmed factors:**
-- data_availability: 80% ✓ (you explicitly said "we have 3 years of sales data")
+- data_availability (Sales): 80% ✓ (you explicitly said "we have 3 years of sales data")
 
 **Unconfirmed inferences:**
-- data_quality: 20% (75% confident, based on 3 mentions: scattered data, no catalog, duplicates)
-- data_governance: 15% (60% confident, based on 2 mentions: no formal policies, no data steward)
+- data_quality (Sales/Salesforce CRM): 30% (80% confident, based on 2 mentions: incomplete data, duplicates)
+- data_quality (Sales/generic): 45% (60% confident, inferred from Salesforce issues)
+- data_governance (Sales): 15% (60% confident, based on 2 mentions: no formal policies, no data steward)
 
 Want to confirm these, or should we move on?"
 ```
@@ -117,27 +138,39 @@ Want to confirm these, or should we move on?"
 - ✅ Confidence increases with more consistent evidence
 - ✅ Full evidence trail is in journal, not duplicated in status
 
-**Persistence:**
+**Persistence with scoped instances:**
 ```python
-class FactorJournalStore:
-    def update_factor(
+class FactorInstanceStore:
+    def update_factor_instance(
         self,
         user_id: str,
         factor_id: str,
+        scope: dict,  # NEW: {domain, system, team}
         new_value: Any,
         rationale: str,
         confidence: float,
-        inference_status: str = "unconfirmed",  # NEW
-        user_confirmed: bool = False  # NEW
+        inference_status: str = "unconfirmed",
+        user_confirmed: bool = False,
+        refines: str = None,  # NEW: instance_id of more generic instance
+        specificity: str = "generic"  # NEW: "generic" | "domain-specific" | "system-specific"
     ):
-        # ... existing code ...
+        # Generate instance_id
+        instance_id = generate_instance_id(factor_id, scope)
         
-        factor_doc.set({
-            "current_value": new_value,
-            "current_confidence": confidence,
+        # Create or update instance document
+        instance_doc = self.user_ref.collection("factor_instances").document(instance_id)
+        
+        instance_doc.set({
+            "instance_id": instance_id,
+            "factor_id": factor_id,
+            "scope": scope,
+            "scope_label": generate_scope_label(scope),
+            "value": new_value,
+            "confidence": confidence,
             "inference_status": "confirmed" if user_confirmed else "unconfirmed",
-            "inferred_from": rationale,
-            "last_updated": entry["timestamp"]
+            "refines": refines,
+            "discovered_in_context": self.current_context,
+            "updated_at": firestore.SERVER_TIMESTAMP
         }, merge=True)
 ```
 
@@ -212,24 +245,38 @@ def get_recommended_confidence(estimated_cost: int) -> float:
 User: "Can we do a sales forecasting project?"
 
 System: 
-# 1. Retrieve relevant factors from journal
+# 1. Determine needed scope from project context
+needed_scope = {"domain": "sales", "system": None}
+
+# 2. Retrieve relevant factor instances using scope matching
 factors = {
-    "data_quality": 20,  # From: "data scattered across 5 systems"
-    "data_availability": 80,  # From: "we have 3 years of sales data"
-    "ml_infrastructure": None  # Never discussed
+    "data_quality": get_applicable_value("data_quality", needed_scope),
+    # Returns: {value: 45, confidence: 0.60, scope: {domain: "sales", system: null}}
+    # Note: Falls back to generic sales if no specific system mentioned
+    
+    "data_availability": get_applicable_value("data_availability", needed_scope),
+    # Returns: {value: 80, confidence: 0.90, scope: {domain: "sales", system: null}}
+    
+    "ml_infrastructure": get_applicable_value("ml_infrastructure", needed_scope)
+    # Returns: None (never discussed for sales domain)
 }
 
-# 2. Evaluate with available data
-evaluation = evaluate_project_feasibility("sales_forecasting", 15000, user_id)
+# 3. Evaluate with scoped data
+evaluation = evaluate_project_feasibility(
+    "sales_forecasting", 
+    15000, 
+    user_id,
+    scope={"domain": "sales", "system": None}
+)
 
-# 3. Respond with context
-"Based on what we've discussed:
+# 4. Respond with scope-aware context
+"Based on what we've discussed about your sales data:
 
 **Feasibility: Proceed with caution (45% confidence)**
 
 Why 45%?
-- ✅ Data availability is strong (80%) - you have 3 years of sales data
-- ⚠️ Data quality is low (20%) - data scattered across 5 systems
+- ✅ Sales data availability is strong (80%) - you have 3 years of sales data
+- ⚠️ Sales data quality is moderate (45%) - some issues in Salesforce (30%), but might be better in other systems
 - ❓ ML infrastructure unknown - haven't discussed this yet
 
 **For a €15k pilot, 45% confidence is borderline.**
@@ -396,14 +443,16 @@ System: "Here's what we've mapped out:
 **Data Readiness: 60% mapped, 70% confident**
 
 Confirmed:
-- data_availability: 80% ✓ (you said "3 years of sales data")
+- data_availability (Sales): 80% ✓ (you said "3 years of sales data")
 
 Unconfirmed (I inferred these, but you haven't validated):
-- data_quality: 20% (from "data scattered across 5 systems")
-- data_governance: 15% (from "no formal policies")
+- data_quality varies by system:
+  • Salesforce CRM: 30% (from "incomplete data" and "duplicates")
+  • Sales overall: 45% (inferred from Salesforce issues)
+- data_governance (Sales): 15% (from "no formal policies")
 
 **What you can do now:**
-You can evaluate basic forecasting projects, but confidence is lower on data quality.
+You can evaluate sales forecasting projects, but confidence varies by which system you'd use.
 
 Want to confirm those inferences, or should we move on?"
 ```

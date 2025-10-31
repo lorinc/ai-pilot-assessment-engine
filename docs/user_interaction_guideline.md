@@ -277,7 +277,7 @@ assessment_status:
     or_proceed: "Or we can start evaluating that sales forecasting project you mentioned"
 ```
 
-**Example:**
+**Example (with scoped factors):**
 ```
 User: "Where are we with all this?"
 
@@ -290,18 +290,23 @@ With this, you can evaluate basic forecasting projects that use historical sales
 You can assess simple automation, but not complex ML projects yet.
 
 **Confirmed factors:**
-- data_availability: 80% ✓ (you explicitly said "3 years of sales data")
+- data_availability (Sales): 80% ✓ (you explicitly said "3 years of sales data")
 
 **Unconfirmed inferences:**
-- data_quality: 20% (75% confident, based on 3 mentions: scattered data, no catalog, duplicates)
-- data_governance: 15% (60% confident, based on 2 mentions: no formal policies, no data steward)
+- data_quality varies by system:
+  • Salesforce CRM: 30% ⚠️ (80% confident, from "incomplete data" and "duplicates")
+  • Sales overall: 45% ⚠️ (60% confident, inferred from Salesforce issues)
+  • Finance: Not assessed
+- data_governance (Sales): 15% (60% confident, from "no formal policies")
 
 **What you can do now:**
-You can evaluate basic forecasting of your annual sales results, but not monthly predictions that consider seasonal trends.
+You can evaluate sales forecasting, but confidence varies by which system you'd use:
+- Using Salesforce: 35% confidence (low)
+- Using data warehouse: 45% confidence (moderate, not assessed specifically)
 
 **Next steps:**
 - Confirm those inferences (2 min) → Boost confidence
-- Continue mapping data readiness → Would unlock quarterly forecasting
+- Assess specific systems (data warehouse, spreadsheets) → Refine feasibility
 - Start evaluating that sales forecasting project you mentioned
 
 What sounds most useful?"
@@ -388,17 +393,18 @@ current_capability:
 ```
 User: "Where were we?"
 
-System: "Last time we discussed **data quality**. You mentioned data is scattered across 5 systems with no catalog yet. This moved data_quality from unknown to 20% (75% confident).
+System: "Last time we discussed **sales data quality**. You mentioned Salesforce data is incomplete with duplicates. This created a specific assessment for Salesforce CRM (30%, 80% confident) and a generic sales assessment (45%, 60% confident).
 
 **If we continue:**
-Finishing this would unlock assessments of data governance and ML infrastructure—basically, we'd understand your full data landscape.
+We could assess other sales systems (data warehouse, spreadsheets) to get a complete picture of your sales data landscape. This would help determine which system is best for forecasting.
 
 **Or you could:**
 - Explore AI capability instead (team skills, infrastructure)
-- Start evaluating that sales forecasting project
+- Start evaluating that sales forecasting project (we'd recommend which system to use)
+- Assess finance or operations data quality
 
 **What you can do now:**
-You can evaluate basic forecasting with annual data. To unlock quarterly forecasting, we need to map data governance next.
+You can evaluate sales forecasting, but the feasibility depends on which system you'd use. Assessing your data warehouse specifically would clarify this.
 
 What would be most useful?"
 ```
@@ -483,6 +489,357 @@ Always mention factors the LLM inferred but user hasn't validated
 - ✅ Cumulative evidence: confidence increases with more consistent mentions
 - ❌ Single mention: "from 'scattered data'" (too weak)
 - ❌ Treat inferences as facts without validation
+
+---
+
+## 9. Clarifying Question Patterns for Scoped Factors
+
+The system uses intelligent clarifying questions to determine the appropriate scope (domain, system, team) for factor assessments. These questions help distinguish between organization-wide issues and domain/system-specific problems.
+
+### Pattern 1: Narrow from Generic
+
+**Trigger:** User makes generic statement about a factor
+
+**Example Statement:** "Our sales data quality is poor"
+
+**System Response:**
+```
+"Is this across all your sales systems (CRM, spreadsheets, databases), 
+or mainly in specific tools?"
+```
+
+**Possible User Responses:**
+- **"All systems"** → Keep generic scope `{domain: "sales", system: null}`, increase confidence
+- **"Mainly Salesforce"** → Create specific scope `{domain: "sales", system: "salesforce_crm"}`, reduce generic confidence
+- **"Not sure"** → Keep generic, flag for later clarification
+
+**Storage:**
+```json
+{
+  "generic_instance": {
+    "scope": {"domain": "sales", "system": null},
+    "value": 45,
+    "confidence": 0.60,
+    "refined_by": ["dq_sales_sfdc_001"]
+  },
+  "specific_instance": {
+    "scope": {"domain": "sales", "system": "salesforce_crm"},
+    "value": 30,
+    "confidence": 0.80,
+    "refines": "dq_sales_generic_001"
+  }
+}
+```
+
+### Pattern 2: Generalize from Specific
+
+**Trigger:** User mentions specific system
+
+**Example Statement:** "Salesforce data is incomplete"
+
+**System Response:**
+```
+"Do other sales systems (data warehouse, spreadsheets) have similar issues, 
+or is this isolated to Salesforce?"
+```
+
+**Possible User Responses:**
+- **"Isolated to Salesforce"** → Keep only specific scope, don't create generic
+- **"Similar everywhere"** → Create generic scope, link specific instances
+- **"Haven't checked others"** → Keep specific, suggest checking others later
+
+**Example Follow-up:**
+```
+User: "It's just Salesforce, our data warehouse is fine"
+
+System: "Understood - data quality varies by system:
+- Salesforce: ~35% (incomplete)
+- Data warehouse: ~75% (fine)
+
+For sales forecasting, which system would we use?"
+```
+
+### Pattern 3: Identify Domain
+
+**Trigger:** User makes statement without domain context
+
+**Example Statement:** "Our data quality is terrible"
+
+**System Response:**
+```
+"Which data domains are you thinking about - sales, finance, operations, 
+or across the organization?"
+```
+
+**Possible User Responses:**
+- **"Sales"** → Create domain-specific scope `{domain: "sales", system: null}`
+- **"Everything"** → Create org-wide scope `{domain: null, system: null}`, high confidence
+- **"Not sure"** → Keep generic, ask about specific use case
+
+**Example Follow-up:**
+```
+User: "Sales data mainly"
+
+System: "Got it. Is this across all sales systems, or specific tools 
+like your CRM, spreadsheets, or analytics platform?"
+```
+
+### Pattern 4: Resolve Contradictions
+
+**Trigger:** New statement contradicts existing assessment
+
+**Example Contradiction:**
+- **Previous:** "Sales data quality is good" (generic = 75)
+- **New:** "Salesforce data is incomplete" (specific = 35)
+
+**System Response:**
+```
+"Earlier you mentioned sales data quality is good, but now you're saying 
+Salesforce has issues. Is Salesforce the exception, or should I revise 
+my understanding of overall sales data quality?"
+```
+
+**Possible User Responses:**
+- **"Salesforce is the exception"** → Keep generic high (75), specific low (35)
+- **"I was wrong earlier"** → Update generic to match specific reality
+- **"Good is relative"** → Clarify scale interpretation
+
+**Resolution:**
+```json
+{
+  "generic_instance": {
+    "scope": {"domain": "sales", "system": null},
+    "value": 75,
+    "confidence": 0.50,
+    "note": "User indicated Salesforce is exception, other systems better"
+  },
+  "specific_instance": {
+    "scope": {"domain": "sales", "system": "salesforce_crm"},
+    "value": 35,
+    "confidence": 0.80,
+    "refines": "dq_sales_generic_001"
+  }
+}
+```
+
+### Pattern 5: Multiple Specifics → Generic Synthesis
+
+**Trigger:** User mentions multiple systems with similar issues
+
+**Example Sequence:**
+```
+User: "Our Salesforce data is incomplete"
+System: Creates dq_sales_sfdc = 35
+
+User: "And our sales spreadsheets are a mess"
+System: Creates dq_sales_spreadsheets = 25
+
+System detects pattern: Multiple sales systems with low quality
+```
+
+**System Response:**
+```
+"I'm noticing a pattern - sales data quality seems low across multiple systems 
+(Salesforce ~35%, spreadsheets ~25%).
+
+This suggests a broader sales data quality issue. Root causes might be:
+- No data governance in sales department
+- Lack of data entry training
+- No data steward for sales
+
+Want to explore what's causing this pattern?"
+```
+
+**Storage:**
+```json
+{
+  "synthesized_generic": {
+    "scope": {"domain": "sales", "system": null},
+    "value": 30,
+    "confidence": 0.75,
+    "synthesized_from": ["dq_sales_sfdc", "dq_sales_spreadsheets"],
+    "note": "Weighted average of specific instances"
+  }
+}
+```
+
+### Clarifying Question Guidelines
+
+**When to Ask:**
+- ✅ When scope is ambiguous ("our data" vs "sales data" vs "Salesforce data")
+- ✅ When contradiction detected between generic and specific
+- ✅ When pattern emerges across multiple systems
+- ❌ Don't ask if context makes scope obvious
+- ❌ Don't ask more than ONE clarifying question per user statement
+
+**How to Ask:**
+- ✅ Offer concrete options ("CRM, spreadsheets, databases")
+- ✅ Allow "not sure" or "haven't checked" responses
+- ✅ Frame as helpful clarification, not interrogation
+- ❌ Don't use technical jargon ("scope dimensions", "instance hierarchy")
+- ❌ Don't force user to answer before proceeding
+
+**After Clarification:**
+- Always acknowledge the clarification
+- Show how it affects the assessment
+- Proceed with the conversation naturally
+- Store both generic and specific instances as appropriate
+
+---
+
+## 10. Scope-Aware Conversation Examples
+
+### Example 1: Sales Forecasting with Scoped Data
+
+```
+User: "Can we do sales forecasting?"
+
+System: [Determines needed scope: {domain: "sales", system: null}]
+        [Retrieves applicable instances using scope matching]
+
+"Based on what we've discussed about your sales data:
+
+**Feasibility: Proceed with caution (45% confidence)**
+
+Why 45%?
+- ✅ Sales data availability is strong (80%) - you have 3 years of sales data
+- ⚠️ Sales data quality is moderate (45%) - some issues in Salesforce (30%), 
+  but might be better in other systems
+- ❓ ML infrastructure unknown - haven't discussed this yet
+
+**For a €15k pilot, 45% confidence is borderline.**
+
+Which system would you use for forecasting - Salesforce, your data warehouse, 
+or something else?"
+
+User: "Probably the data warehouse"
+
+System: "I don't have specific information about your data warehouse quality yet. 
+Based on generic sales data quality (45%), I'd estimate moderate confidence.
+
+Want to tell me about your data warehouse specifically? That would help 
+refine the feasibility assessment."
+```
+
+### Example 2: Cross-Domain Factor Reuse
+
+```
+[Discussion 1: Sales Forecasting]
+User: "Salesforce data is incomplete"
+System: Stores data_quality {domain: "sales", system: "salesforce_crm"} = 35
+
+[Discussion 2: Days Later - Customer Segmentation]
+User: "Can we do customer segmentation?"
+
+System: [Determines needed scope: {domain: "sales", system: "salesforce_crm"}]
+        [Retrieves existing instance via scope matching]
+
+"For customer segmentation using Salesforce data:
+
+**Feasibility: Low confidence (35%)**
+
+We already identified that Salesforce CRM data quality is around 35% 
+(you mentioned incomplete data when we discussed sales forecasting).
+
+For customer segmentation, we'd need:
+- Data quality: 60%+ (currently: 35% ⚠️)
+- Data completeness: customer attributes, purchase history
+- ML infrastructure: clustering capabilities
+
+Want to explore improving Salesforce data quality first, or consider 
+using a different data source?"
+```
+
+### Example 3: Scope-Aware Status Response
+
+```
+User: "Where are we?"
+
+System: "Here's what we've mapped out:
+
+**Data Readiness: 60% mapped, 70% confident**
+
+**Confirmed factors:**
+- data_availability (Sales): 80% ✓ (you said "3 years of sales data")
+
+**Unconfirmed inferences:**
+- data_quality varies by system:
+  • Salesforce CRM: 30% ⚠️ (80% confident, from "incomplete data" and "duplicates")
+  • Sales overall: 45% ⚠️ (60% confident, inferred from Salesforce issues)
+  • Finance: Not assessed yet
+- data_governance (Sales): 15% (60% confident, from "no formal policies")
+
+**What you can do now:**
+You can evaluate sales forecasting projects, but confidence varies by 
+which system you'd use:
+- Using Salesforce: 35% confidence (low)
+- Using data warehouse: 45% confidence (moderate, not assessed specifically)
+- Using other systems: Unknown
+
+Want to confirm those inferences, assess other systems, or proceed with 
+current knowledge?"
+```
+
+### Example 4: Unknown System Discovery
+
+```
+User: "Our Cogglepoop system has data quality issues"
+
+System: [Detects unknown system "Cogglepoop"]
+
+"I'm not familiar with Cogglepoop. Could you help me understand:
+- Which team or department uses it? (sales, finance, operations, etc.)
+- What's it used for - customer data, financial data, operations?"
+
+User: "It's our custom CRM for the sales team"
+
+System: [Updates scope registry: systems.sales.push("cogglepoop_crm")]
+        [Creates instance: data_quality {domain: "sales", system: "cogglepoop_crm"}]
+        [Links to knowledge: "custom CRM" → similar to "salesforce_crm"]
+
+"Got it - Cogglepoop is your custom CRM for sales. I'll track that.
+
+Since it's a CRM, typical data quality issues include:
+- Incomplete customer records
+- Duplicate entries
+- Inconsistent data entry
+
+Which of these are you seeing?"
+```
+
+### Example 5: Scope Inheritance in Recommendations
+
+```
+User: "What AI projects could we do?"
+
+System: [Retrieves all assessed factor instances]
+        [Matches project archetypes to scoped assessments]
+
+"Based on your assessments, here are 3 options:
+
+**1. Sales Forecasting (Annual)**
+   Feasibility: 60% confidence
+   - Uses: Sales data warehouse (quality: 75% ✓)
+   - Timeline: 8-12 weeks
+   - Cost: €15-25k
+
+**2. Salesforce Data Quality Improvement**
+   Feasibility: 75% confidence
+   - Addresses: Salesforce CRM issues (quality: 30% ⚠️)
+   - Would unlock: Customer segmentation, lead scoring
+   - Timeline: 6-8 weeks
+   - Cost: €10-20k
+
+**3. Finance Process Automation**
+   Feasibility: 45% confidence
+   - Uses: SAP ERP data (quality: 85% ✓)
+   - But: Need to assess finance team readiness
+   - Timeline: 10-14 weeks
+   - Cost: €20-35k
+
+Notice how Option 2 could improve Salesforce data quality, which would 
+then enable more sales-focused AI projects. Want to explore any of these?"
+```
 
 ---
 

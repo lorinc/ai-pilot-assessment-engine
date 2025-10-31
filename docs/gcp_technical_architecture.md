@@ -150,13 +150,14 @@ An exploratory AI readiness assessment engine deployed on Google Cloud Platform.
    ├─ Parse response: intent type, entities, relevant factors
    └─ Emit SSE: "Intent: evaluate_project, factors: [data_quality, ml_infra]"
    ↓
-4. CONTEXT RETRIEVAL
-   ├─ Emit SSE: "Retrieving factors..."
-   ├─ Query Firestore: /users/{user_id}/factors/{factor_id}
-   ├─ Query Firestore: /users/{user_id}/factors/{factor_id}/journal (latest entries)
+4. CONTEXT RETRIEVAL WITH SCOPE MATCHING
+   ├─ Emit: "⚙️ SYSTEM: Retrieving factors for scope..."
+   ├─ Determine needed scope from intent (e.g., {domain: "sales", system: null})
+   ├─ Query Firestore: /users/{user_id}/factor_instances (filtered by factor_id)
+   ├─ Apply scope matching algorithm to find most applicable instances
    ├─ Traverse static graph (in-memory) for dependencies
    ├─ Assemble context dict with token budget management
-   └─ Emit SSE: "Retrieved 3 factors: data_quality(20), data_availability(80), ml_infra(null)"
+   └─ Emit: "⚙️ SYSTEM: Retrieved 3 instances: data_quality[sales]=45, data_availability[sales]=80, ml_infra=null"
    ↓
 5. LLM RESPONSE GENERATION
    ├─ Emit SSE: "Generating response..."
@@ -263,37 +264,42 @@ yield "⚙️ SYSTEM: <technical event>"  # Log entries
 yield "<token>"                        # LLM response tokens
 ```
 
-### 2. ConversationOrchestrator ↔ FactorJournalStore
+### 2. ConversationOrchestrator ↔ FactorInstanceStore
 
-**Contract:** CRUD operations on user factors
+**Contract:** CRUD operations on scoped factor instances
 
 ```python
-# Create/Update
-await journal_store.update_factor(
+# Create/Update scoped instance
+await instance_store.update_factor_instance(
     factor_id="data_quality",
-    new_value=20,
-    rationale="User mentioned scattered data",
+    scope={"domain": "sales", "system": "salesforce_crm", "team": None},
+    new_value=30,
+    rationale="User mentioned Salesforce data is incomplete",
     conversation_excerpt="User: ...\nAssistant: ...",
-    confidence=0.75,
-    inferred_from=["data_governance"]
+    confidence=0.80,
+    refines="dq_sales_generic_001",
+    specificity="system-specific"
 )
 
-# Read current state
-state = await journal_store.get_current_state("data_quality")
-# Returns: {current_value: 20, current_confidence: 0.75, inference_status: "unconfirmed", ...}
+# Read using scope matching
+instance = await instance_store.get_applicable_instance(
+    factor_id="data_quality",
+    needed_scope={"domain": "sales", "system": "salesforce_crm"}
+)
+# Returns: {instance, match_score, match_type}
 
-# Read journal history
-entries = await journal_store.get_journal_entries("data_quality", limit=5)
-# Returns: [{timestamp, previous_value, new_value, rationale, excerpt, confidence}, ...]
+# Read all instances for a factor
+instances = await instance_store.get_factor_instances("data_quality")
+# Returns: [{instance_id, scope, value, confidence, evidence, ...}, ...]
 
 # Read aggregate summary
-summary = await journal_store.get_assessment_summary()
+summary = await instance_store.get_assessment_summary()
 # Returns: {categories: {...}, overall: {...}, capabilities: {...}}
 ```
 
-### 3. ContextBuilder ↔ KnowledgeGraph
+### 3. ContextBuilder ↔ KnowledgeGraph & ScopeMatcher
 
-**Contract:** Graph traversal operations
+**Contract:** Graph traversal and scope matching operations
 
 ```python
 # Get dependencies
@@ -304,8 +310,18 @@ deps = graph.get_dependencies("data_quality")
 scale = graph.get_factor_scale("data_quality")
 # Returns: {"0": "No quality controls", "50": "Basic checks", ...}
 
+scope_dims = graph.get_factor_scope_dimensions("data_quality")
+# Returns: ["domain", "system", "team"]
+
 category = graph.get_factor_category("data_quality")
 # Returns: "data_readiness"
+
+# Scope matching
+match = scope_matcher.calculate_scope_match(
+    instance_scope={"domain": "sales", "system": "salesforce_crm"},
+    needed_scope={"domain": "sales", "system": None}
+)
+# Returns: 0.86 (domain match, system is more specific)
 
 # Get enabled archetypes
 archetypes = graph.get_enabled_archetypes(["data_quality", "data_availability"])
@@ -359,6 +375,18 @@ service cloud.firestore {
   match /databases/{database}/documents {
     // Users can only access their own data
     match /users/{userId}/{document=**} {
+      allow read, write: if request.auth != null && request.auth.uid == userId;
+    }
+    
+    // Specific rules for factor_instances collection
+    match /users/{userId}/factor_instances/{instanceId} {
+      allow read: if request.auth != null && request.auth.uid == userId;
+      allow write: if request.auth != null && request.auth.uid == userId
+                   && request.resource.data.keys().hasAll(['factor_id', 'scope', 'value', 'confidence']);
+    }
+    
+    // Scope registry access
+    match /users/{userId}/scope_registry/metadata {
       allow read, write: if request.auth != null && request.auth.uid == userId;
     }
   }
@@ -426,41 +454,53 @@ def authenticate_user():
 - **Per-user subcollections**
 - Queried on-demand
 
-**Lookup Pattern:**
+**Lookup Pattern with Scope Matching:**
 
 ```python
-# Example: "Why is my data_quality score 20?"
+# Example: "Why is my Salesforce data quality score 30?"
 
 # 1. Find factor in static graph (in-memory, instant)
 factor_node = graph.nodes["data_quality"]
 scale = factor_node["scale"]
 category = factor_node["category"]
+scope_dims = factor_node["scope_dimensions"]
 
-# 2. Retrieve user's data from Firestore
-user_state = await journal_store.get_current_state("data_quality")
-# Returns: {current_value: 20, current_confidence: 0.75}
+# 2. Determine needed scope
+needed_scope = {"domain": "sales", "system": "salesforce_crm", "team": None}
 
-user_journal = await journal_store.get_journal_entries("data_quality", limit=3)
-# Returns: [{timestamp, rationale, excerpt, confidence}, ...]
+# 3. Retrieve applicable instance using scope matching
+instance = await instance_store.get_applicable_instance(
+    factor_id="data_quality",
+    needed_scope=needed_scope
+)
+# Returns: {instance, match_score: 1.0, match_type: "exact"}
+# instance = {value: 30, confidence: 0.80, scope: {domain: "sales", system: "salesforce_crm"}}
 
-# 3. Traverse static graph for dependencies (in-memory)
+# 4. Get evidence for this instance
+evidence = instance["evidence"]
+# Returns: [{statement, timestamp, specificity, conversation_id}, ...]
+
+# 5. Traverse static graph for dependencies (in-memory)
 dependencies = graph.get_dependencies("data_quality")
 # Returns: ["data_governance", "data_infrastructure"]
 
-# 4. Fetch dependent factors from Firestore
+# 6. Fetch dependent factor instances with same scope
 for dep_id in dependencies:
-    dep_state = await journal_store.get_current_state(dep_id)
+    dep_instance = await instance_store.get_applicable_instance(dep_id, needed_scope)
     # Use in context
 
-# 5. Assemble context for LLM
+# 7. Assemble context for LLM
 context = {
     "factor": {
         "id": "data_quality",
         "name": factor_node["name"],
         "scale": scale,
-        "current_value": user_state["current_value"],
-        "confidence": user_state["current_confidence"],
-        "journal": user_journal
+        "scope": needed_scope,
+        "scope_label": instance["scope_label"],
+        "value": instance["value"],
+        "confidence": instance["confidence"],
+        "evidence": evidence,
+        "match_type": "exact"
     },
     "dependencies": {...}
 }
@@ -468,8 +508,9 @@ context = {
 
 **Performance:**
 - Static graph lookup: <1ms (in-memory)
-- Firestore read: 10-50ms (indexed queries)
-- Total context assembly: <100ms for typical query
+- Firestore read (factor_instances): 10-50ms (indexed queries)
+- Scope matching calculation: <1ms (in-memory algorithm)
+- Total context assembly: <100ms for typical query (including scope matching)
 
 ---
 
