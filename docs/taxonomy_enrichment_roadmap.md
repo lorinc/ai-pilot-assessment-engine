@@ -1,9 +1,10 @@
 # Taxonomy Enrichment Roadmap - Knowledge Graph Readiness
 
 **Date:** 2024-11-01  
-**Status:** Planning  
-**Priority:** Critical - Blocker for Knowledge Graph Construction  
-**Estimated Time:** 4-6 days
+**Last Updated:** 2025-11-01 21:50  
+**Status:** Superseded by Output-Centric Model (v0.3)  
+**Priority:** Review Required  
+**Note:** This roadmap describes the scoped factor model approach. See `output_centric_factor_model_exploration.md` for the evolved output-centric approach with 1-5 star ratings.
 
 ---
 
@@ -42,11 +43,11 @@ The existing taxonomies (`AI_use_case_taxonomy.json`, `AI_dependency_taxonomy.js
 
 ### What's Missing ❌
 
-**1. Organizational Factors Taxonomy** 🚨 CRITICAL
+**1. Organizational Factors Taxonomy** 🚨 CRITICAL **[NOW: 1-5 STARS]**
 - No structured definition of assessable organizational attributes
-- No 0-100 scales with observable anchors
+- No 1-5 star scales with observable anchors (was: 0-100)
 - No inference hints for LLM-based assessment
-- **Impact:** Cannot infer "data_quality = 30" from conversation
+- **Impact:** Cannot infer "data_quality = ⭐⭐" from conversation
 
 **2. Factor-to-Capability Mapping** 🚨 CRITICAL
 - No definition of how factors combine to enable project types
@@ -95,7 +96,7 @@ AI_dependency_taxonomy.json:
 ```
 ORGANIZATIONAL_FACTOR (e.g., data_quality)
   ↓ HAS_SCALE
-  FACTOR_SCALE (0-100 with anchors)
+  FACTOR_SCALE (1-5 stars with anchors)
   
   ↓ SATISFIES
   PREREQUISITE (e.g., Clean_and_validated_data)
@@ -115,10 +116,12 @@ ORGANIZATIONAL_FACTOR (e.g., data_quality)
 
 ### Missing Edges
 Without organizational factors, we cannot create:
-1. **Conversation → Factor** edges (no scales to map statements to values)
+1. **Conversation → Factor** edges (no scales to map statements to star ratings)
 2. **Factor → Prerequisite** edges (no mapping defined)
 3. **Factor → Capability** edges (no capability definitions)
 4. **Factor → Factor** edges (no interdependencies)
+
+**UPDATE:** Output-centric model uses MIN() calculation instead of weighted averages.
 5. **Factor → Archetype** edges (no impact model)
 
 **Result:** Knowledge graph has archetypes and prerequisites, but no way to connect them to organizational reality.
@@ -138,10 +141,10 @@ Without organizational factors, we cannot create:
   "description": "Quality, consistency, and reliability of organizational data",
   
   "scale": {
-    "type": "0-100",
+    "type": "1-5 stars",
     "anchors": {
-      "0": "No quality controls, data unreliable for any use",
-      "20": "Ad-hoc quality checks, many known issues, manual fixes",
+      "1": "⭐ No quality controls, data unreliable for any use",
+      "2": "⭐⭐ Ad-hoc quality checks, many known issues, manual fixes",
       "40": "Basic quality processes, some validation, reactive fixes",
       "60": "Systematic quality framework, automated checks, proactive monitoring",
       "80": "Comprehensive quality governance, continuous improvement",
@@ -169,10 +172,12 @@ Without organizational factors, we cannot create:
 ```
 
 **Why Critical:**
-- LLM needs scales to map "data scattered across 5 systems" → `data_quality = 20`
-- Scope dimensions enable domain/system-specific assessments
+- LLM needs scales to map "data scattered across 5 systems" → `data_quality = ⭐⭐`
+- Scope dimensions enable domain/system-specific assessments (or Output + Team + Process + System in output-centric model)
 - Inference hints guide conversational extraction
 - Assessment metadata enables ROI calculations
+
+**UPDATE:** Output-centric model uses 1-5 stars and MIN() calculation for bottleneck identification.
 
 **Minimum Required Factors (15):**
 
@@ -398,18 +403,19 @@ Without organizational factors, we cannot create:
 
 **Deliverable:** `src/data/organizational_factors.json`
 
-**Tasks:**
-1. Define 15 core factors across 3 categories
-2. Create 0-100 scales with 6 anchors (0, 20, 40, 60, 80, 100) per factor
-3. Add scope dimensions (domain, system, team) per factor
-4. Define inference hints (positive/negative indicators)
-5. Add assessment metadata (time, complexity, evidence types)
+**Tasks:** **[UPDATED FOR 1-5 STARS]**
+1. Define output-centric factors (capability to deliver specific outputs)
+2. Create 1-5 star scales with clear definitions per component
+3. Add output context (Output + Team + Process + System)
+4. Define 4 components: Dependency Quality, Team Execution, Process Maturity, System Support
+5. Implement MIN() calculation logic
 
 **Validation:**
-- [ ] All 15 factors have complete scales
+- [ ] All factors have 1-5 star scales for each component
 - [ ] Scale anchors are observable and measurable
 - [ ] Inference hints are specific and actionable
-- [ ] Can map 5 test conversation excerpts to factor values
+- [ ] Can map 5 test conversation excerpts to star ratings
+- [ ] MIN() calculation identifies bottlenecks correctly
 
 **Example Output:**
 ```json
@@ -422,7 +428,7 @@ Without organizational factors, we cannot create:
         {
           "factor_id": "data_quality",
           "factor_name": "Data Quality",
-          "scale": { "anchors": {...} },
+          "scale": { "type": "1-5 stars", "anchors": {...} },
           "scope_dimensions": {...},
           "inference_hints": {...},
           "assessment_metadata": {...}
@@ -568,15 +574,16 @@ Without organizational factors, we cannot create:
 - [ ] All factor IDs are unique and stable
 - [ ] All references (factor_id, capability_id, archetype) resolve correctly
 - [ ] Weights sum to 1.0 where required
-- [ ] Thresholds are in valid range (0-100)
-- [ ] Strengths are in valid range (0-1)
+- [ ] Thresholds are in valid range (1-5 stars)
+- [ ] Strengths are in valid range (1-5 stars or 0-1 for confidence)
 
 ### Semantic Validation
-- [ ] Factor scales are monotonic (higher = better)
+- [ ] Factor scales are monotonic (higher stars = better)
 - [ ] Scale anchors are observable and measurable
 - [ ] Factor names and descriptions are clear
-- [ ] Interdependencies make intuitive sense
+- [ ] Interdependencies make intuitive sense (or simplified in output-centric model)
 - [ ] Capability requirements align with domain knowledge
+- [ ] MIN() calculation logic is implemented correctly
 - [ ] Prerequisite mappings are logical
 
 ### Functional Validation
@@ -590,7 +597,7 @@ Without organizational factors, we cannot create:
 ### Integration Validation
 - [ ] Knowledge graph builder can load all new files
 - [ ] Scope matcher works with factor definitions
-- [ ] LLM prompts can use factor scales
+- [ ] LLM prompts can use 1-5 star scales
 - [ ] Firestore schema supports all data structures
 - [ ] No breaking changes to existing code
 
@@ -598,11 +605,12 @@ Without organizational factors, we cannot create:
 
 ## Success Criteria
 
-### Completeness
-- ✅ 15 factors fully defined with scales
-- ✅ 6 capabilities mapped to factors
-- ✅ 10-15 interdependencies documented
-- ✅ All 40+ prerequisites linked to factors
+### Completeness **[UPDATED FOR OUTPUT-CENTRIC MODEL]**
+- ✅ Output-centric factors defined with 1-5 star scales
+- ✅ 4 components per factor (Dependency, Execution, Process, System)
+- ✅ MIN() calculation logic implemented
+- ✅ Bottleneck identification working
+- ✅ Feedback loop detection (communicate only, no management)
 - ✅ Assessment metadata for all factors
 - ✅ Factor-to-archetype impacts defined
 
@@ -623,10 +631,10 @@ Without organizational factors, we cannot create:
 
 ## Risk Assessment & Mitigation
 
-### Risk 1: Scales Too Subjective 🔴
+### Risk 1: Scales Too Subjective 🔴 **[MITIGATED BY 1-5 STARS]**
 **Impact:** LLM can't reliably infer values from conversation  
-**Probability:** Medium  
-**Mitigation:**
+**Probability:** Low (1-5 stars reduce precision requirements)  
+**Mitigation:** Use 1-5 star ratings to embrace rough estimation nature
 - Use observable, measurable anchors
 - Test with 10 real conversation excerpts
 - Iterate based on inference accuracy
@@ -725,11 +733,11 @@ Without organizational factors, we cannot create:
 
 ## Next Steps After Completion
 
-### Immediate (Week 1)
-1. Update knowledge graph builder to load new taxonomies
-2. Create validation test suite
-3. Update LLM prompts to use factor scales
-4. Begin Epic 1 implementation with `data_quality` factor
+### Immediate (Week 1) **[UPDATED]**
+1. Update knowledge graph builder for output-centric model
+2. Create validation test suite for 1-5 star ratings
+3. Update LLM prompts to use 1-5 star scales and MIN() logic
+4. Begin Epic 1 implementation with output-centric factors
 
 ### Short-term (Week 2-3)
 1. Expand to all 15 factors in Epic 2

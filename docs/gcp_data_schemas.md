@@ -1,5 +1,8 @@
 # GCP Data Schemas & Structures
 
+**Last Updated:** 2025-11-01 22:00  
+**Note:** Factor values use 1-5 star ratings (INTEGER 1-5), not 0-100 percentages. See `output_centric_factor_model_exploration.md` for details.
+
 ## Firestore Schema
 
 ### User Data Structure
@@ -61,7 +64,7 @@
       team: null                        # or specific team name
     },
     scope_label: "Salesforce CRM",     # Human-readable label
-    value: 30,
+    value: 2,                            # 1-5 stars (INTEGER)
     confidence: 0.80,
     evidence: [
       {

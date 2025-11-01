@@ -2,7 +2,10 @@
 
 ## System Overview
 
-The AI Pilot Assessment Engine is a **factor-centric conversational assessment system** that helps organizations evaluate their AI readiness through natural dialogue. The system accumulates evidence over time, building confidence in organizational factor assessments, which enables informed project feasibility evaluations.
+**Last Updated:** 2025-11-01 22:15  
+**Note:** System uses 1-5 star ratings for all factors. See `output_centric_factor_model_exploration.md` (v0.3) for scope-locked design with MIN() calculation.
+
+The AI Pilot Assessment Engine is a **factor-centric conversational assessment system** that helps organizations evaluate their AI readiness through natural dialogue. The system accumulates evidence over time, building confidence in organizational factor assessments (rated 1-5 stars), which enables informed project feasibility evaluations.
 
 ---
 
@@ -18,7 +21,7 @@ The AI Pilot Assessment Engine is a **factor-centric conversational assessment s
 ### 2. Hybrid Knowledge Model
 - **Static domain knowledge** (factors, archetypes, scales) → Cloud Storage, loaded into memory (NetworkX graph)
 - **Dynamic user data** (factor values, journal entries) → Firestore, queried on-demand
-- **Lookup pattern:** Static graph provides structure, Firestore provides user-specific values
+- **Lookup pattern:** Static graph provides structure, Firestore provides user-specific values (1-5 stars)
 
 ### 3. Cumulative Inference with Scope Matching
 Factor values are **synthesized from ALL evidence for that scope**, not single mentions. Confidence increases with consistent evidence. The system uses intelligent scope matching to find the most applicable assessment:
@@ -64,7 +67,7 @@ LLM re-synthesizes on demand for "why?" questions, considering scope hierarchy.
 
 **Key methods:**
 - `process_message()` - Main entry point, async generator
-- `_infer_factor_updates()` - Extract factor changes from conversation
+- `_infer_factor_updates()` - [ ] Can infer factor values (1-5 stars) from 10 conversation excerpts
 - `_build_system_prompt()` - Assemble context for LLM
 
 ### FactorJournalStore (Persistence Layer)
@@ -138,6 +141,7 @@ LLM re-synthesizes on demand for "why?" questions, considering scope hierarchy.
    - Result: {type: "evaluate_project", entities: {project: "sales_forecasting"}, 
              relevant_factors: ["data_quality", "data_availability", "ml_infrastructure"],
              scope: {domain: "sales", system: null}}
+   - Note: Factor values are 1-5 stars, calculation uses MIN() for bottleneck identification
    - Emit: "⚙️ SYSTEM: Intent: evaluate_project (scope: sales)"
    ↓
 4. CONTEXT RETRIEVAL WITH SCOPE MATCHING
@@ -150,7 +154,7 @@ LLM re-synthesizes on demand for "why?" questions, considering scope hierarchy.
    - Scope matching query: ml_infrastructure for {domain: "sales", system: null}
      • No match found → null
    - Graph traversal: get_dependencies("data_quality") → ["data_governance", "data_infrastructure"]
-   - Emit: "⚙️ SYSTEM: Retrieved 3 factor instances: data_quality[sales]=45, data_availability[sales]=80, ml_infrastructure=null"
+   - Emit: "⚙️ SYSTEM: Retrieved 3 factor instances: data_quality[sales]=⭐⭐⭐, data_availability[sales]=⭐⭐⭐⭐, ml_infrastructure=null"
    ↓
 5. LLM RESPONSE GENERATION
    - Emit: "⚙️ SYSTEM: Generating response..."
@@ -178,7 +182,7 @@ LLM re-synthesizes on demand for "why?" questions, considering scope hierarchy.
   [12:01:32] Analyzing intent...
   [12:01:33] Intent: evaluate_project
   [12:01:34] Retrieving factors...
-  [12:01:35] Retrieved 3 factors: data_quality(20), data_availability(80), ml_infrastructure(null)
+  [12:01:35] Retrieved 3 factors: data_quality(⭐⭐), data_availability(⭐⭐⭐⭐), ml_infrastructure(null)
   [12:01:36] Generating response...
   [12:01:42] Analyzing for factor updates...
   [12:01:43] No factor updates detected
@@ -188,7 +192,7 @@ LLM re-synthesizes on demand for "why?" questions, considering scope hierarchy.
   📁 Factors
     └─ Data Readiness (60%)
         ├─ 📊 data_quality
-        │   ├─ 💼 Sales Department: 45% ⚠️ (moderate confidence)
+        │   ├─ 💼 Sales Department: ⭐⭐⭐ (3 stars) ⚠️ (moderate confidence)
         │   │   └─ 🔧 Salesforce CRM: 30% ⚠️ (high confidence)
         │   └─ 💰 Finance: Not assessed
         └─ 📊 data_availability

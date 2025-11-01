@@ -1,8 +1,10 @@
 # Scoped Factor Model - Architecture Specification
 
-**Version:** 1.0  
+**Version:** 1.1  
 **Date:** 2024-10-30  
-**Status:** Approved for Implementation
+**Last Updated:** 2025-11-01 21:55  
+**Status:** Superseded by Output-Centric Model  
+**Note:** This document describes the scoped factor model. See `output_centric_factor_model_exploration.md` (v0.3) for the evolved output-centric approach with 1-5 star ratings.
 
 ---
 
@@ -58,10 +60,12 @@ Pre-building project templates: Impossible
 
 Each factor can have **multiple instances** with different **scopes**. The system maintains:
 
-1. **Generic assessments** - "Sales department data quality = 45%"
-2. **Specific assessments** - "Salesforce CRM data quality = 30%"
+1. **Generic assessments** - "Sales department data quality = ⭐⭐⭐ (3 stars)"
+2. **Specific assessments** - "Salesforce CRM data quality = ⭐⭐ (2 stars)"
 3. **Relationships** - Specific instances refine generic ones
 4. **Inheritance** - Fall back to generic when specific unknown
+
+**UPDATE:** Output-centric model uses Output + Team + Process + System context instead of domain/system/team scopes.
 
 ### Scope Dimensions
 
@@ -87,9 +91,9 @@ Each dimension can be:
   "factor_name": "Data Quality",
   "description": "Quality, consistency, and reliability of data",
   "scale": {
-    "0": "No quality controls, data unreliable",
-    "50": "Basic quality processes",
-    "100": "World-class data quality"
+    "1": "⭐ No quality controls, data unreliable",
+    "3": "⭐⭐⭐ Basic quality processes",
+    "5": "⭐⭐⭐⭐⭐ World-class data quality"
   },
   "scope_dimensions": ["domain", "system", "team"],
   "allows_generic_scope": true
@@ -163,7 +167,7 @@ User: "Our sales data has quality issues"
 System:
 1. Creates generic instance
    - scope: {domain: "sales", system: null}
-   - value: 45
+   - value: 3  // 3 stars (was: 45)
    - confidence: 0.60
 
 2. Asks clarifying question:
@@ -175,17 +179,18 @@ User: "Mainly our Salesforce CRM"
 System:
 3. Creates specific instance
    - scope: {domain: "sales", system: "salesforce_crm"}
-   - value: 30 (worse than generic)
+   - value: 2  // 2 stars
    - confidence: 0.80
    - refines: dq_sales_generic_001
 
 4. Updates generic instance
+   - value: 3  // 3 stars
    - confidence: 0.40 (reduced - not truly generic)
    - refined_by: [dq_sales_sfdc_002]
 
 5. Responds:
-   "Got it. Salesforce CRM data quality is particularly low (~30%).
-   Your other sales systems might be better."
+   "Got it. Salesforce CRM data quality is particularly low (⭐⭐).
+   Your other sales systems might be better (⭐⭐⭐)."
 ```
 
 ### Pattern 2: Specific → Generic Inference
@@ -236,7 +241,7 @@ System:
 
 2. Creates generic instance via synthesis
    - scope: {domain: "sales", system: null}
-   - value: 30 (weighted average)
+   - value: 2  // 2 stars (MIN of components in output-centric model)
    - confidence: 0.75 (high - multiple data points)
    - synthesized_from: [dq_sales_sfdc, dq_sales_spreadsheets]
 
@@ -319,10 +324,10 @@ def calculate_scope_match(instance_scope, needed_scope):
 Query: data_quality for {domain: "sales", system: "salesforce_crm"}
 
 Available:
-1. {domain: "sales", system: "salesforce_crm"} = 30, conf=0.80
+1. {domain: "sales", system: "salesforce_crm"} = 2 stars, conf=0.80
    → match_score = 1.0 (exact)
 
-Result: 30, confidence=0.80
+Result: 2 stars, confidence=0.80
 ```
 
 **Example 2: Generic Fallback**
@@ -330,13 +335,13 @@ Result: 30, confidence=0.80
 Query: data_quality for {domain: "sales", system: "data_warehouse"}
 
 Available:
-1. {domain: "sales", system: "salesforce_crm"} = 30, conf=0.80
+1. {domain: "sales", system: "salesforce_crm"} = 2 stars, conf=0.80
    → match_score = 0.0 (system mismatch)
    
-2. {domain: "sales", system: null} = 45, conf=0.60
+2. {domain: "sales", system: null} = 3 stars, conf=0.60
    → match_score = 0.86 (domain match, system generic)
 
-Result: 45, confidence=0.60
+Result: 3 stars, confidence=0.60
 System note: "No specific data warehouse assessment, using generic sales data quality"
 ```
 
@@ -345,10 +350,10 @@ System note: "No specific data warehouse assessment, using generic sales data qu
 Query: data_quality for {domain: "manufacturing", system: "iot_sensors"}
 
 Available:
-1. {domain: "sales", system: "salesforce_crm"} = 30
+1. {domain: "sales", system: "salesforce_crm"} = 2 stars
    → match_score = 0.0 (domain mismatch)
    
-2. {domain: "sales", system: null} = 45
+2. {domain: "sales", system: null} = 3 stars
    → match_score = 0.0 (domain mismatch)
 
 Result: None

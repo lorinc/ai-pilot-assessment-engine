@@ -1,5 +1,8 @@
 # Vertical Epics - AI Pilot Assessment Engine
 
+**Last Updated:** 2025-11-01 22:05  
+**Note:** Factor values use 1-5 star ratings. See `output_centric_factor_model_exploration.md` (v0.3) for scope-locked design.
+
 ## Epic Structure Philosophy
 
 **Vertical = End-to-End Functional Slice**
@@ -67,7 +70,7 @@
   - `/users/{user_id}/factor_instances/{instance_id}` - Scoped factor instances
   - `/users/{user_id}/scope_registry/metadata` - Known domains, systems, teams
 - Static knowledge graph (in-memory):
-  - Single factor: `data_quality` with scale definition and scope_dimensions
+  - Single factor: `data_quality` with 1-5 star scale definition and scope_dimensions
   - Common domains: ["sales", "finance", "operations"]
   - Common systems by domain
   - No dependencies yet
@@ -225,11 +228,11 @@ System: "Let's explore that. I see we've already discussed data_quality (20%).
          Data readiness also depends on data_availability and data_governance.
          Want to discuss those?"
 User: "We have 3 years of sales data"
-System: [Infers data_availability=80, shows in tree under "Data Readiness" category]
+System: [Infers data_availability=⭐⭐⭐⭐, shows in tree under "Data Readiness" category]
 User: "What's our overall data readiness?"
 System: "Based on 3 factors assessed:
-         - data_quality: 20%
-         - data_availability: 80%
+         - data_quality: ⭐⭐ (2 stars)
+         - data_availability: ⭐⭐⭐⭐ (4 stars)
          - data_governance: not assessed yet
          Overall: 50% mapped, 75% confident"
 ```

@@ -1,5 +1,8 @@
 # User Interaction Guidelines
 
+**Last Updated:** 2025-11-01 22:10  
+**Note:** Factor values use 1-5 star ratings. See `output_centric_factor_model_exploration.md` for details.
+
 **Principle:** LLM generates, user validates. Simple language. Minimal questions. Context accumulates. Support, not capture.
 
 ---
@@ -28,7 +31,7 @@ The system generates suggestions based on accumulated context—never asks users
 ```json
 {
   "project_ideas_context": {
-    "assessed_factors": ["data_quality: 20", "data_availability: 80"],
+    "assessed_factors": ["data_quality: ⭐⭐", "data_availability: ⭐⭐⭐⭐"],
     "organizational_context": {
       "budget_range": "extracted from past conversations",
       "time_constraints": "extracted from past conversations",

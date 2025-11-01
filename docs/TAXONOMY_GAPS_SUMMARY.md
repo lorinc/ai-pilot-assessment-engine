@@ -1,8 +1,8 @@
 # Taxonomy Gaps - Quick Reference
 
-**Status:** Planning Complete  
-**Priority:** Critical Blocker  
-**Estimated Fix:** 2-6 days depending on scope
+**Status:** Superseded by Output-Centric Model (v0.3)  
+**Priority:** Review Required  
+**Note:** This document describes gaps for the scoped factor model. See `output_centric_factor_model_exploration.md` for evolved approach.
 
 ---
 
@@ -24,37 +24,49 @@
 
 ### Critical Gaps (Block Epic 1)
 
-**1. Organizational Factors Taxonomy** 🚨
-- **Missing:** Structured definition of 15 assessable organizational attributes
-- **Need:** 0-100 scales with observable anchors for each factor
-- **Impact:** Cannot infer "data_quality = 30" from user saying "data scattered across 5 systems"
+**1. Organizational Factors Taxonomy** 🚨 **UPDATED TO 1-5 STARS**
+- **Missing:** Structured definition of output-centric factors
+- **Need:** 1-5 star scales with observable anchors for each factor component
+- **Impact:** Cannot infer "data_quality = ⭐⭐" from user saying "data scattered across 5 systems"
 - **Example:**
   ```json
   {
-    "factor_id": "data_quality",
+    "factor_id": "output_capability",
+    "output": "Sales Forecast",
     "scale": {
-      "0": "No quality controls",
-      "20": "Ad-hoc checks, many issues",
-      "40": "Basic processes",
-      "60": "Systematic framework",
-      "80": "Comprehensive governance",
-      "100": "World-class quality"
-    }
+      "1": "⭐ Critical issues, major blockers",
+      "2": "⭐⭐ Significant problems, frequent failures",
+      "3": "⭐⭐⭐ Functional but inconsistent",
+      "4": "⭐⭐⭐⭐ Good quality, minor issues",
+      "5": "⭐⭐⭐⭐⭐ Excellent, consistent"
+    },
+    "components": {
+      "dependency_quality": "1-5 stars",
+      "team_execution": "1-5 stars",
+      "process_maturity": "1-5 stars",
+      "system_support": "1-5 stars"
+    },
+    "calculation": "MIN(components)"  
   }
   ```
 
-**2. Factor-to-Capability Mapping** 🚨
-- **Missing:** How factors combine to enable project types
-- **Need:** Weights, thresholds, importance levels per capability
-- **Impact:** Cannot evaluate "Can we do sales forecasting?" from assessed factors
+**2. Factor-to-Capability Mapping** 🚨 **SIMPLIFIED WITH MIN LOGIC**
+- **Missing:** How output-centric factors determine AI pilot feasibility
+- **Need:** MIN-based bottleneck identification, no complex weights
+- **Impact:** Cannot evaluate "Can we improve sales forecasting?" from assessed output factors
 - **Example:**
   ```json
   {
-    "capability": "supervised_classification",
-    "requirements": [
-      {"factor": "data_quality", "weight": 0.25, "threshold": 50},
-      {"factor": "ml_expertise", "weight": 0.15, "threshold": 40}
-    ]
+    "output": "Sales Forecast",
+    "current_capability": 2,
+    "components": [
+      {"component": "dependency_quality", "value": 3},
+      {"component": "team_execution", "value": 3},
+      {"component": "process_maturity", "value": 2},
+      {"component": "system_support", "value": 2}
+    ],
+    "calculation": "MIN(3, 3, 2, 2) = 2 stars",
+    "bottlenecks": ["process_maturity", "system_support"]
   }
   ```
 
@@ -151,14 +163,13 @@ CONVERSATION → FACTOR → PREREQUISITE → CAPABILITY → ARCHETYPE
   "category": "data_readiness",
   
   "scale": {
-    "type": "0-100",
+    "type": "1-5 stars",
     "anchors": {
-      "0": "No quality controls, data unreliable",
-      "20": "Ad-hoc checks, many known issues",
-      "40": "Basic processes, some validation",
-      "60": "Systematic framework, automated checks",
-      "80": "Comprehensive governance, continuous improvement",
-      "100": "World-class quality, real-time monitoring"
+      "1": "⭐ No quality controls, data unreliable",
+      "2": "⭐⭐ Ad-hoc checks, many known issues",
+      "3": "⭐⭐⭐ Basic processes, some validation",
+      "4": "⭐⭐⭐⭐ Systematic framework, automated checks",
+      "5": "⭐⭐⭐⭐⭐ World-class quality, real-time monitoring"
     }
   },
   
@@ -184,20 +195,21 @@ CONVERSATION → FACTOR → PREREQUISITE → CAPABILITY → ARCHETYPE
 
 ## Validation Checklist
 
-### For Each Factor
-- [ ] Has 0-100 scale with 6 anchors (0, 20, 40, 60, 80, 100)
+### For Each Factor (Output-Centric Model)
+- [ ] Has 1-5 star scale with clear definitions
 - [ ] Anchors are observable and measurable
 - [ ] Has inference hints (positive and negative indicators)
-- [ ] Has scope dimensions (domain, system, team)
-- [ ] Has assessment metadata (time, complexity)
-- [ ] Can map 2-3 conversation excerpts to scale values
+- [ ] Tied to specific Output + Team + Process + System
+- [ ] Has 4 components: Dependency Quality, Team Execution, Process Maturity, System Support
+- [ ] Uses MIN() calculation to identify bottlenecks
+- [ ] Can map 2-3 conversation excerpts to star ratings
 
-### For Each Capability
-- [ ] Lists enabled archetypes
-- [ ] Has 5-8 factor requirements
-- [ ] Weights sum to 1.0
-- [ ] Thresholds are realistic (30-70 range)
-- [ ] Can calculate confidence for test scenario
+### For Each Output Capability
+- [ ] Identifies target output
+- [ ] Has 4 component assessments (1-5 stars each)
+- [ ] Uses MIN() to calculate overall capability
+- [ ] Identifies bottleneck component(s)
+- [ ] Can recommend improvement focus (weakest link)
 
 ### For Each Interdependency
 - [ ] Has clear relationship type (mitigates/enables/reinforces/conflicts)
@@ -238,5 +250,10 @@ CONVERSATION → FACTOR → PREREQUISITE → CAPABILITY → ARCHETYPE
 
 ---
 
-**Last Updated:** 2024-11-01  
-**Status:** Ready for Execution
+**Last Updated:** 2025-11-01 21:45  
+**Status:** Superseded by Output-Centric Model (see `output_centric_factor_model_exploration.md` v0.3)  
+**Key Changes:** 
+- 0-100 scales → 1-5 star ratings
+- Weighted averages → MIN() bottleneck identification
+- Abstract factors → Output-centric capability assessment
+- Scoped factors → Output + Team + Process + System context
