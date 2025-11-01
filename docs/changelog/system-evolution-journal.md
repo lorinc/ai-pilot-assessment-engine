@@ -6,6 +6,40 @@
 
 ---
 
+## Table of Contents
+
+- [Summary](#summary)
+- [Iteration 1: Organization-Wide Factors (Initial Approach)](#iteration-1-organization-wide-factors-initial-approach)
+- [Iteration 2: Project-Scoped Contexts](#iteration-2-project-scoped-contexts)
+- [Iteration 3: Faceted Factors (Intermediate Approach)](#iteration-3-faceted-factors-intermediate-approach)
+- [Iteration 4: Scoped Factor Instances](#iteration-4-scoped-factor-instances)
+- [Implementation Impact](#implementation-impact)
+  - [Data Schema Changes](#data-schema-changes)
+  - [New Components](#new-components)
+  - [Epic 1 Scope Adjustment](#epic-1-scope-adjustment)
+- [Next Steps (Updated 2025-11-01)](#next-steps-updated-2025-11-01)
+- [Decision Rationale (Evolution Summary)](#decision-rationale-evolution-summary)
+- [Iteration 5: Output-Centric Model (Final Design)](#iteration-5-output-centric-model-final-design)
+  - [Design](#design-1)
+  - [Rationale](#rationale)
+  - [Strengths](#strengths)
+  - [Problem Identified](#problem-identified)
+  - [Key Innovations](#key-innovations-1)
+  - [The Breakthrough: Assessment → Solution Inference](#the-breakthrough-assessment--solution-inference)
+- [Key Benefits of Output-Centric Model](#key-benefits-of-output-centric-model)
+  - [1. Automatic AI Solution Recommendations](#1-automatic-ai-solution-recommendations)
+  - [2. Honest About Uncertainty](#2-honest-about-uncertainty)
+  - [3. Clear Bottlenecks](#3-clear-bottlenecks)
+  - [4. Output-Centric = Actionable](#4-output-centric--actionable)
+  - [5. Scope Control](#5-scope-control)
+- [Implementation Impact](#implementation-impact-1)
+  - [Data Schema Changes](#data-schema-changes-1)
+  - [New Components](#new-components-1)
+  - [Documentation Updates (2025-11-01)](#documentation-updates-2025-11-01)
+- [Philosophy Evolution](#philosophy-evolution)
+
+---
+
 ## Summary
 
 Evolved through 5 major iterations from organization-wide factor assessments to an **output-centric model** that directly links every assessment to AI solution recommendations.
@@ -86,208 +120,25 @@ Factors have multiple dimensions (facets) that can be specified or left generic.
 
 ---
 
-## Iteration 4: Scoped Factor Instances (Final Design)
+## Iteration 4: Scoped Factor Instances
 
 ### Design
 ```
-Factor Definition: data_quality (template)
-
-Instance 1:
-  scope: {domain: "sales", system: null}
-  value: 45
-  refined_by: [instance_2, instance_3]
-
-Instance 2:
-  scope: {domain: "sales", system: "salesforce_crm"}
-  value: 30
-  refines: instance_1
-
-Instance 3:
-  scope: {domain: "sales", system: "spreadsheets"}
-  value: 25
-  refines: instance_1
+data_quality {sales/salesforce_crm} = 30
+data_quality {sales/generic} = 45  
+data_quality {finance/sap_erp} = 85
 ```
+Multiple instances per factor with scope hierarchy and intelligent matching.
 
-### Key Innovations
+### Strengths
+- ✅ Multiple granularity levels (org → domain → system → team)
+- ✅ Cross-project reuse (organizational facts persist)
+- ✅ Intelligent scope matching with fallback
 
-**1. Multiple Instances Per Factor**
-- Same factor can have multiple assessments at different scopes
-- Generic "sales department" AND specific "Salesforce CRM" coexist
-- Explicit relationships: specific instances refine generic ones
+### Problem Identified
+**Missing Link to Solutions:** Could diagnose problems but no connection to improvement opportunities. Factors existed as isolated assessments with no path to AI solution recommendations.
 
-**2. Scope Hierarchy & Inheritance**
-```
-Level 1: Organization-wide {domain: null, system: null}
-Level 2: Domain-specific {domain: "sales", system: null}
-Level 3: System-specific {domain: "sales", system: "salesforce_crm"}
-Level 4: Team-specific {domain: "sales", system: "salesforce_crm", team: "enterprise_sales"}
-```
-
-**3. Intelligent Scope Matching**
-- Query: "data_quality for Salesforce CRM" → Returns exact match (30%)
-- Query: "data_quality for data warehouse" → Returns generic sales (45%) with note
-- Query: "data_quality for manufacturing" → Returns none, asks to assess
-
-**4. Intelligent Discovery Patterns**
-
-**Pattern A: Generic → Specific Refinement**
-```
-User: "Sales data has quality issues"
-→ Create generic: {domain: "sales"} = 45
-
-System: "Is this across all sales systems, or specific tools?"
-User: "Mainly Salesforce"
-→ Create specific: {domain: "sales", system: "salesforce_crm"} = 30
-→ Link: specific refines generic
-```
-
-**Pattern B: Specific → Generic Inference**
-```
-User: "Salesforce data is incomplete"
-→ Create specific: {domain: "sales", system: "salesforce_crm"} = 35
-
-System: "Do other sales systems have similar issues?"
-User: "Just Salesforce, data warehouse is fine"
-→ Create another specific: {domain: "sales", system: "data_warehouse"} = 75
-→ Do NOT create generic (user said issue is isolated)
-```
-
-**Pattern C: Multiple Specifics → Generic Synthesis**
-```
-User: "Salesforce data is incomplete"
-→ Create: {domain: "sales", system: "salesforce_crm"} = 35
-
-User: "Sales spreadsheets are a mess"
-→ Create: {domain: "sales", system: "spreadsheets"} = 25
-
-System detects pattern:
-→ Create generic via synthesis: {domain: "sales"} = 30 (weighted average)
-→ Link: generic synthesized_from [salesforce, spreadsheets]
-
-System: "I'm noticing sales data quality is low across multiple systems. 
-This suggests a broader issue - maybe lack of data governance?"
-```
-
-**5. Clarifying Questions**
-- "Is this across all systems or specific tools?" (narrow from generic)
-- "Do other systems have similar issues?" (generalize from specific)
-- "Which data domain - sales, finance, operations?" (identify domain)
-- "Earlier you said sales data is good, now you say Salesforce is bad. Is Salesforce the exception?" (resolve contradictions)
-
----
-
-## Key Benefits of Final Design
-
-### 1. Organizational Truth
-Factors describe organizational reality, not project-specific assessments. "Salesforce CRM data quality = 30%" is true regardless of which project discussion discovered it.
-
-### 2. Cross-Project Reuse
-```
-[Discussion 1: Sales Forecasting]
-User: "Salesforce data is incomplete"
-→ Store: data_quality {domain: "sales", system: "salesforce_crm"} = 30
-
-[Discussion 2: Days Later - CRM Data Quality]
-User: "What about improving CRM data quality?"
-System: "We already know Salesforce CRM quality is ~30% (you mentioned 
-incomplete data during sales forecasting discussion). Improving this 
-would unblock sales forecasting AND enable customer segmentation."
-```
-
-### 3. Honest About Scope
-- "Salesforce CRM quality is 30% (high confidence)"
-- "Sales department generally around 45% (moderate confidence)"
-- "Don't have info about data warehouse yet - want to discuss?"
-
-### 4. AI Suggests Itself
-```
-User: "Can we do sales forecasting?"
-System: "Salesforce data quality too low (30%, need 60%).
-
-BUT - AI can help improve Salesforce data quality:
-- Automated duplicate detection
-- Missing value prediction
-- Data validation
-
-Want to use AI to fix the data quality problem first?"
-```
-
-Graph traversal: Project requires data_quality → Gap detected → Search for AI_ARCHETYPE with IMPROVES edge to data_quality → Suggest data quality improvement project.
-
----
-
-## Implementation Impact
-
-### Data Schema Changes
-**Before:** `/users/{user_id}/factors/{factor_id}`  
-**After:** `/users/{user_id}/factor_instances/{instance_id}` with scope fields
-
-### New Components
-- Scope matching algorithm (find best applicable instance)
-- Clarifying question generator (KG-based)
-- Scope registry (domains, systems, teams)
-- Instance relationship tracking (refines, refined_by, synthesized_from)
-
-### Epic 1 Scope Adjustment
-- Single factor: `data_quality`
-- 2-3 scope levels: generic, domain-specific, system-specific
-- 2 clarifying question patterns: narrow and generalize
-- UI: Tree view showing scoped instances
-
----
-
-## Next Steps (Updated 2025-11-01)
-
-### Completed Today:
-1. ✅ Updated all architecture documents for output-centric model
-2. ✅ Created `output_centric_factor_model_exploration.md` (v0.3)
-3. ✅ Updated 8 core documentation files to 1-5 star system
-4. ✅ Defined scope constraints (locked)
-5. ✅ Documented KG inference path: Root Cause → AI Solution Category
-
-### Remaining:
-1. Create output-centric factor schemas (Output + Team + Process + System)
-2. Implement 4-component decomposition (Dependency/Execution/Process/System)
-3. Implement MIN() calculation logic
-4. Build KG edges: Root Cause Type → AI Solution Category
-5. Update Epic 1 specification with output-centric model
-6. Implement output dependency graph with loop detection
-
-**Estimated Time:** 20-25 hours (3-4 days)
-
----
-
-## Decision Rationale (Evolution Summary)
-
-**Iteration 4 (Scoped Instances):**
-- ✅ Maintains organizational truth (not project-specific)
-- ✅ Supports multiple granularity levels simultaneously
-- ✅ Enables cross-project knowledge reuse
-- ✅ Honest about uncertainty and scope limitations
-- ❌ But factors still isolated - no path to AI solution recommendations
-
-**Iteration 5 (Output-Centric):**
-- ✅ All benefits of Iteration 4, PLUS:
-- ✅ **Direct link from assessment to AI solution recommendations**
-- ✅ **KG-supported inference makes recommendations automatic**
-- ✅ Output-centric = users understand what's being assessed
-- ✅ Component decomposition identifies root causes
-- ✅ Root cause type maps to AI solution category
-- ✅ "AI suggests itself" pattern now trivial via KG traversal
-
-**Trade-offs accepted:**
-- More structured model (Output + Team + Process + System context)
-- 4-component decomposition required
-- MIN() calculation (but simpler than weighted averages)
-
-**Value delivered:**
-- **Automatic AI solution recommendations** (the breakthrough)
-- Accurate, trustworthy assessments (no wild generalizations)
-- Actionable insights (know exactly what to fix AND how to fix it)
-- Cross-project intelligence (learn once, apply everywhere)
-- Clear improvement path (output → bottleneck → AI solution)
-
----
+**Why We Iterated:** Need automatic path from assessment to AI solutions.
 
 ---
 
@@ -470,6 +321,79 @@ Users understand what's being assessed and what to improve.
 
 **From:** "Track everything"
 **To:** "Current state snapshot, scope locked"
+
+---
+
+## Implementation Impact (Iteration 4)
+
+### Data Schema Changes
+**Before:** `/users/{user_id}/factors/{factor_id}`  
+**After:** `/users/{user_id}/factor_instances/{instance_id}` with scope fields
+
+### New Components
+- Scope matching algorithm (find best applicable instance)
+- Clarifying question generator (KG-based)
+- Scope registry (domains, systems, teams)
+- Instance relationship tracking (refines, refined_by, synthesized_from)
+
+### Epic 1 Scope Adjustment
+- Single factor: `data_quality`
+- 2-3 scope levels: generic, domain-specific, system-specific
+- 2 clarifying question patterns: narrow and generalize
+- UI: Tree view showing scoped instances
+
+---
+
+## Next Steps (Updated 2025-11-01)
+
+### Completed Today:
+1. ✅ Updated all architecture documents for output-centric model
+2. ✅ Created `output_centric_factor_model_exploration.md` (v0.3)
+3. ✅ Updated 8 core documentation files to 1-5 star system
+4. ✅ Defined scope constraints (locked)
+5. ✅ Documented KG inference path: Root Cause → AI Solution Category
+
+### Remaining:
+1. Create output-centric factor schemas (Output + Team + Process + System)
+2. Implement 4-component decomposition (Dependency/Execution/Process/System)
+3. Implement MIN() calculation logic
+4. Build KG edges: Root Cause Type → AI Solution Category
+5. Update Epic 1 specification with output-centric model
+6. Implement output dependency graph with loop detection
+
+**Estimated Time:** 20-25 hours (3-4 days)
+
+---
+
+## Decision Rationale (Evolution Summary)
+
+**Iteration 4 (Scoped Instances):**
+- ✅ Maintains organizational truth (not project-specific)
+- ✅ Supports multiple granularity levels simultaneously
+- ✅ Enables cross-project knowledge reuse
+- ✅ Honest about uncertainty and scope limitations
+- ❌ But factors still isolated - no path to AI solution recommendations
+
+**Iteration 5 (Output-Centric):**
+- ✅ All benefits of Iteration 4, PLUS:
+- ✅ **Direct link from assessment to AI solution recommendations**
+- ✅ **KG-supported inference makes recommendations automatic**
+- ✅ Output-centric = users understand what's being assessed
+- ✅ Component decomposition identifies root causes
+- ✅ Root cause type maps to AI solution category
+- ✅ "AI suggests itself" pattern now trivial via KG traversal
+
+**Trade-offs accepted:**
+- More structured model (Output + Team + Process + System context)
+- 4-component decomposition required
+- MIN() calculation (but simpler than weighted averages)
+
+**Value delivered:**
+- **Automatic AI solution recommendations** (the breakthrough)
+- Accurate, trustworthy assessments (no wild generalizations)
+- Actionable insights (know exactly what to fix AND how to fix it)
+- Cross-project intelligence (learn once, apply everywhere)
+- Clear improvement path (output → bottleneck → AI solution)
 
 ---
 
