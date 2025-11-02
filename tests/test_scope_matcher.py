@@ -11,7 +11,7 @@ Tests cover:
 """
 
 import pytest
-from src.knowledge.scope_matcher import (
+from src.knowledge_graph.scope_matcher import (
     ScopeMatcher,
     FactorScope,
     FactorInstance,

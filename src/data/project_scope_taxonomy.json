@@ -1,0 +1,1449 @@
+{
+  "metadata": {
+    "component_mapping": {
+      "team_execution": {
+        "name": "Team Execution Ability",
+        "description": "Current capability of the team to execute the process step"
+      },
+      "system_capabilities": {
+        "name": "System Capabilities",
+        "description": "Current capabilities provided by the system/tools"
+      },
+      "process_maturity": {
+        "name": "Process Maturity",
+        "description": "Current maturity level of the process (standards, automation, monitoring)"
+      },
+      "dependency_quality": {
+        "name": "Dependency Quality",
+        "description": "Quality of upstream outputs this output depends on"
+      }
+    }
+  },
+  "taxonomy": [
+    {
+      "name": "Foundational Data Lifecycle & Architecture",
+      "description": "Encompasses the initial stages of the data journey, including acquisition, core storage structuring, fundamental transformations, and system performance optimization.",
+      "categories": [
+        {
+          "category": "Data Acquisition and Ingestion",
+          "name": "Data Acquisition and Ingestion",
+          "description": "Methods and processes for sourcing and bringing raw data into the system, regardless of volume or velocity.",
+          "examples": [
+            {
+              "name": "streaming event ingestion",
+              "description": "Accelerate data availability by implementing high-velocity streaming event ingestion.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "change data capture replication",
+              "description": "Enhance data synchronization speed by utilizing change data capture replication.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "web scraping at scale",
+              "description": "Improve competitive intelligence gathering by executing robust, large-scale web scraping operations.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "email-to-data parsing",
+              "description": "Increase operational efficiency by automating data extraction through email-to-data parsing.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "webhook ingestion pipeline",
+              "description": "Streamline real-time data flow via webhook ingestion pipeline implementation.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Large historical datasets",
+              "description": "Maximize model training depth by ensuring access to large historical datasets.",
+              "targets": [
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Sufficient training samples",
+              "description": "Improve model accuracy and generalization by securing sufficient training samples.",
+              "targets": [
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Continuous data streams",
+              "description": "Enable real-time decision-making capabilities by maintaining continuous data streams.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Transactional or event data",
+              "description": "Ensure comprehensive business intelligence by collecting and integrating transactional or event data.",
+              "targets": [
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Third-party data enrichment integration",
+              "description": "Enhance data completeness by integrating external data enrichment services via APIs.",
+              "targets": [
+                "system_capabilities",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "External prospecting data integration",
+              "description": "Accelerate business development by connecting external prospecting and contact data platforms.",
+              "targets": [
+                "system_capabilities",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Organizational metadata enrichment",
+              "description": "Improve entity profiling by enriching with external organizational and demographic metadata.",
+              "targets": [
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Contact data verification services",
+              "description": "Increase data quality by integrating contact verification and validation services.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Transactional system integration",
+              "description": "Enable operational analytics by connecting to transactional and payment processing systems.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Social platform data ingestion",
+              "description": "Enhance behavioral insights by ingesting data from social and community platforms.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Environmental and location data feeds",
+              "description": "Improve location-based analytics by integrating environmental, weather, and geospatial data sources.",
+              "targets": [
+                "system_capabilities",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Market and reference data feeds",
+              "description": "Enable financial and market analysis by connecting to external market data providers.",
+              "targets": [
+                "system_capabilities",
+                "dependency_quality"
+              ]
+            }
+          ]
+        },
+        {
+          "category": "Data Transformation, Modeling, and Structuring",
+          "name": "Data Transformation, Modeling, and Structuring",
+          "description": "Techniques for cleaning, relating, enriching, and organizing data into usable formats (e.g., schemas, dimensions, gold layers).",
+          "examples": [
+            {
+              "name": "slowly changing dimension handling",
+              "description": "Enhance analytical accuracy over time by correctly implementing slowly changing dimension handling.",
+              "targets": [
+                "process_maturity",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Dimensional modeling design",
+              "description": "Improve analytical query performance and understandability through dimensional modeling patterns.",
+              "targets": [
+                "process_maturity",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "geocoding enrichment",
+              "description": "Increase data utility and locational insight via geocoding enrichment.",
+              "targets": [
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Multi-tier data quality layering",
+              "description": "Improve data governance and quality assurance by enforcing progressive refinement layers (raw, refined, curated).",
+              "targets": [
+                "process_maturity",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "data contract authoring",
+              "description": "Reduce schema drift failures by implementing strict data contract authoring and enforcement.",
+              "targets": [
+                "process_maturity",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Time-indexed sequential data",
+              "description": "Enable sophisticated time-series analysis by preparing and utilizing time-indexed sequential data.",
+              "targets": [
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Unstructured text data",
+              "description": "Expand analytical scope by ingesting and processing unstructured text data.",
+              "targets": [
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Structured tabular data",
+              "description": "Ensure reliability and ease of use for foundational analysis by maintaining structured tabular data.",
+              "targets": [
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Graph or network data",
+              "description": "Improve relationship discovery and complex querying by utilizing Graph or network data structures.",
+              "targets": [
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Multimodal data",
+              "description": "Enhance complex perception models by integrating multimodal data sources.",
+              "targets": [
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Semantic representation indexing",
+              "description": "Improve semantic search and retrieval performance by generating and indexing semantic representations of content.",
+              "targets": [
+                "system_capabilities",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Address standardization and normalization",
+              "description": "Improve data consistency by standardizing address formats using postal validation services.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Phone number parsing and validation",
+              "description": "Enhance contact data quality by parsing and validating phone numbers using telecommunication standards.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Currency conversion and normalization",
+              "description": "Enable global financial analysis by normalizing currencies using exchange rate services.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Text normalization and cleaning",
+              "description": "Improve text analytics by implementing systematic text cleaning, lowercasing, and special character handling.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Date and timezone standardization",
+              "description": "Ensure temporal consistency by standardizing dates and timezones across all data sources.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Null value handling strategy",
+              "description": "Improve data completeness by implementing consistent null value handling and imputation strategies.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Duplicate detection and resolution",
+              "description": "Enhance data quality by implementing fuzzy matching and duplicate resolution workflows.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            }
+          ]
+        },
+        {
+          "category": "Performance, Storage, and Infrastructure",
+          "name": "Performance, Storage, and Infrastructure",
+          "description": "Focuses on optimizing the physical and computational environment for efficiency, speed, and cost management.",
+          "examples": [
+            {
+              "name": "table clustering optimization",
+              "description": "Accelerate query execution time by implementing table clustering optimization.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "spot instance utilization",
+              "description": "Reduce computational costs by maximizing spot instance utilization.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "materialized view creation",
+              "description": "Improve frequently accessed report latency through strategic materialized view creation.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "query cost guardrails",
+              "description": "Prevent accidental high spending by establishing strict query cost guardrails.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Accelerated compute for training",
+              "description": "Accelerate deep learning model development by provisioning dedicated accelerated compute resources.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Real-time inference infrastructure",
+              "description": "Enable low-latency, mission-critical predictions by deploying robust real-time inference infrastructure .",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Vector database infrastructure",
+              "description": "Improve Generative AI and retrieval systems by establishing robust Vector database infrastructure .",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Distributed computing systems",
+              "description": "Enhance big data processing scalability by deploying Distributed computing systems .",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Model serving infrastructure",
+              "description": "Improve model accessibility and integration by standardizing model serving and interface infrastructure.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Data warehouse query optimization",
+              "description": "Reduce query costs and latency by implementing systematic query optimization and indexing strategies.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Incremental data loading patterns",
+              "description": "Improve pipeline efficiency by implementing incremental loads instead of full refreshes.",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Data compression strategies",
+              "description": "Reduce storage costs by implementing appropriate compression algorithms and columnar storage formats.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Partitioning and bucketing strategies",
+              "description": "Accelerate query performance by implementing effective data partitioning and bucketing schemes.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Cold storage archival policies",
+              "description": "Reduce storage costs by implementing automated archival to low-cost cold storage tiers.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Operationalization, Trust, and Control",
+      "description": "Covers the disciplines ensuring data integrity, security, compliance, operational reliability, and the continuous monitoring of production data systems.",
+      "categories": [
+        {
+          "category": "Data Quality, Reliability, and Trustworthiness",
+          "name": "Data Quality, Reliability, and Trustworthiness",
+          "description": "This dimension focuses on ensuring the accuracy, consistency, and fitness-for-use of the data.",
+          "examples": [
+            {
+              "name": "golden dataset certification",
+              "description": "Increase organizational trust in data by formalizing golden dataset certification .",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Data validation test suites",
+              "description": "Improve data validation coverage by implementing comprehensive assertion-based test suites.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "record linkage and deduplication",
+              "description": "Enhance customer identity accuracy through systematic record linkage and deduplication.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "reconciliation across systems",
+              "description": "Ensure financial and operational consistency through mandatory reconciliation across systems .",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "mean time to resolve data issues",
+              "description": "Reduce business impact by minimizing the mean time to resolve data issues .",
+              "targets": [
+                "process_maturity",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Clean and validated data",
+              "description": "Improve model input reliability by guaranteeing Clean and validated data pipelines .",
+              "targets": [
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Labeled training data",
+              "description": "Accelerate supervised learning outcomes by curating high-quality Labeled training data .",
+              "targets": [
+                "dependency_quality",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Data consistency and completeness",
+              "description": "Ensure reliability for sequential analysis by enforcing Data consistency and completeness .",
+              "targets": [
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Normalized and standardized features",
+              "description": "Improve model convergence and robustness by mandating Normalized and standardized features .",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Bias-free and representative datasets",
+              "description": "Increase model fairness and generalizeability by ensuring Bias-free and representative datasets .",
+              "targets": [
+                "dependency_quality",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Field-level statistics tracking",
+              "description": "Enable proactive quality monitoring by tracking min, max, mean, median, and percentiles for key numeric fields.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Null rate monitoring and alerting",
+              "description": "Detect data quality degradation by monitoring null rates and alerting on threshold breaches.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Cardinality drift detection",
+              "description": "Identify schema changes early by tracking and alerting on unexpected cardinality changes in categorical fields.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Row count anomaly detection",
+              "description": "Catch pipeline failures by monitoring daily row counts and alerting on statistical deviations.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Data freshness SLA monitoring",
+              "description": "Ensure timely data availability by tracking and alerting on data freshness SLA violations.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Schema drift detection and alerts",
+              "description": "Prevent downstream breakage by detecting and alerting on unexpected schema changes.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Referential integrity validation",
+              "description": "Ensure data consistency by validating foreign key relationships and alerting on orphaned records.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Business rule validation checks",
+              "description": "Maintain data integrity by implementing and monitoring business logic constraints (e.g., revenue > 0, dates in valid ranges).",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Outlier detection and flagging",
+              "description": "Improve data quality by detecting and flagging statistical outliers in key metrics for review.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Data quality scorecards",
+              "description": "Increase visibility into data health by publishing regular data quality scorecards per dataset.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Automated data profiling",
+              "description": "Accelerate data discovery by automatically profiling new datasets for distributions, patterns, and anomalies.",
+              "targets": [
+                "dependency_quality",
+                "process_maturity"
+              ]
+            }
+          ]
+        },
+        {
+          "category": "Security, Privacy, and Governance",
+          "name": "Security, Privacy, and Governance",
+          "description": "This dimension addresses data protection, access controls, compliance, and risk management.",
+          "examples": [
+            {
+              "name": "Sensitive data masking",
+              "description": "Improve data privacy compliance by applying systematic masking of personally identifiable information.",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "tokenization of sensitive fields",
+              "description": "Enhance data security by implementing tokenization of sensitive fields.",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "row level security filters",
+              "description": "Strengthen access control granularity through row level security filters.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Data subject rights request workflow",
+              "description": "Improve regulatory responsiveness by automating data subject access and deletion request workflows.",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Input validation and sanitization",
+              "description": "Protect AI applications from adversarial attacks by implementing robust input validation and sanitization.",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "data encryption at rest",
+              "description": "Ensure sensitive data protection by enforcing data encryption at rest.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Ethics and fairness review board",
+              "description": "Improve responsible AI practices by establishing an independent Ethics and fairness review board .",
+              "targets": [
+                "process_maturity",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Data governance policies",
+              "description": "Ensure legal compliance and internal standards by formalizing Data governance policies .",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Compliance and legal experts",
+              "description": "Improve risk posture by actively involving Compliance and legal experts in data product design .",
+              "targets": [
+                "team_execution",
+                "process_maturity"
+              ]
+            }
+          ]
+        },
+        {
+          "category": "Pipeline Operations",
+          "name": "Pipeline Operations",
+          "description": "This dimension covers the processes and tools used to build, test, deploy, and manage data pipelines efficiently.",
+          "examples": [
+            {
+              "name": "idempotent job design",
+              "description": "Increase pipeline reliability during failures by employing idempotent job design .",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "blue green pipeline deploys",
+              "description": "Minimize deployment risk and downtime using blue green pipeline deploys .",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "root cause analysis automation",
+              "description": "Accelerate issue resolution by automating root cause analysis .",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "pipeline repair agent",
+              "description": "Improve system uptime through the deployment of an autonomous pipeline repair agent .",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "platform observability rollout",
+              "description": "Enhance operational visibility by executing a comprehensive platform observability rollout .",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "dependency graph orchestration",
+              "description": "Improve complex workflow management via structured dependency graph orchestration .",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Pipeline execution time monitoring",
+              "description": "Detect performance degradation by tracking pipeline execution times and alerting on slowdowns.",
+              "targets": [
+                "process_maturity",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Job failure rate tracking",
+              "description": "Improve reliability by monitoring job failure rates and alerting on elevated error rates.",
+              "targets": [
+                "process_maturity",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Data pipeline testing framework",
+              "description": "Prevent production issues by implementing unit and integration tests for data transformations.",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Pipeline version control",
+              "description": "Improve reproducibility by version controlling all pipeline code and configurations in Git.",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Automated pipeline documentation",
+              "description": "Enhance maintainability by auto-generating pipeline documentation from code and metadata.",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Cost monitoring per pipeline",
+              "description": "Control spending by tracking and alerting on compute and storage costs per pipeline.",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Data lineage visualization",
+              "description": "Improve troubleshooting by visualizing end-to-end data lineage from source to consumption.",
+              "targets": [
+                "process_maturity",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Pipeline health dashboards",
+              "description": "Increase operational visibility by maintaining real-time dashboards of pipeline health metrics.",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Alerting escalation policies",
+              "description": "Ensure timely response by implementing tiered alerting with escalation rules and on-call rotations.",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Pipeline retry and backoff strategies",
+              "description": "Improve resilience by implementing exponential backoff and intelligent retry logic for transient failures.",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            }
+          ]
+        },
+        {
+          "category": "System Resilience and Disaster Recovery",
+          "name": "System Resilience and Disaster Recovery",
+          "description": "This dimension ensures the platform can withstand failures and recover data loss.",
+          "examples": [
+            {
+              "name": "cross cloud data replication",
+              "description": "Increase availability and disaster tolerance through cross cloud data replication.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "multi region failover setup",
+              "description": "Ensure continuous operation by establishing a multi region failover setup .",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "disaster recovery testing",
+              "description": "Improve readiness and recovery predictability by routinely conducting disaster recovery testing .",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "rpo rto validation",
+              "description": "Ensure recovery objectives are met by performing rpo rto validation .",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "time travel retention policy",
+              "description": "Improve data immutability and recovery capabilities using a time travel retention policy.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Automated backup verification",
+              "description": "Ensure backup integrity by implementing automated backup testing and restoration validation.",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Data retention policy enforcement",
+              "description": "Ensure compliance by automating data deletion based on retention policies and legal requirements.",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Point-in-time recovery testing",
+              "description": "Validate recovery capabilities by regularly testing point-in-time restore procedures.",
+              "targets": [
+                "process_maturity"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Advanced Intelligence and Consumption",
+      "description": "Focuses on generating maximum business value through machine learning, generative AI, complex analytics, and enabling external and internal consumption.",
+      "categories": [
+        {
+          "category": "Machine Learning Operations",
+          "name": "Machine Learning Operations",
+          "description": "This dimension encompasses the lifecycle management of machine learning models and their core operational dependencies.",
+          "examples": [
+            {
+              "name": "feature store online serving",
+              "description": "Accelerate real-time inference performance by leveraging feature store online serving .",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "shadow deployment of models",
+              "description": "Minimize risk during model releases by conducting shadow deployment of models .",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "hyperparameter search service",
+              "description": "Improve model accuracy by utilizing a hyperparameter search service for optimization .",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "fairness evaluation reports",
+              "description": "Improve ethical compliance and reduce bias by generating fairness evaluation reports .",
+              "targets": [
+                "process_maturity",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "feature/Data/Concept drift detection",
+              "description": "Ensure model relevance and performance by implementing automated feature/Data/Concept drift detection.",
+              "targets": [
+                "process_maturity",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Model versioning and tracking",
+              "description": "Improve reproducibility and auditability using robust Model versioning and tracking .",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Automated retraining workflows",
+              "description": "Ensure model freshness and adaptiveness by deploying Automated retraining workflows .",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Controlled experiment framework",
+              "description": "Improve feature and model impact measurement via a standardized controlled experiment framework.",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Continuous monitoring pipelines",
+              "description": "Improve operational health visibility by maintaining Continuous monitoring pipelines .",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Feature store",
+              "description": "Improve feature consistency and discovery by establishing a centralized Feature store .",
+              "targets": [
+                "system_capabilities"
+              ]
+            }
+          ]
+        },
+        {
+          "category": "Generative AI and Agent Systems",
+          "name": "Generative AI and Agent Systems",
+          "description": "This dimension focuses on emerging systems built using large language models (LLMs), RAG, and advanced reasoning/orchestration agents.",
+          "examples": [
+            {
+              "name": "Semantic search indexing",
+              "description": "Improve retrieval performance in AI systems by optimizing semantic search indexing strategies.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "multi agent collaboration protocol",
+              "description": "Increase complexity handling by defining a multi agent collaboration protocol for task division .",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Output factuality verification",
+              "description": "Improve AI output reliability by employing factuality verification and grounding mechanisms.",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Query language generation",
+              "description": "Improve analyst productivity by providing reliable natural language to query language translation.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "knowledge graph construction",
+              "description": "Enhance structured knowledge and reasoning capabilities through knowledge graph construction .",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Agentic Orchestration (archetype)",
+              "description": "Expand complex decision-making capabilities using the Agentic Orchestration archetype .",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Retrieval-augmented generation (archetype)",
+              "description": "Improve grounded answers and factual accuracy using retrieval-augmented generation patterns.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Language & Sequence Generation (archetype)",
+              "description": "Increase content creation throughput using the Language & Sequence Generation archetype .",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "AI interaction design expertise",
+              "description": "Maximize AI output quality by developing specialized interaction design and instruction crafting expertise.",
+              "targets": [
+                "team_execution"
+              ]
+            },
+            {
+              "name": "External integration ecosystem",
+              "description": "Improve agent utility and external integration via a rich tool and service integration ecosystem.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Document segmentation strategy",
+              "description": "Optimize retrieval performance by refining document segmentation and indexing strategies.",
+              "targets": [
+                "process_maturity",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Reward signal design",
+              "description": "Improve reinforcement learning outcomes by perfecting the Reward signal design .",
+              "targets": [
+                "team_execution",
+                "process_maturity"
+              ]
+            }
+          ]
+        },
+        {
+          "category": "Advanced Analytics and Business Value Modeling",
+          "name": "Advanced Analytics and Business Value Modeling",
+          "description": "This dimension addresses complex business problems solved using analytical pipelines, optimization, and causal analysis.",
+          "examples": [
+            {
+              "name": "Customer value modeling pipeline",
+              "description": "Improve investment prioritization by deploying accurate customer lifetime value modeling pipelines.",
+              "targets": [
+                "system_capabilities",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Experiment registry",
+              "description": "Ensure experiment rigor and avoid re-testing by maintaining a comprehensive experiment registry.",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "demand forecasting pipeline",
+              "description": "Improve inventory and resource planning by implementing a robust demand forecasting pipeline .",
+              "targets": [
+                "system_capabilities",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "dynamic pricing policy",
+              "description": "Maximize revenue and responsiveness using a dynamic pricing policy .",
+              "targets": [
+                "system_capabilities",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "route optimization service",
+              "description": "Improve logistics efficiency and reduce costs through a route optimization service .",
+              "targets": [
+                "system_capabilities",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Anomaly & Outlier Detection (archetype)",
+              "description": "Increase fraud and defect prevention by employing the Anomaly & Outlier Detection archetype .",
+              "targets": [
+                "system_capabilities",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Classification (archetype)",
+              "description": "Improve categorization and triage efficiency using the Classification archetype .",
+              "targets": [
+                "system_capabilities",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Optimization & Scheduling (archetype)",
+              "description": "Maximize resource utilization via the Optimization & Scheduling archetype .",
+              "targets": [
+                "system_capabilities",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Causal Inference & Uplift Modeling (archetype)",
+              "description": "Improve strategic investment decisions by using the Causal Inference & Uplift Modeling archetype .",
+              "targets": [
+                "system_capabilities",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Scenario Simulation / What-If Engines (archetype)",
+              "description": "Enhance strategic risk evaluation through the Scenario Simulation / What-If Engines archetype .",
+              "targets": [
+                "system_capabilities",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Causal graph or domain theory",
+              "description": "Improve causal model validity by leveraging a Causal graph or domain theory .",
+              "targets": [
+                "team_execution"
+              ]
+            }
+          ]
+        },
+        {
+          "category": "Data Consumption and Analytics",
+          "name": "Data Consumption and Analytics",
+          "description": "This dimension covers the presentation layer and tools used by end-users for analysis.",
+          "examples": [
+            {
+              "name": "Semantic layer for metrics",
+              "description": "Improve analytical consistency and accuracy through a standardized semantic layer for metrics.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "automated commentary on dashboards",
+              "description": "Increase speed-to-insight by generating automated commentary on dashboards.",
+              "targets": [
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "report redundancy pruning",
+              "description": "Improve report catalog hygiene by performing regular report redundancy pruning.",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Executive metrics automation",
+              "description": "Increase efficiency in leadership reporting through automated executive metrics and KPI delivery.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "report access personalization",
+              "description": "Improve user relevance and security through report access personalization.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Explainability / Interpretability (archetype)",
+              "description": "Improve model trust and adoption using the Explainability / Interpretability archetype .",
+              "targets": [
+                "system_capabilities",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Human-in-the-Loop Validation (archetype)",
+              "description": "Improve data and model quality by implementing the Human-in-the-Loop Validation archetype .",
+              "targets": [
+                "process_maturity",
+                "team_execution"
+              ]
+            }
+          ]
+        },
+        {
+          "category": "Data Sharing and Monetization",
+          "name": "Data Sharing and Monetization",
+          "description": "This dimension addresses how data assets are distributed internally and externally.",
+          "examples": [
+            {
+              "name": "Operational data activation",
+              "description": "Improve operational alignment by pushing analytical data back to operational systems.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Audience segment synchronization",
+              "description": "Increase operational efficiency by performing automated audience segment synchronization to operational systems.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Data access monetization metering",
+              "description": "Improve data revenue streams via accurate usage metering and billing for data access.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "secure data sandbox for partners",
+              "description": "Enhance external collaboration security using a secure data sandbox for partners .",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "webhook event catalog",
+              "description": "Improve real-time partner integration by maintaining a comprehensive webhook event catalog .",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Behavioral intent data enrichment",
+              "description": "Accelerate business development by enriching entities with behavioral signals and intent data.",
+              "targets": [
+                "dependency_quality",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Identity resolution platform integration",
+              "description": "Enable unified entity views by integrating identity resolution platforms for cross-system entity matching.",
+              "targets": [
+                "system_capabilities",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Attribution data activation",
+              "description": "Improve campaign effectiveness by exporting attribution data to operational systems.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Usage metrics to operational systems sync",
+              "description": "Enable data-driven workflows by syncing product usage metrics to operational systems.",
+              "targets": [
+                "system_capabilities",
+                "process_maturity"
+              ]
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Strategy, Organization, and Enablement",
+      "description": "Focuses on the non-technical aspects of data management, including organizational maturity, governance processes, stewardship, and maximizing user adoption via documentation and training.",
+      "categories": [
+        {
+          "category": "Organizational Maturity and Governance Process",
+          "name": "Organizational Maturity and Governance Process",
+          "description": "Defining organizational structures, measuring maturity, tracking business value, and formalizing data product ownership and SLAs.",
+          "examples": [
+            {
+              "name": "data readiness scorecards",
+              "description": "Improve source system quality checks using data readiness scorecards .",
+              "targets": [
+                "process_maturity",
+                "dependency_quality"
+              ]
+            },
+            {
+              "name": "Data product service level objectives",
+              "description": "Increase data product accountability by defining and monitoring strict service level objectives.",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "value tracking for data products",
+              "description": "Improve ROI justification by implementing value tracking for data products .",
+              "targets": [
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "skill matrix mapping for data team",
+              "description": "Enhance team capabilities by maintaining a dynamic skill matrix mapping for the data team .",
+              "targets": [
+                "team_execution",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "owner discovery automation",
+              "description": "Improve governance efficiency by enabling owner discovery automation for all assets .",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "Data scientists and ML engineers",
+              "description": "Ensure effective ML delivery by hiring and retaining specialized data scientists and ML engineers.",
+              "targets": [
+                "team_execution"
+              ]
+            },
+            {
+              "name": "ML operations engineers",
+              "description": "Improve model deployment velocity and stability by investing in dedicated ML operations engineers.",
+              "targets": [
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Natural language processing specialists",
+              "description": "Increase unstructured data value by employing specialized natural language processing experts.",
+              "targets": [
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Business domain experts",
+              "description": "Improve model and analytical relevance by consulting Business domain experts .",
+              "targets": [
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Change management capabilities",
+              "description": "Improve technology adoption success by developing strong Change management capabilities .",
+              "targets": [
+                "team_execution",
+                "process_maturity"
+              ]
+            }
+          ]
+        },
+        {
+          "category": "Documentation and User Enablement",
+          "name": "Documentation and User Enablement",
+          "description": "Providing clear lineage, comprehensive cataloging, training, and developer resources to foster data literacy and self-service consumption.",
+          "examples": [
+            {
+              "name": "data catalog curation",
+              "description": "Improve data discoverability and usage via rigorous data catalog curation.",
+              "targets": [
+                "process_maturity",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "lineage impact analysis",
+              "description": "Minimize pipeline breakage risk by performing proactive lineage impact analysis.",
+              "targets": [
+                "process_maturity",
+                "system_capabilities"
+              ]
+            },
+            {
+              "name": "golden path documentation",
+              "description": "Accelerate new developer ramp-up using clear golden path documentation .",
+              "targets": [
+                "process_maturity",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "data-driven onboarding tours",
+              "description": "Improve user adoption by guiding new users with data-driven onboarding tours .",
+              "targets": [
+                "process_maturity",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "reusable query snippet library",
+              "description": "Improve analyst efficiency by maintaining a reusable query snippet library .",
+              "targets": [
+                "process_maturity",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Content Analysis / Labeling / Evaluation (archetype)",
+              "description": "Improve model training data quality through the Content Analysis / Labeling / Evaluation archetype .",
+              "targets": [
+                "team_execution",
+                "process_maturity"
+              ]
+            },
+            {
+              "name": "Summarization & Compression (archetype)",
+              "description": "Improve information digestion speed using the Summarization & Compression archetype .",
+              "targets": [
+                "system_capabilities",
+                "team_execution"
+              ]
+            },
+            {
+              "name": "Multi-hop Reasoning / Chain-of-Thought (archetype)",
+              "description": "Increase AI problem-solving sophistication using the Multi-hop Reasoning / Chain-of-Thought archetype .",
+              "targets": [
+                "system_capabilities",
+                "team_execution"
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

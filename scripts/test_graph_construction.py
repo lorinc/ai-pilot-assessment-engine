@@ -6,8 +6,8 @@ from pathlib import Path
 # Add src to path
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-from src.knowledge.graph_builder import KnowledgeGraphBuilder
-from src.knowledge.schemas import NodeType, EdgeType
+from src.knowledge_graph.graph_builder import KnowledgeGraphBuilder
+from src.knowledge_graph.schemas import NodeType, EdgeType
 
 
 def main():

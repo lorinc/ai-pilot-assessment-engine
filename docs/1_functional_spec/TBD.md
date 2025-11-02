@@ -101,3 +101,21 @@ Each entry includes:
 **Intent**: Design conversation patterns for output-centric assessment. Key challenges: (1) Balancing specificity with natural flow, (2) Knowing when to drill down vs. move on, (3) Handling ambiguity in output identification, (4) Managing multi-output scenarios (user wants to improve 3 things). Considerations: progressive disclosure (start broad, get specific), contextual follow-ups based on detected gaps, visual aids (show output dependency graph?), allow user to skip/defer questions. Recommendation: prototype 3-5 conversation flows with different entry points (problem-first, output-first, team-first, system-first, opportunity-first), test with real users, measure completion rate and user satisfaction.
 
 ---
+
+### 11. Anti-Abstract Response Pattern
+**Added**: 2025-11-02
+
+**Context**: Users may describe problems in abstract or generalized terms that prevent actionable assessment and measurable outcomes.
+
+**Intent**: When user talks about abstract or generalized problems, LLM should respond: "Sorry, I do not do abstract. Let's pick a very concrete example of when this problem manifested, and use that example as a proxy to solve this problem." This system enforces actionability and measurability by grounding all discussions in specific, observable instances rather than theoretical scenarios.
+
+---
+
+### 12. Output-Team-System-Process Constraint Enforcement
+**Added**: 2025-11-02
+
+**Context**: The assessment system is designed specifically for internal, data-driven technical pilots that can be expressed within the output-centric model framework.
+
+**Intent**: When the user comes up with something that cannot reasonably be expressed as "an output created by a team in a system in a process", the LLM is free to answer that this problem is probably not a good candidate for an internal, data-driven technical pilot—unless it is rephrased to meet the requirement for that. This maintains system focus on problems where the output-centric factor model can provide value and prevents scope creep into areas where the methodology doesn't apply.
+
+---
