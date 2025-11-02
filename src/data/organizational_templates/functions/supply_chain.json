@@ -1,0 +1,219 @@
+{
+  "function": "Supply Chain & Logistics",
+  "description": "Planning, sourcing, and delivering products through the supply chain",
+  
+  "typical_teams": [
+    {
+      "name": "Demand Planning Team",
+      "roles": ["Demand Planner", "Forecasting Analyst"],
+      "outputs_created": ["demand_forecasts", "inventory_plans"]
+    },
+    {
+      "name": "Procurement Team",
+      "roles": ["Buyer", "Procurement Specialist", "Sourcing Manager"],
+      "outputs_created": ["purchase_orders", "supplier_contracts", "rfq_responses"]
+    },
+    {
+      "name": "Logistics Team",
+      "roles": ["Logistics Coordinator", "Transportation Manager", "Warehouse Manager"],
+      "outputs_created": ["shipment_schedules", "delivery_confirmations", "warehouse_operations"]
+    },
+    {
+      "name": "Supply Chain Analytics Team",
+      "roles": ["Supply Chain Analyst", "Inventory Analyst"],
+      "outputs_created": ["inventory_reports", "supply_chain_metrics", "optimization_recommendations"]
+    }
+  ],
+  
+  "typical_processes": [
+    {
+      "name": "Demand Forecasting & Planning",
+      "description": "Predicting future demand and planning inventory",
+      "steps": ["Data Collection", "Forecast Generation", "Consensus Planning", "Plan Approval"],
+      "outputs_by_step": {
+        "Forecast Generation": ["demand_forecasts"],
+        "Plan Approval": ["inventory_plans"]
+      }
+    },
+    {
+      "name": "Strategic Sourcing & Supplier Management",
+      "description": "Selecting and managing supplier relationships",
+      "steps": ["Supplier Identification", "RFQ/RFP", "Evaluation", "Negotiation", "Contract Management"],
+      "outputs_by_step": {
+        "RFQ/RFP": ["rfq_responses"],
+        "Negotiation": ["supplier_contracts"],
+        "Contract Management": ["supplier_performance_reports"]
+      }
+    },
+    {
+      "name": "Inventory & Materials Optimization",
+      "description": "Managing inventory levels and material flow",
+      "steps": ["Inventory Monitoring", "Replenishment Planning", "Order Execution", "Tracking"],
+      "outputs_by_step": {
+        "Inventory Monitoring": ["inventory_reports"],
+        "Replenishment Planning": ["replenishment_orders"],
+        "Order Execution": ["purchase_orders"]
+      }
+    },
+    {
+      "name": "Transportation & Route Optimization",
+      "description": "Planning and executing shipments",
+      "steps": ["Route Planning", "Carrier Selection", "Shipment Execution", "Tracking", "Delivery"],
+      "outputs_by_step": {
+        "Route Planning": ["optimized_routes"],
+        "Shipment Execution": ["shipment_schedules"],
+        "Delivery": ["delivery_confirmations"]
+      }
+    }
+  ],
+  
+  "typical_systems": [
+    {
+      "category": "ERP",
+      "examples": ["SAP", "Oracle", "NetSuite"],
+      "outputs_created": ["purchase_orders", "inventory_reports", "shipment_schedules"]
+    },
+    {
+      "category": "Supply Chain Planning",
+      "examples": ["Blue Yonder", "Kinaxis", "o9 Solutions"],
+      "outputs_created": ["demand_forecasts", "inventory_plans", "optimization_recommendations"]
+    },
+    {
+      "category": "Transportation Management",
+      "examples": ["Oracle TMS", "SAP TM", "Manhattan"],
+      "outputs_created": ["shipment_schedules", "route_plans", "carrier_assignments"]
+    },
+    {
+      "category": "Warehouse Management",
+      "examples": ["Manhattan WMS", "Blue Yonder WMS", "SAP EWM"],
+      "outputs_created": ["warehouse_operations", "picking_lists", "inventory_movements"]
+    }
+  ],
+  
+  "common_outputs": [
+    {
+      "id": "demand_forecasts",
+      "name": "Demand Forecasts",
+      "description": "Predictions of future product demand",
+      "typical_quality_metrics": ["accuracy", "bias", "timeliness"],
+      "typical_creation_context": {
+        "team": "Demand Planning Team",
+        "process": "Demand Forecasting & Planning",
+        "step": "Forecast Generation",
+        "system": "Supply Chain Planning System"
+      },
+      "typical_dependencies": ["historical_sales", "market_data", "promotional_plans"],
+      "common_pain_points": [
+        "Forecasts are consistently inaccurate (>30% error)",
+        "Can't capture seasonality or trends",
+        "Manual adjustments override statistical forecasts",
+        "Long lead time for forecast updates",
+        "Can't forecast new products",
+        "Forecast at wrong granularity (too aggregated)"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on forecasting methods, hire demand planning specialist",
+        "system_capabilities": "AI-powered demand sensing, automated forecast generation, scenario planning",
+        "process_maturity": "Implement S&OP process, regular forecast reviews, exception management"
+      }
+    },
+    {
+      "id": "inventory_reports",
+      "name": "Inventory Reports",
+      "description": "Current stock levels, locations, and movements",
+      "typical_quality_metrics": ["accuracy", "freshness", "completeness"],
+      "typical_creation_context": {
+        "team": "Supply Chain Analytics Team",
+        "process": "Inventory & Materials Optimization",
+        "step": "Inventory Monitoring",
+        "system": "ERP or WMS"
+      },
+      "typical_dependencies": ["transaction_data", "warehouse_data", "in_transit_data"],
+      "common_pain_points": [
+        "Inventory data is inaccurate (doesn't match physical)",
+        "Stockouts or overstock situations",
+        "Can't see inventory across locations",
+        "Manual cycle counting is time-consuming",
+        "No visibility to in-transit inventory",
+        "Slow inventory turns"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on inventory management, hire inventory analyst",
+        "system_capabilities": "RFID/IoT tracking, AI inventory optimization, real-time visibility",
+        "process_maturity": "Implement cycle counting, optimize safety stock, ABC analysis"
+      }
+    },
+    {
+      "id": "purchase_orders",
+      "name": "Purchase Orders",
+      "description": "Orders placed with suppliers for materials",
+      "typical_quality_metrics": ["accuracy", "timeliness", "compliance"],
+      "typical_creation_context": {
+        "team": "Procurement Team",
+        "process": "Inventory & Materials Optimization",
+        "step": "Order Execution",
+        "system": "ERP"
+      },
+      "typical_dependencies": ["replenishment_signals", "supplier_contracts", "inventory_levels"],
+      "common_pain_points": [
+        "PO creation is slow and manual",
+        "Errors in quantities or specifications",
+        "Can't optimize order quantities",
+        "Maverick spending (bypassing POs)",
+        "Poor supplier performance tracking",
+        "Manual three-way matching"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on procurement procedures, hire category specialists",
+        "system_capabilities": "Automated PO generation, AI order optimization, supplier portals",
+        "process_maturity": "Implement approval workflows, supplier scorecards, contract compliance"
+      }
+    },
+    {
+      "id": "shipment_schedules",
+      "name": "Shipment Schedules",
+      "description": "Plans for transporting goods from origin to destination",
+      "typical_quality_metrics": ["on_time_delivery", "cost_efficiency", "utilization"],
+      "typical_creation_context": {
+        "team": "Logistics Team",
+        "process": "Transportation & Route Optimization",
+        "step": "Shipment Execution",
+        "system": "Transportation Management System"
+      },
+      "typical_dependencies": ["orders", "carrier_capacity", "route_plans"],
+      "common_pain_points": [
+        "Poor on-time delivery performance (<90%)",
+        "High transportation costs",
+        "Manual route planning is time-consuming",
+        "Can't optimize loads (empty miles)",
+        "No real-time tracking visibility",
+        "Frequent expedited shipments"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on logistics optimization, hire transportation analyst",
+        "system_capabilities": "AI route optimization, dynamic scheduling, real-time tracking",
+        "process_maturity": "Implement carrier scorecards, load optimization, exception management"
+      }
+    }
+  ],
+  
+  "inference_triggers": {
+    "keywords": [
+      "supply chain", "logistics", "procurement", "sourcing", "inventory",
+      "demand planning", "forecasting", "warehouse", "transportation", "shipping",
+      "purchase orders", "PO", "suppliers", "vendors", "materials",
+      "stockout", "overstock", "on-time delivery", "lead time"
+    ],
+    "pain_points": [
+      "demand forecasts are wrong", "can't predict demand",
+      "inventory is inaccurate", "stockouts", "too much inventory",
+      "procurement is slow", "PO errors", "supplier issues",
+      "late deliveries", "high shipping costs", "can't track shipments"
+    ],
+    "systems_mentioned": [
+      "SAP", "Oracle", "NetSuite",
+      "Blue Yonder", "Kinaxis", "o9",
+      "Manhattan", "SAP TM", "Oracle TMS"
+    ]
+  }
+}

@@ -60,7 +60,7 @@ dmypy.json
 
 # Google Cloud credentials
 *.json
-!src/data/*.json
+!src/data/**/*.json
 !data/mappings/*.json
 !deployment/firestore.rules
 !deployment/firestore.indexes.json

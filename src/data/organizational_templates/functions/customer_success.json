@@ -1,0 +1,294 @@
+{
+  "function": "Customer Success / Support",
+  "description": "Ensuring customer satisfaction, retention, and value realization through support and success management",
+  
+  "typical_teams": [
+    {
+      "name": "Customer Support Team",
+      "roles": ["Support Agent", "Support Manager", "Technical Support Specialist"],
+      "outputs_created": ["resolved_tickets", "customer_responses", "support_documentation"]
+    },
+    {
+      "name": "Customer Success Team",
+      "roles": ["Customer Success Manager", "CSM", "Account Manager"],
+      "outputs_created": ["account_health_scores", "success_plans", "renewal_forecasts"]
+    },
+    {
+      "name": "Support Operations Team",
+      "roles": ["Support Ops Manager", "Knowledge Manager", "QA Specialist"],
+      "outputs_created": ["support_metrics", "knowledge_base_articles", "quality_assessments"]
+    }
+  ],
+  
+  "typical_processes": [
+    {
+      "name": "Support Triage & Intent Routing",
+      "description": "Receiving, categorizing, and routing customer support requests",
+      "steps": ["Ticket Creation", "Intent Classification", "Priority Assignment", "Routing", "Assignment"],
+      "outputs_by_step": {
+        "Ticket Creation": ["support_tickets"],
+        "Intent Classification": ["categorized_tickets"],
+        "Priority Assignment": ["prioritized_tickets"],
+        "Routing": ["routed_tickets"]
+      }
+    },
+    {
+      "name": "Agent Assistance & Escalation Management",
+      "description": "Resolving customer issues with agent support and escalations",
+      "steps": ["Issue Investigation", "Solution Identification", "Response", "Escalation (if needed)", "Resolution"],
+      "outputs_by_step": {
+        "Solution Identification": ["solution_recommendations"],
+        "Response": ["customer_responses"],
+        "Resolution": ["resolved_tickets"]
+      }
+    },
+    {
+      "name": "Self-Service & Knowledge Base Management",
+      "description": "Maintaining knowledge base and self-service resources",
+      "steps": ["Content Creation", "Review & Approval", "Publishing", "Maintenance", "Performance Tracking"],
+      "outputs_by_step": {
+        "Content Creation": ["kb_articles_draft"],
+        "Publishing": ["knowledge_base_articles"],
+        "Performance Tracking": ["kb_performance_metrics"]
+      }
+    },
+    {
+      "name": "Customer Experience Monitoring & Sentiment",
+      "description": "Tracking customer satisfaction and sentiment",
+      "steps": ["Feedback Collection", "Sentiment Analysis", "Trend Identification", "Action Planning"],
+      "outputs_by_step": {
+        "Feedback Collection": ["customer_feedback"],
+        "Sentiment Analysis": ["sentiment_scores"],
+        "Trend Identification": ["cx_insights"],
+        "Action Planning": ["improvement_plans"]
+      }
+    },
+    {
+      "name": "Account Health & Churn Prevention",
+      "description": "Monitoring account health and preventing churn",
+      "steps": ["Health Monitoring", "Risk Identification", "Intervention", "Success Planning"],
+      "outputs_by_step": {
+        "Health Monitoring": ["account_health_scores"],
+        "Risk Identification": ["churn_risk_alerts"],
+        "Success Planning": ["success_plans"]
+      }
+    }
+  ],
+  
+  "typical_systems": [
+    {
+      "category": "Ticketing/Support",
+      "examples": ["Zendesk", "Intercom", "Freshdesk", "ServiceNow"],
+      "outputs_created": ["resolved_tickets", "support_metrics", "customer_responses"]
+    },
+    {
+      "category": "Customer Success Platform",
+      "examples": ["Gainsight", "ChurnZero", "Totango", "Catalyst"],
+      "outputs_created": ["account_health_scores", "success_plans", "churn_risk_alerts"]
+    },
+    {
+      "category": "Knowledge Base",
+      "examples": ["Zendesk Guide", "Confluence", "Guru", "Document360"],
+      "outputs_created": ["knowledge_base_articles", "help_documentation"]
+    },
+    {
+      "category": "CRM",
+      "examples": ["Salesforce", "HubSpot"],
+      "outputs_created": ["customer_records", "interaction_history"]
+    },
+    {
+      "category": "Survey/Feedback",
+      "examples": ["Qualtrics", "SurveyMonkey", "Delighted"],
+      "outputs_created": ["customer_feedback", "nps_scores", "csat_scores"]
+    }
+  ],
+  
+  "common_outputs": [
+    {
+      "id": "resolved_tickets",
+      "name": "Resolved Support Tickets",
+      "description": "Customer issues that have been investigated and resolved",
+      "typical_quality_metrics": ["resolution_quality", "timeliness", "first_contact_resolution", "customer_satisfaction"],
+      "typical_creation_context": {
+        "team": "Customer Support Team",
+        "process": "Agent Assistance & Escalation Management",
+        "step": "Resolution",
+        "system": "Ticketing System"
+      },
+      "typical_dependencies": ["support_tickets", "knowledge_base_articles", "product_documentation"],
+      "common_pain_points": [
+        "Resolution time is too long (SLA breaches)",
+        "Low first contact resolution rate (<40%)",
+        "Inconsistent resolution quality across agents",
+        "Tickets get reopened frequently",
+        "Agents can't find answers quickly",
+        "High escalation rate",
+        "Customer satisfaction is declining"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train agents on products, hire senior support staff, implement QA program",
+        "system_capabilities": "AI-powered answer suggestions, automated ticket routing, chatbots, sentiment detection",
+        "process_maturity": "Standardize resolution procedures, build comprehensive knowledge base, implement tier structure"
+      }
+    },
+    {
+      "id": "account_health_scores",
+      "name": "Account Health Scores",
+      "description": "Scores indicating the health and risk level of customer accounts",
+      "typical_quality_metrics": ["predictive_accuracy", "timeliness", "actionability", "coverage"],
+      "typical_creation_context": {
+        "team": "Customer Success Team",
+        "process": "Account Health & Churn Prevention",
+        "step": "Health Monitoring",
+        "system": "Customer Success Platform"
+      },
+      "typical_dependencies": ["usage_data", "support_tickets", "nps_scores", "contract_data"],
+      "common_pain_points": [
+        "Health scores are inaccurate (don't predict churn)",
+        "Scores are updated too infrequently",
+        "Based on limited data (usage only)",
+        "Manual calculation in spreadsheets",
+        "CSMs don't trust the scores",
+        "Can't identify at-risk accounts early enough",
+        "No clear action plan for red accounts"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train CSMs on health score interpretation, hire data analyst",
+        "system_capabilities": "AI-powered churn prediction, automated health scoring, early warning system",
+        "process_maturity": "Standardize health score methodology, implement intervention playbooks"
+      }
+    },
+    {
+      "id": "knowledge_base_articles",
+      "name": "Knowledge Base Articles",
+      "description": "Self-service documentation and help articles for customers",
+      "typical_quality_metrics": ["accuracy", "completeness", "findability", "usefulness"],
+      "typical_creation_context": {
+        "team": "Support Operations Team",
+        "process": "Self-Service & Knowledge Base Management",
+        "step": "Publishing",
+        "system": "Knowledge Base Platform"
+      },
+      "typical_dependencies": ["product_documentation", "common_issues", "agent_expertise"],
+      "common_pain_points": [
+        "KB is incomplete (missing common issues)",
+        "Articles are outdated or inaccurate",
+        "Customers can't find relevant articles",
+        "Article creation is too slow",
+        "No process for keeping KB updated",
+        "Low self-service resolution rate",
+        "Duplicate or conflicting articles"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Hire knowledge manager, train agents on article writing",
+        "system_capabilities": "AI-powered article suggestions, automated article generation, intelligent search",
+        "process_maturity": "Implement article lifecycle management, regular content audits, usage analytics"
+      }
+    },
+    {
+      "id": "customer_responses",
+      "name": "Customer Support Responses",
+      "description": "Replies and communications sent to customers regarding their issues",
+      "typical_quality_metrics": ["accuracy", "helpfulness", "tone", "timeliness"],
+      "typical_creation_context": {
+        "team": "Customer Support Team",
+        "process": "Agent Assistance & Escalation Management",
+        "step": "Response",
+        "system": "Ticketing System"
+      },
+      "typical_dependencies": ["support_tickets", "knowledge_base_articles", "agent_expertise"],
+      "common_pain_points": [
+        "Response quality varies widely by agent",
+        "Responses are too slow (hours or days)",
+        "Tone is inconsistent or inappropriate",
+        "Responses don't fully address the issue",
+        "Agents spend too long crafting responses",
+        "Language/translation issues for global support",
+        "No quality control on responses"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train agents on communication, implement QA reviews",
+        "system_capabilities": "AI response suggestions, automated translation, sentiment-aware responses, response templates",
+        "process_maturity": "Standardize response templates, implement peer review, define tone guidelines"
+      }
+    },
+    {
+      "id": "churn_risk_alerts",
+      "name": "Churn Risk Alerts",
+      "description": "Notifications identifying accounts at risk of churning",
+      "typical_quality_metrics": ["predictive_accuracy", "timeliness", "false_positive_rate", "actionability"],
+      "typical_creation_context": {
+        "team": "Customer Success Team",
+        "process": "Account Health & Churn Prevention",
+        "step": "Risk Identification",
+        "system": "Customer Success Platform"
+      },
+      "typical_dependencies": ["account_health_scores", "usage_data", "support_tickets", "contract_data"],
+      "common_pain_points": [
+        "Alerts come too late (already churned)",
+        "Too many false positives (alert fatigue)",
+        "Based on simple rules (usage drops)",
+        "No context on why account is at risk",
+        "CSMs overwhelmed with alerts",
+        "Can't prioritize which accounts to save",
+        "No recommended intervention actions"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train CSMs on intervention strategies, hire retention specialist",
+        "system_capabilities": "AI-powered churn prediction, root cause analysis, intervention recommendations",
+        "process_maturity": "Define intervention playbooks, implement escalation paths, track save rates"
+      }
+    },
+    {
+      "id": "support_metrics",
+      "name": "Support Performance Metrics",
+      "description": "KPIs tracking support team performance (CSAT, FRT, resolution time, etc.)",
+      "typical_quality_metrics": ["accuracy", "timeliness", "completeness", "actionability"],
+      "typical_creation_context": {
+        "team": "Support Operations Team",
+        "process": "Performance Monitoring",
+        "step": "Reporting",
+        "system": "Ticketing System + BI Tool"
+      },
+      "typical_dependencies": ["ticket_data", "customer_feedback", "agent_activity"],
+      "common_pain_points": [
+        "Metrics are lagging (reported weekly/monthly)",
+        "Can't drill down into root causes",
+        "Metrics don't align with customer experience",
+        "Manual report generation takes hours",
+        "Inconsistent metric definitions",
+        "Can't benchmark against industry standards",
+        "Metrics don't drive action"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train team on metrics interpretation, hire support analyst",
+        "system_capabilities": "Real-time dashboards, automated reporting, predictive analytics, benchmarking",
+        "process_maturity": "Standardize metric definitions, implement regular reviews, link metrics to incentives"
+      }
+    }
+  ],
+  
+  "inference_triggers": {
+    "keywords": [
+      "customer support", "customer success", "support tickets", "help desk", "service desk",
+      "CSM", "customer satisfaction", "CSAT", "NPS", "churn", "retention",
+      "knowledge base", "KB", "self-service", "FAQ", "help center",
+      "escalation", "SLA", "response time", "resolution time", "first contact resolution",
+      "account health", "at-risk accounts", "customer experience", "CX"
+    ],
+    "pain_points": [
+      "tickets take too long", "SLA breaches", "can't resolve issues",
+      "low customer satisfaction", "CSAT is declining", "NPS is low",
+      "high churn rate", "customers are leaving", "can't predict churn",
+      "agents can't find answers", "knowledge base is outdated",
+      "too many escalations", "first contact resolution is low",
+      "response quality is inconsistent", "customers complain about support",
+      "account health scores are inaccurate", "can't identify at-risk accounts"
+    ],
+    "systems_mentioned": [
+      "Zendesk", "Intercom", "Freshdesk", "ServiceNow",
+      "Gainsight", "ChurnZero", "Totango", "Catalyst",
+      "Qualtrics", "SurveyMonkey", "Delighted"
+    ]
+  }
+}

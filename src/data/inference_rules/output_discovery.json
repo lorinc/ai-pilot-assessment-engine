@@ -1,0 +1,262 @@
+{
+  "description": "Rules for discovering and suggesting outputs based on user conversation",
+  "version": "1.0",
+  
+  "inference_strategies": [
+    {
+      "strategy": "explicit_mention",
+      "description": "User explicitly mentions an output by name",
+      "confidence": 0.9,
+      "flag": "user_confirmed",
+      "example": "User says: 'Our sales forecast is always wrong' → Identify output: sales_forecast"
+    },
+    {
+      "strategy": "pain_point_matching",
+      "description": "User describes a pain point that matches a known output's common issues",
+      "confidence": 0.75,
+      "flag": "unverified",
+      "example": "User says: 'We can't predict revenue accurately' → Suggest output: sales_forecast"
+    },
+    {
+      "strategy": "system_mention",
+      "description": "User mentions a system that typically creates certain outputs",
+      "confidence": 0.6,
+      "flag": "unverified",
+      "example": "User says: 'We use Salesforce' → Suggest outputs: sales_forecast, pipeline_reports"
+    },
+    {
+      "strategy": "function_mention",
+      "description": "User mentions a function/department",
+      "confidence": 0.5,
+      "flag": "unverified",
+      "example": "User says: 'Our sales team struggles' → Suggest common sales outputs"
+    },
+    {
+      "strategy": "team_mention",
+      "description": "User mentions a specific team",
+      "confidence": 0.5,
+      "flag": "unverified",
+      "example": "User says: 'Sales ops is overwhelmed' → Suggest outputs: sales_forecast, pipeline_reports"
+    },
+    {
+      "strategy": "process_mention",
+      "description": "User mentions a process",
+      "confidence": 0.5,
+      "flag": "unverified",
+      "example": "User says: 'Our forecasting process is broken' → Suggest output: sales_forecast"
+    }
+  ],
+  
+  "conversation_patterns": [
+    {
+      "pattern_name": "pain_point_discovery",
+      "user_statement_pattern": "Our {function} is struggling with {pain_point}",
+      "system_action": [
+        "1. Lookup function template",
+        "2. Find outputs with matching pain points",
+        "3. Rank by pain point similarity",
+        "4. Suggest top 2-3 outputs"
+      ],
+      "response_template": "It sounds like you might be talking about {output_name}. Is that right?",
+      "confidence": "medium",
+      "flag": "unverified"
+    },
+    {
+      "pattern_name": "system_discovery",
+      "user_statement_pattern": "We use {system} for {function}",
+      "system_action": [
+        "1. Lookup function template",
+        "2. Find outputs created in that system",
+        "3. Present as options"
+      ],
+      "response_template": "Teams using {system} typically create outputs like {output_list}. Which of these are relevant to you?",
+      "confidence": "low",
+      "flag": "unverified"
+    },
+    {
+      "pattern_name": "function_exploration",
+      "user_statement_pattern": "Tell me about {function}",
+      "system_action": [
+        "1. Lookup function template",
+        "2. Present common outputs",
+        "3. Ask which ones are relevant"
+      ],
+      "response_template": "In {function}, common outputs include: {output_list}. Which ones would you like to assess?",
+      "confidence": "low",
+      "flag": "unverified"
+    },
+    {
+      "pattern_name": "vague_problem",
+      "user_statement_pattern": "{vague_problem_statement}",
+      "system_action": [
+        "1. Extract keywords",
+        "2. Match to function inference triggers",
+        "3. Suggest most likely outputs",
+        "4. Ask clarifying question"
+      ],
+      "response_template": "It sounds like this might be related to {output_name}. Can you tell me more about what's not working?",
+      "confidence": "low",
+      "flag": "unverified"
+    }
+  ],
+  
+  "context_expansion_rules": [
+    {
+      "rule": "suggest_related_outputs_in_same_process",
+      "trigger": "User confirms an output",
+      "action": "Suggest other outputs in the same process",
+      "confidence": 0.5,
+      "flag": "unverified_related",
+      "example": "User confirms 'sales_forecast' → Suggest 'pipeline_reports' (same process)"
+    },
+    {
+      "rule": "suggest_upstream_dependencies",
+      "trigger": "User assesses an output with dependencies",
+      "action": "Suggest assessing upstream outputs",
+      "confidence": 0.6,
+      "flag": "unverified_dependency",
+      "example": "User assesses 'sales_forecast' → Suggest 'pipeline_data', 'historical_sales'"
+    },
+    {
+      "rule": "suggest_downstream_impacts",
+      "trigger": "User wants to improve an output",
+      "action": "Show which downstream outputs would benefit",
+      "confidence": 0.7,
+      "flag": "unverified_impact",
+      "example": "Improving 'pipeline_data' → Would improve 'sales_forecast'"
+    }
+  ],
+  
+  "verification_prompts": {
+    "output_confirmation": {
+      "prompt": "Just to confirm - you're talking about {output_name}: {output_description}. Is that right?",
+      "if_yes": "Mark as user_confirmed, confidence = 1.0",
+      "if_no": "Ask: 'Can you describe what output you're referring to?'"
+    },
+    "creation_context_verification": {
+      "prompt": "[UNVERIFIED] Based on typical {function} organizations, this is usually created by:\n- Team: {typical_team}\n- System: {typical_system}\n- Process: {typical_process}\n\nDoes this match your setup?",
+      "if_yes": "Mark context as verified",
+      "if_partial": "Update with user's corrections",
+      "if_no": "Ask: 'Can you tell me who creates this and what system they use?'"
+    },
+    "dependency_discovery": {
+      "prompt": "[UNVERIFIED] {output_name} typically depends on: {typical_dependencies}. Does this match your situation?",
+      "if_yes": "Mark dependencies as verified",
+      "if_partial": "Update with user's corrections",
+      "if_no": "Ask: 'What inputs or data does this output depend on?'"
+    }
+  },
+  
+  "confidence_adjustment_rules": {
+    "increase_confidence": [
+      {
+        "condition": "User explicitly confirms",
+        "adjustment": "Set to 1.0"
+      },
+      {
+        "condition": "Multiple indicators match",
+        "adjustment": "+0.2 per additional indicator (max 0.9)"
+      },
+      {
+        "condition": "User provides specific details",
+        "adjustment": "+0.1 to +0.3 depending on detail level"
+      }
+    ],
+    "decrease_confidence": [
+      {
+        "condition": "User contradicts inference",
+        "adjustment": "Set to 0.0, remove inference"
+      },
+      {
+        "condition": "User is uncertain",
+        "adjustment": "-0.2"
+      },
+      {
+        "condition": "Only weak indicators present",
+        "adjustment": "Cap at 0.4"
+      }
+    ]
+  },
+  
+  "output_suggestion_ranking": {
+    "description": "How to rank multiple potential outputs when suggesting",
+    "factors": [
+      {
+        "factor": "pain_point_match_strength",
+        "weight": 0.4,
+        "description": "How well user's pain point matches output's common issues"
+      },
+      {
+        "factor": "keyword_match_count",
+        "weight": 0.3,
+        "description": "Number of matching keywords/triggers"
+      },
+      {
+        "factor": "system_match",
+        "weight": 0.2,
+        "description": "User mentioned system matches output's typical system"
+      },
+      {
+        "factor": "output_commonality",
+        "weight": 0.1,
+        "description": "How common this output is (prioritize common outputs)"
+      }
+    ],
+    "max_suggestions": 3,
+    "min_score_threshold": 0.3
+  },
+  
+  "progressive_disclosure": {
+    "description": "Order of information gathering about an output",
+    "steps": [
+      {
+        "step": 1,
+        "goal": "Identify the output",
+        "questions": [
+          "What output are you trying to improve?",
+          "Can you describe what's not working?"
+        ],
+        "completion_criteria": "Output identified and confirmed by user"
+      },
+      {
+        "step": 2,
+        "goal": "Understand creation context",
+        "questions": [
+          "Which team creates this?",
+          "What system do they use?",
+          "What process do they follow?"
+        ],
+        "completion_criteria": "Team, System, and Process identified"
+      },
+      {
+        "step": 3,
+        "goal": "Assess quality metrics",
+        "questions": [
+          "What quality issues are you seeing?",
+          "How would you rate the current quality?"
+        ],
+        "completion_criteria": "Quality metrics and ratings captured"
+      },
+      {
+        "step": 4,
+        "goal": "Assess components",
+        "questions": [
+          "How capable is the team?",
+          "How good are the tools/systems?",
+          "How mature is the process?",
+          "What does this depend on?"
+        ],
+        "completion_criteria": "All 4 components assessed"
+      },
+      {
+        "step": 5,
+        "goal": "Identify gap and recommend pilots",
+        "questions": [
+          "What quality level do you need?",
+          "What's the business impact of closing this gap?"
+        ],
+        "completion_criteria": "Gap identified, pilot recommendations made"
+      }
+    ]
+  }
+}

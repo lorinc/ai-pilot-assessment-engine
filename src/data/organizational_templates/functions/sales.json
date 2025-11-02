@@ -1,0 +1,276 @@
+{
+  "function": "Sales",
+  "description": "Revenue generation through customer acquisition and retention",
+  
+  "typical_teams": [
+    {
+      "name": "Sales Development Team",
+      "roles": ["SDR", "BDR", "Lead Qualifier"],
+      "outputs_created": ["qualified_leads", "prospect_outreach", "lead_research"]
+    },
+    {
+      "name": "Account Executive Team",
+      "roles": ["AE", "Sales Rep", "Account Manager", "Closer"],
+      "outputs_created": ["closed_deals", "sales_proposals", "contract_negotiations", "customer_presentations"]
+    },
+    {
+      "name": "Sales Operations Team",
+      "roles": ["Sales Ops Analyst", "Sales Enablement", "Revenue Operations"],
+      "outputs_created": ["sales_forecast", "pipeline_reports", "territory_assignments", "quota_plans", "commission_calculations"]
+    },
+    {
+      "name": "Sales Leadership",
+      "roles": ["VP Sales", "Sales Director", "Sales Manager"],
+      "outputs_created": ["sales_strategy", "team_performance_reviews", "hiring_plans"]
+    }
+  ],
+  
+  "typical_processes": [
+    {
+      "name": "Lead Qualification Process",
+      "description": "Converting raw leads into qualified opportunities",
+      "steps": ["Lead Capture", "Initial Screening", "Research & Enrichment", "Qualification", "Handoff to AE"],
+      "outputs_by_step": {
+        "Lead Capture": ["raw_leads"],
+        "Research & Enrichment": ["enriched_leads"],
+        "Qualification": ["qualified_leads"],
+        "Handoff to AE": ["accepted_opportunities"]
+      }
+    },
+    {
+      "name": "Sales Forecasting Process",
+      "description": "Predicting future revenue based on pipeline",
+      "steps": ["Data Collection", "Pipeline Review", "Rep Forecast Submission", "Manager Review", "Executive Consolidation"],
+      "outputs_by_step": {
+        "Data Collection": ["pipeline_snapshot"],
+        "Rep Forecast Submission": ["rep_forecasts"],
+        "Executive Consolidation": ["sales_forecast", "forecast_presentation"]
+      }
+    },
+    {
+      "name": "Deal Execution Process",
+      "description": "Moving opportunities through sales stages to close",
+      "steps": ["Discovery", "Demo/Presentation", "Proposal", "Negotiation", "Close"],
+      "outputs_by_step": {
+        "Discovery": ["discovery_notes", "requirements_doc"],
+        "Demo/Presentation": ["demo_recording", "presentation_deck"],
+        "Proposal": ["sales_proposal", "pricing_quote"],
+        "Negotiation": ["contract_draft"],
+        "Close": ["signed_contract", "closed_deal"]
+      }
+    },
+    {
+      "name": "Pipeline Management Process",
+      "description": "Tracking and managing deals in progress",
+      "steps": ["Opportunity Creation", "Stage Updates", "Activity Logging", "Pipeline Review", "Reporting"],
+      "outputs_by_step": {
+        "Stage Updates": ["opportunity_updates"],
+        "Pipeline Review": ["pipeline_health_assessment"],
+        "Reporting": ["pipeline_reports", "conversion_metrics"]
+      }
+    }
+  ],
+  
+  "typical_systems": [
+    {
+      "category": "CRM",
+      "examples": ["Salesforce", "HubSpot", "Microsoft Dynamics", "Pipedrive", "Zoho CRM"],
+      "outputs_created": ["sales_forecast", "pipeline_reports", "customer_records", "opportunity_tracking", "activity_logs"]
+    },
+    {
+      "category": "Sales Engagement",
+      "examples": ["Outreach", "SalesLoft", "Apollo", "Groove"],
+      "outputs_created": ["prospect_outreach", "email_sequences", "call_logs", "engagement_metrics"]
+    },
+    {
+      "category": "Proposal/CPQ",
+      "examples": ["PandaDoc", "DocuSign", "Proposify", "Salesforce CPQ"],
+      "outputs_created": ["sales_proposals", "quotes", "contracts", "pricing_configurations"]
+    },
+    {
+      "category": "Spreadsheets",
+      "examples": ["Excel", "Google Sheets"],
+      "outputs_created": ["manual_forecasts", "commission_calculations", "territory_plans", "quota_tracking"]
+    },
+    {
+      "category": "Business Intelligence",
+      "examples": ["Tableau", "Looker", "Power BI"],
+      "outputs_created": ["sales_dashboards", "performance_reports", "trend_analysis"]
+    }
+  ],
+  
+  "common_outputs": [
+    {
+      "id": "sales_forecast",
+      "name": "Sales Forecast",
+      "description": "Predicted revenue for upcoming period (monthly, quarterly, or annual)",
+      "typical_quality_metrics": ["accuracy", "timeliness", "completeness"],
+      "typical_creation_context": {
+        "team": "Sales Operations Team",
+        "process": "Sales Forecasting Process",
+        "step": "Executive Consolidation",
+        "system": "CRM or Spreadsheet"
+      },
+      "typical_dependencies": ["pipeline_reports", "historical_sales_data", "opportunity_stages", "rep_forecasts"],
+      "common_pain_points": [
+        "Forecasts are consistently inaccurate (off by >20%)",
+        "Takes too long to generate (days instead of hours)",
+        "Relies on manual data entry and spreadsheet consolidation",
+        "Inconsistent methodology across reps and regions",
+        "No visibility into forecast assumptions",
+        "Can't drill down into forecast components"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train reps on forecasting methodology, hire data analyst",
+        "system_capabilities": "Implement AI-powered forecasting, automate data aggregation",
+        "process_maturity": "Standardize forecasting process, implement regular reviews"
+      }
+    },
+    {
+      "id": "pipeline_reports",
+      "name": "Sales Pipeline Reports",
+      "description": "Current state of deals in progress, showing stages, values, and probabilities",
+      "typical_quality_metrics": ["accuracy", "completeness", "freshness", "consistency"],
+      "typical_creation_context": {
+        "team": "Sales Operations Team",
+        "process": "Pipeline Management Process",
+        "step": "Reporting",
+        "system": "CRM"
+      },
+      "typical_dependencies": ["opportunity_data", "activity_logs", "stage_definitions"],
+      "common_pain_points": [
+        "Data is stale or incomplete (reps don't update CRM)",
+        "Inconsistent stage definitions across teams",
+        "Hard to get real-time view of pipeline health",
+        "Can't trust the data for decision-making",
+        "Manual cleanup required before sharing with leadership"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train reps on CRM hygiene, implement accountability",
+        "system_capabilities": "Auto-capture activities, AI-powered data validation",
+        "process_maturity": "Standardize stage definitions, mandatory update cadence"
+      }
+    },
+    {
+      "id": "qualified_leads",
+      "name": "Qualified Leads",
+      "description": "Vetted prospects that meet criteria for sales engagement (MQLs/SQLs)",
+      "typical_quality_metrics": ["qualification_accuracy", "completeness", "timeliness", "conversion_rate"],
+      "typical_creation_context": {
+        "team": "Sales Development Team",
+        "process": "Lead Qualification Process",
+        "step": "Qualification",
+        "system": "CRM + Sales Engagement Platform"
+      },
+      "typical_dependencies": ["raw_leads", "enrichment_data", "qualification_criteria"],
+      "common_pain_points": [
+        "Lead quality is inconsistent (low conversion to opportunities)",
+        "AEs waste time on unqualified leads",
+        "SDRs use different qualification criteria",
+        "Missing key information at handoff",
+        "Long lag between lead capture and qualification"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train SDRs on qualification framework, hire specialists",
+        "system_capabilities": "AI lead scoring, automated enrichment",
+        "process_maturity": "Standardize qualification criteria, implement SLA"
+      }
+    },
+    {
+      "id": "sales_proposals",
+      "name": "Sales Proposals",
+      "description": "Customized proposals/quotes for prospects including pricing and terms",
+      "typical_quality_metrics": ["accuracy", "completeness", "professionalism", "turnaround_time"],
+      "typical_creation_context": {
+        "team": "Account Executive Team",
+        "process": "Deal Execution Process",
+        "step": "Proposal",
+        "system": "Proposal Tool or Word/PowerPoint"
+      },
+      "typical_dependencies": ["discovery_notes", "pricing_guidelines", "product_catalog", "legal_templates"],
+      "common_pain_points": [
+        "Takes too long to create proposals (days per proposal)",
+        "Inconsistent pricing across reps",
+        "Errors in calculations or terms",
+        "Outdated templates and content",
+        "No visibility into proposal status after sending"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on proposal tools, create content library",
+        "system_capabilities": "CPQ automation, AI content generation, e-signature",
+        "process_maturity": "Standardize templates, implement approval workflow"
+      }
+    },
+    {
+      "id": "commission_calculations",
+      "name": "Commission Calculations",
+      "description": "Sales compensation calculations based on deals closed and quotas",
+      "typical_quality_metrics": ["accuracy", "timeliness", "transparency"],
+      "typical_creation_context": {
+        "team": "Sales Operations Team",
+        "process": "Commission Processing",
+        "step": "Calculation & Validation",
+        "system": "Spreadsheet or Commission Tool"
+      },
+      "typical_dependencies": ["closed_deals", "quota_plans", "commission_rules", "payment_schedules"],
+      "common_pain_points": [
+        "Frequent errors leading to disputes",
+        "Takes weeks to calculate and distribute",
+        "Complex rules hard to implement in spreadsheets",
+        "No transparency for reps (can't see their own calculations)",
+        "Manual reconciliation with finance systems"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Hire commission specialist, reduce manual work",
+        "system_capabilities": "Automated commission software, real-time tracking",
+        "process_maturity": "Simplify commission structure, implement validation checks"
+      }
+    },
+    {
+      "id": "territory_assignments",
+      "name": "Territory Assignments",
+      "description": "Assignment of accounts/regions to sales reps for coverage",
+      "typical_quality_metrics": ["fairness", "coverage", "balance", "clarity"],
+      "typical_creation_context": {
+        "team": "Sales Operations Team",
+        "process": "Territory Planning",
+        "step": "Assignment & Communication",
+        "system": "Spreadsheet or CRM"
+      },
+      "typical_dependencies": ["account_data", "rep_capacity", "market_segmentation", "historical_performance"],
+      "common_pain_points": [
+        "Unbalanced territories (some reps have much easier/harder territories)",
+        "Frequent disputes over account ownership",
+        "Manual process takes weeks to complete",
+        "Hard to model 'what-if' scenarios",
+        "Changes are disruptive and poorly communicated"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Hire territory planning specialist, improve communication",
+        "system_capabilities": "Territory optimization software, AI-powered balancing",
+        "process_maturity": "Define clear rules, implement regular review cadence"
+      }
+    }
+  ],
+  
+  "inference_triggers": {
+    "keywords": [
+      "sales", "forecast", "forecasting", "pipeline", "CRM", "deals", "quota", "revenue",
+      "opportunities", "leads", "prospects", "proposals", "commission", "territory",
+      "account executive", "AE", "SDR", "BDR", "sales ops", "sales operations"
+    ],
+    "pain_points": [
+      "forecasts are wrong", "forecasts are inaccurate", "can't predict revenue",
+      "pipeline is unclear", "pipeline data is bad", "reps don't update CRM",
+      "lead quality is poor", "leads don't convert", "wasting time on bad leads",
+      "proposals take too long", "pricing is inconsistent",
+      "commission errors", "commission disputes", "can't calculate commissions",
+      "territories are unfair", "territory disputes"
+    ],
+    "systems_mentioned": [
+      "Salesforce", "HubSpot", "Dynamics", "Pipedrive", "Zoho",
+      "Outreach", "SalesLoft", "Apollo",
+      "PandaDoc", "DocuSign"
+    ]
+  }
+}

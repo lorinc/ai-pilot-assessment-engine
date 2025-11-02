@@ -1,0 +1,310 @@
+{
+  "function": "Human Resources (HR)",
+  "description": "Talent acquisition, development, and workforce management",
+  
+  "typical_teams": [
+    {
+      "name": "Talent Acquisition Team",
+      "roles": ["Recruiter", "Sourcer", "Recruiting Coordinator"],
+      "outputs_created": ["job_postings", "candidate_pipelines", "interview_schedules", "offer_letters"]
+    },
+    {
+      "name": "HR Operations Team",
+      "roles": ["HR Generalist", "HR Manager", "HRIS Administrator"],
+      "outputs_created": ["employee_records", "onboarding_materials", "hr_policies"]
+    },
+    {
+      "name": "Learning & Development Team",
+      "roles": ["L&D Manager", "Training Coordinator", "Instructional Designer"],
+      "outputs_created": ["training_programs", "learning_materials", "skill_assessments"]
+    },
+    {
+      "name": "People Analytics Team",
+      "roles": ["People Analyst", "HR Data Scientist", "Workforce Planning Analyst"],
+      "outputs_created": ["workforce_analytics", "turnover_reports", "diversity_metrics"]
+    }
+  ],
+  
+  "typical_processes": [
+    {
+      "name": "Talent Acquisition & Recruiting",
+      "description": "Sourcing, screening, and hiring candidates",
+      "steps": ["Job Requisition", "Sourcing", "Screening", "Interviewing", "Offer", "Acceptance"],
+      "outputs_by_step": {
+        "Job Requisition": ["job_postings"],
+        "Sourcing": ["candidate_pipelines"],
+        "Screening": ["screened_candidates"],
+        "Interviewing": ["interview_feedback"],
+        "Offer": ["offer_letters"]
+      }
+    },
+    {
+      "name": "Employee Onboarding & Offboarding",
+      "description": "Integrating new hires and managing departures",
+      "steps": ["Pre-boarding", "Day 1 Setup", "Training", "Integration", "Offboarding"],
+      "outputs_by_step": {
+        "Pre-boarding": ["onboarding_materials"],
+        "Day 1 Setup": ["employee_records", "system_access"],
+        "Training": ["onboarding_completion"],
+        "Offboarding": ["exit_interviews", "offboarding_checklists"]
+      }
+    },
+    {
+      "name": "Performance Management & Feedback",
+      "description": "Setting goals, reviewing performance, and providing feedback",
+      "steps": ["Goal Setting", "Continuous Feedback", "Performance Review", "Calibration", "Action Planning"],
+      "outputs_by_step": {
+        "Goal Setting": ["employee_goals"],
+        "Performance Review": ["performance_reviews"],
+        "Action Planning": ["development_plans"]
+      }
+    },
+    {
+      "name": "Learning & Development (L&D)",
+      "description": "Training and developing employee skills",
+      "steps": ["Needs Assessment", "Program Design", "Delivery", "Assessment", "Evaluation"],
+      "outputs_by_step": {
+        "Program Design": ["training_programs"],
+        "Delivery": ["training_sessions"],
+        "Assessment": ["skill_assessments"],
+        "Evaluation": ["training_effectiveness_reports"]
+      }
+    },
+    {
+      "name": "HR Analytics & Workforce Planning",
+      "description": "Analyzing workforce data and planning for future needs",
+      "steps": ["Data Collection", "Analysis", "Forecasting", "Planning", "Reporting"],
+      "outputs_by_step": {
+        "Analysis": ["workforce_analytics"],
+        "Forecasting": ["workforce_forecasts"],
+        "Reporting": ["hr_dashboards", "turnover_reports"]
+      }
+    },
+    {
+      "name": "Employee Engagement & Culture Monitoring",
+      "description": "Measuring and improving employee engagement",
+      "steps": ["Survey Design", "Survey Deployment", "Analysis", "Action Planning", "Follow-up"],
+      "outputs_by_step": {
+        "Survey Deployment": ["engagement_surveys"],
+        "Analysis": ["engagement_scores", "sentiment_analysis"],
+        "Action Planning": ["engagement_action_plans"]
+      }
+    }
+  ],
+  
+  "typical_systems": [
+    {
+      "category": "HRIS",
+      "examples": ["Workday", "SAP SuccessFactors", "Oracle HCM", "BambooHR"],
+      "outputs_created": ["employee_records", "org_charts", "hr_reports"]
+    },
+    {
+      "category": "ATS (Applicant Tracking)",
+      "examples": ["Greenhouse", "Lever", "Workable", "iCIMS"],
+      "outputs_created": ["job_postings", "candidate_pipelines", "interview_schedules"]
+    },
+    {
+      "category": "Performance Management",
+      "examples": ["Lattice", "15Five", "Culture Amp", "Betterworks"],
+      "outputs_created": ["performance_reviews", "employee_goals", "feedback"]
+    },
+    {
+      "category": "Learning Management",
+      "examples": ["Cornerstone", "Docebo", "LinkedIn Learning", "Udemy Business"],
+      "outputs_created": ["training_programs", "learning_records", "skill_assessments"]
+    },
+    {
+      "category": "Engagement/Survey",
+      "examples": ["Culture Amp", "Glint", "Qualtrics", "Officevibe"],
+      "outputs_created": ["engagement_surveys", "engagement_scores", "pulse_surveys"]
+    }
+  ],
+  
+  "common_outputs": [
+    {
+      "id": "candidate_pipelines",
+      "name": "Candidate Pipelines",
+      "description": "Pool of qualified candidates for open positions",
+      "typical_quality_metrics": ["candidate_quality", "pipeline_velocity", "diversity", "conversion_rate"],
+      "typical_creation_context": {
+        "team": "Talent Acquisition Team",
+        "process": "Talent Acquisition & Recruiting",
+        "step": "Sourcing",
+        "system": "ATS"
+      },
+      "typical_dependencies": ["job_postings", "sourcing_channels", "employer_brand"],
+      "common_pain_points": [
+        "Pipeline is too small (not enough candidates)",
+        "Candidate quality is low (don't meet requirements)",
+        "Time-to-fill is too long (months per role)",
+        "High candidate drop-off rate",
+        "Lack of diversity in pipeline",
+        "Manual sourcing is time-consuming",
+        "Can't track source effectiveness"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train recruiters on sourcing techniques, hire sourcing specialists",
+        "system_capabilities": "AI-powered candidate matching, automated sourcing, diversity analytics",
+        "process_maturity": "Standardize sourcing strategies, implement talent pools, track source ROI"
+      }
+    },
+    {
+      "id": "performance_reviews",
+      "name": "Performance Reviews",
+      "description": "Formal evaluations of employee performance against goals",
+      "typical_quality_metrics": ["completeness", "timeliness", "fairness", "actionability"],
+      "typical_creation_context": {
+        "team": "HR Operations Team",
+        "process": "Performance Management & Feedback",
+        "step": "Performance Review",
+        "system": "Performance Management System"
+      },
+      "typical_dependencies": ["employee_goals", "continuous_feedback", "manager_input"],
+      "common_pain_points": [
+        "Reviews are completed late (miss deadlines)",
+        "Quality varies widely by manager",
+        "Process is too time-consuming (weeks)",
+        "Reviews don't drive development",
+        "Bias in ratings (recency, halo effects)",
+        "Employees don't find reviews valuable",
+        "No clear link between reviews and compensation"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train managers on feedback delivery, implement calibration sessions",
+        "system_capabilities": "AI-powered bias detection, automated reminders, continuous feedback tools",
+        "process_maturity": "Simplify review process, implement continuous performance management, standardize rating scales"
+      }
+    },
+    {
+      "id": "turnover_reports",
+      "name": "Turnover Reports",
+      "description": "Analysis of employee attrition rates, reasons, and trends",
+      "typical_quality_metrics": ["accuracy", "timeliness", "insight_quality", "actionability"],
+      "typical_creation_context": {
+        "team": "People Analytics Team",
+        "process": "HR Analytics & Workforce Planning",
+        "step": "Reporting",
+        "system": "HRIS + Analytics Tool"
+      },
+      "typical_dependencies": ["employee_records", "exit_interviews", "termination_data"],
+      "common_pain_points": [
+        "Turnover data is lagging (reported quarterly)",
+        "Can't identify patterns or root causes",
+        "Exit interview data is incomplete or unreliable",
+        "Can't predict who will leave",
+        "No segmentation by department, role, or tenure",
+        "Manual data aggregation from multiple sources",
+        "Insights don't lead to action"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Hire people analyst, train on predictive analytics",
+        "system_capabilities": "AI-powered attrition prediction, automated exit interview analysis, real-time dashboards",
+        "process_maturity": "Standardize exit interview process, implement stay interviews, track retention initiatives"
+      }
+    },
+    {
+      "id": "training_programs",
+      "name": "Training Programs",
+      "description": "Structured learning programs for employee skill development",
+      "typical_quality_metrics": ["effectiveness", "completion_rate", "relevance", "engagement"],
+      "typical_creation_context": {
+        "team": "Learning & Development Team",
+        "process": "Learning & Development (L&D)",
+        "step": "Program Design",
+        "system": "Learning Management System"
+      },
+      "typical_dependencies": ["skill_gaps", "business_needs", "learning_content"],
+      "common_pain_points": [
+        "Training is not relevant to job needs",
+        "Low completion rates (<50%)",
+        "Can't measure training effectiveness",
+        "Training content is outdated",
+        "One-size-fits-all approach doesn't work",
+        "Manual tracking of completions",
+        "No personalized learning paths"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Hire instructional designers, train on adult learning principles",
+        "system_capabilities": "AI-powered personalized learning paths, adaptive content, automated assessments",
+        "process_maturity": "Implement competency framework, regular content updates, measure business impact"
+      }
+    },
+    {
+      "id": "engagement_scores",
+      "name": "Employee Engagement Scores",
+      "description": "Metrics measuring employee satisfaction, motivation, and commitment",
+      "typical_quality_metrics": ["response_rate", "reliability", "actionability", "trend_visibility"],
+      "typical_creation_context": {
+        "team": "HR Operations Team",
+        "process": "Employee Engagement & Culture Monitoring",
+        "step": "Analysis",
+        "system": "Engagement Survey Platform"
+      },
+      "typical_dependencies": ["engagement_surveys", "participation_data"],
+      "common_pain_points": [
+        "Low survey response rates (<60%)",
+        "Engagement scores don't predict turnover",
+        "Survey fatigue from too many surveys",
+        "Results are too high-level (not actionable)",
+        "Can't identify specific problem areas",
+        "Long delay between survey and results",
+        "No follow-up action on results"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train managers on engagement drivers, hire engagement specialist",
+        "system_capabilities": "AI-powered sentiment analysis, pulse surveys, predictive analytics, action planning tools",
+        "process_maturity": "Implement regular pulse surveys, close the feedback loop, track action completion"
+      }
+    },
+    {
+      "id": "workforce_forecasts",
+      "name": "Workforce Forecasts",
+      "description": "Predictions of future hiring needs and workforce composition",
+      "typical_quality_metrics": ["accuracy", "timeliness", "scenario_coverage", "actionability"],
+      "typical_creation_context": {
+        "team": "People Analytics Team",
+        "process": "HR Analytics & Workforce Planning",
+        "step": "Forecasting",
+        "system": "HRIS + Workforce Planning Tool"
+      },
+      "typical_dependencies": ["headcount_data", "business_plans", "turnover_data", "hiring_velocity"],
+      "common_pain_points": [
+        "Forecasts are consistently wrong (off by >20%)",
+        "Based on simple extrapolation (not predictive)",
+        "Can't model different scenarios",
+        "Manual forecasting in spreadsheets",
+        "No integration with business planning",
+        "Can't forecast skills needed, only headcount",
+        "Forecasts are updated too infrequently"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Hire workforce planning specialist, train on forecasting methods",
+        "system_capabilities": "AI-powered workforce forecasting, scenario modeling, skills forecasting",
+        "process_maturity": "Integrate with business planning, implement rolling forecasts, track forecast accuracy"
+      }
+    }
+  ],
+  
+  "inference_triggers": {
+    "keywords": [
+      "HR", "human resources", "recruiting", "hiring", "talent acquisition", "ATS",
+      "onboarding", "offboarding", "performance review", "performance management",
+      "training", "learning", "L&D", "development", "skills",
+      "engagement", "employee satisfaction", "culture", "retention", "turnover", "attrition",
+      "workforce planning", "headcount", "people analytics", "HRIS"
+    ],
+    "pain_points": [
+      "can't find candidates", "time-to-fill is too long", "candidate quality is low",
+      "high turnover", "people are leaving", "can't retain talent",
+      "performance reviews are late", "reviews don't drive improvement",
+      "training isn't effective", "low completion rates", "skills gaps",
+      "low engagement scores", "employee satisfaction is declining",
+      "can't predict hiring needs", "workforce planning is manual"
+    ],
+    "systems_mentioned": [
+      "Workday", "SAP SuccessFactors", "Oracle HCM", "BambooHR",
+      "Greenhouse", "Lever", "Workable", "iCIMS",
+      "Lattice", "15Five", "Culture Amp", "Betterworks"
+    ]
+  }
+}

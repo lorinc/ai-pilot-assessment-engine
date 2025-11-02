@@ -1,0 +1,265 @@
+{
+  "function": "Operations",
+  "description": "Service delivery, support, and operational execution",
+  
+  "typical_teams": [
+    {
+      "name": "Customer Support",
+      "roles": ["Support Agent", "Support Manager", "Customer Success Manager"],
+      "outputs_created": ["resolved_tickets", "customer_responses", "support_documentation"]
+    },
+    {
+      "name": "IT Operations",
+      "roles": ["SysAdmin", "DevOps Engineer", "IT Manager"],
+      "outputs_created": ["incident_resolutions", "system_deployments", "infrastructure_monitoring"]
+    },
+    {
+      "name": "Supply Chain Operations",
+      "roles": ["Supply Chain Analyst", "Logistics Coordinator", "Procurement Specialist"],
+      "outputs_created": ["purchase_orders", "shipment_schedules", "inventory_reports"]
+    },
+    {
+      "name": "Project Management Office (PMO)",
+      "roles": ["Project Manager", "Program Manager", "PMO Analyst"],
+      "outputs_created": ["project_plans", "status_reports", "resource_allocations"]
+    }
+  ],
+  
+  "typical_processes": [
+    {
+      "name": "Incident Management Process",
+      "description": "Handling and resolving customer or system incidents",
+      "steps": ["Incident Logging", "Triage", "Investigation", "Resolution", "Closure"],
+      "outputs_by_step": {
+        "Incident Logging": ["incident_tickets"],
+        "Investigation": ["root_cause_analysis"],
+        "Resolution": ["resolved_incidents", "resolution_documentation"],
+        "Closure": ["closed_tickets"]
+      }
+    },
+    {
+      "name": "Order Fulfillment Process",
+      "description": "Processing and delivering customer orders",
+      "steps": ["Order Receipt", "Inventory Check", "Picking & Packing", "Shipping", "Delivery Confirmation"],
+      "outputs_by_step": {
+        "Inventory Check": ["inventory_allocation"],
+        "Picking & Packing": ["packed_orders"],
+        "Shipping": ["shipment_tracking", "shipping_labels"],
+        "Delivery Confirmation": ["delivery_confirmations"]
+      }
+    },
+    {
+      "name": "Procurement Process",
+      "description": "Sourcing and purchasing goods/services",
+      "steps": ["Requisition", "Vendor Selection", "PO Creation", "Receipt", "Invoice Matching"],
+      "outputs_by_step": {
+        "Vendor Selection": ["vendor_quotes"],
+        "PO Creation": ["purchase_orders"],
+        "Receipt": ["goods_receipts"],
+        "Invoice Matching": ["matched_invoices"]
+      }
+    }
+  ],
+  
+  "typical_systems": [
+    {
+      "category": "Ticketing/Service Desk",
+      "examples": ["Zendesk", "ServiceNow", "Jira Service Management", "Freshdesk"],
+      "outputs_created": ["resolved_tickets", "incident_reports", "SLA_tracking", "customer_responses"]
+    },
+    {
+      "category": "Project Management",
+      "examples": ["Jira", "Asana", "Monday.com", "Microsoft Project"],
+      "outputs_created": ["project_plans", "task_assignments", "status_reports", "resource_schedules"]
+    },
+    {
+      "category": "Supply Chain/ERP",
+      "examples": ["SAP", "Oracle SCM", "NetSuite", "Infor"],
+      "outputs_created": ["purchase_orders", "inventory_reports", "shipment_schedules"]
+    },
+    {
+      "category": "Monitoring/Observability",
+      "examples": ["Datadog", "New Relic", "Splunk", "Prometheus"],
+      "outputs_created": ["system_alerts", "performance_metrics", "incident_notifications"]
+    },
+    {
+      "category": "Spreadsheets",
+      "examples": ["Excel", "Google Sheets"],
+      "outputs_created": ["manual_reports", "resource_tracking", "capacity_planning"]
+    }
+  ],
+  
+  "common_outputs": [
+    {
+      "id": "resolved_tickets",
+      "name": "Resolved Support Tickets",
+      "description": "Customer issues that have been investigated and resolved",
+      "typical_quality_metrics": ["resolution_quality", "timeliness", "first_contact_resolution", "customer_satisfaction"],
+      "typical_creation_context": {
+        "team": "Customer Support",
+        "process": "Incident Management Process",
+        "step": "Resolution",
+        "system": "Ticketing System (Zendesk, ServiceNow, etc.)"
+      },
+      "typical_dependencies": ["incident_tickets", "knowledge_base", "product_documentation"],
+      "common_pain_points": [
+        "Resolution time is too long (SLA breaches)",
+        "Low first contact resolution rate",
+        "Inconsistent resolution quality",
+        "Tickets get reopened frequently",
+        "Agents can't find answers quickly"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train agents on products, hire senior support staff",
+        "system_capabilities": "AI-powered answer suggestions, automated ticket routing, chatbots",
+        "process_maturity": "Standardize resolution procedures, build knowledge base"
+      }
+    },
+    {
+      "id": "incident_resolutions",
+      "name": "IT Incident Resolutions",
+      "description": "System outages and technical issues that have been resolved",
+      "typical_quality_metrics": ["mean_time_to_resolution", "accuracy", "documentation_quality", "recurrence_prevention"],
+      "typical_creation_context": {
+        "team": "IT Operations",
+        "process": "Incident Management Process",
+        "step": "Resolution",
+        "system": "ServiceNow or Jira"
+      },
+      "typical_dependencies": ["incident_alerts", "system_logs", "monitoring_data", "runbooks"],
+      "common_pain_points": [
+        "Mean time to resolution (MTTR) is too high",
+        "Same incidents keep recurring",
+        "Poor documentation of resolutions",
+        "Escalations are frequent",
+        "No proactive incident prevention"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on incident response, hire SRE specialists",
+        "system_capabilities": "AIOps for root cause analysis, automated remediation, predictive alerting",
+        "process_maturity": "Implement runbooks, post-incident reviews, proactive monitoring"
+      }
+    },
+    {
+      "id": "project_status_reports",
+      "name": "Project Status Reports",
+      "description": "Regular updates on project progress, risks, and issues",
+      "typical_quality_metrics": ["accuracy", "timeliness", "completeness", "actionability"],
+      "typical_creation_context": {
+        "team": "PMO",
+        "process": "Project Reporting Process",
+        "step": "Status Compilation",
+        "system": "Project Management Tool or Spreadsheet"
+      },
+      "typical_dependencies": ["task_completion_data", "resource_utilization", "budget_tracking", "risk_logs"],
+      "common_pain_points": [
+        "Reports are outdated by the time they're shared",
+        "Manual data gathering from multiple sources",
+        "Inconsistent reporting formats across projects",
+        "Status is overly optimistic (green until red)",
+        "Stakeholders can't get real-time visibility"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train PMs on reporting standards, hire PMO analysts",
+        "system_capabilities": "Automated status dashboards, real-time project tracking, AI risk detection",
+        "process_maturity": "Standardize reporting templates, implement project governance"
+      }
+    },
+    {
+      "id": "purchase_orders",
+      "name": "Purchase Orders",
+      "description": "Formal orders to vendors for goods or services",
+      "typical_quality_metrics": ["accuracy", "timeliness", "compliance", "cost_optimization"],
+      "typical_creation_context": {
+        "team": "Supply Chain Operations",
+        "process": "Procurement Process",
+        "step": "PO Creation",
+        "system": "ERP or Procurement System"
+      },
+      "typical_dependencies": ["requisitions", "vendor_contracts", "pricing_agreements", "approval_workflows"],
+      "common_pain_points": [
+        "PO creation takes too long (delays procurement)",
+        "Errors in PO details (wrong quantities, prices)",
+        "Manual PO creation from requisitions",
+        "Lack of spend visibility",
+        "Maverick spending (bypassing PO process)"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on procurement procedures, hire procurement specialists",
+        "system_capabilities": "Automated PO generation, catalog-based ordering, spend analytics",
+        "process_maturity": "Standardize requisition-to-PO workflow, implement approval rules"
+      }
+    },
+    {
+      "id": "inventory_reports",
+      "name": "Inventory Reports",
+      "description": "Current stock levels, locations, and movements",
+      "typical_quality_metrics": ["accuracy", "freshness", "completeness", "forecast_accuracy"],
+      "typical_creation_context": {
+        "team": "Supply Chain Operations",
+        "process": "Inventory Management",
+        "step": "Reporting",
+        "system": "ERP or Warehouse Management System"
+      },
+      "typical_dependencies": ["transaction_data", "warehouse_data", "demand_forecasts"],
+      "common_pain_points": [
+        "Inventory data is inaccurate (doesn't match physical)",
+        "Stockouts or overstock situations",
+        "Can't forecast demand accurately",
+        "Manual cycle counting is time-consuming",
+        "No visibility across multiple warehouses"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on inventory procedures, hire inventory analysts",
+        "system_capabilities": "RFID/barcode automation, AI demand forecasting, real-time tracking",
+        "process_maturity": "Implement cycle counting, optimize reorder points"
+      }
+    },
+    {
+      "id": "resource_allocations",
+      "name": "Resource Allocations",
+      "description": "Assignment of people and resources to projects/tasks",
+      "typical_quality_metrics": ["utilization_rate", "balance", "forecast_accuracy", "satisfaction"],
+      "typical_creation_context": {
+        "team": "PMO",
+        "process": "Resource Management",
+        "step": "Allocation Planning",
+        "system": "Project Management Tool or Spreadsheet"
+      },
+      "typical_dependencies": ["project_demands", "resource_capacity", "skills_inventory", "availability_data"],
+      "common_pain_points": [
+        "Resources are over-allocated (burnout)",
+        "Under-utilization of some resources",
+        "Can't see resource availability across projects",
+        "Manual resource planning in spreadsheets",
+        "Conflicts and double-booking"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on resource planning, hire resource managers",
+        "system_capabilities": "Resource management software, capacity planning, AI-powered allocation",
+        "process_maturity": "Standardize allocation process, implement utilization targets"
+      }
+    }
+  ],
+  
+  "inference_triggers": {
+    "keywords": [
+      "operations", "support", "tickets", "incidents", "customer service", "help desk",
+      "IT operations", "DevOps", "SRE", "infrastructure", "monitoring",
+      "supply chain", "procurement", "inventory", "logistics", "warehouse",
+      "project management", "PMO", "projects", "resources", "capacity"
+    ],
+    "pain_points": [
+      "tickets take too long", "SLA breaches", "can't resolve issues",
+      "incidents keep recurring", "MTTR is too high", "too many escalations",
+      "projects are behind schedule", "can't track project status",
+      "procurement is slow", "PO errors", "inventory is wrong",
+      "resources are over-allocated", "can't plan capacity"
+    ],
+    "systems_mentioned": [
+      "Zendesk", "ServiceNow", "Jira", "Freshdesk",
+      "Asana", "Monday", "Microsoft Project",
+      "Datadog", "New Relic", "Splunk"
+    ]
+  }
+}

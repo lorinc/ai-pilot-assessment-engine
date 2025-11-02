@@ -1,0 +1,276 @@
+{
+  "function": "Finance",
+  "description": "Financial planning, reporting, and control",
+  
+  "typical_teams": [
+    {
+      "name": "Financial Planning & Analysis (FP&A)",
+      "roles": ["FP&A Analyst", "Financial Analyst", "Budget Manager"],
+      "outputs_created": ["financial_forecasts", "budget_plans", "variance_reports", "board_reports"]
+    },
+    {
+      "name": "Accounting",
+      "roles": ["Accountant", "Controller", "Accounting Manager"],
+      "outputs_created": ["financial_statements", "journal_entries", "account_reconciliations", "audit_reports"]
+    },
+    {
+      "name": "Accounts Payable",
+      "roles": ["AP Specialist", "AP Manager"],
+      "outputs_created": ["vendor_payments", "expense_reports", "payment_schedules"]
+    },
+    {
+      "name": "Accounts Receivable",
+      "roles": ["AR Specialist", "Collections Manager"],
+      "outputs_created": ["invoices", "payment_collections", "aging_reports"]
+    },
+    {
+      "name": "Treasury",
+      "roles": ["Treasurer", "Cash Manager"],
+      "outputs_created": ["cash_flow_forecasts", "liquidity_reports", "investment_decisions"]
+    }
+  ],
+  
+  "typical_processes": [
+    {
+      "name": "Financial Close Process",
+      "description": "Month-end/quarter-end/year-end financial closing",
+      "steps": ["Transaction Cutoff", "Reconciliations", "Adjustments", "Review", "Reporting"],
+      "outputs_by_step": {
+        "Reconciliations": ["account_reconciliations"],
+        "Adjustments": ["journal_entries"],
+        "Reporting": ["financial_statements", "management_reports"]
+      }
+    },
+    {
+      "name": "Budgeting & Planning Process",
+      "description": "Annual budget creation and periodic forecasting",
+      "steps": ["Guidelines", "Department Submissions", "Consolidation", "Review & Approval", "Distribution"],
+      "outputs_by_step": {
+        "Department Submissions": ["department_budgets"],
+        "Consolidation": ["consolidated_budget", "budget_plan"],
+        "Distribution": ["approved_budget"]
+      }
+    },
+    {
+      "name": "Accounts Payable Process",
+      "description": "Processing vendor invoices and payments",
+      "steps": ["Invoice Receipt", "Validation", "Approval", "Payment Processing", "Reconciliation"],
+      "outputs_by_step": {
+        "Validation": ["validated_invoices"],
+        "Payment Processing": ["vendor_payments", "payment_files"],
+        "Reconciliation": ["payment_reconciliation"]
+      }
+    },
+    {
+      "name": "Financial Forecasting Process",
+      "description": "Updating financial projections based on actuals",
+      "steps": ["Data Collection", "Assumption Updates", "Model Updates", "Review", "Distribution"],
+      "outputs_by_step": {
+        "Model Updates": ["financial_forecast"],
+        "Distribution": ["forecast_presentation"]
+      }
+    }
+  ],
+  
+  "typical_systems": [
+    {
+      "category": "ERP",
+      "examples": ["SAP", "Oracle Financials", "NetSuite", "Microsoft Dynamics", "Workday"],
+      "outputs_created": ["financial_statements", "journal_entries", "account_reconciliations", "vendor_payments"]
+    },
+    {
+      "category": "Financial Planning",
+      "examples": ["Anaplan", "Adaptive Insights", "Planful", "Vena"],
+      "outputs_created": ["budget_plans", "financial_forecasts", "variance_reports", "scenario_models"]
+    },
+    {
+      "category": "Expense Management",
+      "examples": ["Concur", "Expensify", "Coupa"],
+      "outputs_created": ["expense_reports", "reimbursements", "spend_analytics"]
+    },
+    {
+      "category": "Spreadsheets",
+      "examples": ["Excel", "Google Sheets"],
+      "outputs_created": ["manual_forecasts", "budget_models", "variance_analysis", "ad_hoc_reports"]
+    },
+    {
+      "category": "Business Intelligence",
+      "examples": ["Tableau", "Power BI", "Looker"],
+      "outputs_created": ["financial_dashboards", "KPI_reports", "executive_summaries"]
+    }
+  ],
+  
+  "common_outputs": [
+    {
+      "id": "financial_statements",
+      "name": "Financial Statements",
+      "description": "Income statement, balance sheet, cash flow statement",
+      "typical_quality_metrics": ["accuracy", "timeliness", "completeness", "compliance"],
+      "typical_creation_context": {
+        "team": "Accounting",
+        "process": "Financial Close Process",
+        "step": "Reporting",
+        "system": "ERP"
+      },
+      "typical_dependencies": ["journal_entries", "account_reconciliations", "transaction_data"],
+      "common_pain_points": [
+        "Close takes too long (10+ days)",
+        "Errors discovered after close",
+        "Manual consolidation across entities",
+        "Lack of real-time visibility",
+        "Audit findings and restatements"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on close procedures, hire senior accountants",
+        "system_capabilities": "Automated consolidation, continuous close, AI anomaly detection",
+        "process_maturity": "Standardize close checklist, implement continuous accounting"
+      }
+    },
+    {
+      "id": "financial_forecasts",
+      "name": "Financial Forecasts",
+      "description": "Updated projections of revenue, expenses, and cash flow",
+      "typical_quality_metrics": ["accuracy", "timeliness", "scenario_coverage"],
+      "typical_creation_context": {
+        "team": "FP&A",
+        "process": "Financial Forecasting Process",
+        "step": "Model Updates",
+        "system": "Financial Planning Tool or Spreadsheet"
+      },
+      "typical_dependencies": ["actuals_data", "sales_forecast", "expense_plans", "market_assumptions"],
+      "common_pain_points": [
+        "Forecasts are consistently off by >15%",
+        "Takes weeks to update forecast",
+        "Complex spreadsheet models prone to errors",
+        "Can't model scenarios quickly",
+        "Disconnect between operational and financial forecasts"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Hire FP&A analysts, improve cross-functional collaboration",
+        "system_capabilities": "Predictive analytics, driver-based planning, scenario modeling",
+        "process_maturity": "Standardize assumptions, implement rolling forecasts"
+      }
+    },
+    {
+      "id": "budget_plans",
+      "name": "Budget Plans",
+      "description": "Annual operating budget by department and cost center",
+      "typical_quality_metrics": ["realism", "completeness", "alignment", "timeliness"],
+      "typical_creation_context": {
+        "team": "FP&A",
+        "process": "Budgeting & Planning Process",
+        "step": "Consolidation",
+        "system": "Financial Planning Tool or Spreadsheet"
+      },
+      "typical_dependencies": ["department_budgets", "strategic_plans", "historical_actuals", "growth_assumptions"],
+      "common_pain_points": [
+        "Budget process takes 3+ months",
+        "Budgets are unrealistic (sandbagging or overly optimistic)",
+        "Manual consolidation of department submissions",
+        "Version control nightmare with spreadsheets",
+        "Budget is obsolete by the time it's approved"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Improve budget training, hire planning specialists",
+        "system_capabilities": "Collaborative planning tool, workflow automation",
+        "process_maturity": "Simplify budget process, implement zero-based budgeting"
+      }
+    },
+    {
+      "id": "account_reconciliations",
+      "name": "Account Reconciliations",
+      "description": "Verification that account balances match supporting documentation",
+      "typical_quality_metrics": ["accuracy", "timeliness", "completeness", "documentation_quality"],
+      "typical_creation_context": {
+        "team": "Accounting",
+        "process": "Financial Close Process",
+        "step": "Reconciliations",
+        "system": "ERP + Spreadsheet"
+      },
+      "typical_dependencies": ["transaction_data", "bank_statements", "subledger_data"],
+      "common_pain_points": [
+        "Reconciliations take days to complete",
+        "High error rate requiring rework",
+        "Manual matching of transactions",
+        "Lack of audit trail",
+        "Bottleneck in close process"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on reconciliation procedures, hire specialists",
+        "system_capabilities": "Automated matching, AI-powered reconciliation, exception management",
+        "process_maturity": "Standardize reconciliation templates, implement continuous reconciliation"
+      }
+    },
+    {
+      "id": "vendor_payments",
+      "name": "Vendor Payments",
+      "description": "Payments to suppliers for goods and services",
+      "typical_quality_metrics": ["accuracy", "timeliness", "compliance", "fraud_prevention"],
+      "typical_creation_context": {
+        "team": "Accounts Payable",
+        "process": "Accounts Payable Process",
+        "step": "Payment Processing",
+        "system": "ERP"
+      },
+      "typical_dependencies": ["validated_invoices", "payment_terms", "approval_workflows"],
+      "common_pain_points": [
+        "Late payments causing vendor issues",
+        "Duplicate payments",
+        "Manual payment file creation",
+        "Fraud risk with manual processes",
+        "Missing early payment discounts"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on payment procedures, implement segregation of duties",
+        "system_capabilities": "Automated payment processing, fraud detection, dynamic discounting",
+        "process_maturity": "Standardize approval workflows, implement payment optimization"
+      }
+    },
+    {
+      "id": "variance_reports",
+      "name": "Variance Reports",
+      "description": "Analysis of actual vs budget/forecast with explanations",
+      "typical_quality_metrics": ["accuracy", "insight_quality", "timeliness", "actionability"],
+      "typical_creation_context": {
+        "team": "FP&A",
+        "process": "Performance Analysis",
+        "step": "Variance Analysis",
+        "system": "Financial Planning Tool or Spreadsheet"
+      },
+      "typical_dependencies": ["actuals_data", "budget_data", "forecast_data"],
+      "common_pain_points": [
+        "Analysis is superficial (just numbers, no insights)",
+        "Takes too long to produce",
+        "Manual data gathering and formatting",
+        "Inconsistent variance explanations",
+        "Reports are backward-looking, not actionable"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train analysts on root cause analysis, hire senior FP&A",
+        "system_capabilities": "Automated variance calculation, AI-powered insights, predictive analytics",
+        "process_maturity": "Standardize variance categories, implement driver-based analysis"
+      }
+    }
+  ],
+  
+  "inference_triggers": {
+    "keywords": [
+      "finance", "financial", "accounting", "budget", "forecast", "close", "reconciliation",
+      "P&L", "income statement", "balance sheet", "cash flow", "ERP", "SAP", "Oracle",
+      "FP&A", "accounts payable", "AP", "accounts receivable", "AR", "controller",
+      "variance", "actuals", "expenses", "revenue recognition"
+    ],
+    "pain_points": [
+      "close takes too long", "can't close on time", "errors in financials",
+      "forecasts are wrong", "budget is inaccurate", "budget process takes forever",
+      "reconciliations take too long", "can't reconcile accounts",
+      "late payments", "duplicate payments", "payment errors",
+      "variance analysis is manual", "can't explain variances"
+    ],
+    "systems_mentioned": [
+      "SAP", "Oracle", "NetSuite", "Dynamics", "Workday",
+      "Anaplan", "Adaptive", "Planful", "Vena",
+      "Concur", "Expensify", "Coupa"
+    ]
+  }
+}

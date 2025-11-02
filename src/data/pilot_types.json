@@ -1,0 +1,369 @@
+{
+  "description": "Taxonomy of pilot project types mapped to component improvements",
+  "version": "1.0",
+  
+  "pilot_categories": {
+    "team_execution": {
+      "component": "Team Execution Ability",
+      "description": "Pilots that improve team capability to execute and deliver outputs",
+      "pilot_types": [
+        {
+          "id": "ai_copilot",
+          "name": "AI Copilot / Assistant",
+          "description": "Deploy AI tools to augment team members' capabilities",
+          "typical_use_cases": [
+            "Code completion for developers",
+            "Writing assistance for content creators",
+            "Data analysis assistance for analysts",
+            "Customer response suggestions for support agents"
+          ],
+          "typical_impact": "Increase productivity 20-40%, reduce errors 15-30%",
+          "typical_timeline": "6-12 weeks",
+          "typical_cost": "€10k-€30k",
+          "prerequisites": ["Team willingness to adopt", "Clear use case", "Data/API access"],
+          "examples": [
+            "GitHub Copilot for engineering team",
+            "Grammarly Business for sales proposals",
+            "Tableau AI for FP&A analysts"
+          ]
+        },
+        {
+          "id": "skills_training",
+          "name": "Skills Training Program",
+          "description": "Structured training to upskill team members",
+          "typical_use_cases": [
+            "Technical skills training (e.g., SQL, Python)",
+            "Process training (e.g., forecasting methodology)",
+            "Tool training (e.g., CRM, ERP)",
+            "Soft skills (e.g., communication, problem-solving)"
+          ],
+          "typical_impact": "Increase capability 1-2 star levels over 3-6 months",
+          "typical_timeline": "8-16 weeks",
+          "typical_cost": "€5k-€20k",
+          "prerequisites": ["Training budget", "Time commitment from team", "Clear skill gaps"],
+          "examples": [
+            "SQL training for sales ops team",
+            "Forecasting methodology workshop",
+            "Advanced Excel for finance team"
+          ]
+        },
+        {
+          "id": "team_augmentation",
+          "name": "Team Augmentation / Hiring",
+          "description": "Hire specialists or contractors to fill capability gaps",
+          "typical_use_cases": [
+            "Hire senior specialist (e.g., data engineer, FP&A lead)",
+            "Contract specialists for specific projects",
+            "Offshore team augmentation",
+            "Fractional executive (e.g., part-time CFO)"
+          ],
+          "typical_impact": "Immediate capability boost, sustainable if permanent",
+          "typical_timeline": "4-12 weeks (recruiting) + onboarding",
+          "typical_cost": "€50k-€150k annually per hire",
+          "prerequisites": ["Hiring budget", "Clear role definition", "Management capacity"],
+          "examples": [
+            "Hire senior data analyst for sales ops",
+            "Contract FP&A consultant for 6 months",
+            "Offshore development team"
+          ]
+        },
+        {
+          "id": "knowledge_management",
+          "name": "Knowledge Management System",
+          "description": "Build knowledge base, documentation, or runbooks to capture expertise",
+          "typical_use_cases": [
+            "Support knowledge base",
+            "Process documentation",
+            "Runbooks for IT operations",
+            "Best practices library"
+          ],
+          "typical_impact": "Reduce onboarding time 30-50%, improve consistency",
+          "typical_timeline": "8-12 weeks",
+          "typical_cost": "€10k-€25k",
+          "prerequisites": ["Subject matter experts available", "Tool selection", "Maintenance plan"],
+          "examples": [
+            "Zendesk knowledge base for support team",
+            "Confluence wiki for engineering runbooks",
+            "SharePoint library for sales best practices"
+          ]
+        }
+      ]
+    },
+    
+    "system_capabilities": {
+      "component": "System Capabilities",
+      "description": "Pilots that improve tools and systems used to create outputs",
+      "pilot_types": [
+        {
+          "id": "ai_features",
+          "name": "AI-Powered Features",
+          "description": "Add intelligent capabilities to existing systems",
+          "typical_use_cases": [
+            "Predictive analytics (e.g., sales forecasting)",
+            "Intelligent automation (e.g., invoice matching)",
+            "Recommendation engines (e.g., next best action)",
+            "Anomaly detection (e.g., fraud, quality issues)"
+          ],
+          "typical_impact": "Improve accuracy 20-40%, reduce manual work 30-50%",
+          "typical_timeline": "10-16 weeks",
+          "typical_cost": "€20k-€60k",
+          "prerequisites": ["Quality data available", "System integration capability", "Use case validation"],
+          "examples": [
+            "AI sales forecasting in Salesforce",
+            "Automated invoice matching in AP",
+            "Predictive maintenance alerts"
+          ]
+        },
+        {
+          "id": "intelligent_automation",
+          "name": "Intelligent Automation / RPA",
+          "description": "Automate repetitive manual tasks with bots",
+          "typical_use_cases": [
+            "Data entry automation",
+            "Report generation",
+            "Email processing",
+            "System-to-system data transfer"
+          ],
+          "typical_impact": "Reduce manual work 50-80%, improve speed 3-5x",
+          "typical_timeline": "8-12 weeks",
+          "typical_cost": "€15k-€40k",
+          "prerequisites": ["Stable process", "System access/APIs", "Exception handling plan"],
+          "examples": [
+            "UiPath bot for invoice processing",
+            "Power Automate for report distribution",
+            "Zapier integration for lead routing"
+          ]
+        },
+        {
+          "id": "system_integration",
+          "name": "System Integration",
+          "description": "Connect disparate systems to eliminate manual data transfer",
+          "typical_use_cases": [
+            "CRM to ERP integration",
+            "Data warehouse integration",
+            "API development",
+            "ETL pipeline creation"
+          ],
+          "typical_impact": "Eliminate manual data entry, improve data freshness",
+          "typical_timeline": "10-16 weeks",
+          "typical_cost": "€25k-€70k",
+          "prerequisites": ["System APIs available", "Data mapping defined", "IT resources"],
+          "examples": [
+            "Salesforce to NetSuite integration",
+            "Automated data pipeline to warehouse",
+            "API for real-time inventory sync"
+          ]
+        },
+        {
+          "id": "system_upgrade",
+          "name": "System Upgrade / Replacement",
+          "description": "Upgrade to modern version or replace legacy system",
+          "typical_use_cases": [
+            "Upgrade ERP to cloud version",
+            "Replace spreadsheets with purpose-built tool",
+            "Migrate to modern CRM",
+            "Adopt SaaS platform"
+          ],
+          "typical_impact": "Major capability boost, 2-3 star improvement",
+          "typical_timeline": "16-32 weeks",
+          "typical_cost": "€50k-€200k+",
+          "prerequisites": ["Executive sponsorship", "Change management plan", "Budget approval"],
+          "examples": [
+            "Migrate from on-prem SAP to S/4HANA Cloud",
+            "Replace Excel forecasting with Anaplan",
+            "Upgrade to Salesforce Lightning"
+          ]
+        },
+        {
+          "id": "data_quality_improvement",
+          "name": "Data Quality Improvement",
+          "description": "Implement data validation, cleansing, and governance",
+          "typical_use_cases": [
+            "Data validation rules",
+            "Automated data cleansing",
+            "Master data management",
+            "Data quality monitoring"
+          ],
+          "typical_impact": "Improve data quality 2-3 star levels",
+          "typical_timeline": "12-20 weeks",
+          "typical_cost": "€20k-€50k",
+          "prerequisites": ["Data quality assessment", "Governance model", "Tool selection"],
+          "examples": [
+            "Implement Salesforce validation rules",
+            "Deploy Talend data quality",
+            "Build data quality dashboard"
+          ]
+        }
+      ]
+    },
+    
+    "process_maturity": {
+      "component": "Process Maturity",
+      "description": "Pilots that improve processes and workflows",
+      "pilot_types": [
+        {
+          "id": "process_automation",
+          "name": "Process Automation",
+          "description": "Automate manual process steps and workflows",
+          "typical_use_cases": [
+            "Approval workflows",
+            "Notification automation",
+            "Task routing",
+            "Status updates"
+          ],
+          "typical_impact": "Reduce cycle time 30-60%, improve consistency",
+          "typical_timeline": "8-14 weeks",
+          "typical_cost": "€15k-€40k",
+          "prerequisites": ["Documented process", "System capabilities", "Change management"],
+          "examples": [
+            "Automated PO approval workflow",
+            "ServiceNow incident routing",
+            "Salesforce opportunity stage automation"
+          ]
+        },
+        {
+          "id": "process_intelligence",
+          "name": "Process Intelligence / Mining",
+          "description": "Add monitoring, analytics, and optimization to processes",
+          "typical_use_cases": [
+            "Process mining to find bottlenecks",
+            "Real-time process monitoring",
+            "SLA tracking and alerts",
+            "Process performance dashboards"
+          ],
+          "typical_impact": "Identify 20-40% improvement opportunities",
+          "typical_timeline": "10-16 weeks",
+          "typical_cost": "€20k-€50k",
+          "prerequisites": ["Process event data", "Tool selection", "Improvement capacity"],
+          "examples": [
+            "Celonis process mining for P2P",
+            "ServiceNow process analytics",
+            "Custom process dashboard in Tableau"
+          ]
+        },
+        {
+          "id": "workflow_optimization",
+          "name": "Workflow Optimization / Redesign",
+          "description": "Redesign inefficient processes using lean/six sigma",
+          "typical_use_cases": [
+            "Eliminate unnecessary steps",
+            "Reduce handoffs",
+            "Standardize procedures",
+            "Implement best practices"
+          ],
+          "typical_impact": "Reduce cycle time 40-70%, improve quality 1-2 stars",
+          "typical_timeline": "12-20 weeks",
+          "typical_cost": "€25k-€60k",
+          "prerequisites": ["Executive sponsorship", "Cross-functional team", "Change management"],
+          "examples": [
+            "Lean six sigma project for financial close",
+            "Sales process redesign",
+            "Order-to-cash optimization"
+          ]
+        },
+        {
+          "id": "process_standardization",
+          "name": "Process Standardization",
+          "description": "Document and standardize processes across teams/regions",
+          "typical_use_cases": [
+            "Create process documentation",
+            "Standardize across regions",
+            "Define roles and responsibilities",
+            "Implement process governance"
+          ],
+          "typical_impact": "Improve consistency, enable scaling",
+          "typical_timeline": "10-16 weeks",
+          "typical_cost": "€15k-€35k",
+          "prerequisites": ["Process SMEs available", "Documentation tool", "Change management"],
+          "examples": [
+            "Global sales process standardization",
+            "Shared services process documentation",
+            "ISO 9001 process certification"
+          ]
+        },
+        {
+          "id": "continuous_improvement",
+          "name": "Continuous Improvement Program",
+          "description": "Establish ongoing process improvement culture and capability",
+          "typical_use_cases": [
+            "Kaizen events",
+            "Improvement suggestion system",
+            "Process owner network",
+            "Regular process reviews"
+          ],
+          "typical_impact": "Sustained 10-20% annual improvement",
+          "typical_timeline": "16-24 weeks to establish",
+          "typical_cost": "€30k-€70k initial + ongoing",
+          "prerequisites": ["Leadership commitment", "Improvement methodology", "Incentive structure"],
+          "examples": [
+            "Lean transformation program",
+            "Six Sigma black belt program",
+            "Agile continuous improvement"
+          ]
+        }
+      ]
+    }
+  },
+  
+  "selection_logic": {
+    "description": "How to recommend pilots based on component bottlenecks",
+    "rules": [
+      {
+        "if": "bottleneck_component == 'team_execution'",
+        "then": "Recommend pilots from team_execution category",
+        "prioritize_by": [
+          "Quick wins: ai_copilot, skills_training (8-12 weeks)",
+          "Strategic: team_augmentation (if budget allows)",
+          "Foundation: knowledge_management (if high turnover)"
+        ]
+      },
+      {
+        "if": "bottleneck_component == 'system_capabilities'",
+        "then": "Recommend pilots from system_capabilities category",
+        "prioritize_by": [
+          "Quick wins: intelligent_automation, data_quality_improvement",
+          "High impact: ai_features (if data quality is good)",
+          "Strategic: system_upgrade (if current system is fundamentally inadequate)"
+        ]
+      },
+      {
+        "if": "bottleneck_component == 'process_maturity'",
+        "then": "Recommend pilots from process_maturity category",
+        "prioritize_by": [
+          "Quick wins: process_automation (if process is documented)",
+          "Foundation: process_standardization (if process is ad-hoc)",
+          "Strategic: workflow_optimization (if major inefficiencies exist)"
+        ]
+      },
+      {
+        "if": "multiple_components_are_bottlenecks",
+        "then": "Recommend pilots that address multiple components",
+        "examples": [
+          "System upgrade can improve both system_capabilities and process_maturity",
+          "Process intelligence can improve both process_maturity and team_execution (through insights)"
+        ]
+      }
+    ]
+  },
+  
+  "pilot_recommendation_template": {
+    "structure": {
+      "output_context": "Remind user what output we're improving",
+      "current_state": "Show current component ratings and bottleneck",
+      "gap": "Show gap between actual and required quality",
+      "recommended_pilots": [
+        {
+          "pilot_name": "Name of pilot",
+          "rationale": "Why this pilot addresses the bottleneck",
+          "expected_impact": "How much improvement (star rating)",
+          "timeline": "How long it takes",
+          "cost": "Estimated cost range",
+          "prerequisites": "What's needed to start",
+          "next_steps": "How to get started"
+        }
+      ],
+      "alternatives": "Other pilots to consider"
+    },
+    "example": "For Sales Forecast (current accuracy: ⭐⭐, target: ⭐⭐⭐⭐):\n\nBottleneck: Team Execution (⭐⭐)\n\nRecommended Pilot: AI Copilot for Sales Forecasting\n- Rationale: Augments team's forecasting capability without hiring\n- Expected Impact: Improve accuracy from ⭐⭐ to ⭐⭐⭐⭐ (2 star improvement)\n- Timeline: 10-12 weeks\n- Cost: €20k-€35k\n- Prerequisites: 2+ years of historical sales data, Salesforce API access\n- Next Steps: Validate data quality, select AI vendor, run 4-week pilot\n\nAlternatives:\n- Skills Training: Lower cost (€10k) but slower impact (6 months)\n- Team Augmentation: Hire FP&A analyst (€80k/year) for sustainable improvement"
+  }
+}

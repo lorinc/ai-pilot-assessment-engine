@@ -1,0 +1,287 @@
+{
+  "function": "Marketing",
+  "description": "Customer acquisition, engagement, and brand building through campaigns and content",
+  
+  "typical_teams": [
+    {
+      "name": "Demand Generation Team",
+      "roles": ["Demand Gen Manager", "Campaign Manager", "Marketing Ops"],
+      "outputs_created": ["campaign_performance_reports", "lead_generation_metrics", "marketing_qualified_leads"]
+    },
+    {
+      "name": "Content Marketing Team",
+      "roles": ["Content Strategist", "Content Writer", "SEO Specialist"],
+      "outputs_created": ["marketing_content", "seo_reports", "content_performance_metrics"]
+    },
+    {
+      "name": "Marketing Analytics Team",
+      "roles": ["Marketing Analyst", "Attribution Analyst", "Marketing Data Scientist"],
+      "outputs_created": ["attribution_reports", "marketing_roi_analysis", "customer_journey_maps"]
+    },
+    {
+      "name": "Customer Insights Team",
+      "roles": ["Market Researcher", "Customer Insights Analyst"],
+      "outputs_created": ["customer_segments", "sentiment_analysis", "market_research_reports"]
+    }
+  ],
+  
+  "typical_processes": [
+    {
+      "name": "Campaign Execution & Optimization",
+      "description": "Planning, launching, and optimizing marketing campaigns",
+      "steps": ["Campaign Planning", "Audience Targeting", "Creative Development", "Launch", "Performance Monitoring", "Optimization"],
+      "outputs_by_step": {
+        "Campaign Planning": ["campaign_plans", "budget_allocations"],
+        "Audience Targeting": ["target_segments", "audience_lists"],
+        "Launch": ["active_campaigns"],
+        "Performance Monitoring": ["campaign_performance_reports"],
+        "Optimization": ["optimization_recommendations"]
+      }
+    },
+    {
+      "name": "Customer Segmentation & Targeting",
+      "description": "Identifying and defining customer segments for targeting",
+      "steps": ["Data Collection", "Segmentation Analysis", "Segment Definition", "Targeting Strategy"],
+      "outputs_by_step": {
+        "Segmentation Analysis": ["segment_analysis"],
+        "Segment Definition": ["customer_segments"],
+        "Targeting Strategy": ["targeting_plans"]
+      }
+    },
+    {
+      "name": "Content Creation & Management",
+      "description": "Creating and managing marketing content and assets",
+      "steps": ["Content Planning", "Content Creation", "Review & Approval", "Publishing", "Performance Tracking"],
+      "outputs_by_step": {
+        "Content Planning": ["content_calendar"],
+        "Content Creation": ["marketing_content"],
+        "Publishing": ["published_content"],
+        "Performance Tracking": ["content_performance_metrics"]
+      }
+    },
+    {
+      "name": "Marketing Performance & Attribution",
+      "description": "Measuring and attributing marketing impact",
+      "steps": ["Data Integration", "Attribution Modeling", "ROI Calculation", "Reporting"],
+      "outputs_by_step": {
+        "Attribution Modeling": ["attribution_models"],
+        "ROI Calculation": ["marketing_roi_analysis"],
+        "Reporting": ["attribution_reports", "executive_dashboards"]
+      }
+    }
+  ],
+  
+  "typical_systems": [
+    {
+      "category": "Marketing Automation",
+      "examples": ["HubSpot", "Marketo", "Pardot", "Eloqua"],
+      "outputs_created": ["campaign_performance_reports", "lead_scoring", "email_metrics", "marketing_qualified_leads"]
+    },
+    {
+      "category": "CRM",
+      "examples": ["Salesforce", "HubSpot CRM"],
+      "outputs_created": ["lead_tracking", "customer_data", "conversion_metrics"]
+    },
+    {
+      "category": "Analytics",
+      "examples": ["Google Analytics", "Adobe Analytics", "Mixpanel"],
+      "outputs_created": ["web_analytics", "conversion_tracking", "user_behavior_data"]
+    },
+    {
+      "category": "Content Management",
+      "examples": ["WordPress", "Contentful", "AEM"],
+      "outputs_created": ["published_content", "content_library"]
+    },
+    {
+      "category": "Social Media",
+      "examples": ["Hootsuite", "Sprout Social", "Buffer"],
+      "outputs_created": ["social_posts", "engagement_metrics", "sentiment_analysis"]
+    },
+    {
+      "category": "Spreadsheets",
+      "examples": ["Excel", "Google Sheets"],
+      "outputs_created": ["manual_reports", "campaign_tracking", "budget_tracking"]
+    }
+  ],
+  
+  "common_outputs": [
+    {
+      "id": "campaign_performance_reports",
+      "name": "Campaign Performance Reports",
+      "description": "Reports showing performance metrics for marketing campaigns",
+      "typical_quality_metrics": ["accuracy", "timeliness", "completeness", "actionability"],
+      "typical_creation_context": {
+        "team": "Demand Generation Team",
+        "process": "Campaign Execution & Optimization",
+        "step": "Performance Monitoring",
+        "system": "Marketing Automation Platform"
+      },
+      "typical_dependencies": ["campaign_data", "conversion_data", "cost_data"],
+      "common_pain_points": [
+        "Data is scattered across multiple platforms",
+        "Manual data aggregation takes days",
+        "Attribution is unclear or inconsistent",
+        "Can't track ROI accurately",
+        "Reports are outdated by the time they're shared",
+        "Inconsistent metrics across campaigns"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train team on analytics tools, hire marketing data analyst",
+        "system_capabilities": "Implement unified analytics platform, automated reporting, AI-powered attribution",
+        "process_maturity": "Standardize metrics definitions, implement real-time dashboards"
+      }
+    },
+    {
+      "id": "customer_segments",
+      "name": "Customer Segments",
+      "description": "Defined groups of customers with similar characteristics for targeting",
+      "typical_quality_metrics": ["distinctiveness", "actionability", "stability", "predictive_power"],
+      "typical_creation_context": {
+        "team": "Customer Insights Team",
+        "process": "Customer Segmentation & Targeting",
+        "step": "Segment Definition",
+        "system": "Analytics Platform or CRM"
+      },
+      "typical_dependencies": ["customer_data", "behavioral_data", "transaction_data"],
+      "common_pain_points": [
+        "Segments are based on gut feel, not data",
+        "Segmentation is outdated (done once years ago)",
+        "Can't operationalize segments in campaigns",
+        "Segments overlap or are too broad",
+        "No way to track segment performance",
+        "Manual segmentation in spreadsheets"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on segmentation techniques, hire data scientist",
+        "system_capabilities": "AI-powered clustering and segmentation, automated segment updates",
+        "process_maturity": "Implement regular segmentation refresh, define segment governance"
+      }
+    },
+    {
+      "id": "marketing_content",
+      "name": "Marketing Content",
+      "description": "Blog posts, whitepapers, case studies, emails, and other marketing materials",
+      "typical_quality_metrics": ["relevance", "engagement", "conversion_rate", "brand_consistency"],
+      "typical_creation_context": {
+        "team": "Content Marketing Team",
+        "process": "Content Creation & Management",
+        "step": "Content Creation",
+        "system": "Content Management System"
+      },
+      "typical_dependencies": ["content_strategy", "brand_guidelines", "customer_insights"],
+      "common_pain_points": [
+        "Content creation is too slow (weeks per piece)",
+        "Inconsistent quality across content",
+        "Hard to find existing content (duplication)",
+        "No data on what content performs",
+        "Content approval process is bottleneck",
+        "Can't personalize content at scale"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Hire content specialists, train on content tools",
+        "system_capabilities": "AI content generation, automated personalization, content recommendation",
+        "process_maturity": "Standardize content templates, implement content governance"
+      }
+    },
+    {
+      "id": "attribution_reports",
+      "name": "Marketing Attribution Reports",
+      "description": "Analysis showing which marketing touchpoints drive conversions",
+      "typical_quality_metrics": ["accuracy", "completeness", "actionability", "timeliness"],
+      "typical_creation_context": {
+        "team": "Marketing Analytics Team",
+        "process": "Marketing Performance & Attribution",
+        "step": "Reporting",
+        "system": "Analytics Platform"
+      },
+      "typical_dependencies": ["touchpoint_data", "conversion_data", "cost_data", "attribution_model"],
+      "common_pain_points": [
+        "Using last-touch attribution (not accurate)",
+        "Can't track cross-channel journeys",
+        "Attribution model is too simple or too complex",
+        "Data integration is manual and error-prone",
+        "Can't prove marketing ROI to leadership",
+        "Attribution changes with every analysis"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on attribution modeling, hire attribution specialist",
+        "system_capabilities": "Multi-touch attribution platform, AI-powered attribution, automated data integration",
+        "process_maturity": "Standardize attribution methodology, implement regular reviews"
+      }
+    },
+    {
+      "id": "marketing_qualified_leads",
+      "name": "Marketing Qualified Leads (MQLs)",
+      "description": "Leads that meet criteria for sales engagement based on marketing signals",
+      "typical_quality_metrics": ["conversion_rate", "lead_quality_score", "timeliness", "completeness"],
+      "typical_creation_context": {
+        "team": "Demand Generation Team",
+        "process": "Lead Generation & Qualification",
+        "step": "Lead Scoring",
+        "system": "Marketing Automation + CRM"
+      },
+      "typical_dependencies": ["raw_leads", "engagement_data", "scoring_model"],
+      "common_pain_points": [
+        "MQL-to-SQL conversion rate is low (<20%)",
+        "Sales rejects most MQLs as unqualified",
+        "Lead scoring model is outdated or arbitrary",
+        "Can't identify high-intent leads quickly",
+        "Leads go cold before sales contacts them",
+        "Inconsistent lead qualification criteria"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Align marketing and sales on criteria, train on lead scoring",
+        "system_capabilities": "AI-powered lead scoring, predictive lead qualification, automated routing",
+        "process_maturity": "Implement SLA for lead handoff, regular scoring model updates"
+      }
+    },
+    {
+      "id": "sentiment_analysis",
+      "name": "Customer Sentiment Analysis",
+      "description": "Analysis of customer feedback and sentiment across channels",
+      "typical_quality_metrics": ["accuracy", "coverage", "timeliness", "actionability"],
+      "typical_creation_context": {
+        "team": "Customer Insights Team",
+        "process": "Customer Feedback & Sentiment Analysis",
+        "step": "Sentiment Analysis",
+        "system": "Social Listening Tool or Analytics Platform"
+      },
+      "typical_dependencies": ["customer_feedback", "social_media_data", "review_data", "survey_data"],
+      "common_pain_points": [
+        "Manual review of feedback is overwhelming",
+        "Can't identify trends or themes quickly",
+        "Sentiment analysis is inaccurate or too simple",
+        "Feedback is scattered across channels",
+        "No way to track sentiment over time",
+        "Can't link sentiment to business outcomes"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on sentiment analysis tools, hire insights analyst",
+        "system_capabilities": "AI-powered sentiment analysis, automated theme extraction, real-time monitoring",
+        "process_maturity": "Centralize feedback collection, implement regular sentiment reviews"
+      }
+    }
+  ],
+  
+  "inference_triggers": {
+    "keywords": [
+      "marketing", "campaign", "campaigns", "content", "leads", "MQL", "demand gen",
+      "attribution", "ROI", "segmentation", "segments", "targeting", "personalization",
+      "email marketing", "social media", "SEO", "SEM", "advertising", "brand",
+      "customer insights", "sentiment", "engagement", "conversion"
+    ],
+    "pain_points": [
+      "campaigns aren't performing", "can't track ROI", "attribution is unclear",
+      "lead quality is poor", "MQLs don't convert", "sales rejects our leads",
+      "content creation is too slow", "can't personalize at scale",
+      "segmentation is outdated", "can't identify target customers",
+      "data is scattered", "manual reporting takes forever",
+      "don't know what's working", "can't prove marketing value"
+    ],
+    "systems_mentioned": [
+      "HubSpot", "Marketo", "Pardot", "Eloqua",
+      "Google Analytics", "Adobe Analytics", "Mixpanel",
+      "Hootsuite", "Sprout Social", "Buffer"
+    ]
+  }
+}

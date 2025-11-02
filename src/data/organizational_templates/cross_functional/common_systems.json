@@ -1,0 +1,310 @@
+{
+  "description": "Common systems/tools across functions for inference and matching",
+  "version": "1.0",
+  
+  "system_categories": {
+    "crm": {
+      "category": "Customer Relationship Management",
+      "typical_functions": ["Sales", "Marketing", "Customer Success"],
+      "examples": [
+        {
+          "name": "Salesforce",
+          "aliases": ["SFDC", "Salesforce CRM", "Sales Cloud"],
+          "typical_outputs": ["sales_forecast", "pipeline_reports", "customer_records", "opportunity_tracking"]
+        },
+        {
+          "name": "HubSpot",
+          "aliases": ["HubSpot CRM"],
+          "typical_outputs": ["lead_tracking", "pipeline_reports", "marketing_campaigns"]
+        },
+        {
+          "name": "Microsoft Dynamics",
+          "aliases": ["Dynamics 365", "Dynamics CRM"],
+          "typical_outputs": ["sales_forecast", "customer_records", "service_cases"]
+        },
+        {
+          "name": "Pipedrive",
+          "aliases": [],
+          "typical_outputs": ["pipeline_reports", "deal_tracking"]
+        },
+        {
+          "name": "Zoho CRM",
+          "aliases": ["Zoho"],
+          "typical_outputs": ["sales_tracking", "customer_records"]
+        }
+      ]
+    },
+    
+    "erp": {
+      "category": "Enterprise Resource Planning",
+      "typical_functions": ["Finance", "Operations", "Supply Chain"],
+      "examples": [
+        {
+          "name": "SAP",
+          "aliases": ["SAP ERP", "S/4HANA", "SAP R/3"],
+          "typical_outputs": ["financial_statements", "purchase_orders", "inventory_reports", "production_schedules"]
+        },
+        {
+          "name": "Oracle",
+          "aliases": ["Oracle ERP", "Oracle Financials", "Oracle E-Business Suite"],
+          "typical_outputs": ["financial_statements", "procurement", "inventory_management"]
+        },
+        {
+          "name": "NetSuite",
+          "aliases": ["Oracle NetSuite"],
+          "typical_outputs": ["financial_statements", "order_management", "inventory_tracking"]
+        },
+        {
+          "name": "Microsoft Dynamics",
+          "aliases": ["Dynamics 365", "Dynamics ERP", "Dynamics AX"],
+          "typical_outputs": ["financial_reports", "supply_chain_management"]
+        },
+        {
+          "name": "Workday",
+          "aliases": ["Workday Financial Management"],
+          "typical_outputs": ["financial_statements", "budget_plans", "expense_reports"]
+        }
+      ]
+    },
+    
+    "ticketing": {
+      "category": "Ticketing / Service Desk",
+      "typical_functions": ["Operations", "IT", "Customer Support"],
+      "examples": [
+        {
+          "name": "Zendesk",
+          "aliases": ["Zendesk Support"],
+          "typical_outputs": ["resolved_tickets", "customer_responses", "support_metrics"]
+        },
+        {
+          "name": "ServiceNow",
+          "aliases": ["SNOW"],
+          "typical_outputs": ["incident_resolutions", "change_requests", "service_catalog"]
+        },
+        {
+          "name": "Jira Service Management",
+          "aliases": ["Jira Service Desk", "JSM"],
+          "typical_outputs": ["incident_tickets", "service_requests", "SLA_tracking"]
+        },
+        {
+          "name": "Freshdesk",
+          "aliases": ["Freshservice"],
+          "typical_outputs": ["support_tickets", "customer_responses"]
+        }
+      ]
+    },
+    
+    "project_management": {
+      "category": "Project Management",
+      "typical_functions": ["Operations", "IT", "PMO"],
+      "examples": [
+        {
+          "name": "Jira",
+          "aliases": ["Jira Software", "Atlassian Jira"],
+          "typical_outputs": ["project_plans", "sprint_reports", "task_tracking"]
+        },
+        {
+          "name": "Asana",
+          "aliases": [],
+          "typical_outputs": ["project_plans", "task_assignments", "status_updates"]
+        },
+        {
+          "name": "Monday.com",
+          "aliases": ["Monday"],
+          "typical_outputs": ["project_tracking", "workflow_management"]
+        },
+        {
+          "name": "Microsoft Project",
+          "aliases": ["MS Project"],
+          "typical_outputs": ["project_schedules", "resource_allocations", "gantt_charts"]
+        },
+        {
+          "name": "Smartsheet",
+          "aliases": [],
+          "typical_outputs": ["project_plans", "resource_management"]
+        }
+      ]
+    },
+    
+    "financial_planning": {
+      "category": "Financial Planning & Analysis",
+      "typical_functions": ["Finance", "FP&A"],
+      "examples": [
+        {
+          "name": "Anaplan",
+          "aliases": [],
+          "typical_outputs": ["budget_plans", "financial_forecasts", "scenario_models"]
+        },
+        {
+          "name": "Adaptive Insights",
+          "aliases": ["Workday Adaptive Planning"],
+          "typical_outputs": ["budget_plans", "financial_forecasts", "variance_reports"]
+        },
+        {
+          "name": "Planful",
+          "aliases": ["Host Analytics"],
+          "typical_outputs": ["financial_forecasts", "budget_plans", "consolidation"]
+        },
+        {
+          "name": "Vena",
+          "aliases": ["Vena Solutions"],
+          "typical_outputs": ["budget_plans", "financial_forecasts"]
+        }
+      ]
+    },
+    
+    "sales_engagement": {
+      "category": "Sales Engagement",
+      "typical_functions": ["Sales"],
+      "examples": [
+        {
+          "name": "Outreach",
+          "aliases": ["Outreach.io"],
+          "typical_outputs": ["prospect_outreach", "email_sequences", "call_logs"]
+        },
+        {
+          "name": "SalesLoft",
+          "aliases": ["Salesloft"],
+          "typical_outputs": ["cadence_execution", "engagement_metrics"]
+        },
+        {
+          "name": "Apollo",
+          "aliases": ["Apollo.io"],
+          "typical_outputs": ["prospecting", "lead_enrichment"]
+        }
+      ]
+    },
+    
+    "business_intelligence": {
+      "category": "Business Intelligence / Analytics",
+      "typical_functions": ["All"],
+      "examples": [
+        {
+          "name": "Tableau",
+          "aliases": [],
+          "typical_outputs": ["dashboards", "reports", "data_visualizations"]
+        },
+        {
+          "name": "Power BI",
+          "aliases": ["Microsoft Power BI"],
+          "typical_outputs": ["dashboards", "reports", "KPI_tracking"]
+        },
+        {
+          "name": "Looker",
+          "aliases": ["Google Looker"],
+          "typical_outputs": ["dashboards", "data_exploration", "reports"]
+        },
+        {
+          "name": "Qlik",
+          "aliases": ["QlikView", "Qlik Sense"],
+          "typical_outputs": ["dashboards", "analytics"]
+        }
+      ]
+    },
+    
+    "spreadsheets": {
+      "category": "Spreadsheets",
+      "typical_functions": ["All"],
+      "examples": [
+        {
+          "name": "Excel",
+          "aliases": ["Microsoft Excel", "MS Excel"],
+          "typical_outputs": ["manual_reports", "calculations", "forecasts", "budgets", "tracking"]
+        },
+        {
+          "name": "Google Sheets",
+          "aliases": ["Sheets"],
+          "typical_outputs": ["collaborative_spreadsheets", "manual_reports", "calculations"]
+        }
+      ],
+      "common_pain_points": [
+        "Error-prone manual entry",
+        "Version control issues",
+        "Not scalable",
+        "Difficult to audit",
+        "Breaks with complex formulas"
+      ]
+    },
+    
+    "expense_management": {
+      "category": "Expense Management",
+      "typical_functions": ["Finance"],
+      "examples": [
+        {
+          "name": "Concur",
+          "aliases": ["SAP Concur"],
+          "typical_outputs": ["expense_reports", "travel_bookings", "reimbursements"]
+        },
+        {
+          "name": "Expensify",
+          "aliases": [],
+          "typical_outputs": ["expense_reports", "receipt_scanning"]
+        },
+        {
+          "name": "Coupa",
+          "aliases": [],
+          "typical_outputs": ["expense_management", "procurement", "spend_analytics"]
+        }
+      ]
+    },
+    
+    "proposal_cpq": {
+      "category": "Proposal / CPQ (Configure-Price-Quote)",
+      "typical_functions": ["Sales"],
+      "examples": [
+        {
+          "name": "PandaDoc",
+          "aliases": [],
+          "typical_outputs": ["sales_proposals", "quotes", "contracts"]
+        },
+        {
+          "name": "DocuSign",
+          "aliases": [],
+          "typical_outputs": ["e_signatures", "contract_management"]
+        },
+        {
+          "name": "Salesforce CPQ",
+          "aliases": ["SFDC CPQ"],
+          "typical_outputs": ["quotes", "pricing_configurations", "proposals"]
+        },
+        {
+          "name": "Proposify",
+          "aliases": [],
+          "typical_outputs": ["sales_proposals", "proposal_tracking"]
+        }
+      ]
+    }
+  },
+  
+  "inference_rules": {
+    "system_matching": {
+      "description": "How to match user mentions to systems",
+      "rules": [
+        "Match exact name (case-insensitive)",
+        "Match aliases",
+        "Handle common misspellings",
+        "Ask for clarification if ambiguous"
+      ]
+    },
+    "output_inference": {
+      "description": "When user mentions a system, infer likely outputs",
+      "confidence_levels": {
+        "high": "0.7-0.9 - System is strongly associated with specific outputs",
+        "medium": "0.5-0.6 - System commonly used for these outputs",
+        "low": "0.3-0.4 - System could be used for these outputs"
+      }
+    }
+  },
+  
+  "unknown_system_handling": {
+    "description": "What to do when user mentions an unknown system",
+    "steps": [
+      "1. Acknowledge the system name",
+      "2. Ask clarifying questions: 'What type of system is {system}? (CRM, ERP, etc.)'",
+      "3. Ask: 'What outputs does your team create using {system}?'",
+      "4. Store for future reference",
+      "5. Proceed with assessment using user's information"
+    ],
+    "example": "User mentions 'Cogglepoop'. System responds: 'I'm not familiar with Cogglepoop. What type of system is it - CRM, ERP, project management, or something else? And what outputs does your team create using it?'"
+  }
+}

@@ -1,0 +1,287 @@
+{
+  "description": "1-5 star rating scales for the four components that determine output quality",
+  "note": "These scales help LLMs infer component ratings from conversational evidence",
+  
+  "components": {
+    "team_execution": {
+      "name": "Team Execution Ability",
+      "description": "Current capability of the team to execute and deliver the output",
+      "scale": {
+        "1": {
+          "stars": "⭐",
+          "label": "Critical Issues",
+          "description": "No relevant skills, high turnover, no training, frequent major errors",
+          "indicators": [
+            "Team has no experience with this type of work",
+            "High turnover (>50% annually)",
+            "No training or onboarding",
+            "Frequent critical errors requiring rework",
+            "Team is overwhelmed and burned out"
+          ]
+        },
+        "2": {
+          "stars": "⭐⭐",
+          "label": "Major Issues",
+          "description": "Basic skills, learning on the job, frequent mistakes, inconsistent quality",
+          "indicators": [
+            "Team is learning as they go",
+            "Frequent mistakes (30-50% error rate)",
+            "Inconsistent quality across team members",
+            "Heavy reliance on senior staff",
+            "Minimal formal training"
+          ]
+        },
+        "3": {
+          "stars": "⭐⭐⭐",
+          "label": "Functional",
+          "description": "Competent team, occasional errors, some training, generally meets expectations",
+          "indicators": [
+            "Team has adequate skills for the job",
+            "Occasional errors (10-30% error rate)",
+            "Some formal training exists",
+            "Quality is acceptable but not excellent",
+            "Can handle routine work well"
+          ]
+        },
+        "4": {
+          "stars": "⭐⭐⭐⭐",
+          "label": "Good",
+          "description": "Skilled team, rare errors, regular training, consistently good quality",
+          "indicators": [
+            "Team has strong skills and experience",
+            "Rare errors (<10% error rate)",
+            "Regular training and development",
+            "Consistently good quality",
+            "Can handle complex situations"
+          ]
+        },
+        "5": {
+          "stars": "⭐⭐⭐⭐⭐",
+          "label": "Excellent",
+          "description": "Expert team, near-zero errors, continuous improvement, best-in-class",
+          "indicators": [
+            "Team are recognized experts",
+            "Near-zero errors (<2% error rate)",
+            "Continuous learning culture",
+            "Proactive improvement initiatives",
+            "Industry-leading quality"
+          ]
+        }
+      }
+    },
+    
+    "system_capabilities": {
+      "name": "System Capabilities",
+      "description": "Current capabilities provided by the system/tools used to create the output",
+      "scale": {
+        "1": {
+          "stars": "⭐",
+          "label": "Critical Issues",
+          "description": "Manual/spreadsheet-based, no automation, frequent failures, not fit for purpose",
+          "indicators": [
+            "Entirely manual or spreadsheet-based",
+            "No automation or integration",
+            "Frequent system failures or downtime",
+            "System is not designed for this use case",
+            "Major workarounds required"
+          ]
+        },
+        "2": {
+          "stars": "⭐⭐",
+          "label": "Major Issues",
+          "description": "Basic tools, minimal automation, reliability issues, limited functionality",
+          "indicators": [
+            "Basic tools with limited features",
+            "Minimal automation (mostly manual)",
+            "Frequent reliability issues",
+            "Missing key functionality",
+            "Significant manual workarounds"
+          ]
+        },
+        "3": {
+          "stars": "⭐⭐⭐",
+          "label": "Functional",
+          "description": "Standard tools, some automation, generally reliable, meets basic needs",
+          "indicators": [
+            "Standard industry tools",
+            "Some automation exists",
+            "Generally reliable (occasional issues)",
+            "Meets basic functional needs",
+            "Minor workarounds needed"
+          ]
+        },
+        "4": {
+          "stars": "⭐⭐⭐⭐",
+          "label": "Good",
+          "description": "Modern tools, good automation, highly reliable, well-integrated",
+          "indicators": [
+            "Modern, well-maintained tools",
+            "Good automation and integration",
+            "Highly reliable (rare issues)",
+            "Well-suited for the use case",
+            "Minimal manual intervention"
+          ]
+        },
+        "5": {
+          "stars": "⭐⭐⭐⭐⭐",
+          "label": "Excellent",
+          "description": "Best-in-class tools, full automation, enterprise-grade, AI-powered",
+          "indicators": [
+            "Best-in-class, cutting-edge tools",
+            "Full automation and intelligence",
+            "Enterprise-grade reliability",
+            "AI/ML capabilities where appropriate",
+            "Continuous optimization"
+          ]
+        }
+      }
+    },
+    
+    "process_maturity": {
+      "name": "Process Maturity",
+      "description": "Current maturity level of the process used to create the output",
+      "scale": {
+        "1": {
+          "stars": "⭐",
+          "label": "Critical Issues",
+          "description": "No documented process, ad-hoc, chaotic, no standards",
+          "indicators": [
+            "No documented process exists",
+            "Completely ad-hoc execution",
+            "Every instance is different",
+            "No standards or guidelines",
+            "Chaotic and unpredictable"
+          ]
+        },
+        "2": {
+          "stars": "⭐⭐",
+          "label": "Major Issues",
+          "description": "Informal process, inconsistent execution, tribal knowledge",
+          "indicators": [
+            "Informal, undocumented process",
+            "Inconsistent execution across team",
+            "Relies on tribal knowledge",
+            "No process monitoring",
+            "Frequent exceptions and workarounds"
+          ]
+        },
+        "3": {
+          "stars": "⭐⭐⭐",
+          "label": "Functional",
+          "description": "Documented process, mostly followed, some gaps, basic monitoring",
+          "indicators": [
+            "Process is documented",
+            "Generally followed by team",
+            "Some gaps and exceptions",
+            "Basic monitoring exists",
+            "Occasional process improvements"
+          ]
+        },
+        "4": {
+          "stars": "⭐⭐⭐⭐",
+          "label": "Good",
+          "description": "Well-defined process, consistently followed, monitored, regular improvements",
+          "indicators": [
+            "Well-defined and documented",
+            "Consistently followed",
+            "Actively monitored and measured",
+            "Regular process improvements",
+            "Clear ownership and accountability"
+          ]
+        },
+        "5": {
+          "stars": "⭐⭐⭐⭐⭐",
+          "label": "Excellent",
+          "description": "Optimized process, continuous improvement, best practices, automated monitoring",
+          "indicators": [
+            "Highly optimized process",
+            "Continuous improvement culture",
+            "Industry best practices",
+            "Automated monitoring and alerts",
+            "Proactive optimization"
+          ]
+        }
+      }
+    },
+    
+    "dependency_quality": {
+      "name": "Dependency Quality",
+      "description": "Quality of upstream outputs that this output depends on (calculated as MIN of upstream outputs)",
+      "calculation": "MIN(upstream_output_1.actual_quality, upstream_output_2.actual_quality, ...)",
+      "note": "This component is not directly assessed - it's calculated from upstream output quality",
+      "scale": {
+        "1": {
+          "stars": "⭐",
+          "label": "Critical Issues",
+          "description": "At least one critical upstream dependency has major quality issues",
+          "indicators": [
+            "Upstream data is mostly missing or incorrect",
+            "Upstream outputs are unreliable",
+            "Frequent issues with input quality",
+            "Cannot trust upstream information"
+          ]
+        },
+        "2": {
+          "stars": "⭐⭐",
+          "label": "Major Issues",
+          "description": "Upstream dependencies have significant quality issues",
+          "indicators": [
+            "Upstream data has frequent errors",
+            "Inconsistent quality from upstream",
+            "Requires significant cleanup/validation",
+            "Upstream outputs are often late"
+          ]
+        },
+        "3": {
+          "stars": "⭐⭐⭐",
+          "label": "Functional",
+          "description": "Upstream dependencies are adequate but not great",
+          "indicators": [
+            "Upstream data is generally usable",
+            "Some quality issues exist",
+            "Occasional cleanup needed",
+            "Mostly reliable upstream outputs"
+          ]
+        },
+        "4": {
+          "stars": "⭐⭐⭐⭐",
+          "label": "Good",
+          "description": "Upstream dependencies are high quality and reliable",
+          "indicators": [
+            "Upstream data is high quality",
+            "Reliable and timely upstream outputs",
+            "Minimal validation needed",
+            "Strong upstream processes"
+          ]
+        },
+        "5": {
+          "stars": "⭐⭐⭐⭐⭐",
+          "label": "Excellent",
+          "description": "All upstream dependencies are excellent quality",
+          "indicators": [
+            "Upstream data is excellent quality",
+            "Highly reliable upstream outputs",
+            "No validation needed",
+            "Best-in-class upstream processes"
+          ]
+        }
+      }
+    }
+  },
+  
+  "inference_guidelines": {
+    "description": "How to infer component ratings from conversational evidence",
+    "principles": [
+      "Look for specific indicators mentioned by the user",
+      "Multiple indicators at the same level increase confidence",
+      "User's subjective assessment (e.g., 'team is great') should be validated with evidence",
+      "Absence of negative indicators doesn't mean high rating - look for positive evidence",
+      "When uncertain, default to middle rating (3 stars) with low confidence"
+    ],
+    "confidence_levels": {
+      "high": "0.8-1.0 - User explicitly confirmed or provided multiple strong indicators",
+      "medium": "0.5-0.7 - Inferred from context with some supporting evidence",
+      "low": "0.3-0.4 - Weak inference or assumption based on limited information"
+    }
+  }
+}

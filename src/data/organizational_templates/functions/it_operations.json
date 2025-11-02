@@ -1,0 +1,291 @@
+{
+  "function": "IT Operations",
+  "description": "Managing and maintaining IT infrastructure, systems, and services",
+  
+  "typical_teams": [
+    {
+      "name": "Service Desk Team",
+      "roles": ["Service Desk Analyst", "Help Desk Technician"],
+      "outputs_created": ["resolved_tickets", "user_support", "incident_reports"]
+    },
+    {
+      "name": "Infrastructure Team",
+      "roles": ["Systems Administrator", "Network Engineer", "Cloud Engineer"],
+      "outputs_created": ["system_deployments", "infrastructure_changes", "capacity_reports"]
+    },
+    {
+      "name": "Site Reliability Engineering (SRE)",
+      "roles": ["SRE", "DevOps Engineer", "Platform Engineer"],
+      "outputs_created": ["incident_resolutions", "postmortems", "reliability_metrics"]
+    },
+    {
+      "name": "IT Operations Management",
+      "roles": ["IT Ops Manager", "Service Manager"],
+      "outputs_created": ["it_metrics", "service_reports", "capacity_plans"]
+    }
+  ],
+  
+  "typical_processes": [
+    {
+      "name": "IT Service Management (ITSM) & Service Desk",
+      "description": "Handling user requests and incidents",
+      "steps": ["Request Logging", "Triage", "Assignment", "Resolution", "Closure"],
+      "outputs_by_step": {
+        "Request Logging": ["service_requests"],
+        "Resolution": ["resolved_tickets"],
+        "Closure": ["incident_reports"]
+      }
+    },
+    {
+      "name": "Infrastructure Monitoring & AIOps",
+      "description": "Monitoring systems and detecting issues",
+      "steps": ["Data Collection", "Anomaly Detection", "Alert Generation", "Investigation", "Response"],
+      "outputs_by_step": {
+        "Anomaly Detection": ["system_alerts"],
+        "Investigation": ["root_cause_analysis"],
+        "Response": ["incident_resolutions"]
+      }
+    },
+    {
+      "name": "Incident, Problem & Change Management",
+      "description": "Managing incidents, problems, and changes",
+      "steps": ["Incident Detection", "Response", "Resolution", "Problem Analysis", "Change Implementation"],
+      "outputs_by_step": {
+        "Resolution": ["incident_resolutions"],
+        "Problem Analysis": ["problem_records", "postmortems"],
+        "Change Implementation": ["change_records"]
+      }
+    },
+    {
+      "name": "Security Patching & Configuration Management",
+      "description": "Maintaining system security and configuration",
+      "steps": ["Vulnerability Scanning", "Patch Planning", "Testing", "Deployment", "Verification"],
+      "outputs_by_step": {
+        "Vulnerability Scanning": ["vulnerability_reports"],
+        "Deployment": ["patch_deployments"],
+        "Verification": ["compliance_reports"]
+      }
+    },
+    {
+      "name": "IT Asset & Inventory Management",
+      "description": "Tracking and managing IT assets",
+      "steps": ["Asset Discovery", "Inventory Update", "Lifecycle Management", "Reporting"],
+      "outputs_by_step": {
+        "Inventory Update": ["asset_inventory"],
+        "Reporting": ["asset_reports"]
+      }
+    }
+  ],
+  
+  "typical_systems": [
+    {
+      "category": "ITSM/Ticketing",
+      "examples": ["ServiceNow", "Jira Service Management", "BMC Remedy"],
+      "outputs_created": ["resolved_tickets", "incident_reports", "change_records"]
+    },
+    {
+      "category": "Monitoring/Observability",
+      "examples": ["Datadog", "New Relic", "Splunk", "Prometheus", "Grafana"],
+      "outputs_created": ["system_alerts", "performance_metrics", "dashboards"]
+    },
+    {
+      "category": "Configuration Management",
+      "examples": ["Ansible", "Puppet", "Chef", "Terraform"],
+      "outputs_created": ["configuration_changes", "infrastructure_as_code"]
+    },
+    {
+      "category": "Asset Management",
+      "examples": ["ServiceNow CMDB", "Lansweeper", "Snow Software"],
+      "outputs_created": ["asset_inventory", "license_tracking"]
+    }
+  ],
+  
+  "common_outputs": [
+    {
+      "id": "incident_resolutions",
+      "name": "IT Incident Resolutions",
+      "description": "System outages and technical issues that have been resolved",
+      "typical_quality_metrics": ["mean_time_to_resolution", "accuracy", "documentation_quality", "recurrence_prevention"],
+      "typical_creation_context": {
+        "team": "SRE Team",
+        "process": "Incident, Problem & Change Management",
+        "step": "Resolution",
+        "system": "ITSM Platform"
+      },
+      "typical_dependencies": ["incident_alerts", "system_logs", "monitoring_data", "runbooks"],
+      "common_pain_points": [
+        "Mean time to resolution (MTTR) is too high (>4 hours)",
+        "Same incidents keep recurring",
+        "Poor documentation of resolutions",
+        "Escalations are frequent (>30%)",
+        "No proactive incident prevention",
+        "War rooms for every major incident",
+        "Blame culture instead of learning"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on incident response, hire SRE specialists, implement on-call rotation",
+        "system_capabilities": "AIOps for root cause analysis, automated remediation, predictive alerting, runbook automation",
+        "process_maturity": "Implement runbooks, post-incident reviews, proactive monitoring, SLO tracking"
+      }
+    },
+    {
+      "id": "system_alerts",
+      "name": "System Alerts",
+      "description": "Automated notifications of system issues or anomalies",
+      "typical_quality_metrics": ["precision", "recall", "timeliness", "actionability"],
+      "typical_creation_context": {
+        "team": "Infrastructure Team",
+        "process": "Infrastructure Monitoring & AIOps",
+        "step": "Alert Generation",
+        "system": "Monitoring Platform"
+      },
+      "typical_dependencies": ["monitoring_data", "alert_rules", "thresholds"],
+      "common_pain_points": [
+        "Alert fatigue (too many false positives)",
+        "Missing critical alerts (false negatives)",
+        "Alerts don't provide enough context",
+        "Can't correlate alerts across systems",
+        "Manual alert tuning is time-consuming",
+        "Alerts arrive too late",
+        "No prioritization of alerts"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on alert tuning, hire observability specialist",
+        "system_capabilities": "AI-powered anomaly detection, alert correlation, intelligent routing, auto-remediation",
+        "process_maturity": "Implement SLO-based alerting, regular alert review, runbook linking"
+      }
+    },
+    {
+      "id": "postmortems",
+      "name": "Incident Postmortems",
+      "description": "Blameless analysis of incidents to prevent recurrence",
+      "typical_quality_metrics": ["completeness", "actionability", "timeliness", "follow_through"],
+      "typical_creation_context": {
+        "team": "SRE Team",
+        "process": "Incident, Problem & Change Management",
+        "step": "Problem Analysis",
+        "system": "Documentation Tool"
+      },
+      "typical_dependencies": ["incident_data", "timeline", "impact_assessment"],
+      "common_pain_points": [
+        "Postmortems are not done consistently",
+        "Action items are not tracked or completed",
+        "Blame culture prevents honest analysis",
+        "Postmortems take too long to write",
+        "No learning from other teams' incidents",
+        "Same root causes keep appearing",
+        "Postmortems are not shared widely"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on blameless postmortems, establish postmortem culture",
+        "system_capabilities": "Automated postmortem templates, action item tracking, incident knowledge base",
+        "process_maturity": "Mandatory postmortems for SEV1/2, regular review of trends, cross-team sharing"
+      }
+    },
+    {
+      "id": "change_records",
+      "name": "Change Records",
+      "description": "Documentation of infrastructure and system changes",
+      "typical_quality_metrics": ["completeness", "accuracy", "compliance", "risk_assessment"],
+      "typical_creation_context": {
+        "team": "Infrastructure Team",
+        "process": "Incident, Problem & Change Management",
+        "step": "Change Implementation",
+        "system": "ITSM Platform"
+      },
+      "typical_dependencies": ["change_requests", "approval_workflows", "risk_assessments"],
+      "common_pain_points": [
+        "Change approval process is too slow",
+        "Emergency changes bypass process",
+        "Poor documentation of changes",
+        "Changes cause incidents (>20% failure rate)",
+        "No rollback plans documented",
+        "Can't track change impact",
+        "Compliance audit failures"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on change management, implement peer review",
+        "system_capabilities": "Automated change risk assessment, impact analysis, rollback automation",
+        "process_maturity": "Implement CAB process, standard change catalog, automated approvals for low-risk changes"
+      }
+    },
+    {
+      "id": "capacity_reports",
+      "name": "Capacity Reports",
+      "description": "Analysis of system capacity and utilization",
+      "typical_quality_metrics": ["accuracy", "timeliness", "forecast_horizon", "actionability"],
+      "typical_creation_context": {
+        "team": "IT Operations Management",
+        "process": "Capacity Planning",
+        "step": "Reporting",
+        "system": "Monitoring + Analytics"
+      },
+      "typical_dependencies": ["utilization_data", "growth_trends", "business_forecasts"],
+      "common_pain_points": [
+        "Capacity planning is reactive (not proactive)",
+        "Can't predict when capacity will be exhausted",
+        "Over-provisioning wastes money",
+        "Under-provisioning causes outages",
+        "Manual capacity analysis in spreadsheets",
+        "No visibility to cloud costs",
+        "Can't optimize resource allocation"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Train on capacity planning, hire capacity analyst",
+        "system_capabilities": "AI-powered capacity forecasting, automated scaling, cost optimization",
+        "process_maturity": "Implement regular capacity reviews, define capacity thresholds, link to business planning"
+      }
+    },
+    {
+      "id": "asset_inventory",
+      "name": "IT Asset Inventory",
+      "description": "Comprehensive list of all IT assets and their status",
+      "typical_quality_metrics": ["completeness", "accuracy", "freshness"],
+      "typical_creation_context": {
+        "team": "IT Operations Management",
+        "process": "IT Asset & Inventory Management",
+        "step": "Inventory Update",
+        "system": "Asset Management System"
+      },
+      "typical_dependencies": ["asset_discovery", "procurement_data", "disposal_records"],
+      "common_pain_points": [
+        "Asset inventory is incomplete or inaccurate",
+        "Shadow IT not tracked",
+        "Manual asset tracking in spreadsheets",
+        "Can't track asset lifecycle",
+        "License compliance issues",
+        "Wasted spend on unused assets",
+        "Security risk from unknown assets"
+      ],
+      "typical_improvement_opportunities": {
+        "team_execution": "Hire asset manager, implement asset governance",
+        "system_capabilities": "Automated asset discovery, license optimization, lifecycle tracking",
+        "process_maturity": "Implement asset tagging, regular audits, disposal procedures"
+      }
+    }
+  ],
+  
+  "inference_triggers": {
+    "keywords": [
+      "IT operations", "IT ops", "infrastructure", "systems", "servers", "cloud",
+      "incidents", "outages", "downtime", "MTTR", "SRE", "DevOps",
+      "monitoring", "alerts", "observability", "AIOps",
+      "ITSM", "service desk", "help desk", "tickets",
+      "changes", "patches", "configuration", "CMDB",
+      "capacity", "performance", "scalability"
+    ],
+    "pain_points": [
+      "too many incidents", "MTTR is too high", "systems are down",
+      "alert fatigue", "too many false positives", "missing alerts",
+      "incidents keep recurring", "no postmortems", "blame culture",
+      "change failures", "approval process is slow",
+      "capacity issues", "outages from capacity", "over-provisioned",
+      "asset inventory is wrong", "shadow IT", "license compliance"
+    ],
+    "systems_mentioned": [
+      "ServiceNow", "Jira", "BMC Remedy",
+      "Datadog", "New Relic", "Splunk", "Prometheus",
+      "Ansible", "Puppet", "Chef", "Terraform"
+    ]
+  }
+}

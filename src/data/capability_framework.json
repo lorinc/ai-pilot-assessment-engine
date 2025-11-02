@@ -1,11 +1,16 @@
 {
-  "T1_Organizational_Capabilities": [
+  "description": "Organizational capabilities mapped to component assessment",
+  "version": "1.0",
+  "source": "business_capability_taxonomy.json",
+  "usage": "Use these capabilities as detailed indicators for component scales",
+  "pillars": [
     {
-      "T1_Pillar": "Data_and_Information_Assets",
-      "T2_Categories": [
+      "pillar": "Data_and_Information_Assets",
+      "maps_to_component": "",
+      "categories": [
         {
-          "T2_Category": "Data_Foundation_and_Feature_Engineering",
-          "T3_Capabilities": [
+          "category": "Data_Foundation_and_Feature_Engineering",
+          "capabilities": [
             "Data availability and provisioning capability",
             "Data quality assurance capability",
             "Data quality management capability",
@@ -20,8 +25,8 @@
           ]
         },
         {
-          "T2_Category": "Data_Structure_and_Modality_Handling",
-          "T3_Capabilities": [
+          "category": "Data_Structure_and_Modality_Handling",
+          "capabilities": [
             "Structured tabular data management capability",
             "Transactional or event data logging infrastructure",
             "Time-indexed sequential data handling capability",
@@ -33,8 +38,8 @@
           ]
         },
         {
-          "T2_Category": "Data_Governance_Privacy_and_Access",
-          "T3_Capabilities": [
+          "category": "Data_Governance_Privacy_and_Access",
+          "capabilities": [
             "Formal data governance policies",
             "Auditable governance capability",
             "Policy documentation capability",
@@ -56,8 +61,8 @@
           ]
         },
         {
-          "T2_Category": "Knowledge_and_Documentation_Systems",
-          "T3_Capabilities": [
+          "category": "Knowledge_and_Documentation_Systems",
+          "capabilities": [
             "Knowledge capture processes",
             "Knowledge distribution capability",
             "Knowledge democratization capability",
@@ -80,11 +85,12 @@
       ]
     },
     {
-      "T1_Pillar": "Technology_and_Engineering",
-      "T2_Categories": [
+      "pillar": "Technology_and_Engineering",
+      "maps_to_component": "",
+      "categories": [
         {
-          "T2_Category": "AI_Infrastructure_and_Compute",
-          "T3_Capabilities": [
+          "category": "AI_Infrastructure_and_Compute",
+          "capabilities": [
             "GPU compute infrastructure for training",
             "Scalable cloud or on-premise compute infrastructure",
             "Distributed computing systems capability",
@@ -96,8 +102,8 @@
           ]
         },
         {
-          "T2_Category": "MLOps_and_Model_Lifecycle_Management",
-          "T3_Capabilities": [
+          "category": "MLOps_and_Model_Lifecycle_Management",
+          "capabilities": [
             "Model versioning and tracking capability",
             "Continuous monitoring pipeline capability",
             "Automated retraining workflow capability",
@@ -111,8 +117,8 @@
           ]
         },
         {
-          "T2_Category": "Architecture_Integration_and_Orchestration",
-          "T3_Capabilities": [
+          "category": "Architecture_Integration_and_Orchestration",
+          "capabilities": [
             "Toolchain management and rationalization capability ",
             "Existing ML stack utilization capability",
             "Toolchain integration capability",
@@ -130,8 +136,8 @@
           ]
         },
         {
-          "T2_Category": "Performance_and_Quality_Targets",
-          "T3_Capabilities": [
+          "category": "Performance_and_Quality_Targets",
+          "capabilities": [
             "Batch latency performance capability",
             "Near-real-time latency performance capability",
             "Real-time latency performance capability",
@@ -141,8 +147,8 @@
           ]
         },
         {
-          "T2_Category": "External_Resources_and_Sourcing_Strategy",
-          "T3_Capabilities": [
+          "category": "External_Resources_and_Sourcing_Strategy",
+          "capabilities": [
             "Strategic build/buy posture definition",
             "Vendor independence/management capability",
             "Vendor lock-in avoidance capability ",
@@ -155,11 +161,12 @@
       ]
     },
     {
-      "T1_Pillar": "Strategy_People_and_Process",
-      "T2_Categories": [
+      "pillar": "Strategy_People_and_Process",
+      "maps_to_component": "",
+      "categories": [
         {
-          "T2_Category": "AI_Talent_and_Expertise",
-          "T3_Capabilities": [
+          "category": "AI_Talent_and_Expertise",
+          "capabilities": [
             "In-house ML expertise",
             "MLOps engineering capability",
             "NLP specialization expertise",
@@ -180,8 +187,8 @@
           ]
         },
         {
-          "T2_Category": "Business_Alignment_and_Strategic_Ownership",
-          "T3_Capabilities": [
+          "category": "Business_Alignment_and_Strategic_Ownership",
+          "capabilities": [
             "AI executive sponsorship and budget availability",
             "Strategic alignment enforcement capability ",
             "Competitive posture advancement capability ",
@@ -194,8 +201,8 @@
           ]
         },
         {
-          "T2_Category": "Process_Efficiency_and_Standardization",
-          "T3_Capabilities": [
+          "category": "Process_Efficiency_and_Standardization",
+          "capabilities": [
             "Process clarity and definition capability",
             "Process adherence enforcement capability",
             "Standardized playbook capability",
@@ -212,8 +219,8 @@
           ]
         },
         {
-          "T2_Category": "Organizational_Change_and_Adoption_Enablement",
-          "T3_Capabilities": [
+          "category": "Organizational_Change_and_Adoption_Enablement",
+          "capabilities": [
             "Organizational change management capability",
             "Cross-functional collaboration capability",
             "Stakeholder alignment capability ",
@@ -229,8 +236,8 @@
           ]
         },
         {
-          "T2_Category": "Value_Measurement_and_Specialized_Modeling",
-          "T3_Capabilities": [
+          "category": "Value_Measurement_and_Specialized_Modeling",
+          "capabilities": [
             "SLA KPI linkage capability",
             "NPS KPI linkage capability",
             "Cycle time KPI linkage capability",
@@ -246,11 +253,12 @@
       ]
     },
     {
-      "T1_Pillar": "Governance_Risk_and_Resilience",
-      "T2_Categories": [
+      "pillar": "Governance_Risk_and_Resilience",
+      "maps_to_component": "",
+      "categories": [
         {
-          "T2_Category": "Security_Compliance_and_Legal_Postures",
-          "T3_Capabilities": [
+          "category": "Security_Compliance_and_Legal_Postures",
+          "capabilities": [
             "Compliance and legal expert availability",
             "Strong security posture capability ",
             "Compliance monitoring capability ",
@@ -263,8 +271,8 @@
           ]
         },
         {
-          "T2_Category": "Operational_Resilience_and_Continuity",
-          "T3_Capabilities": [
+          "category": "Operational_Resilience_and_Continuity",
+          "capabilities": [
             "Comprehensive observability capability ",
             "System reliability improvement capability ",
             "System resilience capability ",
@@ -281,8 +289,8 @@
           ]
         },
         {
-          "T2_Category": "Deployment_Assurance_and_Human_Oversight",
-          "T3_Capabilities": [
+          "category": "Deployment_Assurance_and_Human_Oversight",
+          "capabilities": [
             "Ethics and fairness review board oversight",
             "Shadow testing capability",
             "Production piloting capability",
@@ -298,8 +306,8 @@
           ]
         },
         {
-          "T2_Category": "Financial_Risk_and_Economic_Control",
-          "T3_Capabilities": [
+          "category": "Financial_Risk_and_Economic_Control",
+          "capabilities": [
             "Cost control and unit economics visibility ",
             "Clear success metric definition capability ",
             "Revenue integrity assurance capability ",

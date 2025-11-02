@@ -1,0 +1,663 @@
+{
+  "description": "Mapping from problem taxonomy to output pain points for better inference",
+  "version": "1.0",
+  "categories": [
+    {
+      "category": "Broken Knowledge & Documentation Systems",
+      "subcategories": [
+        {
+          "subcategory": "Knowledge management quality",
+          "pain_points": [
+            "capture gaps",
+            "retrieval failure",
+            "stale/obsolete content",
+            "no ownership of updates"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Documentation maturity",
+          "pain_points": [
+            "missing docs",
+            "inaccurate/how-to errors",
+            "not maintained",
+            "scattered across tools"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Version control hygiene",
+          "pain_points": [
+            "branching chaos",
+            "no release notes",
+            "manual merges",
+            "unknown latest version"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Knowledge silos",
+          "pain_points": [
+            "single points of failure",
+            "tribal knowledge gatekeeping",
+            "expert burnout risks"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Search/discoverability",
+          "pain_points": [
+            "irrelevant ranking",
+            "duplicate results first",
+            "poor filters/facets"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Metadata/ontology maturity",
+          "pain_points": [
+            "no taxonomy",
+            "inconsistent tags",
+            "missing entity graph"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Feedback synthesis",
+          "pain_points": [
+            "conflicting inputs unsynthesized",
+            "themes unknown",
+            "no prioritization"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Knowledge base health",
+          "pain_points": [
+            "coverage gaps",
+            "low freshness",
+            "broken links"
+          ],
+          "maps_to_outputs": []
+        }
+      ]
+    },
+    {
+      "category": "Process Design Gaps & Workarounds",
+      "subcategories": [
+        {
+          "subcategory": "Process clarity",
+          "pain_points": [
+            "ambiguous steps",
+            "conflicting procedures",
+            "hidden constraints"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Process adherence",
+          "pain_points": [
+            "guideline avoidance",
+            "workarounds normalized",
+            "audit failures"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Standardization level",
+          "pain_points": [
+            "one-off approaches",
+            "template drift",
+            "no canonical playbooks"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Reuse potential",
+          "pain_points": [
+            "reinventing the wheel",
+            "no component library",
+            "copy-paste proliferation"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Work prioritization",
+          "pain_points": [
+            "firefighting culture",
+            "no WIP limits",
+            "low-value work crowds out high-value"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Ticket hygiene",
+          "pain_points": [
+            "misrouting",
+            "duplicates",
+            "stale backlog"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Feature discovery/education",
+          "pain_points": [
+            "users unaware of capability",
+            "docs too dense",
+            "no in-product guidance"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Adoption barriers",
+          "pain_points": [
+            "poor UX",
+            "low trust",
+            "unclear value proposition"
+          ],
+          "maps_to_outputs": []
+        }
+      ]
+    },
+    {
+      "category": "Missing Ownership, Misaligned Incentives & Skills",
+      "subcategories": [
+        {
+          "subcategory": "Ownership clarity (RACI)",
+          "pain_points": [
+            "no accountable owner",
+            "confused escalation paths",
+            "decision paralysis"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Incentive alignment",
+          "pain_points": [
+            "KPIs reward output not outcomes",
+            "perverse incentives",
+            "no recognition for fixes"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Training/enablement",
+          "pain_points": [
+            "thin onboarding",
+            "no refresh cadence",
+            "irrelevant courseware"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Skill availability (SME bottlenecks)",
+          "pain_points": [
+            "few experts",
+            "overloaded reviewers",
+            "handoff delays"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Workforce impact (reskilling need)",
+          "pain_points": [
+            "role fear",
+            "skill gap unaddressed",
+            "talent attrition"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Union/works-council sensitivity",
+          "pain_points": [
+            "late consultation",
+            "negotiation delays",
+            "pilot blocked"
+          ],
+          "maps_to_outputs": []
+        }
+      ]
+    },
+    {
+      "category": "Broken Communication & Decision Flow",
+      "subcategories": [
+        {
+          "subcategory": "Communication flow",
+          "pain_points": [
+            "handoff gaps",
+            "feedback loops missing",
+            "context lost across channels"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Decision latency",
+          "pain_points": [
+            "approval queues",
+            "batching delays",
+            "unclear thresholds"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Stakeholder alignment",
+          "pain_points": [
+            "conflicting goals",
+            "consensus deadlock",
+            "scope churn"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Visibility preference",
+          "pain_points": [
+            "quiet win required",
+            "internal showcase pressure",
+            "public case study demands"
+          ],
+          "maps_to_outputs": []
+        }
+      ]
+    },
+    {
+      "category": "Data Management Failures",
+      "subcategories": [
+        {
+          "subcategory": "Data availability",
+          "pain_points": [
+            "coverage gaps",
+            "access blocked",
+            "slow provisioning"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Data quality",
+          "pain_points": [
+            "incompleteness",
+            "inaccuracy",
+            "untimeliness"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Data consistency",
+          "pain_points": [
+            "competing truths",
+            "forked datasets",
+            "schema drift"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Data lineage transparency",
+          "pain_points": [
+            "unknown sources",
+            "opaque transforms",
+            "no impact analysis"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Data sovereignty",
+          "pain_points": [
+            "region constraints unclear",
+            "cross-border risk",
+            "vendor residency gaps"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Privacy mode (PII handling)",
+          "pain_points": [
+            "excess data collection",
+            "weak minimization",
+            "inconsistent redaction"
+          ],
+          "maps_to_outputs": []
+        }
+      ]
+    },
+    {
+      "category": "Fragmented Tooling, Integrations & Shadow IT",
+      "subcategories": [
+        {
+          "subcategory": "Toolchain fragmentation",
+          "pain_points": [
+            "overlap and redundancy",
+            "gaps between tools",
+            "license sprawl"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Integration depth",
+          "pain_points": [
+            "one-way sync only",
+            "manual rekeying",
+            "no eventing"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Spreadsheet reliance",
+          "pain_points": [
+            "mission-critical spreadsheets",
+            "brittle formulas",
+            "version chaos"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Shadow IT prevalence",
+          "pain_points": [
+            "unauthorized tools",
+            "untracked data flows",
+            "security blind spots"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Procurement friction",
+          "pain_points": [
+            "RFP bottlenecks",
+            "slow approvals",
+            "unclear vendor policy"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Vendor dependency (lock-in)",
+          "pain_points": [
+            "hard to exit",
+            "proprietary formats",
+            "limited portability"
+          ],
+          "maps_to_outputs": []
+        }
+      ]
+    },
+    {
+      "category": "Ops Reliability, Observability & Continuity Gaps",
+      "subcategories": [
+        {
+          "subcategory": "Observability",
+          "pain_points": [
+            "missing logs",
+            "sparse metrics",
+            "no traces"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Reliability",
+          "pain_points": [
+            "frequent incidents",
+            "high MTTR",
+            "recurring root causes"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Resilience",
+          "pain_points": [
+            "no fallbacks",
+            "poor degradation modes",
+            "single-region risk"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "SLA/SLO adherence",
+          "pain_points": [
+            "chronic breaches",
+            "weak error budgets",
+            "no blameless postmortems"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Operational continuity risk",
+          "pain_points": [
+            "pilot in prod without guardrails",
+            "risky cutovers",
+            "untested runbooks"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Rollback readiness",
+          "pain_points": [
+            "no kill switch",
+            "no blue/green",
+            "rollback untested"
+          ],
+          "maps_to_outputs": []
+        }
+      ]
+    },
+    {
+      "category": "Security, Compliance & Legal Exposure",
+      "subcategories": [
+        {
+          "subcategory": "Security posture",
+          "pain_points": [
+            "secrets in code",
+            "over-permissive RBAC",
+            "manual rotations"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Compliance pressure",
+          "pain_points": [
+            "policy fit",
+            "audit gaps",
+            "new regulation impact unknown"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Legal exposure",
+          "pain_points": [
+            "contractual liabilities",
+            "IP ambiguity",
+            "retention violations"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Governance readiness",
+          "pain_points": [
+            "no approved policies",
+            "ad hoc approvals",
+            "poor review trails"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Standard of care vs regulation",
+          "pain_points": [
+            "best-practice gap",
+            "industry baseline missed",
+            "unsafe defaults"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Auditability",
+          "pain_points": [
+            "missing decision logs",
+            "non-traceable actions",
+            "weak evidence capture"
+          ],
+          "maps_to_outputs": []
+        }
+      ]
+    },
+    {
+      "category": "IT System Performance, Capacity & Cost Control",
+      "subcategories": [
+        {
+          "subcategory": "Performance",
+          "pain_points": [
+            "latency spikes",
+            "throughput limits",
+            "no QoS"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Capacity planning",
+          "pain_points": [
+            "GPU/CPU under/over-provision",
+            "rate-limit hits",
+            "queue buildup"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Cost control",
+          "pain_points": [
+            "unknown unit economics",
+            "no budgets/alerts",
+            "chargeback disputes"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Risk aggregation",
+          "pain_points": [
+            "hidden dependencies",
+            "cascade failures",
+            "no blast-radius limits"
+          ],
+          "maps_to_outputs": []
+        }
+      ]
+    },
+    {
+      "category": "Measurement, Forecasting & Economic Blind Spots",
+      "subcategories": [
+        {
+          "subcategory": "Measurement clarity",
+          "pain_points": [
+            "no baselines",
+            "unclear success metrics",
+            "vanity KPIs"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Evaluation maturity",
+          "pain_points": [
+            "no offline evals",
+            "HITL missing",
+            "no CI for prompts/models"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Forecasting quality",
+          "pain_points": [
+            "high variance",
+            "systematic bias",
+            "no scenarios"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Revenue integrity",
+          "pain_points": [
+            "leakage undetected",
+            "pricing errors",
+            "discount abuse"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Cost leakage",
+          "pain_points": [
+            "rework tax",
+            "duplicate spend",
+            "unused licenses"
+          ],
+          "maps_to_outputs": []
+        }
+      ]
+    },
+    {
+      "category": "Operations, Supply Chain & Fulfillment Breakdowns",
+      "subcategories": [
+        {
+          "subcategory": "Inventory accuracy",
+          "pain_points": [
+            "stale counts",
+            "shrinkage",
+            "mismatched systems"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Scheduling efficiency",
+          "pain_points": [
+            "missed constraints",
+            "idle time",
+            "expedites common"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Customer impact",
+          "pain_points": [
+            "internal handoffs break CX",
+            "high-touch external failures",
+            "SLA visibility gaps"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Brand/reputation risk",
+          "pain_points": [
+            "public incidents",
+            "slow responses",
+            "inconsistent messaging"
+          ],
+          "maps_to_outputs": []
+        }
+      ]
+    },
+    {
+      "category": "Strategic Misalignment & Competitive Pressure",
+      "subcategories": [
+        {
+          "subcategory": "Strategic alignment",
+          "pain_points": [
+            "off-OKR work",
+            "must-win themes ignored",
+            "pet projects"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Competitive pressure",
+          "pain_points": [
+            "parity gap",
+            "catch-up scramble",
+            "missed leapfrog window"
+          ],
+          "maps_to_outputs": []
+        },
+        {
+          "subcategory": "Optionality creation",
+          "pain_points": [
+            "premature lock-in",
+            "no path options",
+            "irreversible choices"
+          ],
+          "maps_to_outputs": []
+        }
+      ]
+    }
+  ]
+}
