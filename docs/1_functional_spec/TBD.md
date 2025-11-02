@@ -119,3 +119,21 @@ Each entry includes:
 **Intent**: When the user comes up with something that cannot reasonably be expressed as "an output created by a team in a system in a process", the LLM is free to answer that this problem is probably not a good candidate for an internal, data-driven technical pilot—unless it is rephrased to meet the requirement for that. This maintains system focus on problems where the output-centric factor model can provide value and prevents scope creep into areas where the methodology doesn't apply.
 
 ---
+
+### 13. Numbered Question Format for User Responses
+**Added**: 2025-11-02
+
+**Context**: When the system asks multiple questions, users need a clear, efficient way to provide structured answers without repeating the questions.
+
+**Intent**: When asking questions, add numeric IDs to them (e.g., "1. What team creates this output?", "2. Which system do they use?"). This allows users to respond concisely in the format "1: answer, 2: answer" without having to retype or reference the questions. This reduces friction, speeds up the conversation, and makes responses more parseable for the LLM.
+
+---
+
+### 14. Professional Reflection Pattern (No Empathy)
+**Added**: 2025-11-02
+
+**Context**: When reflecting back what the user said, the system should maintain a professional, analytical tone rather than an empathetic or supportive tone.
+
+**Intent**: Do not empathize ("I understand that must be frustrating..."). Instead, state why the information is relevant in the assessment ("This indicates a bottleneck in Team Execution") and what factors were created or updated from the statement ("Created factor: Sales Forecast quality = ⭐⭐ due to junior team"). This keeps the conversation focused on actionable assessment rather than emotional support, and makes the system's reasoning transparent.
+
+---

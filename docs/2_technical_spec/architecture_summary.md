@@ -5,31 +5,32 @@
 **Last Updated:** 2025-11-01 22:15  
 **Note:** System uses 1-5 star ratings for all factors. See `output_centric_factor_model_exploration.md` (v0.3) for scope-locked design with MIN() calculation.
 
-The AI Pilot Assessment Engine is a **factor-centric conversational assessment system** that helps organizations evaluate their AI readiness through natural dialogue. The system accumulates evidence over time, building confidence in organizational factor assessments (rated 1-5 stars), which enables informed project feasibility evaluations.
+The AI Pilot Assessment Engine is an **output-centric conversational assessment system** that helps organizations identify improvement opportunities through natural dialogue. The system assesses specific organizational outputs (e.g., "Sales Forecast in CRM"), decomposes them into 4 components (Team, System, Process, Dependencies), identifies bottlenecks using MIN() calculation, and recommends targeted AI pilots.
 
 ---
 
 ## Core Architecture Principles
 
-### 1. Factor-Centric Design with Scoped Instances
-**Everything links to factors.** The system doesn't track arbitrary conversations—it extracts evidence about specific organizational factors (data_quality, ml_infrastructure, team_skills, etc.) and maintains a cumulative journal for each.
+### 1. Output-Centric Design
+**Everything links to outputs.** The system doesn't track arbitrary conversations—it assesses specific organizational outputs (e.g., "Sales Forecast in CRM by Sales Team") and decomposes each into 4 components (Team Execution, System Capabilities, Process Maturity, Dependency Quality).
 
-**Key insight:** Factors can have multiple scoped instances (e.g., data_quality for "sales/Salesforce CRM" vs "finance/SAP ERP"). This enables domain/system-specific assessments while maintaining organizational truth across projects.
+**Key insight:** Each output has a creation context (Team + Process + System) and dependencies on upstream outputs. The MIN() of the 4 components identifies the bottleneck, which directly maps to pilot recommendations.
 
-**Scoped Factor Model:** Each factor instance has a scope defined by domain, system, and team dimensions. The system intelligently matches the most specific applicable instance for any query, falling back to generic assessments when specific ones don't exist.
+**Assessment Model:** Output quality = MIN(Team, System, Process, Dependencies). This "weakest link" approach highlights bottlenecks and enables targeted improvement recommendations.
 
 ### 2. Hybrid Knowledge Model
-- **Static domain knowledge** (factors, archetypes, scales) → Cloud Storage, loaded into memory (NetworkX graph)
-- **Dynamic user data** (factor values, journal entries) → Firestore, queried on-demand
-- **Lookup pattern:** Static graph provides structure, Firestore provides user-specific values (1-5 stars)
+- **Static domain knowledge** (function templates, component scales, pilot types) → Cloud Storage or local JSON files
+- **Dynamic user data** (output assessments, component ratings) → Firestore (full) or JSON files (POC)
+- **Lookup pattern:** Static taxonomies provide structure, dynamic data stores user-specific assessments
 
-### 3. Cumulative Inference with Scope Matching
-Factor values are **synthesized from ALL evidence for that scope**, not single mentions. Confidence increases with consistent evidence. The system uses intelligent scope matching to find the most applicable assessment:
-- **Exact match:** Query for "sales/Salesforce" finds exact instance (confidence: 1.0)
-- **Generic fallback:** Query for "sales/data_warehouse" falls back to "sales/all systems" (confidence: 0.86)
-- **No match:** Query for "manufacturing" returns None if not assessed
-
-LLM re-synthesizes on demand for "why?" questions, considering scope hierarchy.
+### 3. Assessment Storage
+Output assessments are stored with:
+- **Output identification** (name, function, creation context)
+- **Component ratings** (Team ⭐1-5, System ⭐1-5, Process ⭐1-5, Dependencies ⭐1-5)
+- **Calculated quality** (MIN of components)
+- **Gap analysis** (actual vs required quality)
+- **Recommended pilots** (based on bottleneck)
+- **Conversation history** (for context)
 
 ### 4. Real-Time Streaming
 - **LLM responses:** Stream tokens as generated (Vertex AI streaming API)
