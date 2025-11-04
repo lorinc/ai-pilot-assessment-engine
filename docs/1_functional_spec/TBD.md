@@ -191,3 +191,33 @@ Each entry includes:
 **Decision Required Before:** Implementing Increment 1 data models
 
 ---
+
+### 17. LLM Evaluation Metrics and Observability
+**Added**: 2025-11-05
+
+**Context**: The system relies heavily on LLM semantic inference across multiple components: output discovery, edge rating inference, evidence tier classification, context extraction, and pilot recommendations. Need quantitative metrics to evaluate LLM performance and prevent regression.
+
+**Intent**: Add LLM evaluation metrics to the unit test suite following observability best practices. Key areas requiring evaluation:
+
+1. **Output Discovery:** Accuracy of matching user descriptions to output catalog (semantic similarity, false positive/negative rates)
+2. **Evidence Tier Classification:** Correct classification of user statements into Tiers 1-5 (accuracy, inter-rater reliability with human labelers)
+3. **Context Extraction:** Precision/recall of business constraint extraction (budget, timeline, visibility preferences)
+4. **Recommendation Quality:** Relevance of pain point → archetype → pilot mappings (reasoning quality assessment)
+5. **Feasibility Assessment:** Accuracy of prerequisite gap identification and cost-to-bridge estimation
+
+**Suggested Metrics:**
+- Classification metrics: Accuracy, Precision, Recall, F1
+- Matching metrics: Semantic similarity scores, ranking quality
+- Performance metrics: Latency (p50, p95, p99), token usage, cost per conversation
+- Reliability metrics: Error rates, timeout rates, retry counts
+
+**Observability Best Practices:**
+- Structured logging with trace IDs (correlate across components)
+- Real-time metrics dashboards (Cloud Monitoring/Grafana)
+- Alerting on degraded performance thresholds
+- A/B testing framework for prompt iterations
+- Human-in-the-loop validation sampling (10% of conversations)
+
+**Implementation Phase:** Week 9-10 (Polish & Testing) per Implementation Plan
+
+---
