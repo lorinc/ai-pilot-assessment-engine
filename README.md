@@ -1,237 +1,363 @@
 # AI Pilot Assessment Engine
 
-An **exploratory assessment system** that helps organizations understand their AI readiness through conversational factor assessment and project evaluation. (Everything that influences the feasibility of an AI pilot is a "factor" in this system.)
+A **conversational AI pilot recommendation system** that helps organizations identify AI opportunities through natural dialogue. The system assesses organizational outputs (deliverables, work products) through their contributing factors, identifies bottlenecks, and recommends targeted AI pilots to address them.
 
-**No effort is ever lost.** 
-- Every conversation builds cumulative evidence about your organization's factors (your effort keeps working for you)
-- Your data is yours, always available to export in LLM or human-friendly formats.
-- Your data is safe, LLM will send you a signed NDA the second you ask for it.
+**Core Innovation:** Output-centric assessment with LLM-powered semantic inference for solution recommendations.
 
 ---
 
 ## Quick Links
 
 **📖 Documentation:**
-- [Technical Architecture](docs/gcp_technical_architecture.md) - Complete GCP implementation guide
-- [Architecture Summary](docs/architecture_summary.md) - High-level overview
-- [Implementation Roadmap](ARCHITECTURE_COMPLETE.md) - Next steps
+- **Functional Specification:** [`docs/1_functional_spec/`](docs/1_functional_spec/)
+  - [User Interaction Patterns](docs/1_functional_spec/USER_INTERACTION_PATTERNS.md) - Canonical conversation examples
+  - [Representation Model](docs/1_functional_spec/REPRESENTATION.md) - Edge-based factor model
+  - [Business Context Extraction](docs/1_functional_spec/BUSINESS_CONTEXT_EXTRACTION.md) - Natural constraint extraction
+  - [Solution Recommendation](docs/1_functional_spec/SOLUTION_RECOMMENDATION.md) - LLM semantic inference
+  - [Feasibility Assessment](docs/1_functional_spec/FEASIBILITY_AND_REPORTING.md) - Prerequisites and reporting
+  
+- **Technical Specification:** [`docs/2_technical_spec/`](docs/2_technical_spec/)
+  - [Implementation & Deployment Plan](docs/2_technical_spec/IMPLEMENTATION_DEPLOYMENT_PLAN.md) - Complete technical roadmap
 
 **🎯 Key Concepts:**
-- [Vision & Features](#vision) - What this system does
-- [Technical Architecture](#technical-architecture) - GCP deployment details
-- [Status](#status) - Current progress
+- [What This System Does](#what-this-system-does)
+- [How It Works](#how-it-works)
+- [Technical Architecture](#technical-architecture)
 
 ---
 
-## Vision
+## What This System Does
 
-This system enables **free exploration** of organizational readiness without rigid processes. Users can:
-- Start anywhere (project idea, factor discussion, "what's possible?")
-- Jump freely between topics
-- Evaluate projects at any confidence level
-- Never be blocked by "you need X first"
+### The Problem
 
-The system shows **confidence scores** and **what would improve them**, letting users decide when "good enough" is reached.
+Organizations struggle to identify which AI pilots to pursue because:
+- **Combinatorial complexity:** 46+ outputs × 4 bottleneck types × 100+ pain points × 27 AI archetypes
+- **Context matters:** Same bottleneck (e.g., "junior team") requires different solutions based on context
+- **Stakeholder alignment:** Need comprehensive analysis for approval, not just quick recommendations
 
-### Core Principle
+### The Solution
 
-**Factor-centric assessment with intelligent scoping** - Everything links to factors (data_quality, ai_capability, cultural_fit, etc.). The system:
-1. Accumulates evidence from conversations
-2. Infers factor values cumulatively (not from single mentions)
-3. Tracks confirmed vs unconfirmed inferences
-4. **Assesses factors at multiple levels of specificity** (organization-wide, domain-specific, system-specific)
-5. **Intelligently matches scopes** to find most applicable assessments
-6. Evaluates project feasibility based on assessed factors
-7. Shows ROI of continuing assessment
-
-### What This Is NOT
-
-- ❌ Not a decision tracking system
-- ❌ Not a linear process enforcer
-- ❌ Not a "what-if" scenario modeler
-- ❌ Not an execution tracker
-
-### What This IS
-
-- ✅ An exploration tool for organizational readiness
-- ✅ A project evaluation system with confidence scoring
-- ✅ A conversation-based factor assessment engine
-- ✅ A "thinking partner" that remembers everything
+A conversational system that:
+1. **Identifies struggling outputs** through natural dialogue ("Sales forecasts are always wrong")
+2. **Assesses contributing factors** via edge-based model (People, Tools, Processes, Dependencies)
+3. **Calculates bottlenecks** using MIN() - weakest link determines output quality
+4. **Extracts business context** naturally (budget, timeline, visibility preferences)
+5. **Recommends AI pilots** using LLM semantic inference (not hardcoded rules)
+6. **Checks feasibility** against archetype prerequisites
+7. **Generates comprehensive reports** for stakeholder approval (13-18 pages)
 
 ---
 
-## Key Features
+## How It Works
 
-### 1. Exploratory, Not Rigid
-- Start with any question
-- Jump between topics freely
-- System never blocks exploration
-- Always proceed with confidence score
+### 1. Edge-Based Factor Model
 
-### 2. Cumulative Inference with Intelligent Scoping
-- Factor values derived from ALL conversation history for that scope
-- Confidence increases with consistent evidence
-- **Scoped instances:** Assess factors at domain/system level (e.g., "Salesforce data quality" vs "sales data quality")
-- **Scope matching:** Automatically finds most applicable assessment (exact match or generic fallback)
-- Even confirmed claims stay low-confidence without examples
-- User can validate or correct anytime
+**Outputs are assessed through their contributing edges:**
 
-### 3. Project Evaluation
-- Evaluate any project idea at any time
-- Shows confidence breakdown by factor category
-- Identifies gaps and ROI of filling them
-- Risk/assumption ledger instead of arbitrary thresholds
+```
+Nodes:
+  - Output (deliverable: Sales Forecast, Customer Support Ticket, etc.)
+  - People (team archetype: Sales Ops - Junior, Data Engineers - Senior)
+  - Tool (system: Salesforce CRM, Excel, Custom Dashboard)
+  - Process (workflow: Forecasting Process, Data Entry Workflow)
 
-### 4. Pareto-Driven Suggestions
-- "What's next?" shows top 3 high-ROI actions
-- Signals diminishing returns
-- User decides when "good enough"
+Edges (the factors):
+  - People → Output (team's effect on output quality)
+  - Tool → Output (system's effect on output quality)
+  - Process → Output (process's effect on output quality)
+  - Output → Output (upstream dependency's effect)
+```
 
-### 5. Context Accumulation & Intelligent Scope Discovery
-- Never ask twice
-- Auto-populate from factor instances using scope matching
-- **Cross-project reuse:** Assessments discovered in one context apply to all relevant contexts
-- **Unknown system detection:** Asks clarifying questions when unfamiliar systems mentioned
-- Organizational context reused forever
+**Each edge has:**
+- **Evidence array:** User statements with confidence tiers (1-5)
+- **Current score:** 1-5 stars (calculated via Bayesian aggregation)
+- **Current confidence:** 0.0-1.0 (based on evidence weight)
+
+**Output quality = MIN(all incoming edges)** - weakest link determines quality.
+
+### 2. Evidence-Based Assessment
+
+**Tier-weighted evidence aggregation:**
+- **Tier 1:** AI inferred from indirect data (weight=1)
+- **Tier 2:** User mentioned indirectly (weight=3)
+- **Tier 3:** User stated directly (weight=9)
+- **Tier 4:** User provided example (weight=27)
+- **Tier 5:** User provided quantified example (weight=81)
+
+**Bayesian-weighted ranking:**
+- Multiple evidence pieces weighted by tier
+- Regressed toward global average (μ=2.0) for low-confidence edges
+- Handles contradictions (later evidence outweighs earlier)
+- Accepts "I don't know" (confidence=0.0)
+
+### 3. Natural Context Extraction
+
+**"Sprinkle, don't survey" approach:**
+- Extract business constraints naturally throughout conversation
+- Only ask explicitly for missing critical factors before recommendations
+
+**Critical factors (always needed):**
+- Budget range
+- Timeline urgency
+- Visibility preference (quiet win vs showcase)
+
+**Contextual factors (only if relevant):**
+- Compliance requirements
+- Vendor constraints
+- Stakeholder pressure
+
+### 4. LLM Semantic Inference for Recommendations
+
+**Why not hardcoded mapping:**
+- Combinatorial explosion makes rules infeasible
+- Same bottleneck has different solutions based on context
+- Example: "Team ⭐⭐" could mean knowledge gaps, SME bottleneck, or incentive issues
+
+**LLM inference process:**
+1. Build rich context bundle (output + edges + evidence + business constraints)
+2. Reference structured catalogs (100+ pain points, 27 AI archetypes, 28 pilots)
+3. LLM identifies pain points → maps to archetypes → recommends specific pilots
+4. Output: JSON with pain points, archetypes, ranked pilots (with reasoning)
+
+### 5. Feasibility Assessment
+
+**Archetype-based prerequisites:**
+- Data prerequisites (historical data, quality, infrastructure)
+- Team prerequisites (domain expertise, technical skills, capacity)
+- System prerequisites (API access, integration, deployment)
+- Organizational prerequisites (change readiness, stakeholder support, compliance)
+
+**Feasibility tiers:**
+- **Tier 1 (Ready):** 0 weeks, €0, 80-90% success probability
+- **Tier 2 (Minor gaps):** +4-6 weeks, +€10k-€20k, 60-80% success
+- **Tier 3 (Major gaps):** +8-16 weeks, +€30k-€60k, 40-60% success
+- **Tier 4 (Not feasible):** Deal-breakers present
+
+### 6. Two-Tier Recommendations
+
+**In-conversation:** 2-3 targeted pilots (fast decisions)  
+**Downloadable report:** 5-10+ options with full analysis (stakeholder approval)
+
+**Report structure (13-18 pages):**
+1. Executive Summary
+2. Top 3 Recommendations (expected impact, timeline, cost, prerequisites)
+3. Alternative Solutions (4-7 additional options)
+4. Prerequisite Deep Dive (gaps, cost-to-bridge)
+5. Staged Approach (quick wins → comprehensive solutions)
+6. Decision Matrix
+7. Appendix
 
 ---
 
-## Persistence & Portability
+## Example Conversation Flow
 
-The system operates on a **"do once, benefit forever"** principle:
+**User:** "Our sales forecasts are always wrong"
 
-**Zero Effort Loss**
-- All user-provided information is automatically preserved and reusable across future assessments
-- Organizational context (norms, policies, constraints) is captured once and applied to all subsequent evaluations
-- Evidence, assumptions, and factor assessments build a growing knowledge base
-- Conversations can be paused and resumed via email links—no work is ever lost, even accidentally
+**System:** "Sales Forecast - got it. How urgent is fixing this?"  
+*[Moment 1: Extract timeline urgency]*
 
-**No Lock-In**
-- Every piece of information can be exported as detailed AI prompts
-- Users can "smarten up" their favorite AI with their organizational context
-- Exported prompts create a transferable, intelligent sparring partner
-- Assessment history and patterns remain portable across tools
+**User:** "Very urgent. Board is asking about forecast accuracy every week."
 
-This ensures that the system becomes more valuable over time while keeping users in full control of their data.
+**System:** "What's the business impact of these errors?"  
+*[Moment 2: Extract business impact]*
+
+**User:** "We're missing revenue targets. Cost us €500k last quarter."
+
+**System:** "Let's assess 4 areas. First, data quality from upstream sources?"
+
+**User:** "2 stars. Customer data is scattered across multiple systems and outdated."
+
+**System:** "Team skills and resources?"
+
+**User:** "2 stars. Team is junior, mostly fresh grads. And we're understaffed."
+
+**System:** "What budget range could you work with for improvements?"  
+*[Moment 4: Extract budget]*
+
+**User:** "Maybe €30k-€50k for a pilot."
+
+**System:** "Process maturity?"
+
+**User:** "1 star. No standard process, everyone does it their own way."
+
+**System:** "CRM support for forecasting?"
+
+**User:** "1 star. No forecasting tools, we export to Excel manually."
 
 ---
 
-## Key Concepts
+**System Analysis:**
+```
+Output: Sales Forecast
+Current Quality: ⭐ (MIN of all edges)
+Required Quality: ⭐⭐⭐⭐
+Gap: 3 stars
 
-### UX Design Philosophy
+Bottlenecks:
+- Tool → Output: ⭐ (No forecasting tools, manual Excel)
+- Process → Output: ⭐ (Ad-hoc, no standardization)
+- People → Output: ⭐⭐ (Junior team, understaffed)
+- Dependency → Output: ⭐⭐ (Scattered customer data)
 
-The system is designed with **user experience as a core principle**. The LLM is **not inquisitive**—users are not burdened with answering deep, difficult questions. Instead, the LLM infers factor values through **deep but natural conversation**.
+Business Context:
+- Budget: €30k-€50k
+- Timeline: Urgent (board pressure)
+- Impact: €500k/quarter revenue miss
+```
 
-**Intelligent Scope Discovery**
-- The system asks targeted clarifying questions to determine scope (domain, system, team)
-- Distinguishes between organization-wide issues and domain/system-specific problems
-- Examples:
-  - "Is this across all sales systems, or specific to certain tools?"
-  - "Do other domains have similar issues, or is this isolated to sales?"
-- Resolves contradictions between generic and specific assessments
-- Detects patterns across multiple systems and synthesizes generic assessments
+**System Recommendations:**
 
-**Inference-Driven Interaction with Scope Awareness**
-- The system infers factor values AND their scope from conversational context
-- Inferred values are displayed transparently with scope labels (e.g., "Salesforce CRM: 30%")
-- Users can challenge inferences: *"Why do you think our Salesforce data quality is only at 30%?"*
-- The LLM provides insights and reasoning to support or adjust values
-- **Cross-project reuse:** Factor assessed during sales forecasting discussion automatically applies to customer segmentation discussion
+**Option 1: AI Forecasting Copilot** ✅ Ready (Recommended)
+- **What it does:** Real-time AI assistant for forecasting workflow
+- **Expected impact:** ⭐ → ⭐⭐⭐⭐ (addresses Tool + People bottlenecks)
+- **Timeline:** 8-12 weeks
+- **Cost:** €30k-€50k (fits budget)
+- **Prerequisites:** All met, ready to start
+- **Feasibility:** High (80-90% success probability)
 
-**Evidence-Based Updates**
-- Users cannot arbitrarily change values (*"Set data governance readiness to 80%"*) without backing them up with narrative evidence
-- Every adjustment must be grounded in context, examples, or reasoning provided through conversation
-- Even confirmed claims stay low-confidence until backed by examples (e.g., "Our CEO supports AI pilots" needs concrete examples to increase confidence)
-- This maintains assessment integrity while keeping the interaction natural
+**Option 2: Process Automation + Data Pipeline** ⚠️ Minor Gaps
+- **What it does:** Automate data collection, standardize process
+- **Expected impact:** ⭐ → ⭐⭐⭐ (addresses Process + Dependency bottlenecks)
+- **Timeline:** 12-16 weeks (+4 weeks for data cleanup)
+- **Cost:** €40k-€60k (+€10k for data work, exceeds budget)
+- **Prerequisites:** Need data cleanup first
+- **Feasibility:** Medium-High (60-80% success probability)
 
-**Scope Discipline**
-- This is **not a what-if tool**—the scope is already substantial
-- The system focuses on inference and evidence-based assessment, not hypothetical scenario modeling
+**User:** "Option 1 sounds perfect. Can I get a detailed report for the VP?"
 
-### Project Evaluation Approach
-
-When evaluating a project, the system helps clarify:
-
-**Project Definition (TBD - needs better specification)**
-- Clear project description and scope
-- Estimated cost and timeline *(with massive disclaimer: zero guarantees, user must validate with experts)*
-
-**Internal Selling**
-- ROI estimation with KPIs and deadline for stakeholder buy-in
-
-**Feasibility Assessment**
-- Assumptions enumerated and pushed to reasonable level of discovery
-- Key dependencies identified *(rough and arbitrary at this stage—vital for primer guidance, but not nuanced enough for final decisions)*
-- Risk/assumption ledger maintained
-
-This is **not a mandatory checklist**—users can evaluate projects at any time. It's a guide for what makes evaluations more confident and actionable.
-
-### Outputs
-
-The system produces:
-- **Project Evaluation Snapshots** - Timestamped feasibility assessments with confidence breakdowns, gaps, risk/assumption ledger, and recommendations
-- **Factor Assessment Summary** - Current state of all assessed factors with confirmed/unconfirmed status
-- **Evidence Trail** - Full conversation history linked to factor journals
-- **Exportable Context** - All organizational knowledge as portable AI prompts
+**System:** "Generating comprehensive assessment report... [Download: Assessment_Report_Sales_Forecast_2025-11-04.pdf]"
 
 ---
 
 ## Technical Architecture
 
-The system is deployed on **Google Cloud Platform** with a Streamlit frontend and serverless backend.
+### Technology Stack
 
-### Architecture Overview
+**Backend:**
+- **Language:** Python 3.11+
+- **LLM:** Gemini 1.5 Flash via Vertex AI (streaming, 4x cheaper than Pro)
+- **Graph:** NetworkX (in-memory graph operations)
+- **Data:** Firestore (user data), Cloud Storage (static catalogs)
 
-- **Frontend:** Streamlit app with 3-panel layout (chat | knowledge tree | technical log)
-- **Backend:** Python-based conversation orchestrator with async streaming
-- **LLM:** Vertex AI (Gemini 1.5 Flash) for intent classification, factor inference, and response generation
-- **Persistence:** Firestore for user data, scoped factor instances, evidence trails, and project evaluations
-- **Static Knowledge:** Cloud Storage for domain graph (factors, archetypes, relationships)
-- **Authentication:** Firebase Auth (Google OAuth + Email/Password)
-- **Hosting:** Cloud Run (serverless, scale-to-zero for cost optimization)
+**Frontend:**
+- **Framework:** Streamlit (conversational chat interface)
+- **Streaming:** Async generators for real-time LLM responses
+- **Auth:** Firebase Authentication (Google OAuth)
 
-### Key Technical Decisions
+**Deployment:**
+- **Platform:** Google Cloud Platform
+- **Compute:** Cloud Run (scale-to-zero, session affinity)
+- **Region:** us-central1 (Vertex AI availability)
 
-**Hybrid Knowledge Model**
-- Static domain graph (factors, AI archetypes, scales) loaded into memory from Cloud Storage
-- Dynamic user data (factor values, journal entries) stored in Firestore
-- Fast graph traversal (<1ms) with clean separation of concerns
+### High-Level Architecture
 
-**Real-Time Streaming**
-- LLM responses stream token-by-token to chat window
-- Technical events (intent classification, factor updates) stream to log window in real-time
-- Knowledge tree updates via Firestore polling (1-2 second latency)
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    USER (Browser)                           │
+│  Chat Interface + Knowledge Tree + Technical Log            │
+└─────────────────────────────────────────────────────────────┘
+                            │
+                            ▼
+┌─────────────────────────────────────────────────────────────┐
+│              STREAMLIT APP (Cloud Run)                      │
+│  ┌────────────────────────────────────────────────────────┐ │
+│  │  Conversation Orchestrator                             │ │
+│  │    ├─ Discovery Engine (Output identification)         │ │
+│  │    ├─ Assessment Engine (Edge rating + MIN calc)       │ │
+│  │    ├─ Context Extractor (Business constraints)         │ │
+│  │    ├─ Recommendation Engine (LLM semantic inference)   │ │
+│  │    └─ Report Generator (Comprehensive PDF)             │ │
+│  └────────────────────────────────────────────────────────┘ │
+└─────────────────────────────────────────────────────────────┘
+         │              │              │              │
+         ▼              ▼              ▼              ▼
+┌──────────────┐ ┌──────────────┐ ┌──────────────┐ ┌──────────────┐
+│  Vertex AI   │ │  Firestore   │ │   Cloud      │ │  Firebase    │
+│  (Gemini)    │ │  (User Data) │ │   Storage    │ │    Auth      │
+│              │ │              │ │  (Catalogs)  │ │              │
+└──────────────┘ └──────────────┘ └──────────────┘ └──────────────┘
+```
 
-**Cost Optimization**
-- Cloud Run scales to zero when idle (free tier covers low traffic)
-- Gemini 1.5 Flash (4x cheaper than Pro, sufficient for task)
-- Estimated cost: **~$1.50/month** for 10 users, 500 conversations/month
+### Data Model
 
-**Factor-Centric Persistence with Scoped Instances**
-- Factor instances created for each unique scope (domain/system/team combination)
-- Evidence tracked per instance with specificity markers
-- 83% storage savings vs full event sourcing
-- Cumulative inference: factor values synthesized from ALL evidence for that scope via LLM
-- Scope matching algorithm finds most applicable instance (<1ms overhead)
+**Firestore Schema:**
+```
+/users/{user_id}/
+  nodes/
+    outputs/{output_id}
+      - output_name, function, description
+      - incoming_edges: [edge_id, ...]
+      - calculated_score: 2.5  # Cached MIN()
+      - calculated_confidence: 0.75
+    
+    tools/{tool_id}
+      - tool_name, tool_type, description
+      - outgoing_edges: [edge_id, ...]
+    
+    processes/{process_id}
+      - process_name, maturity_level
+      - outgoing_edges: [edge_id, ...]
+    
+    people/{people_id}
+      - archetype_name, description
+      - outgoing_edges: [edge_id, ...]
+  
+  edges/{edge_id}
+    - source_id, target_id, edge_name
+    - current_score: 1-5 stars
+    - current_confidence: 0.0-1.0
+    - evidence: [
+        {statement, tier, timestamp, conversation_id}
+      ]
+  
+  conversations/{conversation_id}
+    - messages: [{role, content, timestamp}]
+    - extracted_context: {budget, timeline, visibility, ...}
+    - status: "in_progress" | "completed"
+```
 
-### Architecture Documentation
+**Hybrid Storage:**
+- Firestore = source of truth (persistence)
+- NetworkX = fast graph operations (BFS, DFS, MIN calculation)
+- Load relevant subgraph on session start
+- Write back to Firestore on changes
 
-**Implementation Guides:**
-- **[GCP Technical Architecture](docs/gcp_technical_architecture.md)** - Complete system architecture, component responsibilities, data flow, deployment
-- **[Data Schemas](docs/gcp_data_schemas.md)** - Firestore schema, static graph structure, Python data classes, LLM prompts
-- **[Architecture Summary](docs/architecture_summary.md)** - High-level overview, key decisions, technology stack
-- **[System Interactions](docs/system_interactions.md)** - Component interactions, responsibility matrix, process flows
-- **[Architecture Complete](ARCHITECTURE_COMPLETE.md)** - Implementation roadmap and design summary
+### Cost Optimization
 
-**Domain Design:**
-- **[Conversation Memory Architecture](docs/conversation_memory_architecture.md)** - Factor journal persistence, cumulative inference
-- **[Exploratory Assessment Architecture](docs/exploratory_assessment_architecture.md)** - Assessment flow patterns, confidence scoring
-- **[User Interaction Guidelines](docs/user_interaction_guideline.md)** - Conversational UX patterns, LLM guidelines
+**GCP Free Tier Coverage:**
+- Cloud Run: 2M requests/month, 360K GB-seconds
+- Firestore: 1GB storage, 50K reads/day, 20K writes/day
+- Cloud Storage: 5GB storage
+- Vertex AI: $300 credit for new accounts
+
+**Estimated Monthly Cost (after free tier):**
+- Cloud Run: ~$5-10 (low traffic)
+- Firestore: ~$0-5 (< 1GB data)
+- Vertex AI: ~$10-20 (Gemini Flash, ~100 conversations/month)
+- **Total: ~$15-35/month**
+
+**Scale-to-zero:** Cloud Run scales to 0 instances when idle (cost = $0)
+
+---
+
+## Implementation Timeline
+
+**Total Duration:** 10 weeks (2.5 months)
+
+| Phase | Duration | Deliverable |
+|-------|----------|-------------|
+| 1. Infrastructure | Weeks 1-2 | GCP setup, basic chat |
+| 2. Discovery & Assessment | Weeks 3-4 | Output ID, edge rating, MIN calc |
+| 3. Context Extraction | Week 5 | Business context extraction |
+| 4. Recommendations | Weeks 6-7 | LLM inference, feasibility |
+| 5. Report Generation | Week 8 | PDF report |
+| 6. Polish & Testing | Weeks 9-10 | Demo-ready |
 
 ---
 
 ## Status
 
-**Architecture:** ✅ Complete - Full GCP technical architecture documented (49,000+ words)  
-**Implementation:** 🔄 Ready to begin - All components, schemas, and contracts defined  
+**Functional Specification:** ✅ Complete - All interaction patterns, models, and algorithms defined  
+**Technical Specification:** ✅ Complete - Implementation and deployment plan documented  
+**Implementation:** 📋 Ready to begin - See [Implementation Plan](docs/2_technical_spec/IMPLEMENTATION_DEPLOYMENT_PLAN.md)  
 **Deployment:** 📋 Planned - Cloud Run serverless deployment with scale-to-zero cost optimization
