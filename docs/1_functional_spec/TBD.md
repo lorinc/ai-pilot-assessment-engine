@@ -137,3 +137,57 @@ Each entry includes:
 **Intent**: Do not empathize ("I understand that must be frustrating..."). Instead, state why the information is relevant in the assessment ("This indicates a bottleneck in Team Execution") and what factors were created or updated from the statement ("Created factor: Sales Forecast quality = ⭐⭐ due to junior team"). This keeps the conversation focused on actionable assessment rather than emotional support, and makes the system's reasoning transparent.
 
 ---
+
+### 15. Verifiable Assumptions Export (Technical Questionnaire)
+**Added**: 2025-11-04
+
+**Context**: During conversation, the system makes inferences and the user makes assumptions about technical capabilities, data quality, infrastructure, and team skills. Many of these assumptions can be verified by talking to engineers, data teams, or technical leads within the organization.
+
+**Intent**: Track assumptions that are verifiable through internal investigation (as opposed to subjective judgments). Allow selective export of these assumptions in a questionnaire format that the user can share with technical stakeholders (e.g., data engineers, infrastructure leads, ML engineers). The questionnaire should be structured for easy completion by technical staff and easy re-import of answers back into the assessment. This enables the user to validate technical assumptions without requiring technical stakeholders to participate in the full conversational assessment.
+
+**Examples of Verifiable Assumptions:**
+- "You have 3 years of historical sales data" → Can ask data engineer to confirm
+- "Your CRM has no built-in forecasting tools" → Can ask system admin to verify
+- "Data quality in Salesforce is around 30%" → Can ask data team to assess
+- "Team lacks ML expertise" → Can ask engineering manager to confirm skill levels
+
+**Export Format Considerations:**
+- Questionnaire should be standalone (includes context about why we're asking)
+- Questions should be technical but clear (avoid jargon where possible)
+- Should support multiple-choice, yes/no, and scale responses
+- Should include space for technical notes/clarifications
+- Re-import should update evidence levels and confidence scores
+
+---
+
+### 16. 🚨 BLOCKING: Shared Evidence & Factor Representation
+**Added**: 2025-11-04  
+**Status**: BLOCKING for Increment 1 implementation
+
+**Context**: User statements like "Sales data is bad" can influence multiple outputs (Sales Forecast, Sales Dashboard, Revenue Report, etc.). The evidence is shared, but the output-centric model treats each output's components as independent. This creates a fundamental tension in the domain model.
+
+**The Problem:**
+- Evidence about "sales data quality" is **shared** across outputs
+- But OutputFactor components are **output-specific** (capability to deliver THIS output)
+- Do we duplicate evidence across all affected outputs?
+- Or do we have a shared "Factor" concept separate from output-specific components?
+
+**Critical Questions:**
+1. Is "sales data quality" a first-class entity in the domain model, or just evidence for output-specific components?
+2. How do we model: Evidence → Factor → Component → Output?
+3. Where/how do we store evidence to enable:
+   - Store once (efficiency)
+   - Retrieve at inference runtime for ANY affected output
+   - Maintain output-centric purity (MIN() calculation per output)
+4. What's the retrieval pattern when user asks "Why is Sales Forecast rated ⭐⭐?"
+
+**Options to Consider:**
+- **Option A:** Duplicate evidence across outputs (simple, redundant)
+- **Option B:** Shared factor pool (efficient, adds indirection)
+- **Option C:** Hybrid - Evidence pool, ratings per-output (complex retrieval)
+
+**Related:** See `/docs/EVIDENCE_HIERARCHY_DISCUSSION.md` for full context
+
+**Decision Required Before:** Implementing Increment 1 data models
+
+---

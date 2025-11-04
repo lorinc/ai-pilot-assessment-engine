@@ -103,9 +103,9 @@ with col_log:
         log_entries = logger.get_entries(limit=20)
         
         if log_entries:
-            # Format all entries as text
+            # Format all entries as text with markdown
             formatted_log = LogFormatter.format_entries(log_entries)
-            st.code(formatted_log, language=None)
+            st.markdown(formatted_log)
         else:
             st.info("No log entries yet. Start chatting to see technical logs.")
 

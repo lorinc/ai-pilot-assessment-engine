@@ -36,7 +36,7 @@ class LogFormatter:
             entry: Log entry dict with timestamp, level, type, message, metadata
             
         Returns:
-            Formatted string (may contain newlines for detailed logs)
+            Formatted string with proper multi-line indentation
         """
         timestamp = entry["timestamp"][:19].replace("T", " ")
         level = entry["level"]
@@ -46,7 +46,7 @@ class LogFormatter:
         # Level icon
         level_icons = {
             "DEBUG": "🔵",
-            "INFO": "🟢",
+            "INFO": "🟢", 
             "WARNING": "🟡",
             "ERROR": "🔴"
         }
@@ -74,8 +74,17 @@ class LogFormatter:
             # No template, use original message
             message = entry["message"]
         
-        # Format: [timestamp] LEVEL: message
-        return f"{icon} [{timestamp}] {level}: {message}"
+        # Format: [timestamp] **LEVEL**: message
+        # Multi-line messages get proper indentation
+        lines = message.split('\n')
+        if len(lines) == 1:
+            # Single line - no special handling needed
+            return f"[{timestamp}] **{level}**: {message}"
+        else:
+            # Multi-line - first line normal, subsequent lines indented
+            first_line = f"[{timestamp}] **{level}**: {lines[0]}"
+            subsequent_lines = ['  ' + line for line in lines[1:]]
+            return '\n'.join([first_line] + subsequent_lines)
     
     @staticmethod
     def _format_context_build(metadata: Dict[str, Any]) -> str:
@@ -98,9 +107,12 @@ class LogFormatter:
         prompt_length = metadata.get("prompt_length", 0)
         prompt_preview = metadata.get("prompt_preview", "")
         
+        # Convert to plain text by replacing newlines with spaces and limiting length
+        plain_preview = prompt_preview.replace('\n', ' ').strip()
+        
         lines = [
             f"Prompt constructed ({prompt_length} chars):",
-            f"  Preview: {prompt_preview[:200]}{'...' if len(prompt_preview) > 200 else ''}"
+            f"  Preview: {plain_preview[:200]}{'...' if len(plain_preview) > 200 else ''}"
         ]
         
         return "\n".join(lines)
@@ -114,6 +126,7 @@ class LogFormatter:
             entries: List of log entry dicts
             
         Returns:
-            Multi-line formatted string
+            Multi-line formatted string with double newlines for markdown rendering
         """
-        return "\n".join(LogFormatter.format_entry(entry) for entry in entries)
+        formatted_entries = [LogFormatter.format_entry(entry) for entry in entries]
+        return '\n\n'.join(formatted_entries)
