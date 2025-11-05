@@ -1,0 +1,547 @@
+# Generated Atomic Triggers
+# Source: triggers_dense_format.md
+# Generated: 2025-11-06
+# Total: 40 triggers across 4 categories
+
+---
+
+## USER EXPLICIT TRIGGERS (8)
+# Direct user requests
+
+triggers:
+  user_explicit:
+    - id: T_REQUEST_HELP
+      description: "User explicitly asks for help"
+      examples:
+        - "help"
+        - "what should I do?"
+        - "I'm stuck"
+      detection:
+        type: keyword_match
+        keywords: ["help", "stuck", "what should i do", "what now"]
+      situation_affinity:
+        navigation: 0.8
+        education: 0.6
+      triggers_behaviors:
+        - B_SUGGEST_NEXT_ACTION
+        - B_SHOW_OPTIONAL_PATHS
+
+    - id: T_REQUEST_EXPLANATION
+      description: "User asks how something works"
+      examples:
+        - "how does this work?"
+        - "explain"
+        - "what is X?"
+      detection:
+        type: keyword_match
+        keywords: ["how does", "explain", "what is", "why"]
+      situation_affinity:
+        education: 0.9
+        discovery: 0.3
+      triggers_behaviors:
+        - B_EXPLAIN_DESIGN_DECISIONS
+        - B_EXPLAIN_OBJECT_MODEL
+
+    - id: T_REQUEST_RECOMMENDATIONS
+      description: "User asks for pilot suggestions"
+      examples:
+        - "what should I build?"
+        - "recommend"
+        - "suggestions?"
+      detection:
+        type: keyword_match
+        keywords: ["recommend", "suggest", "what should i build", "options"]
+      situation_affinity:
+        recommendation: 0.9
+        analysis: 0.5
+      triggers_behaviors:
+        - B_GENERATE_PILOT_OPTIONS
+        - B_OFFER_RECOMMENDATIONS_AT_CONFIDENCE
+
+    - id: T_REQUEST_PROGRESS
+      description: "User asks about status"
+      examples:
+        - "where are we?"
+        - "progress?"
+        - "how much done?"
+      detection:
+        type: keyword_match
+        keywords: ["where are we", "progress", "status", "how much", "done"]
+      situation_affinity:
+        navigation: 0.9
+      triggers_behaviors:
+        - B_SHOW_OUTPUT_COMPLETENESS
+        - B_SHOW_PROGRESS_BAR
+
+    - id: T_REQUEST_EXPORT
+      description: "User wants to save/export"
+      examples:
+        - "export"
+        - "save"
+        - "download"
+        - "report"
+      detection:
+        type: keyword_match
+        keywords: ["export", "save", "download", "report"]
+      situation_affinity:
+        navigation: 0.7
+      triggers_behaviors:
+        - B_OFFER_SAVE_POINT
+
+    - id: T_PROVIDE_FEEDBACK
+      description: "User gives feedback"
+      examples:
+        - "this is wrong"
+        - "actually..."
+        - "let me clarify"
+      detection:
+        type: keyword_match
+        keywords: ["wrong", "actually", "no", "correction", "clarify"]
+      situation_affinity:
+        error_recovery: 0.6
+        assessment: 0.4
+      triggers_behaviors:
+        - B_APPRECIATE_FEEDBACK
+        - B_OFFER_UNDO
+
+    - id: T_RESTART_ASSESSMENT
+      description: "User wants to start over"
+      examples:
+        - "restart"
+        - "start over"
+        - "new assessment"
+      detection:
+        type: keyword_match
+        keywords: ["restart", "start over", "new", "reset"]
+      situation_affinity:
+        navigation: 0.8
+      triggers_behaviors:
+        - B_CONFIRM_RESTART
+
+    - id: T_SKIP_QUESTION
+      description: "User wants to skip"
+      examples:
+        - "skip"
+        - "I don't know"
+        - "pass"
+        - "later"
+      detection:
+        type: keyword_match
+        keywords: ["skip", "don't know", "pass", "later", "not sure"]
+      situation_affinity:
+        error_recovery: 0.5
+        navigation: 0.5
+      triggers_behaviors:
+        - B_OFFER_SKIP
+        - B_ACCEPT_DONT_KNOW
+
+---
+
+## USER IMPLICIT TRIGGERS (14)
+# Inferred from user content
+
+  user_implicit:
+    - id: T_MENTION_OUTPUT
+      description: "User describes an output"
+      detection:
+        type: semantic
+        signals:
+          - mentions_deliverable
+          - mentions_report
+          - mentions_dashboard
+          - mentions_forecast
+      situation_affinity:
+        discovery: 0.9
+        assessment: 0.3
+      triggers_behaviors:
+        - B_REDIRECT_TO_CONCRETE
+        - B_CONFIRM_OUTPUT
+
+    - id: T_MENTION_PROBLEM
+      description: "User describes a problem"
+      detection:
+        type: keyword_match
+        keywords: ["issue", "problem", "broken", "doesn't work", "bad", "wrong"]
+      situation_affinity:
+        discovery: 0.7
+        assessment: 0.5
+      triggers_behaviors:
+        - B_PROGRESSIVE_NARROWING
+        - B_ELICIT_EXAMPLE
+
+    - id: T_MENTION_TEAM
+      description: "User mentions team/people"
+      detection:
+        type: semantic
+        signals:
+          - mentions_team_name
+          - mentions_role
+          - uses_we_they
+      situation_affinity:
+        discovery: 0.6
+        scope_management: 0.4
+      triggers_behaviors:
+        - B_DISCOVER_TEAM
+        - B_ENRICH_TEAM_CONTEXT
+
+    - id: T_MENTION_SYSTEM
+      description: "User mentions system/tool"
+      detection:
+        type: semantic
+        signals:
+          - mentions_system_name
+          - mentions_tool
+          - mentions_software
+      situation_affinity:
+        discovery: 0.6
+        scope_management: 0.4
+      triggers_behaviors:
+        - B_DISCOVER_SYSTEM
+        - B_ENRICH_SYSTEM_CONTEXT
+
+    - id: T_MENTION_PROCESS
+      description: "User mentions process"
+      detection:
+        type: keyword_match
+        keywords: ["process", "workflow", "procedure", "steps"]
+      situation_affinity:
+        discovery: 0.6
+        scope_management: 0.4
+      triggers_behaviors:
+        - B_DISCOVER_PROCESS
+        - B_ENRICH_PROCESS_CONTEXT
+
+    - id: T_PROVIDE_RATING
+      description: "User gives quality assessment"
+      detection:
+        type: semantic
+        signals:
+          - mentions_numbers
+          - mentions_stars
+          - uses_quality_adjectives
+      situation_affinity:
+        assessment: 0.9
+      triggers_behaviors:
+        - B_ASSESS_WITH_PROFESSIONAL_REFLECTION
+        - B_ACKNOWLEDGE_TIER1
+
+    - id: T_PROVIDE_EVIDENCE
+      description: "User gives specific data"
+      detection:
+        type: semantic
+        signals:
+          - mentions_numbers
+          - mentions_percentages
+          - mentions_specific_time
+      situation_affinity:
+        assessment: 0.8
+        evidence_quality: 0.7
+      triggers_behaviors:
+        - B_ACKNOWLEDGE_QUANTIFIED
+        - B_ACKNOWLEDGE_TIER1
+
+    - id: T_PROVIDE_EXAMPLE
+      description: "User gives concrete example"
+      detection:
+        type: keyword_match
+        keywords: ["for example", "like when", "last time", "instance"]
+      situation_affinity:
+        assessment: 0.7
+        discovery: 0.5
+      triggers_behaviors:
+        - B_ACKNOWLEDGE_CONCRETE
+
+    - id: T_EXPRESS_UNCERTAINTY
+      description: "User shows uncertainty"
+      detection:
+        type: keyword_match
+        keywords: ["maybe", "i think", "not sure", "probably", "guess"]
+      situation_affinity:
+        error_recovery: 0.6
+        evidence_quality: 0.5
+      triggers_behaviors:
+        - B_ACCEPT_VAGUE_WITH_LOW_CONFIDENCE
+        - B_PROBE_FOR_EXAMPLE
+
+    - id: T_EXPRESS_FRUSTRATION
+      description: "User shows frustration"
+      detection:
+        type: keyword_match
+        keywords: ["stupid", "doesn't make sense", "annoying", "frustrated"]
+      situation_affinity:
+        error_recovery: 0.9
+      triggers_behaviors:
+        - B_DETECT_FRUSTRATION
+        - B_ACKNOWLEDGE_BETA
+
+    - id: T_EXPRESS_CONFUSION
+      description: "User shows confusion"
+      detection:
+        type: keyword_match
+        keywords: ["confused", "lost", "don't understand", "what?", "huh"]
+      situation_affinity:
+        error_recovery: 0.9
+        education: 0.6
+      triggers_behaviors:
+        - B_OFFER_REPHRASE
+        - B_OFFER_SKIP
+
+    - id: T_SCOPE_AMBIGUITY
+      description: "Statement lacks scope"
+      detection:
+        type: semantic
+        signals:
+          - generic_statement_without_scope
+          - no_system_specified
+          - no_team_specified
+      situation_affinity:
+        scope_management: 0.9
+        discovery: 0.4
+      triggers_behaviors:
+        - B_DETECT_SCOPE_AMBIGUITY
+        - B_CLARIFY_SYSTEM_SCOPE
+
+    - id: T_ABSTRACT_STATEMENT
+      description: "Vague/generic statement"
+      detection:
+        type: semantic
+        signals:
+          - no_specifics
+          - generic_complaint
+          - abstract_language
+      situation_affinity:
+        discovery: 0.8
+        error_recovery: 0.3
+      triggers_behaviors:
+        - B_REDIRECT_TO_CONCRETE
+        - B_ELICIT_EXAMPLE
+
+    - id: T_MULTIPLE_OUTPUTS
+      description: "User mentions multiple outputs"
+      detection:
+        type: semantic
+        signals:
+          - lists_multiple_deliverables
+          - mentions_several_problems
+      situation_affinity:
+        scope_management: 0.8
+        navigation: 0.5
+      triggers_behaviors:
+        - B_HANDLE_MULTI_OUTPUT
+        - B_NARROW_TO_SPECIFIC
+
+---
+
+## SYSTEM PROACTIVE TRIGGERS (12)
+# System-initiated based on state
+
+  system_proactive:
+    - id: T_OUTPUT_IDENTIFIED
+      description: "Output successfully identified"
+      condition: "discovery_engine_confidence > 0.7"
+      situation_affinity:
+        assessment: 0.7
+        navigation: 0.5
+      triggers_behaviors:
+        - B_CONFIRM_OUTPUT
+        - B_DISCOVER_TEAM
+
+    - id: T_ASSESSMENT_SUFFICIENT
+      description: "Enough data for recommendations"
+      condition: "components_assessed >= 3 OR user_requested_recommendations"
+      situation_affinity:
+        recommendation: 0.8
+        analysis: 0.6
+      triggers_behaviors:
+        - B_OFFER_RECOMMENDATIONS_AT_CONFIDENCE
+        - B_GENERATE_PILOT_OPTIONS
+
+    - id: T_BOTTLENECK_IDENTIFIED
+      description: "Bottleneck analysis complete"
+      condition: "MIN_calculation_done AND bottleneck_found"
+      situation_affinity:
+        recommendation: 0.9
+        analysis: 0.5
+      triggers_behaviors:
+        - B_MAP_BOTTLENECK_TO_ARCHETYPE
+        - B_GENERATE_PILOT_OPTIONS
+
+    - id: T_LOW_CONFIDENCE_DATA
+      description: "Evidence quality is low"
+      condition: "tier4_or_tier5_count > 2"
+      situation_affinity:
+        evidence_quality: 0.8
+        assessment: 0.4
+      triggers_behaviors:
+        - B_PROBE_FOR_NUMBERS
+        - B_PROBE_FOR_EXAMPLE
+
+    - id: T_CONFLICTING_EVIDENCE
+      description: "Contradictory statements detected"
+      condition: "current_statement_contradicts_previous"
+      situation_affinity:
+        error_recovery: 0.7
+        evidence_quality: 0.6
+      triggers_behaviors:
+        - B_DETECT_CONFLICTING_EVIDENCE
+        - B_RESOLVE_CONFLICT
+
+    - id: T_MILESTONE_REACHED
+      description: "Natural break point"
+      condition: "output_fully_assessed OR recommendations_shown"
+      situation_affinity:
+        navigation: 0.8
+      triggers_behaviors:
+        - B_SHOW_SESSION_SUMMARY
+        - B_OFFER_SAVE_POINT
+
+    - id: T_CONTEXT_THIN
+      description: "Entity lacks description"
+      condition: "entity_identified AND description_empty"
+      situation_affinity:
+        discovery: 0.7
+        assessment: 0.5
+      triggers_behaviors:
+        - B_ENRICH_SYSTEM_CONTEXT
+        - B_ENRICH_TEAM_CONTEXT
+        - B_ENRICH_PROCESS_CONTEXT
+
+    - id: T_MULTIPLE_OUTPUTS_ACTIVE
+      description: "Multiple outputs in progress"
+      condition: "active_outputs_count >= 2"
+      situation_affinity:
+        scope_management: 0.8
+        navigation: 0.7
+      triggers_behaviors:
+        - B_HANDLE_MULTI_OUTPUT
+        - B_RECOMMEND_DEPTH_OVER_BREADTH
+
+    - id: T_SESSION_RESUME
+      description: "Returning user"
+      condition: "previous_session_exists"
+      situation_affinity:
+        navigation: 0.7
+        education: 0.3
+      triggers_behaviors:
+        - B_RESUME_SESSION
+
+    - id: T_FIRST_TIME_USER
+      description: "New user detected"
+      condition: "no_previous_sessions"
+      situation_affinity:
+        education: 0.9
+        discovery: 0.5
+      triggers_behaviors:
+        - B_EXPLAIN_OBJECT_MODEL
+
+    - id: T_SPARSE_KNOWLEDGE_DETECTED
+      description: "Multiple outputs but shallow assessment"
+      condition: "outputs_count >= 3 AND all_have_less_than_2_components"
+      situation_affinity:
+        navigation: 0.8
+        recommendation: 0.6
+        scope_management: 0.5
+      triggers_behaviors:
+        - B_RECOMMEND_DEPTH_OVER_BREADTH
+        - B_SHOW_ASSESSMENT_GAPS
+
+    - id: T_BREADTH_OVER_DEPTH
+      description: "User exploring many outputs superficially"
+      condition: "outputs_mentioned >= 5 AND none_fully_assessed"
+      situation_affinity:
+        navigation: 0.9
+        discovery: 0.4
+      triggers_behaviors:
+        - B_SHOW_ASSESSMENT_GAPS
+        - B_OFFER_FOCUS_STRATEGY
+
+---
+
+## SYSTEM REACTIVE TRIGGERS (6)
+# Response to conversation patterns
+
+  system_reactive:
+    - id: T_PATTERN_REPETITION
+      description: "Same pattern triggered 3+ times"
+      condition: "pattern_used_count >= 3 AND no_progress"
+      situation_affinity:
+        error_recovery: 0.6
+        navigation: 0.4
+      triggers_behaviors:
+        - B_BACKTRACK
+        - B_OFFER_SKIP
+
+    - id: T_USER_STUCK
+      description: "No progress in 3+ turns"
+      condition: "turns_without_useful_data >= 3"
+      situation_affinity:
+        error_recovery: 0.8
+        navigation: 0.5
+      triggers_behaviors:
+        - B_OFFER_SKIP
+        - B_SUGGEST_NEXT_ACTION
+
+    - id: T_RAPID_CORRECTIONS
+      description: "User corrects multiple times"
+      condition: "corrections_in_last_3_turns >= 2"
+      situation_affinity:
+        error_recovery: 0.7
+        assessment: 0.5
+      triggers_behaviors:
+        - B_OFFER_UNDO
+        - B_RESOLVE_CONFLICT
+
+    - id: T_QUESTION_IGNORED
+      description: "User didn't answer question"
+      condition: "user_changed_topic OR unrelated_response"
+      situation_affinity:
+        error_recovery: 0.6
+        navigation: 0.4
+      triggers_behaviors:
+        - B_BACKTRACK
+        - B_OFFER_SKIP
+
+    - id: T_SCOPE_CLARIFIED
+      description: "User provided scope signal"
+      condition: "user_said_all_or_just_x"
+      situation_affinity:
+        scope_management: 0.7
+        assessment: 0.5
+      triggers_behaviors:
+        - B_DETECT_SCOPE_SIGNAL
+
+    - id: T_UNDERSTANDING_DEMONSTRATED
+      description: "User uses system terminology"
+      condition: "user_uses_bottleneck_or_min_or_output_centric"
+      situation_affinity:
+        education: 0.3
+        assessment: 0.7
+      triggers_behaviors:
+        - B_ACKNOWLEDGE_UNDERSTANDING
+
+---
+
+## METADATA
+
+metadata:
+  total_triggers: 40
+  categories:
+    user_explicit: 8
+    user_implicit: 14
+    system_proactive: 12
+    system_reactive: 6
+  
+  situation_dimensions_covered:
+    - discovery: 18 triggers
+    - education: 8 triggers
+    - assessment: 16 triggers
+    - analysis: 3 triggers
+    - recommendation: 4 triggers
+    - navigation: 12 triggers
+    - error_recovery: 13 triggers
+    - scope_management: 8 triggers
+    - evidence_quality: 4 triggers
+  
+  source: triggers_dense_format.md
+  generated: 2025-11-06
+  version: 1.0

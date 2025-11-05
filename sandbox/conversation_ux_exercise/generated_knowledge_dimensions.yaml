@@ -1,0 +1,475 @@
+# Generated Knowledge Dimensions
+# Source: knowledge_dimensions_dense_format.md
+# Generated: 2025-11-06
+# Total: 30 dimensions across 4 categories
+
+---
+
+knowledge_dimensions:
+
+  ## SYSTEM KNOWLEDGE (12 dimensions)
+  # What the system knows about user's context
+  
+  system_knowledge:
+    - id: outputs_identified
+      description: "Outputs discovered"
+      type: list
+      values: "List of output IDs with names"
+      updated_by:
+        - B_CONFIRM_OUTPUT
+        - B_DISCOVER_TEAM
+      default: []
+      
+    - id: outputs_assessed
+      description: "Assessment completeness per output"
+      type: dict
+      values: "{output_id: {components: 3, confidence: 'medium'}}"
+      updated_by:
+        - B_ASSESS_WITH_PROFESSIONAL_REFLECTION
+        - B_SHOW_OUTPUT_COMPLETENESS
+      default: {}
+      
+    - id: bottlenecks_identified
+      description: "Known bottlenecks per output"
+      type: dict
+      values: "{output_id: [component_ids]}"
+      updated_by:
+        - B_MAP_BOTTLENECK_TO_ARCHETYPE
+      default: {}
+      
+    - id: recommendations_shown
+      description: "Recommendations presented"
+      type: dict
+      values: "{output_id: [pilot_ids]}"
+      updated_by:
+        - B_GENERATE_PILOT_OPTIONS
+      default: {}
+      
+    - id: user_domain
+      description: "User's business domain"
+      type: enum
+      values: ["sales", "finance", "operations", "marketing", "engineering", "unknown"]
+      updated_by:
+        - B_DISCOVER_TEAM
+        - B_ENRICH_TEAM_CONTEXT
+      default: "unknown"
+      
+    - id: user_role
+      description: "User's role/perspective"
+      type: enum
+      values: ["manager", "analyst", "executive", "engineer", "unknown"]
+      updated_by:
+        - B_DISCOVER_TEAM
+      default: "unknown"
+      
+    - id: evidence_quality
+      description: "Overall evidence quality"
+      type: enum
+      values: ["high", "medium", "low"]
+      updated_by:
+        - B_ACKNOWLEDGE_TIER1
+        - B_ACCEPT_VAGUE_WITH_LOW_CONFIDENCE
+      default: "medium"
+      
+    - id: scope_clarity
+      description: "How clear scope is"
+      type: enum
+      values: ["clear", "ambiguous", "conflicting"]
+      updated_by:
+        - B_DETECT_SCOPE_AMBIGUITY
+        - B_DETECT_SCOPE_SIGNAL
+      default: "ambiguous"
+      
+    - id: active_outputs
+      description: "Currently active outputs"
+      type: list
+      values: "List of output IDs"
+      updated_by:
+        - B_CONFIRM_OUTPUT
+        - B_HANDLE_MULTI_OUTPUT
+      default: []
+      
+    - id: session_history
+      description: "Previous sessions"
+      type: dict
+      values: "{session_id: summary}"
+      updated_by:
+        - B_RESUME_SESSION
+        - B_SHOW_SESSION_SUMMARY
+      default: {}
+      
+    - id: assessment_depth_ratio
+      description: "Depth vs breadth indicator"
+      type: float
+      values: "avg_components_per_output / total_outputs"
+      updated_by:
+        - B_SHOW_ASSESSMENT_GAPS
+        - B_RECOMMEND_DEPTH_OVER_BREADTH
+      default: 0.0
+      calculation: "sum(components_per_output) / len(outputs)"
+      
+    - id: sparse_knowledge_flag
+      description: "Multiple outputs, shallow assessment"
+      type: boolean
+      values: "true if 3+ outputs, all <2 components"
+      updated_by:
+        - B_SHOW_ASSESSMENT_GAPS
+      default: false
+      condition: "len(outputs) >= 3 AND all(components < 2)"
+
+  ## USER KNOWLEDGE (9 dimensions)
+  # What the user knows about the system
+  
+  user_knowledge:
+    - id: understands_object_model
+      description: "User knows output-centric model"
+      type: boolean
+      updated_by:
+        - B_EXPLAIN_OBJECT_MODEL
+      default: false
+      demonstrated_by:
+        - uses_output_terminology
+        - mentions_output_team_system_process
+      
+    - id: understands_min_calculation
+      description: "User knows MIN() logic"
+      type: boolean
+      updated_by:
+        - B_EXPLAIN_DESIGN_DECISIONS
+      default: false
+      demonstrated_by:
+        - mentions_bottleneck
+        - mentions_weakest_link
+      
+    - id: understands_evidence_tiers
+      description: "User knows evidence quality system"
+      type: boolean
+      updated_by:
+        - B_EXPLAIN_EVIDENCE_TIERS
+      default: false
+      demonstrated_by:
+        - provides_specific_data
+        - mentions_tier_system
+      
+    - id: understands_scope_importance
+      description: "User knows scope matters"
+      type: boolean
+      updated_by:
+        - B_DETECT_SCOPE_AMBIGUITY
+        - B_CLARIFY_SYSTEM_SCOPE
+      default: false
+      demonstrated_by:
+        - specifies_scope_unprompted
+        - asks_about_scope
+      
+    - id: understands_bottleneck_concept
+      description: "User knows bottleneck analysis"
+      type: boolean
+      updated_by:
+        - B_MAP_BOTTLENECK_TO_ARCHETYPE
+        - B_EXPLAIN_WHY_RECOMMENDED
+      default: false
+      demonstrated_by:
+        - uses_bottleneck_term
+        - identifies_weakest_component
+      
+    - id: has_seen_recommendations
+      description: "User has seen pilot recommendations"
+      type: boolean
+      updated_by:
+        - B_GENERATE_PILOT_OPTIONS
+      default: false
+      
+    - id: has_used_system_before
+      description: "Returning user"
+      type: boolean
+      updated_by:
+        - B_RESUME_SESSION
+      default: false
+      
+    - id: comfort_level
+      description: "User's comfort with system"
+      type: enum
+      values: ["confused", "learning", "comfortable", "expert"]
+      updated_by:
+        - B_DETECT_CONFUSION
+        - B_OFFER_REPHRASE
+        - B_ACKNOWLEDGE_UNDERSTANDING
+      default: "learning"
+      
+    - id: preferred_interaction_style
+      description: "How user likes to interact"
+      type: enum
+      values: ["detailed", "concise", "guided", "exploratory"]
+      updated_by:
+        - "Adaptive from patterns"
+      default: "guided"
+      inferred_from:
+        - response_length
+        - question_frequency
+        - skip_frequency
+
+  ## CONVERSATION STATE (8 dimensions)
+  # Current conversation dynamics
+  
+  conversation_state:
+    - id: current_focus
+      description: "What we're currently doing"
+      type: enum
+      values: ["discovering_output", "assessing_component", "analyzing", "recommending", "navigating"]
+      updated_by: "All behaviors"
+      default: "discovering_output"
+      
+    - id: last_question_answered
+      description: "Did user answer last question"
+      type: boolean
+      updated_by:
+        - B_BACKTRACK
+        - B_OFFER_SKIP
+      default: true
+      
+    - id: pattern_history
+      description: "Last 5 patterns used"
+      type: list
+      values: "List of pattern IDs"
+      updated_by: "Pattern engine"
+      default: []
+      max_length: 5
+      
+    - id: frustration_level
+      description: "User frustration indicator"
+      type: float
+      values: "0.0-1.0 (0=calm, 1=very frustrated)"
+      updated_by:
+        - B_DETECT_FRUSTRATION
+        - B_ACKNOWLEDGE_BETA
+      default: 0.0
+      decay_rate: 0.1
+      decay_per_turn: true
+      
+    - id: confusion_level
+      description: "User confusion indicator"
+      type: float
+      values: "0.0-1.0 (0=clear, 1=very confused)"
+      updated_by:
+        - B_DETECT_CONFUSION
+        - B_OFFER_REPHRASE
+      default: 0.0
+      decay_rate: 0.15
+      decay_per_turn: true
+      
+    - id: engagement_level
+      description: "User engagement"
+      type: float
+      values: "0.0-1.0 (0=disengaged, 1=highly engaged)"
+      updated_by: "All behaviors"
+      default: 0.5
+      decay_rate: 0.05
+      decay_per_turn: true
+      signals:
+        - response_length
+        - response_speed
+        - detail_provided
+      
+    - id: turns_since_progress
+      description: "Turns without useful data"
+      type: integer
+      updated_by:
+        - B_BACKTRACK
+        - B_OFFER_SKIP
+      default: 0
+      reset_on_progress: true
+      
+    - id: needs_navigation
+      description: "User seems lost"
+      type: boolean
+      updated_by:
+        - B_SUGGEST_NEXT_ACTION
+        - B_SHOW_WHERE_WE_ARE
+      default: false
+      condition: "turns_since_progress > 2 OR confusion_level > 0.5"
+
+  ## QUALITY METRICS (6 dimensions)
+  # Evidence and assessment quality tracking
+  
+  quality_metrics:
+    - id: tier1_evidence_count
+      description: "High-quality evidence statements"
+      type: integer
+      updated_by:
+        - B_ACKNOWLEDGE_TIER1
+        - B_ACKNOWLEDGE_QUANTIFIED
+      default: 0
+      
+    - id: tier5_evidence_count
+      description: "Low-quality evidence statements"
+      type: integer
+      updated_by:
+        - B_ACCEPT_VAGUE_WITH_LOW_CONFIDENCE
+      default: 0
+      
+    - id: confidence_by_output
+      description: "Confidence level per output"
+      type: dict
+      values: "{output_id: 'low'/'medium'/'high'}"
+      updated_by:
+        - B_SHOW_OUTPUT_COMPLETENESS
+        - B_OFFER_RECOMMENDATIONS_AT_CONFIDENCE
+      default: {}
+      calculation:
+        low: "1-2 components assessed"
+        medium: "3 components assessed"
+        high: "4 components assessed with tier1 evidence"
+      
+    - id: missing_components
+      description: "Components not yet assessed"
+      type: dict
+      values: "{output_id: [component_names]}"
+      updated_by:
+        - B_SHOW_WHAT_WE_KNOW
+        - B_SUGGEST_NEXT_ACTION
+      default: {}
+      
+    - id: scope_ambiguities
+      description: "Unresolved scope questions"
+      type: list
+      values: "List of ambiguous statements"
+      updated_by:
+        - B_DETECT_SCOPE_AMBIGUITY
+        - B_DETECT_SCOPE_SIGNAL
+      default: []
+      
+    - id: contradictions_resolved
+      description: "Conflicting evidence resolved"
+      type: integer
+      updated_by:
+        - B_RESOLVE_CONFLICT
+      default: 0
+
+---
+
+## KNOWLEDGE UPDATE RULES
+
+update_rules:
+  
+  # Decay rules
+  decay:
+    - dimension: frustration_level
+      rate: 0.1
+      per_turn: true
+      condition: "no_new_frustration_signals"
+      
+    - dimension: confusion_level
+      rate: 0.15
+      per_turn: true
+      condition: "no_new_confusion_signals"
+      
+    - dimension: engagement_level
+      rate: 0.05
+      per_turn: true
+      condition: "no_engagement_signals"
+  
+  # Automatic calculations
+  calculated:
+    - dimension: assessment_depth_ratio
+      formula: "sum(components_per_output) / len(outputs) if len(outputs) > 0 else 0"
+      
+    - dimension: sparse_knowledge_flag
+      formula: "len(outputs) >= 3 AND all(components < 2 for components in outputs_assessed.values())"
+      
+    - dimension: needs_navigation
+      formula: "turns_since_progress > 2 OR confusion_level > 0.5"
+      
+    - dimension: confidence_by_output
+      formula: |
+        for output_id, data in outputs_assessed.items():
+          if data['components'] >= 4 and tier1_evidence_count > 3:
+            confidence = 'high'
+          elif data['components'] >= 3:
+            confidence = 'medium'
+          else:
+            confidence = 'low'
+  
+  # Conditional updates
+  conditional:
+    - dimension: comfort_level
+      conditions:
+        - if: "confusion_level > 0.7"
+          then: "confused"
+        - if: "understands_object_model AND understands_min_calculation"
+          then: "comfortable"
+        - if: "has_used_system_before AND comfort_level == 'comfortable'"
+          then: "expert"
+        - else: "learning"
+
+---
+
+## PATTERN GATING EXAMPLES
+
+pattern_gates:
+  # Patterns can require knowledge conditions
+  
+  - pattern: PATTERN_ADVANCED_EDUCATION
+    requires:
+      user_knowledge:
+        understands_object_model: true
+    blocks:
+      conversation_state:
+        frustration_level: "> 0.5"
+  
+  - pattern: PATTERN_HIGH_CONFIDENCE_RECOMMENDATIONS
+    requires:
+      system_knowledge:
+        outputs_assessed: "{output_id}.components >= 3"
+      quality_metrics:
+        confidence_by_output: "{output_id} == 'high'"
+  
+  - pattern: PATTERN_SCOPE_DISAMBIGUATION
+    requires:
+      system_knowledge:
+        scope_clarity: "ambiguous"
+  
+  - pattern: PATTERN_ERROR_RECOVERY
+    requires:
+      conversation_state:
+        frustration_level: "> 0.3"
+        OR:
+        confusion_level: "> 0.3"
+  
+  - pattern: PATTERN_DEPTH_GUIDANCE
+    requires:
+      system_knowledge:
+        sparse_knowledge_flag: true
+        OR:
+        assessment_depth_ratio: "< 0.5"
+
+---
+
+## METADATA
+
+metadata:
+  total_dimensions: 30
+  categories:
+    system_knowledge: 12
+    user_knowledge: 9
+    conversation_state: 8
+    quality_metrics: 6
+  
+  update_frequency:
+    every_turn: 8  # conversation_state
+    on_events: 21  # system_knowledge, user_knowledge
+    accumulated: 6  # quality_metrics
+  
+  decay_dimensions: 3
+  calculated_dimensions: 4
+  conditional_dimensions: 1
+  
+  purpose:
+    - enable_context_aware_pattern_selection
+    - track_conversation_quality
+    - adapt_to_user_understanding
+    - prevent_repetition_and_frustration
+  
+  source: knowledge_dimensions_dense_format.md
+  generated: 2025-11-06
+  version: 1.0

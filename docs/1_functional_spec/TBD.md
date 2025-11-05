@@ -221,3 +221,310 @@ Each entry includes:
 **Implementation Phase:** Week 9-10 (Polish & Testing) per Implementation Plan
 
 ---
+
+### 18. Collapsible Thinking Process Display (UX Feature)
+**Added**: 2025-11-05
+
+**Context**: Users want transparency into how the system reaches conclusions, but detailed internal reasoning can clutter the conversation flow.
+
+**Intent**: Implement collapsible "thinking process" boxes that show internal system operations before the main response. Content should include:
+- Retrieved knowledge graph nodes
+- Confidence calculations (formulas and values)
+- Assumptions made during inference
+- Knowledge base updates (what was stored/modified)
+- Pattern selection reasoning
+
+**Display Format:**
+```
+<details>
+<summary>🔍 Internal reasoning</summary>
+
+Retrieved nodes: [Sales Forecast, Dependency Quality, Salesforce CRM]
+Confidence: 0.75 = (2 Tier-1 evidence + 1 Tier-2) / 4 statements
+Assumptions: User refers to annual forecast (not monthly)
+Updated: dependency_quality_sales_forecast = ⭐⭐ (confidence: 75%)
+
+</details>
+
+[Main response to user]
+```
+
+**Technical Requirements:**
+- Backend must expose reasoning trace
+- UI must support collapsible sections
+- Should be toggleable (on/off per user preference)
+- Debug mode shows by default
+
+**Benefits:**
+- Builds trust through transparency
+- Helps users understand system limitations
+- Enables debugging and feedback
+- Educational for power users
+
+---
+
+### 19. Survey Generation and Processing System
+**Added**: 2025-11-05
+
+**Context**: Low-confidence assessments need validation by technical stakeholders (engineers, data teams) who aren't part of the conversation. Users need a way to extract verifiable questions, get answers, and re-import results.
+
+**Intent**: Implement end-to-end survey workflow:
+
+**Part 1: Survey Generation**
+- User selects topics with low confidence (or system suggests)
+- User chooses depth: quick (5 questions), standard (10-15), comprehensive (20+)
+- System generates standalone document with:
+  - Context: Why we're asking these questions
+  - Questions: Technical but clear, with examples
+  - Response formats: Multiple choice, yes/no, 1-5 scale, free text
+  - Space for technical notes
+
+**Part 2: Survey Processing**
+- User uploads completed survey (PDF, Word, or structured format)
+- System parses responses
+- System shows impact summary:
+  - Confidence increases (before/after)
+  - Rating changes (what changed and why)
+  - New insights discovered
+- System updates knowledge base automatically
+
+**Technical Requirements:**
+- Document generation (PDF/Word/Markdown)
+- Question bank with templates
+- Response parsing (OCR or structured input)
+- Evidence tier upgrade logic
+- Confidence recalculation
+
+**Benefits:**
+- Validates technical assumptions without requiring stakeholder participation in full conversation
+- Increases confidence in assessments
+- Enables async collaboration
+- Shows tangible value of validation effort
+
+**Related**: See TBD #15 (Verifiable Assumptions Export)
+
+---
+
+### 20. Pattern Chaining and Orchestration Engine
+**Added**: 2025-11-05
+
+**Context**: After responding to user, the system should check if the new context creates opportunities for additional patterns (e.g., user mentions budget → extract budget constraints). This should happen within a single response to feel natural.
+
+**Intent**: Implement pattern chaining logic:
+
+**Chaining Rules:**
+1. After generating primary response, check for new trigger opportunities
+2. If high-priority trigger detected (agenda-driven context extraction), execute secondary pattern
+3. Maximum 2 chained patterns per response (avoid overwhelming)
+4. Chained patterns must feel natural (not forced)
+5. Track pattern history to avoid repetition
+
+**Example Flow:**
+```
+User: "We need to assess sales forecasting"
+System Primary: [Identifies output, confirms with user]
+System Check: [Detects no timeline/budget captured yet]
+System Secondary: "By the way, is there a deadline for this?"
+```
+
+**Technical Requirements:**
+- Pattern matching engine (see PATTERN_RUNTIME_ARCHITECTURE.md)
+- Context monitoring after each response
+- Priority-based trigger evaluation
+- Pattern history tracking (last 5-10 turns)
+- Natural language transition generation
+
+**Benefits:**
+- Opportunistic context extraction ("Sprinkle, don't survey")
+- More efficient conversations
+- Feels proactive, not interrogative
+- Reduces back-and-forth
+
+---
+
+### 21. Pattern History and Variety Tracking
+**Added**: 2025-11-05
+
+**Context**: Using the same conversation pattern repeatedly makes the interaction feel monotonous and robotic. The system should track recent patterns and vary its approach.
+
+**Intent**: Implement pattern variety enforcement:
+
+**Tracking:**
+- Store last 5-10 pattern IDs used in conversation
+- Track pattern categories (e.g., "status query" vs "context extraction")
+- Monitor response templates and phrasings
+
+**Variety Rules:**
+1. Don't use same pattern twice within 5 turns
+2. Vary response templates even for same pattern type
+3. If multiple patterns applicable, prefer least-recently-used
+4. Balance between consistency (predictable) and variety (engaging)
+
+**Example:**
+```
+Turn 1: "Where are we?" → B_SHOW_STATUS (template A)
+Turn 3: "What's our progress?" → B_SHOW_STATUS (template B - different phrasing)
+Turn 5: "Status check?" → B_SHOW_MILESTONE (alternative pattern)
+```
+
+**Technical Requirements:**
+- Conversation state tracking
+- Pattern ID logging per turn
+- Template variation system
+- Pattern selection algorithm considers history
+
+**Benefits:**
+- More engaging conversation
+- Feels less robotic
+- Maintains user interest
+- Better UX
+
+---
+
+### 22. Automated Knowledge Base Updates from External Sources
+**Added**: 2025-11-05
+
+**Context**: When users upload survey results, technical questionnaires, or other structured data, the system should automatically parse and integrate this information into the knowledge base.
+
+**Intent**: Implement automated knowledge ingestion:
+
+**Supported Sources:**
+1. Survey results (from TBD #19)
+2. Technical questionnaires (from TBD #15)
+3. Exported assessments (from other sessions)
+4. Structured data files (JSON, CSV)
+
+**Processing Pipeline:**
+1. Parse input format
+2. Extract evidence statements
+3. Classify evidence tier (1-5)
+4. Map to relevant factors/components
+5. Update confidence scores
+6. Detect conflicts with existing knowledge
+7. Generate impact summary for user
+
+**Conflict Resolution:**
+- If new evidence contradicts existing: Flag for user review
+- If new evidence confirms existing: Increase confidence
+- If new evidence refines existing: Update with higher tier
+
+**Technical Requirements:**
+- Document parsing (PDF, Word, structured formats)
+- Evidence extraction and classification
+- Factor mapping logic
+- Confidence recalculation
+- Conflict detection
+- Audit trail (what changed, when, why)
+
+**Benefits:**
+- Reduces manual data entry
+- Enables async collaboration
+- Maintains data quality
+- Shows clear value of validation efforts
+
+---
+
+### 23. Meta-Awareness: System Explains Its Own Design
+**Added**: 2025-11-05
+
+**Context**: Users benefit from understanding why the system behaves the way it does. The system should be able to explain its own design principles, UX decisions, and limitations when relevant.
+
+**Intent**: Implement meta-awareness behaviors:
+
+**What System Can Explain:**
+1. **UX Principles Applied**: "I'm asking one question at a time (Volume Control principle)"
+2. **Design Decisions**: "I need concrete outputs because abstract problems can't be measured"
+3. **Limitations**: "I'm not great at X, and here's why that's intentional..."
+4. **Capabilities**: "What makes this useful: output-centric model, MIN calculation, knowledge graph..."
+5. **Data Model**: "If a tool has multiple functions, treat them as separate tools"
+
+**When to Explain:**
+- User asks "why" or "how does this work"
+- User criticizes system ("this is dumb")
+- User encounters limitation
+- Natural teaching moment (first-time feature use)
+- User expresses confusion about system behavior
+
+**Tone:**
+- Transparent, not defensive
+- Educational, not preachy
+- Self-deprecating when appropriate
+- Confident about intentional design
+
+**Technical Requirements:**
+- UX principle taxonomy (reference library)
+- Design rationale documentation
+- Context detection for teaching moments
+- Natural language explanation generation
+
+**Benefits:**
+- Builds trust through transparency
+- Educates users on system strengths/limitations
+- Reduces frustration from mismatched expectations
+- Creates more sophisticated users over time
+
+**Related**: See sandbox/conversation_ux_exercise/WHAT_MAKES_CONVERSATION_GOOD.md for UX principles
+
+---
+
+### 24. Meeting Scheduling with Creator (Human Escalation)
+**Added**: 2025-11-05
+
+**Context**: The system has inherent limitations—it won't spot problems outside its scope (organizational politics, cultural barriers, domain-specific constraints). Users may need human consultation for high-stakes or complex situations.
+
+**Intent**: Implement transparent escalation path to human expert (system creator):
+
+**Disclaimer Behavior (B_ACKNOWLEDGE_SYSTEM_LIMITS):**
+```
+Quick disclaimer: While a lot of effort and knowledge went into building this, 
+I'm still just a language model with a knowledge graph of a few thousand ideas.
+
+I won't spot critical problems outside my scope—things like organizational politics, 
+cultural barriers, or domain-specific technical constraints I haven't been trained on.
+
+The creator is a freelancer who'd be happy to discuss your specific situation. 
+Want me to help set up a meeting?
+```
+
+**When to Trigger:**
+- User questions system accuracy ("Are you sure this is right?")
+- User expresses high-stakes concern ("This is for the board...")
+- User reaches end of assessment (proactive offer)
+- User explicitly requests human consultation ("Can I talk to someone?")
+- System detects problem outside its scope
+
+**Meeting Scheduling Flow:**
+1. User accepts meeting offer
+2. System collects: Name, email, company, preferred times, brief context
+3. System generates email to creator with:
+   - User contact info
+   - Assessment summary (what was discussed)
+   - User's specific concern or question
+   - Suggested meeting times
+4. System confirms to user: "Email sent to [creator]. You'll hear back within 24 hours."
+
+**Technical Requirements:**
+- Email integration (SendGrid, AWS SES, or similar)
+- Contact form with validation
+- Assessment summary export
+- Email template generation
+- Confirmation tracking
+
+**Tone Considerations:**
+- Humble, not defensive ("I'm just a language model...")
+- Transparent about limitations
+- Helpful escalation (not abandonment)
+- Builds trust through honesty
+
+**Benefits:**
+- Sets realistic expectations
+- Provides safety net for complex cases
+- Generates leads for creator (freelancer)
+- Builds trust through transparency
+- Prevents over-reliance on automated system
+
+**Related Triggers:**
+- T_QUESTION_SYSTEM_ACCURACY
+- T_REQUEST_HUMAN_CONSULTATION
+
+---

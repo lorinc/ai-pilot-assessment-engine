@@ -1,0 +1,805 @@
+# Generated Atomic Behaviors
+# Source: behaviors_dense_format.md
+# Generated: 2025-11-06
+# Total: 77 behaviors across 6 categories + 19 existing
+
+---
+
+behaviors:
+
+  ## ERROR RECOVERY (12 behaviors)
+  error_recovery:
+    - id: B_DETECT_FRUSTRATION
+      goal: "Notice user frustration"
+      when: "Negative sentiment, repeated corrections, 'this is stupid'"
+      template: "Tell me what went wrong"
+      notes: "Triggers ticket offer"
+      situation_affinity:
+        error_recovery: 0.9
+        navigation: 0.3
+
+    - id: B_ACKNOWLEDGE_BETA
+      goal: "Beta disclaimer"
+      when: "User frustrated"
+      template: "Still in beta. Tell me what went wrong, I'll fix it."
+      notes: "Humble, helpful"
+      situation_affinity:
+        error_recovery: 0.9
+
+    - id: B_OFFER_TICKET
+      goal: "Create dev ticket"
+      when: "User frustrated or reports bug"
+      template: "Want me to create a ticket for the developer?"
+      notes: "Tracks issues"
+      situation_affinity:
+        error_recovery: 0.7
+        navigation: 0.3
+
+    - id: B_OFFER_UNDO
+      goal: "Reverse changes"
+      when: "User frustrated about node/edge creation"
+      template: "Should I reverse that change?"
+      notes: "Allows backtracking"
+      situation_affinity:
+        error_recovery: 0.8
+
+    - id: B_EXPLAIN_INTENTIONAL_LIMITATION
+      goal: "Defend design decision"
+      when: "User frustrated by limitation"
+      template: "That's by design because {reason}. But I'll flag for review."
+      notes: "Transparent, not defensive"
+      situation_affinity:
+        error_recovery: 0.6
+        education: 0.4
+
+    - id: B_RESOLVE_DUPLICATE
+      goal: "Handle duplicate entities"
+      when: "User mentions possible duplicate"
+      template: "Are these the same or different? Or should I flag as synonyms?"
+      notes: "Clarifies ambiguity"
+      situation_affinity:
+        error_recovery: 0.5
+        scope_management: 0.5
+
+    - id: B_DETECT_CONFUSION
+      goal: "Notice user uncertainty"
+      when: "'I'm not sure', 'confused', 'lost', unclear responses"
+      template: "Acknowledge confusion"
+      notes: "Triggers clarification"
+      situation_affinity:
+        error_recovery: 0.9
+
+    - id: B_OFFER_REPHRASE
+      goal: "Explain differently"
+      when: "User confused"
+      template: "I haven't given enough context. Let me try a different approach."
+      notes: "Takes ownership of unclear communication"
+      situation_affinity:
+        error_recovery: 0.9
+        education: 0.3
+
+    - id: B_OFFER_SKIP
+      goal: "Skip difficult question"
+      when: "User confused or stuck"
+      template: "You're right, it's not that important right now. We can come back to this later if we need to."
+      notes: "Validates user, downplays importance, reduces pressure"
+      situation_affinity:
+        error_recovery: 0.8
+        navigation: 0.4
+
+    - id: B_BACKTRACK
+      goal: "Try different approach"
+      when: "User stuck or wrong path"
+      template: "I think we went down the wrong path. Let me try a different approach."
+      notes: "System takes ownership of wrong direction"
+      situation_affinity:
+        error_recovery: 0.8
+        navigation: 0.3
+
+    - id: B_ACCEPT_DONT_KNOW
+      goal: "Handle 'I don't know'"
+      when: "User says 'I don't know'"
+      template: "That's fine, we can estimate / ask your team / mark as low confidence"
+      notes: "Non-judgmental"
+      situation_affinity:
+        error_recovery: 0.7
+        assessment: 0.3
+
+    - id: B_LOWER_CONFIDENCE
+      goal: "Mark uncertainty"
+      when: "User uncertain"
+      template: "I'll mark this as low confidence - we can always refine it later if needed"
+      notes: "Transparent about quality, offers future improvement"
+      situation_affinity:
+        assessment: 0.6
+        evidence_quality: 0.4
+
+  ## DISCOVERY / REFINEMENT (18 behaviors)
+  discovery:
+    - id: B_REDIRECT_TO_CONCRETE
+      goal: "Force concrete example"
+      when: "Abstract statement detected"
+      template: "Sorry, I don't do abstract. Let's use a concrete event as proxy."
+      notes: "Direct, professional"
+      situation_affinity:
+        discovery: 0.9
+        assessment: 0.2
+
+    - id: B_PROGRESSIVE_NARROWING
+      goal: "Narrow from generic"
+      when: "Vague problem detected"
+      template: "Help me narrow down the scope. Sales forecasts? Sales reports? Sales dashboards?"
+      notes: "Offer options"
+      situation_affinity:
+        discovery: 0.8
+        scope_management: 0.4
+
+    - id: B_ELICIT_EXAMPLE
+      goal: "Request specific instance"
+      when: "Abstract or generic statement"
+      template: "Tell me about the last time this problem happened"
+      notes: "Concrete grounding"
+      situation_affinity:
+        discovery: 0.9
+
+    - id: B_CONFIRM_OUTPUT
+      goal: "Validate output identification"
+      when: "After narrowing"
+      template: "So you mean {specific output}?"
+      notes: "Explicit confirmation"
+      situation_affinity:
+        discovery: 0.7
+        assessment: 0.3
+
+    - id: B_DISCOVER_TEAM
+      goal: "Identify team"
+      when: "Output identified, team unknown"
+      template: "Which team creates this output?"
+      notes: "Context gathering"
+      situation_affinity:
+        discovery: 0.8
+
+    - id: B_DISCOVER_SYSTEM
+      goal: "Identify system"
+      when: "Output identified, system unknown"
+      template: "What system do they use?"
+      notes: "Context gathering"
+      situation_affinity:
+        discovery: 0.8
+
+    - id: B_DISCOVER_PROCESS
+      goal: "Identify process"
+      when: "Output identified, process unknown"
+      template: "What's the process called?"
+      notes: "Context gathering"
+      situation_affinity:
+        discovery: 0.8
+
+    - id: B_DISCOVER_FREQUENCY
+      goal: "Identify cadence"
+      when: "Output identified"
+      template: "How often is this created? Daily? Monthly?"
+      notes: "Helps assess importance"
+      situation_affinity:
+        discovery: 0.6
+        assessment: 0.4
+
+    - id: B_ENRICH_SYSTEM_CONTEXT
+      goal: "Gather system description"
+      when: "System identified, context thin"
+      template: "Is there anything about {system} that better explains the root cause or rationale behind this?"
+      notes: "Populates system.description"
+      situation_affinity:
+        discovery: 0.7
+        assessment: 0.5
+
+    - id: B_ENRICH_TEAM_CONTEXT
+      goal: "Gather team/persona description"
+      when: "Team identified, context thin"
+      template: "Tell me more about {team}. Anything that explains why this is challenging for them?"
+      notes: "Populates persona.description"
+      situation_affinity:
+        discovery: 0.7
+        assessment: 0.5
+
+    - id: B_ENRICH_PROCESS_CONTEXT
+      goal: "Gather process description"
+      when: "Process identified, context thin"
+      template: "What should I know about the {process} that explains the root cause here?"
+      notes: "Populates process.description"
+      situation_affinity:
+        discovery: 0.7
+        assessment: 0.5
+
+    - id: B_ENRICH_OUTPUT_CONTEXT
+      goal: "Gather output description"
+      when: "Output identified, context thin"
+      template: "Anything about {output} that helps explain why quality is an issue?"
+      notes: "Populates output.description"
+      situation_affinity:
+        discovery: 0.7
+        assessment: 0.5
+
+    - id: B_PROBE_FOR_CONSTRAINTS
+      goal: "Identify constraints"
+      when: "Entity identified, constraints unclear"
+      template: "Are there constraints or limitations with {entity} I should know about?"
+      notes: "Captures blockers"
+      situation_affinity:
+        discovery: 0.6
+        assessment: 0.4
+
+    - id: B_PROBE_FOR_DEPENDENCIES
+      goal: "Identify dependencies"
+      when: "Entity identified, dependencies unclear"
+      template: "What does {entity} depend on to work well?"
+      notes: "Maps dependencies"
+      situation_affinity:
+        discovery: 0.6
+        assessment: 0.4
+
+    - id: B_PROBE_FOR_HISTORY
+      goal: "Understand historical context"
+      when: "Problem identified"
+      template: "Has this always been a problem, or did something change?"
+      notes: "Temporal context"
+      situation_affinity:
+        discovery: 0.5
+        assessment: 0.3
+
+    - id: B_CLARIFY_SCOPE
+      goal: "Disambiguate scope"
+      when: "Ambiguous statement"
+      template: "All systems or just Salesforce?"
+      notes: "Critical for scoped factors"
+      situation_affinity:
+        scope_management: 0.9
+        discovery: 0.3
+
+    - id: B_CLARIFY_DOMAIN
+      goal: "Disambiguate domain"
+      when: "Ambiguous statement"
+      template: "All of sales or just EMEA?"
+      notes: "Scope clarification"
+      situation_affinity:
+        scope_management: 0.9
+
+    - id: B_CLARIFY_TIMEFRAME
+      goal: "Disambiguate time"
+      when: "Ambiguous statement"
+      template: "Current state or future state?"
+      notes: "Temporal scope"
+      situation_affinity:
+        scope_management: 0.8
+
+  ## RECOMMENDATIONS (13 behaviors)
+  recommendations:
+    - id: B_GENERATE_PILOT_OPTIONS
+      goal: "Create pilot recommendations"
+      when: "Assessment complete, bottleneck identified"
+      template: "Based on {bottleneck}, here are 3 options: {pilots}"
+      notes: "Core value delivery"
+      situation_affinity:
+        recommendation: 0.9
+        analysis: 0.3
+
+    - id: B_MAP_BOTTLENECK_TO_ARCHETYPE
+      goal: "Link bottleneck to solution type"
+      when: "Bottleneck identified"
+      template: "Dependency issue → Data Quality pilots"
+      notes: "Uses KG inference"
+      situation_affinity:
+        recommendation: 0.8
+        analysis: 0.5
+
+    - id: B_SHOW_PILOT_DETAILS
+      goal: "Explain pilot option"
+      when: "Presenting options"
+      template: "Option 1: {name}. Effort: {effort}. Impact: {impact}. Feasibility: {%}"
+      notes: "Structured format"
+      situation_affinity:
+        recommendation: 0.9
+
+    - id: B_EXPLAIN_FEASIBILITY
+      goal: "Justify feasibility score"
+      when: "Showing pilot option"
+      template: "45% confidence - this would need ML expertise to deliver"
+      notes: "Transparent reasoning, not accusatory"
+      situation_affinity:
+        recommendation: 0.8
+        education: 0.3
+
+    - id: B_SHOW_PREREQUISITES
+      goal: "Identify gaps"
+      when: "Low feasibility pilot"
+      template: "This pilot would benefit from strengthening {component} first"
+      notes: "Prerequisite analysis, neutral tone"
+      situation_affinity:
+        recommendation: 0.7
+        analysis: 0.4
+
+    - id: B_ESTIMATE_COST_TO_BRIDGE
+      goal: "Estimate gap bridging"
+      when: "Prerequisites identified"
+      template: "Bridging this gap: €50-100K, 3-6 months - but this is just a language model, my developer would be happy to help with better assessment."
+      notes: "Rough estimate"
+      situation_affinity:
+        recommendation: 0.6
+        analysis: 0.3
+
+    - id: B_PRIORITIZE_BY_IMPACT
+      goal: "Rank by impact"
+      when: "Multiple options"
+      template: "Quick win vs strategic investment"
+      notes: "Impact-based sorting"
+      situation_affinity:
+        recommendation: 0.8
+
+    - id: B_PRIORITIZE_BY_FEASIBILITY
+      goal: "Rank by ease"
+      when: "Multiple options"
+      template: "Easy vs hard to implement"
+      notes: "Feasibility-based sorting"
+      situation_affinity:
+        recommendation: 0.8
+
+    - id: B_SHOW_TRADEOFFS
+      goal: "Explain tradeoffs"
+      when: "Multiple options"
+      template: "High impact but requires prerequisites"
+      notes: "Balanced view"
+      situation_affinity:
+        recommendation: 0.7
+        analysis: 0.3
+
+    - id: B_EXPLAIN_WHY_RECOMMENDED
+      goal: "Justify recommendation"
+      when: "Presenting option"
+      template: "This addresses your bottleneck ({component}), show gap -> pain -> archetype hop"
+      notes: "Clear reasoning"
+      situation_affinity:
+        recommendation: 0.9
+        education: 0.3
+
+    - id: B_SHOW_EXPECTED_IMPACT
+      goal: "Predict improvement"
+      when: "Presenting option"
+      template: "Could improve from ⭐⭐ to ⭐⭐⭐⭐"
+      notes: "Quantified benefit"
+      situation_affinity:
+        recommendation: 0.8
+
+    - id: B_SHOW_RISKS
+      goal: "Identify risks"
+      when: "Presenting option"
+      template: "Risk: Requires culture change / data access / budget"
+      notes: "Honest assessment"
+      situation_affinity:
+        recommendation: 0.7
+
+    - id: B_REQUEST_RECOMMENDATION_FEEDBACK
+      goal: "Validate recommendations with user"
+      when: "After presenting pilot options"
+      template: "What do you think about these options? Am I on the right track finding projects that might be actually useful, or am I missing something?"
+      notes: "Validates model accuracy, learns from feedback"
+      situation_affinity:
+        recommendation: 0.6
+        error_recovery: 0.4
+
+  ## NAVIGATION (15 behaviors)
+  navigation:
+    - id: B_SHOW_OUTPUT_COMPLETENESS
+      goal: "Show assessment completeness for specific output"
+      when: "Sufficient data for output"
+      template: "For {output}: enough data for {low/mid/high} confidence recommendations"
+      notes: "Per-output, not global phase"
+      situation_affinity:
+        navigation: 0.9
+
+    - id: B_SHOW_PROGRESS_BAR
+      goal: "Show completion % for specific output"
+      when: "Status query"
+      template: "For {output}: 3 of 4 components assessed (75%)"
+      notes: "Per-output progress"
+      situation_affinity:
+        navigation: 0.9
+
+    - id: B_OFFER_RECOMMENDATIONS_AT_CONFIDENCE
+      goal: "Offer to generate recommendations"
+      when: "Output reaches confidence threshold"
+      template: "I can generate {low/mid/high} confidence recommendations for {output} now. Continue assessing or see options?"
+      notes: "User choice per output"
+      situation_affinity:
+        navigation: 0.7
+        recommendation: 0.5
+
+    - id: B_RESUME_SESSION
+      goal: "Continue previous session"
+      when: "Returning user"
+      template: "Last time we discussed {topic}..."
+      notes: "Continuity"
+      situation_affinity:
+        navigation: 0.8
+        education: 0.2
+
+    - id: B_SHOW_SESSION_SUMMARY
+      goal: "Summarize current session"
+      when: "Status query or end of session"
+      template: "In this session: identified 2 outputs, assessed 1, this lifted our confidence in finding good solutions by 10%"
+      notes: "Session recap"
+      situation_affinity:
+        navigation: 0.8
+
+    - id: B_OFFER_SAVE_POINT
+      goal: "Suggest pause"
+      when: "Natural break point"
+      template: "Good stopping point. Want to save your progress? I can help you create an account."
+      notes: "Creates account if needed"
+      situation_affinity:
+        navigation: 0.7
+
+    - id: B_OFFER_CONTINUE_OR_EVALUATE
+      goal: "Present options"
+      when: "Partial assessment"
+      template: "Continue assessment or evaluate now with partial data?"
+      notes: "User choice"
+      situation_affinity:
+        navigation: 0.8
+
+    - id: B_SUGGEST_NEXT_ACTION
+      goal: "Recommend next step"
+      when: "Status query or milestone"
+      template: "Next: assess Process Maturity"
+      notes: "Guidance"
+      situation_affinity:
+        navigation: 0.8
+
+    - id: B_SHOW_OPTIONAL_PATHS
+      goal: "Present multiple options"
+      when: "Decision point"
+      template: "You can: (1) Continue, (2) Export, (3) Get recommendations"
+      notes: "User agency"
+      situation_affinity:
+        navigation: 0.9
+
+    - id: B_SHOW_WHERE_WE_ARE
+      goal: "Current location"
+      when: "Status query"
+      template: "Assessment phase, focusing on Team Execution"
+      notes: "Orientation"
+      situation_affinity:
+        navigation: 0.9
+
+    - id: B_SHOW_WHAT_WE_KNOW
+      goal: "Knowledge summary"
+      when: "Status query"
+      template: "Known: Output, Team, System. Unknown: Process, Dependencies"
+      notes: "Transparency"
+      situation_affinity:
+        navigation: 0.9
+
+    - id: B_SHOW_CONFIDENCE_LEVELS
+      goal: "Confidence breakdown"
+      when: "Status query"
+      template: "High confidence: 2 factors. Low confidence: 3 factors"
+      notes: "Quality transparency"
+      situation_affinity:
+        navigation: 0.8
+        evidence_quality: 0.3
+
+    - id: B_RECOMMEND_DEPTH_OVER_BREADTH
+      goal: "Suggest focusing on fewer outputs"
+      when: "Multiple outputs with sparse assessment"
+      template: "I notice you've mentioned {N} outputs, but we have shallow knowledge about each. For better pilot recommendations, I suggest we focus deeply on 1-2 outputs rather than superficially on many. Which output would give you the most value if we found a great pilot for it?"
+      notes: "Strategic guidance"
+      situation_affinity:
+        navigation: 0.8
+        recommendation: 0.4
+
+    - id: B_SHOW_ASSESSMENT_GAPS
+      goal: "Highlight sparse knowledge"
+      when: "Sparse knowledge detected"
+      template: "Current state: {N} outputs identified, but only {M} components assessed across all. Ideal state: 3-4 components per output for high-confidence recommendations. Want to go deep on one output or continue exploring?"
+      notes: "Transparent about quality"
+      situation_affinity:
+        navigation: 0.8
+        evidence_quality: 0.3
+
+    - id: B_OFFER_FOCUS_STRATEGY
+      goal: "Present depth vs breadth options"
+      when: "Multiple outputs, user unclear on strategy"
+      template: "Two paths: (1) Assess {output_A} deeply now → get solid recommendations, or (2) Continue discovering outputs → assess later. What's more valuable to you?"
+      notes: "User choice"
+      situation_affinity:
+        navigation: 0.8
+        scope_management: 0.3
+
+  ## EVIDENCE QUALITY (15 behaviors)
+  evidence_quality:
+    - id: B_ACKNOWLEDGE_TIER1
+      goal: "Recognize high-quality evidence"
+      when: "Specific data provided"
+      template: "That's specific data—high confidence"
+      notes: "Positive reinforcement"
+      situation_affinity:
+        evidence_quality: 0.9
+        assessment: 0.3
+
+    - id: B_ACKNOWLEDGE_QUANTIFIED
+      goal: "Recognize numbers"
+      when: "Numbers provided"
+      template: "Thanks for the numbers, that helps"
+      notes: "Appreciation"
+      situation_affinity:
+        evidence_quality: 0.8
+        assessment: 0.3
+
+    - id: B_ACKNOWLEDGE_CONCRETE
+      goal: "Recognize concrete example"
+      when: "Specific example given"
+      template: "Good example, that's actionable"
+      notes: "Positive feedback"
+      situation_affinity:
+        evidence_quality: 0.8
+        assessment: 0.3
+
+    - id: B_PROBE_FOR_NUMBERS
+      goal: "Request quantification"
+      when: "Vague statement"
+      template: "Can you quantify that? Like % or count?"
+      notes: "Improve evidence quality"
+      situation_affinity:
+        evidence_quality: 0.8
+        assessment: 0.4
+
+    - id: B_PROBE_FOR_EXAMPLE
+      goal: "Request specific instance"
+      when: "Generic statement"
+      template: "Give me a specific instance"
+      notes: "Concrete grounding"
+      situation_affinity:
+        evidence_quality: 0.8
+        discovery: 0.3
+
+    - id: B_PROBE_FOR_FREQUENCY
+      goal: "Request frequency"
+      when: "Impact claim"
+      template: "How often does this happen?"
+      notes: "Quantify impact"
+      situation_affinity:
+        evidence_quality: 0.7
+        assessment: 0.4
+
+    - id: B_PROBE_FOR_IMPACT
+      goal: "Request business impact"
+      when: "Problem statement"
+      template: "What's the business impact? Revenue? Time?"
+      notes: "Quantify importance"
+      situation_affinity:
+        evidence_quality: 0.7
+        assessment: 0.4
+
+    - id: B_ACCEPT_VAGUE_WITH_LOW_CONFIDENCE
+      goal: "Accept low-quality evidence"
+      when: "Vague statement, user can't be more specific"
+      template: "That's okay, I can work with that. If we need more precision later, we can refine it."
+      notes: "Honest about quality, emotionally safe"
+      situation_affinity:
+        evidence_quality: 0.6
+        error_recovery: 0.5
+
+    - id: B_OFFER_SURVEY_FOR_VALIDATION
+      goal: "Suggest validation"
+      when: "Low confidence, verifiable"
+      template: "Want to verify this with your team?"
+      notes: "Improve confidence"
+      situation_affinity:
+        evidence_quality: 0.6
+        navigation: 0.3
+
+    - id: B_FLAG_FOR_LATER
+      goal: "Defer low-priority uncertainty"
+      when: "Low confidence, not critical"
+      template: "Let's come back to this if we need higher confidence"
+      notes: "Prioritize"
+      situation_affinity:
+        navigation: 0.6
+        evidence_quality: 0.4
+
+    - id: B_DETECT_CONFLICTING_EVIDENCE
+      goal: "Notice contradiction"
+      when: "Current contradicts previous"
+      template: "I'm seeing different information - earlier you mentioned X, now Y"
+      notes: "System owns the observation, not accusatory"
+      situation_affinity:
+        evidence_quality: 0.8
+        error_recovery: 0.4
+
+    - id: B_RESOLVE_CONFLICT
+      goal: "Clarify contradiction"
+      when: "Conflict detected"
+      template: "I want to make sure I understand correctly. Which is more accurate, or does it depend on context?"
+      notes: "System takes responsibility for understanding"
+      situation_affinity:
+        evidence_quality: 0.8
+        error_recovery: 0.3
+
+    - id: B_SYNTHESIZE_EVIDENCE
+      goal: "Combine multiple statements"
+      when: "Multiple related statements"
+      template: "From 3 mentions, I infer {synthesis}"
+      notes: "Pattern recognition"
+      situation_affinity:
+        evidence_quality: 0.7
+        analysis: 0.4
+
+    - id: B_EXPLAIN_EVIDENCE_TIERS
+      goal: "Teach evidence system"
+      when: "First mention of tiers"
+      template: "Tier 1 = specific data, Tier 5 = vague opinion"
+      notes: "Just-in-time education"
+      situation_affinity:
+        education: 0.7
+        evidence_quality: 0.5
+
+    - id: B_SHOW_CONFIDENCE_IMPACT
+      goal: "Show tier impact"
+      when: "Evidence tier mentioned"
+      template: "With Tier-1 evidence, confidence jumps to 85%"
+      notes: "Motivate quality"
+      situation_affinity:
+        evidence_quality: 0.7
+        education: 0.4
+
+  ## SCOPE MANAGEMENT (13 behaviors)
+  scope_management:
+    - id: B_DETECT_SCOPE_AMBIGUITY
+      goal: "Notice unclear scope"
+      when: "Statement without scope"
+      template: "I need to clarify the scope. Does 'data quality' mean all systems or specific ones?"
+      notes: "System owns need for clarification"
+      situation_affinity:
+        scope_management: 0.9
+        discovery: 0.3
+
+    - id: B_DETECT_SCOPE_SIGNAL
+      goal: "Recognize scope clarification"
+      when: "User says 'all' or 'just X'"
+      template: "Capture scope explicitly"
+      notes: "Update factor scope"
+      situation_affinity:
+        scope_management: 0.8
+
+    - id: B_CLARIFY_SYSTEM_SCOPE
+      goal: "Ask about system scope"
+      when: "Ambiguous system reference"
+      template: "All systems or just Salesforce?"
+      notes: "Scope disambiguation"
+      situation_affinity:
+        scope_management: 0.9
+
+    - id: B_CLARIFY_TEAM_SCOPE
+      goal: "Ask about team scope"
+      when: "Ambiguous team reference"
+      template: "All of sales or just EMEA?"
+      notes: "Scope disambiguation"
+      situation_affinity:
+        scope_management: 0.9
+
+    - id: B_CLARIFY_DOMAIN_SCOPE
+      goal: "Ask about domain scope"
+      when: "Ambiguous domain reference"
+      template: "All outputs or just forecasts?"
+      notes: "Scope disambiguation"
+      situation_affinity:
+        scope_management: 0.9
+
+    - id: B_CLARIFY_TIME_SCOPE
+      goal: "Ask about temporal scope"
+      when: "Ambiguous time reference"
+      template: "Current state or future state?"
+      notes: "Temporal disambiguation"
+      situation_affinity:
+        scope_management: 0.8
+
+    - id: B_NARROW_TO_SPECIFIC
+      goal: "Focus on specific instance"
+      when: "Too broad"
+      template: "Let's focus on Salesforce first"
+      notes: "Manageable scope"
+      situation_affinity:
+        scope_management: 0.8
+        discovery: 0.3
+
+    - id: B_SUGGEST_SPECIFIC_INSTANCE
+      goal: "Request example"
+      when: "Too generic"
+      template: "Pick one system as an example"
+      notes: "Concrete starting point"
+      situation_affinity:
+        scope_management: 0.8
+        discovery: 0.3
+
+    - id: B_EXPAND_TO_GENERIC
+      goal: "Check broader applicability"
+      when: "Specific instance assessed"
+      template: "Does this apply to other systems too?"
+      notes: "Generalization"
+      situation_affinity:
+        scope_management: 0.7
+        assessment: 0.3
+
+    - id: B_SYNTHESIZE_GENERIC_FROM_SPECIFIC
+      goal: "Calculate overall from instances"
+      when: "Multiple specific instances"
+      template: "Salesforce (30%) + Spreadsheets (25%) → Overall ≈ 28%"
+      notes: "Aggregate calculation"
+      situation_affinity:
+        scope_management: 0.6
+        analysis: 0.5
+
+    - id: B_HANDLE_MULTI_OUTPUT
+      goal: "Manage multiple outputs"
+      when: "User mentions multiple outputs"
+      template: "You mentioned 3 outputs. Let's focus on one first."
+      notes: "Prevent overwhelm"
+      situation_affinity:
+        scope_management: 0.8
+        navigation: 0.4
+
+    - id: B_OFFER_SCOPED_ASSESSMENT
+      goal: "Suggest scoped approach"
+      when: "User wants to assess multiple"
+      template: "We can assess all 3, but one at a time. Which is most critical?"
+      notes: "Structured approach"
+      situation_affinity:
+        scope_management: 0.8
+        navigation: 0.3
+
+    - id: B_OFFER_GENERIC_ASSESSMENT
+      goal: "Suggest generic approach"
+      when: "User wants overall view"
+      template: "We can assess 'sales data quality' generically across all systems"
+      notes: "Broad view option"
+      situation_affinity:
+        scope_management: 0.7
+        assessment: 0.3
+
+---
+
+## METADATA
+
+metadata:
+  total_behaviors: 77
+  categories:
+    error_recovery: 12
+    discovery: 18
+    recommendations: 13
+    navigation: 15
+    evidence_quality: 15
+    scope_management: 13
+  
+  existing_behaviors_to_merge: 19
+  total_after_merge: 96
+  
+  situation_dimensions_covered:
+    - discovery: 18 behaviors
+    - education: 8 behaviors
+    - assessment: 18 behaviors
+    - analysis: 6 behaviors
+    - recommendation: 13 behaviors
+    - navigation: 15 behaviors
+    - error_recovery: 12 behaviors
+    - scope_management: 13 behaviors
+    - evidence_quality: 15 behaviors
+  
+  psychological_safety_principles:
+    - system_takes_ownership: true
+    - validates_user: true
+    - downplays_importance_when_skipping: true
+    - non_judgmental_language: true
+    - offers_future_improvement: true
+  
+  source: behaviors_dense_format.md
+  generated: 2025-11-06
+  version: 1.0
