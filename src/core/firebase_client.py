@@ -289,3 +289,280 @@ class FirebaseClient:
                     "error": str(e)
                 })
             return []
+    
+    # ========== Graph Operations ==========
+    
+    def get_graph_ref(self, user_id: str, graph_id: str):
+        """
+        Get Firestore reference to graph document.
+        
+        Args:
+            user_id: User ID
+            graph_id: Graph ID
+            
+        Returns:
+            Firestore document reference
+        """
+        if settings.MOCK_FIREBASE:
+            return None
+        
+        return self.db.collection('users').document(user_id).collection('graphs').document(graph_id)
+    
+    def get_graph_metadata(self, user_id: str, graph_id: str) -> Optional[Dict[str, Any]]:
+        """
+        Get graph metadata.
+        
+        Args:
+            user_id: User ID
+            graph_id: Graph ID
+            
+        Returns:
+            Graph metadata or None
+        """
+        if settings.MOCK_FIREBASE:
+            return {
+                "created_at": datetime.utcnow().isoformat() + "Z",
+                "updated_at": datetime.utcnow().isoformat() + "Z",
+                "output_id": "mock_output",
+                "output_name": "Mock Output"
+            }
+        
+        try:
+            doc = self.get_graph_ref(user_id, graph_id).get()
+            if doc.exists:
+                return doc.to_dict()
+            return None
+        except Exception as e:
+            if self.logger:
+                self.logger.error("firestore_read", f"Failed to get graph metadata: {str(e)}")
+            return None
+    
+    def save_graph_metadata(self, user_id: str, graph_id: str, metadata: Dict[str, Any]) -> bool:
+        """
+        Save graph metadata.
+        
+        Args:
+            user_id: User ID
+            graph_id: Graph ID
+            metadata: Graph metadata
+            
+        Returns:
+            True if successful
+        """
+        if settings.MOCK_FIREBASE:
+            if self.logger:
+                self.logger.info("firestore_write", "Mock graph metadata saved")
+            return True
+        
+        try:
+            self.get_graph_ref(user_id, graph_id).set(metadata, merge=True)
+            if self.logger:
+                self.logger.info("firestore_write", "Graph metadata saved", {
+                    "graph_id": graph_id
+                })
+            return True
+        except Exception as e:
+            if self.logger:
+                self.logger.error("firestore_write", f"Failed to save graph metadata: {str(e)}")
+            return False
+    
+    def get_graph_nodes(self, user_id: str, graph_id: str) -> Dict[str, Dict[str, Any]]:
+        """
+        Get all nodes in a graph.
+        
+        Args:
+            user_id: User ID
+            graph_id: Graph ID
+            
+        Returns:
+            Dict of node_id -> node_data
+        """
+        if settings.MOCK_FIREBASE:
+            return {}
+        
+        try:
+            nodes = {}
+            docs = self.get_graph_ref(user_id, graph_id).collection('nodes').stream()
+            for doc in docs:
+                nodes[doc.id] = doc.to_dict()
+            
+            if self.logger:
+                self.logger.info("firestore_read", "Graph nodes retrieved", {
+                    "graph_id": graph_id,
+                    "node_count": len(nodes)
+                })
+            return nodes
+        except Exception as e:
+            if self.logger:
+                self.logger.error("firestore_read", f"Failed to get graph nodes: {str(e)}")
+            return {}
+    
+    def save_graph_node(self, user_id: str, graph_id: str, node_id: str, node_data: Dict[str, Any]) -> bool:
+        """
+        Save a graph node.
+        
+        Args:
+            user_id: User ID
+            graph_id: Graph ID
+            node_id: Node ID
+            node_data: Node data
+            
+        Returns:
+            True if successful
+        """
+        if settings.MOCK_FIREBASE:
+            if self.logger:
+                self.logger.info("firestore_write", "Mock graph node saved")
+            return True
+        
+        try:
+            self.get_graph_ref(user_id, graph_id).collection('nodes').document(node_id).set(node_data, merge=True)
+            return True
+        except Exception as e:
+            if self.logger:
+                self.logger.error("firestore_write", f"Failed to save graph node: {str(e)}")
+            return False
+    
+    def delete_graph_node(self, user_id: str, graph_id: str, node_id: str) -> bool:
+        """
+        Delete a graph node.
+        
+        Args:
+            user_id: User ID
+            graph_id: Graph ID
+            node_id: Node ID
+            
+        Returns:
+            True if successful
+        """
+        if settings.MOCK_FIREBASE:
+            if self.logger:
+                self.logger.info("firestore_write", "Mock graph node deleted")
+            return True
+        
+        try:
+            self.get_graph_ref(user_id, graph_id).collection('nodes').document(node_id).delete()
+            return True
+        except Exception as e:
+            if self.logger:
+                self.logger.error("firestore_write", f"Failed to delete graph node: {str(e)}")
+            return False
+    
+    def get_graph_edges(self, user_id: str, graph_id: str) -> Dict[str, Dict[str, Any]]:
+        """
+        Get all edges in a graph.
+        
+        Args:
+            user_id: User ID
+            graph_id: Graph ID
+            
+        Returns:
+            Dict of edge_id -> edge_data
+        """
+        if settings.MOCK_FIREBASE:
+            return {}
+        
+        try:
+            edges = {}
+            docs = self.get_graph_ref(user_id, graph_id).collection('edges').stream()
+            for doc in docs:
+                edges[doc.id] = doc.to_dict()
+            
+            if self.logger:
+                self.logger.info("firestore_read", "Graph edges retrieved", {
+                    "graph_id": graph_id,
+                    "edge_count": len(edges)
+                })
+            return edges
+        except Exception as e:
+            if self.logger:
+                self.logger.error("firestore_read", f"Failed to get graph edges: {str(e)}")
+            return {}
+    
+    def save_graph_edge(self, user_id: str, graph_id: str, edge_id: str, edge_data: Dict[str, Any]) -> bool:
+        """
+        Save a graph edge.
+        
+        Args:
+            user_id: User ID
+            graph_id: Graph ID
+            edge_id: Edge ID
+            edge_data: Edge data
+            
+        Returns:
+            True if successful
+        """
+        if settings.MOCK_FIREBASE:
+            if self.logger:
+                self.logger.info("firestore_write", "Mock graph edge saved")
+            return True
+        
+        try:
+            self.get_graph_ref(user_id, graph_id).collection('edges').document(edge_id).set(edge_data, merge=True)
+            return True
+        except Exception as e:
+            if self.logger:
+                self.logger.error("firestore_write", f"Failed to save graph edge: {str(e)}")
+            return False
+    
+    def delete_graph_edge(self, user_id: str, graph_id: str, edge_id: str) -> bool:
+        """
+        Delete a graph edge.
+        
+        Args:
+            user_id: User ID
+            graph_id: Graph ID
+            edge_id: Edge ID
+            
+        Returns:
+            True if successful
+        """
+        if settings.MOCK_FIREBASE:
+            if self.logger:
+                self.logger.info("firestore_write", "Mock graph edge deleted")
+            return True
+        
+        try:
+            self.get_graph_ref(user_id, graph_id).collection('edges').document(edge_id).delete()
+            return True
+        except Exception as e:
+            if self.logger:
+                self.logger.error("firestore_write", f"Failed to delete graph edge: {str(e)}")
+            return False
+    
+    def list_user_graphs(self, user_id: str, limit: int = 10) -> List[Dict[str, Any]]:
+        """
+        List user's graphs.
+        
+        Args:
+            user_id: User ID
+            limit: Maximum number of graphs to return
+            
+        Returns:
+            List of graph metadata
+        """
+        if settings.MOCK_FIREBASE:
+            return []
+        
+        try:
+            graphs = []
+            docs = self.db.collection('users').document(user_id).collection('graphs')\
+                .order_by('updated_at', direction=firestore.Query.DESCENDING)\
+                .limit(limit)\
+                .stream()
+            
+            for doc in docs:
+                data = doc.to_dict()
+                data['graph_id'] = doc.id
+                graphs.append(data)
+            
+            if self.logger:
+                self.logger.info("firestore_read", "Graphs listed", {
+                    "user_id": user_id,
+                    "count": len(graphs)
+                })
+            return graphs
+        except Exception as e:
+            if self.logger:
+                self.logger.error("firestore_read", f"Failed to list graphs: {str(e)}")
+            return []

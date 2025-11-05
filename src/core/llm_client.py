@@ -12,6 +12,10 @@ from utils.logger import TechnicalLogger, LogLevel
 class LLMClient:
     """Client for interacting with Gemini via Vertex AI."""
     
+    # Context size limits (in characters, conservative estimate)
+    MAX_PROMPT_CHARS = 30000  # ~7500 tokens (Gemini supports 1M but be conservative)
+    WARN_PROMPT_CHARS = 20000  # Warning threshold
+    
     def __init__(
         self,
         project_id: Optional[str] = None,
@@ -50,11 +54,65 @@ class LLMClient:
                     "mock_mode": True
                 })
     
+    def _validate_prompt_size(self, prompt: str, caller: str = "unknown") -> None:
+        """
+        Validate prompt size and raise error if too large.
+        
+        Args:
+            prompt: The prompt to validate
+            caller: Name of the calling function/module for debugging
+            
+        Raises:
+            ValueError: If prompt exceeds MAX_PROMPT_CHARS
+        """
+        prompt_length = len(prompt)
+        
+        # Hard limit - reject
+        if prompt_length > self.MAX_PROMPT_CHARS:
+            error_details = {
+                "caller": caller,
+                "prompt_length": prompt_length,
+                "max_allowed": self.MAX_PROMPT_CHARS,
+                "exceeded_by": prompt_length - self.MAX_PROMPT_CHARS,
+                "prompt_preview": prompt[:500] + "...",
+                "prompt_end": "..." + prompt[-500:] if len(prompt) > 500 else ""
+            }
+            
+            if self.logger:
+                self.logger.error(
+                    "llm_context_overflow",
+                    f"🚨 CONTEXT SIZE FAILSAFE TRIGGERED by {caller}",
+                    error_details
+                )
+            
+            raise ValueError(
+                f"Prompt size ({prompt_length} chars) exceeds maximum allowed ({self.MAX_PROMPT_CHARS} chars). "
+                f"Caller: {caller}. Exceeded by: {prompt_length - self.MAX_PROMPT_CHARS} chars. "
+                f"This is a failsafe to prevent sending unreasonably large context to the LLM. "
+                f"Check logs for details."
+            )
+        
+        # Warning threshold - log but allow
+        if prompt_length > self.WARN_PROMPT_CHARS:
+            if self.logger:
+                self.logger.warning(
+                    "llm_context_warning",
+                    f"⚠️ Large context detected from {caller}",
+                    {
+                        "caller": caller,
+                        "prompt_length": prompt_length,
+                        "warn_threshold": self.WARN_PROMPT_CHARS,
+                        "max_allowed": self.MAX_PROMPT_CHARS,
+                        "usage_percent": round(100 * prompt_length / self.MAX_PROMPT_CHARS, 1)
+                    }
+                )
+    
     def generate(
         self,
         prompt: str,
         temperature: float = 0.7,
         max_output_tokens: int = 2048,
+        caller: str = "unknown",
         **kwargs
     ) -> str:
         """
@@ -64,13 +122,21 @@ class LLMClient:
             prompt: Input prompt
             temperature: Sampling temperature (0.0-1.0)
             max_output_tokens: Maximum tokens to generate
+            caller: Name of calling function/module for debugging
             **kwargs: Additional generation parameters
             
         Returns:
             Generated text
+            
+        Raises:
+            ValueError: If prompt exceeds size limits
         """
+        # FAILSAFE: Validate prompt size
+        self._validate_prompt_size(prompt, caller)
+        
         if self.logger:
             self.logger.info("llm_call", "Generating response (non-streaming)", {
+                "caller": caller,
                 "prompt_length": len(prompt),
                 "temperature": temperature,
                 "max_tokens": max_output_tokens
@@ -107,6 +173,7 @@ class LLMClient:
         prompt: str,
         temperature: float = 0.7,
         max_output_tokens: int = 2048,
+        caller: str = "unknown",
         **kwargs
     ) -> Iterator[str]:
         """
@@ -116,13 +183,21 @@ class LLMClient:
             prompt: Input prompt
             temperature: Sampling temperature (0.0-1.0)
             max_output_tokens: Maximum tokens to generate
+            caller: Name of calling function/module for debugging
             **kwargs: Additional generation parameters
             
         Yields:
             Text chunks as they're generated
+            
+        Raises:
+            ValueError: If prompt exceeds size limits
         """
+        # FAILSAFE: Validate prompt size
+        self._validate_prompt_size(prompt, caller)
+        
         if self.logger:
             self.logger.info("llm_call", "Generating response (streaming)", {
+                "caller": caller,
                 "prompt_length": len(prompt),
                 "temperature": temperature,
                 "max_tokens": max_output_tokens

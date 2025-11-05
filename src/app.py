@@ -6,6 +6,7 @@ from datetime import datetime
 from core.llm_client import LLMClient
 from core.firebase_client import FirebaseClient
 from core.session_manager import SessionManager
+from orchestrator.conversation_orchestrator import ConversationOrchestrator, AssessmentPhase
 from utils.logger import TechnicalLogger
 from config.settings import settings
 
@@ -44,6 +45,18 @@ if 'llm_client' not in st.session_state:
     tech_logger.info("app_init", "LLM client initialized", {})
 
 llm_client = st.session_state.llm_client
+
+# Initialize orchestrator (cached per session)
+if 'orchestrator' not in st.session_state:
+    st.session_state.orchestrator = ConversationOrchestrator(
+        llm_client=llm_client,
+        firebase_client=firebase_client,
+        session_manager=session_manager,
+        logger=tech_logger
+    )
+    tech_logger.info("app_init", "Orchestrator initialized", {})
+
+orchestrator = st.session_state.orchestrator
 
 # ============================================================================
 # AUTHENTICATION
@@ -154,7 +167,13 @@ with col2:
     else:
         st.markdown(f"👤 **{user_display}**")
 
-st.markdown(f"**Session ID:** `{session_manager.session_id}` | **Phase:** {session_manager.phase.title()}")
+# Get progress
+progress = orchestrator.get_progress()
+phase_display = progress['phase'].title()
+if progress.get('output_name'):
+    st.markdown(f"**Assessing:** {progress['output_name']} | **Phase:** {phase_display} | **Progress:** {progress.get('assessment_progress', 'N/A')}")
+else:
+    st.markdown(f"**Phase:** {phase_display} | **Session:** `{session_manager.session_id}`")
 
 # Sidebar
 with st.sidebar:
@@ -176,7 +195,7 @@ with st.sidebar:
     col1, col2 = st.columns(2)
     with col1:
         if st.button("🔄 New\nAssessment", use_container_width=True):
-            session_manager.reset()
+            orchestrator.reset()
             tech_logger.info("session", "New assessment started", {})
             st.rerun()
     
@@ -194,11 +213,17 @@ with st.sidebar:
     st.markdown("""
     This system helps identify AI opportunities through conversational assessment.
     
-    **Features:**
-    - 🎯 Output-centric factor assessment
-    - 🔍 Bottleneck identification
-    - 💡 AI pilot recommendations
-    - 📊 Feasibility analysis
+    **Current Phase:**
+    - 🔍 Discovery: Identify output
+    - 📊 Assessment: Rate factors
+    - 🎯 Analysis: Find bottlenecks
+    - 💡 Recommendations: AI pilots
+    
+    **Phase 2 Complete:**
+    - ✅ Graph infrastructure
+    - ✅ Output discovery
+    - ✅ Assessment engine
+    - ✅ Bottleneck analysis
     """)
     
     # Technical log viewer
@@ -244,41 +269,35 @@ if prompt := st.chat_input("Describe your problem or ask a question..."):
     with st.chat_message("user"):
         st.markdown(prompt)
     
-    # Generate assistant response
+    # Generate assistant response using orchestrator
     with st.chat_message("assistant"):
         message_placeholder = st.empty()
-        full_response = ""
         
-        # Build prompt with conversation history
-        conversation_history = [
-            {"role": msg["role"], "content": msg["content"]}
-            for msg in session_manager.messages[:-1]  # Exclude current message
-        ]
-        
-        full_prompt = llm_client.build_prompt(
-            user_message=prompt,
-            conversation_history=conversation_history if conversation_history else None
-        )
-        
-        # Stream response
         try:
-            for chunk in llm_client.generate_stream(full_prompt):
-                full_response += chunk
-                message_placeholder.markdown(full_response + "▌")
+            # Process message through orchestrator
+            response = orchestrator.process_message(prompt)
             
-            message_placeholder.markdown(full_response)
+            # Display response
+            message_placeholder.markdown(response["message"])
             
             # Save assistant response
-            session_manager.add_message("assistant", full_response, persist=True)
+            session_manager.add_message("assistant", response["message"], persist=True)
+            
+            # Show progress/data if available
+            if response.get("data"):
+                with st.expander("📊 Assessment Data", expanded=False):
+                    st.json(response["data"])
             
         except Exception as e:
-            error_msg = f"Error generating response: {str(e)}"
+            error_msg = f"Error processing message: {str(e)}"
             message_placeholder.error(error_msg)
-            tech_logger.error("llm_error", error_msg, {"error": str(e)})
+            tech_logger.error("orchestrator_error", error_msg, {"error": str(e)})
+            import traceback
+            st.code(traceback.format_exc())
 
 # ============================================================================
 # FOOTER
 # ============================================================================
 
 st.divider()
-st.caption(f"Phase 1: Core Infrastructure | Session: {session_manager.session_id}")
+st.caption(f"Phase 2: Discovery & Assessment (90% Complete) | Session: {session_manager.session_id}")
