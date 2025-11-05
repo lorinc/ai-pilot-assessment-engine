@@ -105,8 +105,8 @@
   
   "common_outputs": [
     {
-      "id": "resolved_tickets",
-      "name": "Resolved Support Tickets",
+      "id": "cs_resolved_tickets",
+      "name": "Resolved Support Tickets (Customer Success)",
       "description": "Customer issues that have been investigated and resolved",
       "typical_quality_metrics": ["resolution_quality", "timeliness", "first_contact_resolution", "customer_satisfaction"],
       "typical_creation_context": {

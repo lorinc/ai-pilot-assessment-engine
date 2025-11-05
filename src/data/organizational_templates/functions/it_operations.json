@@ -102,8 +102,8 @@
   
   "common_outputs": [
     {
-      "id": "incident_resolutions",
-      "name": "IT Incident Resolutions",
+      "id": "it_incident_resolutions",
+      "name": "IT Incident Resolutions (IT Ops)",
       "description": "System outages and technical issues that have been resolved",
       "typical_quality_metrics": ["mean_time_to_resolution", "accuracy", "documentation_quality", "recurrence_prevention"],
       "typical_creation_context": {

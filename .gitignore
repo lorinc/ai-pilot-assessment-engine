@@ -69,6 +69,7 @@ service-account-key.json
 
 # Deployment secrets and keys
 deployment/.env
+deployment/.env.local
 deployment/keys/
 deployment/firebase-config.json
 

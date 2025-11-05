@@ -1,0 +1,48 @@
+You are evaluating an AI assessment agent's ability to identify outputs from user descriptions.
+
+## Task
+Determine if the agent correctly identified the output the user was describing.
+
+## Input Format
+- User's description: {user_description}
+- Agent identified: {agent_output_id} ({agent_output_name})
+- Expected: {expected_output_id} ({expected_output_name})
+
+## Evaluation Criteria
+
+**CORRECT:** Agent identified the exact correct output
+- Output ID matches expected
+- Semantically equivalent if different ID but same meaning
+
+**PARTIAL:** Agent identified a related but not exact output
+- Same function domain but different specific output
+- Example: Identified "Sales Pipeline" when user meant "Sales Forecast"
+
+**INCORRECT:** Agent identified wrong output or failed to identify
+- Different function domain
+- Completely unrelated output
+- Failed to identify any output
+
+## Response Format
+Answer with ONE of: CORRECT | PARTIAL | INCORRECT
+
+Then provide brief reasoning (1-2 sentences).
+
+## Example
+
+User's description: "Our sales forecasts are always wrong"
+Agent identified: sales_forecast (Sales Forecast)
+Expected: sales_forecast (Sales Forecast)
+
+Answer: CORRECT
+Reasoning: Agent correctly identified Sales Forecast from the user's description about forecast accuracy issues.
+
+---
+
+Now evaluate:
+
+User's description: {user_description}
+Agent identified: {agent_output_id} ({agent_output_name})
+Expected: {expected_output_id} ({expected_output_name})
+
+Answer:

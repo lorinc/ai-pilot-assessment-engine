@@ -91,8 +91,8 @@
   
   "common_outputs": [
     {
-      "id": "resolved_tickets",
-      "name": "Resolved Support Tickets",
+      "id": "ops_resolved_tickets",
+      "name": "Resolved Support Tickets (Operations)",
       "description": "Customer issues that have been investigated and resolved",
       "typical_quality_metrics": ["resolution_quality", "timeliness", "first_contact_resolution", "customer_satisfaction"],
       "typical_creation_context": {
@@ -116,8 +116,8 @@
       }
     },
     {
-      "id": "incident_resolutions",
-      "name": "IT Incident Resolutions",
+      "id": "ops_incident_resolutions",
+      "name": "IT Incident Resolutions (Operations)",
       "description": "System outages and technical issues that have been resolved",
       "typical_quality_metrics": ["mean_time_to_resolution", "accuracy", "documentation_quality", "recurrence_prevention"],
       "typical_creation_context": {
@@ -166,8 +166,8 @@
       }
     },
     {
-      "id": "purchase_orders",
-      "name": "Purchase Orders",
+      "id": "ops_purchase_orders",
+      "name": "Purchase Orders (Operations)",
       "description": "Formal orders to vendors for goods or services",
       "typical_quality_metrics": ["accuracy", "timeliness", "compliance", "cost_optimization"],
       "typical_creation_context": {
@@ -191,8 +191,8 @@
       }
     },
     {
-      "id": "inventory_reports",
-      "name": "Inventory Reports",
+      "id": "ops_inventory_reports",
+      "name": "Inventory Reports (Operations)",
       "description": "Current stock levels, locations, and movements",
       "typical_quality_metrics": ["accuracy", "freshness", "completeness", "forecast_accuracy"],
       "typical_creation_context": {

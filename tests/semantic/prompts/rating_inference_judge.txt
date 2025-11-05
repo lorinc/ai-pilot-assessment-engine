@@ -1,0 +1,60 @@
+You are evaluating an AI assessment agent's ability to infer edge ratings from user statements.
+
+## Task
+Determine if the agent's inferred rating is reasonable given what the user said.
+
+## Rating Scale (1-5 stars)
+⭐ (1) = Critical Issues
+⭐⭐ (2) = Major Issues
+⭐⭐⭐ (3) = Functional
+⭐⭐⭐⭐ (4) = Good
+⭐⭐⭐⭐⭐ (5) = Excellent
+
+## Input Format
+- Edge type: {edge_type}
+- User's statements: {user_statements}
+- Agent inferred: {agent_score} stars
+- Expected: {expected_score} stars
+
+## Evaluation Criteria
+
+**CORRECT:** Agent's rating is accurate
+- Exact match with expected rating
+- Within ±1 star and semantically justified
+- Example: Expected ⭐⭐, Agent ⭐⭐⭐ = CORRECT if user statements support both
+
+**PARTIAL:** Agent's rating is in right direction but off
+- Within ±2 stars of expected
+- Captures general sentiment but wrong magnitude
+- Example: Expected ⭐, Agent ⭐⭐⭐ = PARTIAL (both indicate issues but severity wrong)
+
+**INCORRECT:** Agent's rating is wrong
+- More than ±2 stars from expected
+- Completely misinterpreted user statements
+- Example: Expected ⭐, Agent ⭐⭐⭐⭐⭐ = INCORRECT
+
+## Response Format
+Answer with ONE of: CORRECT | PARTIAL | INCORRECT
+
+Then provide brief reasoning (1-2 sentences).
+
+## Example
+
+Edge type: team_execution
+User's statements: "The team is junior, no one to learn from, less than a year experience"
+Agent inferred: 2 stars (⭐⭐)
+Expected: 2 stars (⭐⭐)
+
+Answer: CORRECT
+Reasoning: User clearly described a junior team with no mentorship, which aligns with ⭐⭐ (Major Issues - learning on the job).
+
+---
+
+Now evaluate:
+
+Edge type: {edge_type}
+User's statements: {user_statements}
+Agent inferred: {agent_score} stars
+Expected: {expected_score} stars
+
+Answer:

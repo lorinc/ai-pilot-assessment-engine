@@ -1,0 +1,75 @@
+You are evaluating an AI assessment agent's ability to classify evidence by tier.
+
+## Task
+Determine if the agent correctly classified the evidence tier based on how the user provided information.
+
+## Evidence Tier Scale (1-5)
+
+**Tier 1:** AI inferred from indirect data (weight=1)
+- Agent guessed based on context
+- No explicit user statement
+- Example: "Since they use Excel, system is probably ⭐⭐"
+
+**Tier 2:** User mentioned indirectly (weight=3)
+- User implied but didn't state directly
+- Reading between the lines
+- Example: User says "it's okay" → Agent infers ⭐⭐⭐
+
+**Tier 3:** User stated directly (weight=9)
+- User explicitly described the situation
+- Clear statement of fact
+- Example: "The team is junior with no training"
+
+**Tier 4:** User provided example (weight=27)
+- User gave specific instance or story
+- Concrete evidence
+- Example: "Last quarter, 3 out of 5 forecasts were off by >20%"
+
+**Tier 5:** User provided quantified example (weight=81)
+- User gave numbers, metrics, measurements
+- Precise quantification
+- Example: "We have 50% error rate, average 2 weeks late"
+
+## Input Format
+- User's statement: {user_statement}
+- Agent classified as: Tier {agent_tier}
+- Expected: Tier {expected_tier}
+
+## Evaluation Criteria
+
+**CORRECT:** Agent's tier classification is accurate
+- Exact match with expected tier
+- Within ±1 tier and justifiable
+- Captures the right level of evidence strength
+
+**PARTIAL:** Agent's tier is close but not quite right
+- Within ±2 tiers
+- Right general category but wrong specificity
+
+**INCORRECT:** Agent's tier is wrong
+- More than ±2 tiers off
+- Completely misclassified evidence type
+
+## Response Format
+Answer with ONE of: CORRECT | PARTIAL | INCORRECT
+
+Then provide brief reasoning (1-2 sentences).
+
+## Example
+
+User's statement: "The CRM doesn't have forecasting features, so everyone exports to Excel manually"
+Agent classified as: Tier 4 (User provided example)
+Expected: Tier 4 (User provided example)
+
+Answer: CORRECT
+Reasoning: User provided a specific example of the manual workaround (exporting to Excel), which is concrete evidence qualifying as Tier 4.
+
+---
+
+Now evaluate:
+
+User's statement: {user_statement}
+Agent classified as: Tier {agent_tier}
+Expected: Tier {expected_tier}
+
+Answer:

@@ -118,8 +118,8 @@
       }
     },
     {
-      "id": "inventory_reports",
-      "name": "Inventory Reports",
+      "id": "sc_inventory_reports",
+      "name": "Inventory Reports (Supply Chain)",
       "description": "Current stock levels, locations, and movements",
       "typical_quality_metrics": ["accuracy", "freshness", "completeness"],
       "typical_creation_context": {
@@ -144,8 +144,8 @@
       }
     },
     {
-      "id": "purchase_orders",
-      "name": "Purchase Orders",
+      "id": "sc_purchase_orders",
+      "name": "Purchase Orders (Supply Chain)",
       "description": "Orders placed with suppliers for materials",
       "typical_quality_metrics": ["accuracy", "timeliness", "compliance"],
       "typical_creation_context": {

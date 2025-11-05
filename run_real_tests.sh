@@ -19,7 +19,7 @@ MOCK_FIREBASE=false \
 MOCK_LLM=false \
 GCP_PROJECT_ID=ai-assessment-engine-476709 \
 GCP_LOCATION=europe-west1 \
-GEMINI_MODEL=gemini-1.5-flash \
+GEMINI_MODEL=gemini-2.5-flash \
 FIREBASE_CREDENTIALS_PATH=/home/lorinc/CascadeProjects/ai-pilot-assessment-engine/deployment/keys/service-account-key.json \
 pytest tests/integration/test_real_firebase.py -v -m requires_gcp --tb=short
 
@@ -29,7 +29,7 @@ MOCK_FIREBASE=false \
 MOCK_LLM=false \
 GCP_PROJECT_ID=ai-assessment-engine-476709 \
 GCP_LOCATION=europe-west1 \
-GEMINI_MODEL=gemini-1.5-flash \
+GEMINI_MODEL=gemini-2.5-flash \
 FIREBASE_CREDENTIALS_PATH=/home/lorinc/CascadeProjects/ai-pilot-assessment-engine/deployment/keys/service-account-key.json \
 pytest tests/integration/test_real_llm.py -v -m requires_gcp --tb=short
 
