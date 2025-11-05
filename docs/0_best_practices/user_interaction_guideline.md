@@ -3,7 +3,7 @@
 **Last Updated:** 2025-11-01 22:10  
 **Note:** Factor values use 1-5 star ratings. See `output_centric_factor_model_exploration.md` for details.
 
-**Principle:** LLM generates, user validates. Simple language. Minimal questions. Context accumulates. Support, not capture.
+**Principle:** LLM generates, user validates. Simple language. Minimal questions. Context accumulates. Support, not capture. **"Withhold education until it is relevant."**
 
 ---
 

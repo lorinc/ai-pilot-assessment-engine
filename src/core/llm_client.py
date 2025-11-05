@@ -162,8 +162,18 @@ class LLMClient:
         )
         
         if self.logger:
+            # Calculate approximate cost
+            input_tokens = len(prompt) // 4  # Rough estimate: 4 chars per token
+            output_tokens = len(response.text) // 4
+            input_cost = (input_tokens / 1_000_000) * 0.075  # $0.075 per 1M input tokens
+            output_cost = (output_tokens / 1_000_000) * 0.30  # $0.30 per 1M output tokens
+            total_cost = input_cost + output_cost
+            
             self.logger.info("llm_response", "Response generated", {
-                "response_length": len(response.text)
+                "response_length": len(response.text),
+                "input_tokens_est": input_tokens,
+                "output_tokens_est": output_tokens,
+                "cost_usd_est": round(total_cost, 6)
             })
         
         return response.text
