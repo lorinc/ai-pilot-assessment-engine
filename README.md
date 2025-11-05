@@ -11,6 +11,7 @@ A **conversational AI pilot recommendation system** that helps organizations ide
 **📖 Documentation:**
 - **Functional Specification:** [`docs/1_functional_spec/`](docs/1_functional_spec/)
   - [User Interaction Patterns](docs/1_functional_spec/USER_INTERACTION_PATTERNS.md) - Canonical conversation examples
+  - [Situational Awareness](docs/1_functional_spec/SITUATIONAL_AWARENESS.md) - Dynamic conversation management (no global phases)
   - [Representation Model](docs/1_functional_spec/REPRESENTATION.md) - Edge-based factor model
   - [Business Context Extraction](docs/1_functional_spec/BUSINESS_CONTEXT_EXTRACTION.md) - Natural constraint extraction
   - [Solution Recommendation](docs/1_functional_spec/SOLUTION_RECOMMENDATION.md) - LLM semantic inference
@@ -18,10 +19,12 @@ A **conversational AI pilot recommendation system** that helps organizations ide
   
 - **Technical Specification:** [`docs/2_technical_spec/`](docs/2_technical_spec/)
   - [Implementation & Deployment Plan](docs/2_technical_spec/IMPLEMENTATION_DEPLOYMENT_PLAN.md) - Complete technical roadmap
+  - [Phase 2.5: UX & Quality Infrastructure](docs/2_technical_spec/Phase2.5/README.md) - Situational awareness + semantic evaluation
 
 **🎯 Key Concepts:**
 - [What This System Does](#what-this-system-does)
 - [How It Works](#how-it-works)
+- [Conversation UX](#conversation-ux)
 - [Technical Architecture](#technical-architecture)
 
 ---
@@ -229,6 +232,101 @@ Business Context:
 
 ---
 
+## Conversation UX
+
+### Situational Awareness (Phase 2.5)
+
+**Problem**: Traditional chatbots use global phases (DISCOVERY → ASSESSMENT → ANALYSIS → RECOMMENDATIONS) that:
+- ❌ Force linear progression
+- ❌ Prevent multi-output assessment
+- ❌ Block early recommendations
+- ❌ Destroy user agency
+
+**Solution**: **Situational Awareness** - Dynamic composition model that replaces phases
+
+**8 Dimensions** (always sum to 100%):
+1. **Discovery** - Identifying outputs, context
+2. **Education** - Teaching concepts
+3. **Assessment** - Gathering evidence
+4. **Analysis** - Calculating, finding bottlenecks
+5. **Recommendation** - Generating pilots
+6. **Navigation** - Showing progress, orienting
+7. **Error Recovery** - Handling frustration/confusion
+8. **Scope Management** - Disambiguating scope
+
+**How It Works**:
+```
+Start: {discovery: 50%, education: 50%}
+After output identified: {discovery: 30%, assessment: 40%, education: 20%, navigation: 10%}
+User gets confused: {assessment: 30%, error_recovery: 40%, navigation: 15%, education: 10%, discovery: 5%}
+```
+
+**Pattern Selection**:
+- 40 triggers detect user intent and system state
+- 77 behaviors with situation affinity scores
+- Patterns selected by: score = sum(situation[dim] × behavior.affinity[dim])
+- Top-scoring patterns that pass knowledge gates are activated
+
+**Benefits**:
+- ✅ User can assess multiple outputs simultaneously
+- ✅ User can get recommendations at any confidence level
+- ✅ Error recovery spikes automatically when user confused/frustrated
+- ✅ No forced "complete" state
+- ✅ Conversation flows naturally
+
+### Psychological Safety
+
+**Core Principle**: System takes ownership when confusion, correction, or backtracking needed
+
+**Examples**:
+- **Confusion**: "I haven't given enough context. Let me try a different approach."
+- **Skip**: "You're right, it's not that important right now. We can come back later if we need to."
+- **Backtrack**: "I think we went down the wrong path. Let me try a different approach."
+- **Conflict**: "I'm seeing different information - earlier you mentioned X, now Y"
+- **Clarify**: "I want to make sure I understand correctly..."
+
+**Never implies user error**. Always validates user and offers future improvement.
+
+### Pattern System
+
+**40 Triggers**:
+- User Explicit (8): Direct requests (help, explanation, recommendations)
+- User Implicit (14): Inferred from content (mentions output, expresses frustration)
+- System Proactive (12): System-initiated (output identified, assessment sufficient)
+- System Reactive (6): Response to patterns (repetition detected, user stuck)
+
+**77 Behaviors**:
+- Error Recovery (12): Frustration, confusion, undo, backtracking
+- Discovery/Refinement (18): Abstract→concrete, context enrichment
+- Recommendations (13): Pilot generation, feasibility, prerequisites
+- Navigation (15): Progress, depth vs breadth guidance
+- Evidence Quality (15): Tier recognition, conflict resolution
+- Scope Management (13): Disambiguation, multi-output handling
+
+**30 Knowledge Dimensions**:
+- System Knowledge (12): What system knows about user's context
+- User Knowledge (9): What user knows about system
+- Conversation State (8): Frustration, confusion, engagement levels
+- Quality Metrics (6): Evidence quality tracking
+
+**Pattern Composition**: ~400 viable patterns after filtering by situation affinity, knowledge gates, and anti-patterns.
+
+### Quality Assurance (Phase 2.5)
+
+**Three-Layer Evaluation**:
+1. **Deterministic Tests (30%)**: Graph operations, MIN calculation, Bayesian aggregation
+2. **Semantic Similarity (50%)**: Output discovery, rating inference (LLM-as-judge)
+3. **Conversation Quality (20%)**: End-to-end task completion, interaction quality
+
+**Target**: >85% quality score across all layers
+
+**LLM-as-Judge**: Uses Gemini Flash to evaluate semantic equivalence and subjective qualities
+- Handles "forecast accuracy is poor" ≈ "predictions are wrong"
+- Evaluates clarity, helpfulness, naturalness
+- Cost: ~$7.50/month for continuous evaluation
+
+---
+
 ## Technical Architecture
 
 ### Technology Stack
@@ -342,22 +440,46 @@ Business Context:
 
 ## Implementation Timeline
 
-**Total Duration:** 10 weeks (2.5 months)
+**Total Duration:** 14 weeks (3.5 months)
 
 | Phase | Duration | Deliverable |
 |-------|----------|-------------|
 | 1. Infrastructure | Weeks 1-2 | GCP setup, basic chat |
 | 2. Discovery & Assessment | Weeks 3-4 | Output ID, edge rating, MIN calc |
-| 3. Context Extraction | Week 5 | Business context extraction |
-| 4. Recommendations | Weeks 6-7 | LLM inference, feasibility |
-| 5. Report Generation | Week 8 | PDF report |
-| 6. Polish & Testing | Weeks 9-10 | Demo-ready |
+| **2.5. UX & Quality Infrastructure** | **Weeks 5-8** | **Situational awareness, pattern system, semantic evaluation** |
+| 3. Context Extraction | Week 9 | Business context extraction |
+| 4. Recommendations | Weeks 10-11 | LLM inference, feasibility |
+| 5. Report Generation | Week 12 | PDF report |
+| 6. Polish & Testing | Weeks 13-14 | Demo-ready |
+
+**Phase 2.5 Details** (4 weeks parallel tracks):
+- **Week 5**: Core infrastructure (SituationalAwareness class, remove phase logic)
+- **Week 6**: Pattern integration (40 triggers, 77 behaviors, situation affinity)
+- **Week 7**: Intent detection (replace phase routing, enable non-linear conversation)
+- **Week 8**: Refinement + semantic evaluation (tune weights, 3-layer testing)
 
 ---
 
 ## Status
 
-**Functional Specification:** ✅ Complete - All interaction patterns, models, and algorithms defined  
-**Technical Specification:** ✅ Complete - Implementation and deployment plan documented  
-**Implementation:** 📋 Ready to begin - See [Implementation Plan](docs/2_technical_spec/IMPLEMENTATION_DEPLOYMENT_PLAN.md)  
+**Functional Specification:** ✅ Complete
+- Core assessment model defined
+- Situational awareness design complete
+- User interaction patterns documented
+
+**Technical Specification:** ✅ Complete
+- Implementation and deployment plan documented
+- Phase 2.5 UX infrastructure specified
+- Pattern system designed (40 triggers, 77 behaviors, 30 knowledge dimensions)
+
+**Pattern System:** ✅ Generated
+- `sandbox/conversation_ux_exercise/generated_triggers.yaml` (547 lines)
+- `sandbox/conversation_ux_exercise/generated_behaviors.yaml` (805 lines)
+- `sandbox/conversation_ux_exercise/generated_knowledge_dimensions.yaml` (475 lines)
+- Ready for Phase 2.5 implementation
+
+**Implementation:** 📋 Ready to begin
+- See [Implementation Plan](docs/2_technical_spec/IMPLEMENTATION_DEPLOYMENT_PLAN.md)
+- See [Phase 2.5 Plan](docs/2_technical_spec/Phase2.5/README.md)
+
 **Deployment:** 📋 Planned - Cloud Run serverless deployment with scale-to-zero cost optimization
