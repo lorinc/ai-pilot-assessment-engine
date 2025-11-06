@@ -1,363 +1,383 @@
-# Atomic Triggers - Grounded in System Purpose
-# Purpose: Assess AI pilot feasibility via output-centric factor model
-# Scope: Discovery → Assessment → Analysis → Recommendations
+# Atomic Triggers - Clean Production Version
+# Generated from: sandbox/conversation_ux_exercise/triggers_dense_format.md
+# Purpose: Trigger conditions for pattern activation
+# Total: 40 triggers across 4 types
 
----
-
-# USER-EXPLICIT TRIGGERS (User directly asks for something)
-
+# USER EXPLICIT TRIGGERS (8 triggers)
 user_explicit:
-  
-  # Navigation & Orientation
-  - id: T_STATUS_QUERY
-    keywords: ["where are we", "what's our progress", "status", "what have we covered"]
-    intent: user_wants_orientation
-    triggers_behavior: B_SHOW_STATUS
-    
-  - id: T_HOW_IT_WORKS
-    keywords: ["how does this work", "explain", "what is this", "how do you"]
-    intent: user_needs_education
-    triggers_behavior: B_EXPLAIN_CONCEPT
-    
-  - id: T_FEASIBILITY_CHECK
-    keywords: ["can we do", "is it possible", "would this work", "feasible"]
-    intent: user_wants_recommendation
-    triggers_behavior: B_RECOMMEND_PILOTS
-  
-  # Data Management
-  - id: T_REVIEW_CAPTURED_DATA
-    keywords: ["what did you capture", "show me what you know", "review data"]
-    intent: user_wants_transparency
-    triggers_behavior: B_SHOW_CAPTURED_DATA
-  
-  - id: T_EDIT_PREVIOUS_ANSWER
-    keywords: ["change my answer", "I was wrong", "let me correct", "edit"]
-    intent: user_wants_to_correct
-    triggers_behavior: B_ALLOW_EDIT
-  
-  - id: T_CHALLENGE_ASSUMPTION
-    keywords: ["that's not right", "I disagree", "actually", "challenge"]
-    intent: user_disputes_inference
-    triggers_behavior: B_RESOLVE_CHALLENGE
-  
-  # Export & Reporting
-  - id: T_REQUEST_REPORT
-    keywords: ["generate report", "create document", "export", "download"]
-    intent: user_wants_deliverable
-    triggers_behavior: B_GENERATE_REPORT
-  
-  - id: T_REQUEST_TECH_QUESTIONNAIRE
-    keywords: ["technical questionnaire", "ask engineers", "verify assumptions"]
-    intent: user_wants_validation_tool
-    triggers_behavior: B_GENERATE_TECH_QUESTIONNAIRE
-  
-  # Scope Management
-  - id: T_REQUEST_NEXT_STEPS
-    keywords: ["what's next", "what should I do", "next steps"]
-    intent: user_wants_guidance
-    triggers_behavior: B_OFFER_NEXT_STEPS
-  
-  - id: T_REQUEST_PROJECT_IDEAS
-    keywords: ["what projects", "what pilots", "what can we do", "give me ideas"]
-    intent: user_wants_recommendations
-    triggers_behavior: B_GENERATE_PROJECT_IDEAS
-    note: "Generate 3-5 AI pilot ideas based on assessed factors"
-  
-  # Escalation & Limitations
-  - id: T_QUESTION_SYSTEM_ACCURACY
-    keywords: ["are you sure", "is this right", "can you really", "what if", "how do you know"]
-    intent: user_questions_system_reliability
-    triggers_behavior: B_ACKNOWLEDGE_SYSTEM_LIMITS
-  
-  - id: T_REQUEST_HUMAN_CONSULTATION
-    keywords: ["talk to someone", "meet", "call", "discuss", "human expert", "consultant"]
-    intent: user_wants_human_escalation
-    triggers_behavior: B_ACKNOWLEDGE_SYSTEM_LIMITS
+  - id: T_REQUEST_HELP
+    description: "User explicitly asks for help"
+    keywords:
+      - "help"
+      - "what should I do"
+      - "I'm stuck"
+      - "how do I"
+    situation_affinity:
+      navigation: 0.8
+      education: 0.6
+      
+  - id: T_REQUEST_EXPLANATION
+    description: "User asks how something works"
+    keywords:
+      - "how does this work"
+      - "explain"
+      - "what is"
+      - "tell me about"
+    situation_affinity:
+      education: 0.9
+      discovery: 0.3
+      
+  - id: T_REQUEST_RECOMMENDATIONS
+    description: "User asks for pilot suggestions"
+    keywords:
+      - "what should I build"
+      - "recommend"
+      - "suggestions"
+      - "what pilots"
+    situation_affinity:
+      recommendation: 0.9
+      analysis: 0.5
+      
+  - id: T_REQUEST_PROGRESS
+    description: "User asks about status"
+    keywords:
+      - "where are we"
+      - "progress"
+      - "how much done"
+      - "status"
+    situation_affinity:
+      navigation: 0.9
+      
+  - id: T_REQUEST_EXPORT
+    description: "User wants to save/export"
+    keywords:
+      - "export"
+      - "save"
+      - "download"
+      - "report"
+    situation_affinity:
+      navigation: 0.7
+      
+  - id: T_PROVIDE_FEEDBACK
+    description: "User gives feedback"
+    keywords:
+      - "this is wrong"
+      - "actually"
+      - "let me clarify"
+      - "correction"
+    situation_affinity:
+      error_recovery: 0.6
+      assessment: 0.4
+      
+  - id: T_RESTART_ASSESSMENT
+    description: "User wants to start over"
+    keywords:
+      - "restart"
+      - "start over"
+      - "new assessment"
+      - "begin again"
+    situation_affinity:
+      navigation: 0.8
+      
+  - id: T_SKIP_QUESTION
+    description: "User wants to skip"
+    keywords:
+      - "skip"
+      - "I don't know"
+      - "pass"
+      - "later"
+    situation_affinity:
+      error_recovery: 0.5
+      navigation: 0.5
 
----
-
-# USER-IMPLICIT TRIGGERS (User's statement implies a need)
-
+# USER IMPLICIT TRIGGERS (14 triggers)
 user_implicit:
-  
-  # Communication Issues
-  - id: T_CONTRADICTION_DETECTED
-    signal: current_statement_contradicts_previous
-    detection: semantic_comparison
-    triggers_behavior: B_RESOLVE_CONTRADICTION
-    example: "Earlier you said data is good, now you say it's horrible"
-  
-  - id: T_CONFUSION_DETECTED
-    keywords: ["I don't know", "not sure", "confused", "lost", "unclear"]
-    signal: user_expresses_uncertainty
-    triggers_behavior: B_CLARIFY_OR_SKIP
-  
+  - id: T_MENTION_OUTPUT
+    description: "User describes an output"
+    signals:
+      - "mentions_deliverable"
+      - "mentions_report"
+      - "mentions_dashboard"
+      - "mentions_forecast"
+    detection: "output_keyword_detected"
+    situation_affinity:
+      discovery: 0.9
+      assessment: 0.3
+      
+  - id: T_MENTION_PROBLEM
+    description: "User describes a problem"
+    signals:
+      - "issue"
+      - "problem"
+      - "broken"
+      - "doesn't work"
+    detection: "problem_keyword_detected"
+    situation_affinity:
+      discovery: 0.7
+      assessment: 0.5
+      
+  - id: T_MENTION_TEAM
+    description: "User mentions team/people"
+    signals:
+      - "team_name"
+      - "role_mention"
+      - "we"
+      - "they"
+    detection: "team_reference_detected"
+    situation_affinity:
+      discovery: 0.6
+      scope_management: 0.4
+      
+  - id: T_MENTION_SYSTEM
+    description: "User mentions system/tool"
+    signals:
+      - "system_name"
+      - "Excel"
+      - "Salesforce"
+      - "our tool"
+    detection: "system_reference_detected"
+    situation_affinity:
+      discovery: 0.6
+      scope_management: 0.4
+      
+  - id: T_MENTION_PROCESS
+    description: "User mentions process"
+    signals:
+      - "process_name"
+      - "workflow"
+      - "procedure"
+    detection: "process_reference_detected"
+    situation_affinity:
+      discovery: 0.6
+      scope_management: 0.4
+      
+  - id: T_PROVIDE_RATING
+    description: "User gives quality assessment"
+    signals:
+      - "numbers"
+      - "stars"
+      - "good"
+      - "bad"
+      - "terrible"
+      - "excellent"
+    detection: "quality_assessment_detected"
+    situation_affinity:
+      assessment: 0.9
+      
+  - id: T_PROVIDE_EVIDENCE
+    description: "User gives specific data"
+    signals:
+      - "numbers"
+      - "percentages"
+      - "30% of the time"
+      - "last week"
+    detection: "specific_data_detected"
+    situation_affinity:
+      assessment: 0.8
+      evidence_quality: 0.7
+      
+  - id: T_PROVIDE_EXAMPLE
+    description: "User gives concrete example"
+    signals:
+      - "for example"
+      - "like when"
+      - "last time"
+    detection: "example_provided"
+    situation_affinity:
+      assessment: 0.7
+      discovery: 0.5
+      
+  - id: T_EXPRESS_UNCERTAINTY
+    description: "User shows uncertainty"
+    signals:
+      - "maybe"
+      - "I think"
+      - "not sure"
+      - "probably"
+    detection: "uncertainty_detected"
+    situation_affinity:
+      error_recovery: 0.6
+      evidence_quality: 0.5
+      
+  - id: T_EXPRESS_FRUSTRATION
+    description: "User shows frustration"
+    signals:
+      - "this is stupid"
+      - "doesn't make sense"
+      - "annoying"
+    detection: "frustration_detected"
+    situation_affinity:
+      error_recovery: 0.9
+      
+  - id: T_EXPRESS_CONFUSION
+    description: "User shows confusion"
+    signals:
+      - "confused"
+      - "lost"
+      - "don't understand"
+      - "what"
+    detection: "confusion_detected"
+    situation_affinity:
+      error_recovery: 0.9
+      education: 0.6
+      
+  - id: T_SCOPE_AMBIGUITY
+    description: "Statement lacks scope"
+    signals:
+      - "data quality is bad"
+      - "no_scope_specified"
+    detection: "ambiguous_scope"
+    situation_affinity:
+      scope_management: 0.9
+      discovery: 0.4
+      
   - id: T_ABSTRACT_STATEMENT
-    signal: user_describes_problem_without_concrete_output
-    detection: lacks_output_team_system_process
-    triggers_behavior: B_REDIRECT_TO_CONCRETE
-    example: "Our data is a mess" (no specific output/system mentioned)
-  
-  - id: T_VAGUE_PROBLEM
-    signal: user_describes_problem_generically
-    detection: no_specific_output_identified
-    triggers_behavior: B_PROGRESSIVE_REFINEMENT
-    example: "Sales is broken" → "Sales forecasts?" → "Yes"
-  
-  - id: T_POSITIVE_CONFIRMATION
-    keywords: ["yes", "correct", "exactly", "right", "that's it"]
-    signal: user_confirms_system_inference
-    triggers_behavior: B_ACKNOWLEDGE_AND_CONTINUE
-    note: "User validates inference, increase confidence"
-  
-  - id: T_SCOPE_SIGNAL
-    keywords: ["all systems", "just Salesforce", "only sales", "across the org"]
-    signal: user_clarifies_scope_of_statement
-    triggers_behavior: B_REFINE_SCOPE
-    note: "Critical for scoped factor instances (domain/system/team)"
+    description: "Vague/generic statement"
+    signals:
+      - "things are broken"
+      - "quality is low"
+      - "no_specifics"
+    detection: "abstract_language"
+    situation_affinity:
+      discovery: 0.8
+      error_recovery: 0.3
+      
+  - id: T_MULTIPLE_OUTPUTS
+    description: "User mentions multiple outputs"
+    signals:
+      - "lists_several_deliverables"
+    detection: "multiple_output_mentions"
+    situation_affinity:
+      scope_management: 0.8
+      navigation: 0.5
 
----
-
-# SYSTEM-PROACTIVE TRIGGERS (System initiates based on opportunity)
-
+# SYSTEM PROACTIVE TRIGGERS (12 triggers)
 system_proactive:
-  
-  # Business Context Extraction (Agenda-Driven)
-  - id: T_URGENCY_SIGNAL
-    keywords: ["urgent", "deadline", "board", "asap", "quickly", "pressure"]
-    signal: user_mentions_time_pressure
-    extracts: timeline_urgency
-    triggers_behavior: B_EXTRACT_TIMELINE
-    requires: {system_knowledge.timeline_urgency_known: false}
-  
-  - id: T_COST_SIGNAL
-    keywords: ["budget", "cost", "expensive", "€", "$", "spend", "money"]
-    signal: user_mentions_financial_constraints
-    extracts: budget_constraints
-    triggers_behavior: B_EXTRACT_BUDGET
-    requires: {system_knowledge.budget_constraints_known: false}
-  
-  - id: T_STAKEHOLDER_SIGNAL
-    keywords: ["CEO", "board", "VP", "showcase", "demo", "visible", "leadership"]
-    signal: user_mentions_visibility_or_stakeholders
-    extracts: visibility_preference
-    triggers_behavior: B_EXTRACT_VISIBILITY
-    requires: {system_knowledge.visibility_preference_known: false}
-  
-  - id: T_VENDOR_CONSTRAINT
-    keywords: ["locked in", "can't change", "procurement", "vendor", "contract"]
-    signal: user_mentions_system_constraints
-    extracts: vendor_constraints
-    triggers_behavior: B_EXTRACT_VENDOR_CONSTRAINTS
-    requires: {system_knowledge.vendor_constraints_known: false}
-  
-  # Evidence Quality Signals
-  - id: T_QUANTIFIED_STATEMENT
-    signal: user_provides_specific_numbers
-    patterns: ["\\d+%", "€\\d+", "\\$\\d+", "\\d+ years", "\\d+ people"]
-    extracts: high_quality_evidence
-    triggers_behavior: B_ACKNOWLEDGE_AND_STORE
-    note: "Tier 1-2 evidence, high confidence"
-  
-  - id: T_DEPENDENCY_MENTION
-    keywords: ["depends on", "upstream", "relies on", "needs data from"]
-    signal: user_mentions_output_dependencies
-    extracts: dependency_relationship
-    triggers_behavior: B_EXPLORE_DEPENDENCY
-    note: "Critical for output-centric model"
-  
-  - id: T_DATA_QUALITY_SIGNAL
-    keywords: ["incomplete", "duplicates", "messy", "inaccurate", "missing", "outdated"]
-    signal: user_describes_data_quality_issues
-    extracts: dependency_quality_evidence
-    triggers_behavior: B_ASSESS_DEPENDENCY_QUALITY
-    note: "Maps to Dependency Quality component"
-  
-  - id: T_TEAM_CAPABILITY_SIGNAL
-    keywords: ["team can", "we know how", "engineers are", "no skills", "need training"]
-    signal: user_describes_team_capabilities
-    extracts: team_execution_evidence
-    triggers_behavior: B_ASSESS_TEAM_EXECUTION
-    note: "Maps to Team Execution component"
-  
-  - id: T_PROCESS_SIGNAL
-    keywords: ["process", "workflow", "how we do", "no formal", "ad hoc"]
-    signal: user_describes_process_maturity
-    extracts: process_maturity_evidence
-    triggers_behavior: B_ASSESS_PROCESS_MATURITY
-    note: "Maps to Process Maturity component"
-  
-  - id: T_SYSTEM_CAPABILITY_SIGNAL
-    keywords: ["system supports", "tool has", "no API", "can't integrate", "manual"]
-    signal: user_describes_system_capabilities
-    extracts: system_support_evidence
-    triggers_behavior: B_ASSESS_SYSTEM_SUPPORT
-    note: "Maps to System Support component"
-
----
-
-# SYSTEM-REACTIVE TRIGGERS (System responds to state changes)
-
-system_reactive:
-  
-  # Session Lifecycle
-  - id: T_FIRST_MESSAGE
-    condition: conversation_turn == 1
-    triggers_behavior: B_WELCOME_FIRST_TIME
-    priority: high
-  
-  - id: T_RETURNING_USER
-    condition: session_count > 1 AND conversation_turn == 1
-    triggers_behavior: B_WELCOME_RETURNING
-    priority: high
-  
-  # Assessment Progress
   - id: T_OUTPUT_IDENTIFIED
-    condition: system_knowledge.identified_output == true
-    triggers_behavior: B_START_COMPONENT_ASSESSMENT
-    priority: medium
-    note: "Move from discovery to assessment phase"
-  
-  - id: T_ASSESSMENT_COMPLETE
-    condition: all_four_components_assessed == true
-    triggers_behavior: B_IDENTIFY_BOTTLENECK
-    priority: medium
-    note: "Move from assessment to analysis phase"
-  
+    description: "Output successfully identified"
+    condition: "discovery_engine_found_output_with_high_confidence"
+    threshold: 0.7
+    situation_affinity:
+      assessment: 0.7
+      navigation: 0.5
+      
+  - id: T_ASSESSMENT_SUFFICIENT
+    description: "Enough data for recommendations"
+    condition: "3_or_more_components_assessed_OR_user_requested_recommendations"
+    situation_affinity:
+      recommendation: 0.8
+      analysis: 0.6
+      
   - id: T_BOTTLENECK_IDENTIFIED
-    condition: system_knowledge.bottleneck_identified == true
-    triggers_behavior: B_RECOMMEND_PILOTS
-    priority: medium
-    note: "Move from analysis to recommendations phase"
-  
-  # Milestone Events
+    description: "Bottleneck analysis complete"
+    condition: "MIN_calculation_done_bottleneck_found"
+    situation_affinity:
+      recommendation: 0.9
+      analysis: 0.5
+      
+  - id: T_LOW_CONFIDENCE_DATA
+    description: "Evidence quality is low"
+    condition: "multiple_tier_4_5_evidence_statements"
+    situation_affinity:
+      evidence_quality: 0.8
+      assessment: 0.4
+      
+  - id: T_CONFLICTING_EVIDENCE
+    description: "Contradictory statements detected"
+    condition: "current_statement_contradicts_previous"
+    situation_affinity:
+      error_recovery: 0.7
+      evidence_quality: 0.6
+      
   - id: T_MILESTONE_REACHED
-    condition: significant_state_change
-    examples: ["first_component_assessed", "all_dependencies_mapped"]
-    triggers_behavior: B_OFFER_STATUS_OR_CONTINUE
-    priority: low
-  
-  # Discovery Events
-  - id: T_UNKNOWN_SYSTEM_MENTIONED
-    condition: user_mentions_system_not_in_catalog
-    triggers_behavior: B_DISCOVER_SYSTEM
-    priority: high
-    example: "Our Cogglepoop CRM has issues"
-  
-  - id: T_UNKNOWN_OUTPUT_MENTIONED
-    condition: user_mentions_output_not_in_catalog
-    triggers_behavior: B_DISCOVER_OUTPUT
-    priority: high
-    example: "We struggle with Quantum Forecast Reports"
-  
-  # Feature First Use (Just-in-Time Education)
-  - id: T_FIRST_STAR_RATING
-    condition: user_provides_first_star_rating
-    triggers_behavior: B_EXPLAIN_STAR_SCALE
-    priority: medium
-    requires: {user_knowledge.knows_star_rating_scale: false}
-  
-  - id: T_FIRST_MIN_RESULT
-    condition: system_shows_min_calculation_first_time
-    triggers_behavior: B_EXPLAIN_MIN_CALCULATION
-    priority: medium
-    requires: {user_knowledge.knows_min_calculation: false}
-  
-  - id: T_FIRST_EVIDENCE_TIER_MENTION
-    condition: system_mentions_evidence_tiers_first_time
-    triggers_behavior: B_EXPLAIN_EVIDENCE_TIERS
-    priority: medium
-    requires: {user_knowledge.knows_evidence_tiers: false}
-  
-  - id: T_FIRST_DEPENDENCY_MENTION
-    condition: system_discusses_dependencies_first_time
-    triggers_behavior: B_EXPLAIN_DEPENDENCY_CONCEPT
-    priority: medium
-    requires: {user_knowledge.knows_dependency_concept: false}
-  
-  # Partial Assessment
-  - id: T_PARTIAL_ASSESSMENT
-    condition: some_components_assessed AND not_all_assessed
-    triggers_behavior: B_OFFER_CONTINUE_OR_EVALUATE
-    priority: low
-    note: "User can evaluate with partial data or continue assessment"
-  
-  # Multiple Specific Instances
-  - id: T_MULTIPLE_SYSTEMS_LOW_QUALITY
-    condition: multiple_system_instances_with_similar_low_ratings
-    triggers_behavior: B_SYNTHESIZE_GENERIC_FACTOR
-    priority: medium
-    note: "Pattern detected: Salesforce=30%, Spreadsheets=25% → Sales overall=28%"
+    description: "Natural break point"
+    condition: "output_fully_assessed_OR_recommendations_shown"
+    situation_affinity:
+      navigation: 0.8
+      
+  - id: T_CONTEXT_THIN
+    description: "Entity lacks description"
+    condition: "system_team_or_process_identified_but_no_context"
+    situation_affinity:
+      discovery: 0.7
+      assessment: 0.5
+      
+  - id: T_MULTIPLE_OUTPUTS_ACTIVE
+    description: "Multiple outputs in progress"
+    condition: "user_working_on_2_or_more_outputs"
+    situation_affinity:
+      scope_management: 0.8
+      navigation: 0.7
+      
+  - id: T_SESSION_RESUME
+    description: "Returning user"
+    condition: "user_has_previous_session_data"
+    situation_affinity:
+      navigation: 0.7
+      education: 0.3
+      
+  - id: T_FIRST_TIME_USER
+    description: "New user detected"
+    condition: "no_previous_sessions"
+    situation_affinity:
+      education: 0.9
+      discovery: 0.5
+      
+  - id: T_SPARSE_KNOWLEDGE_DETECTED
+    description: "Multiple outputs but shallow assessment"
+    condition: "3_or_more_outputs_identified_all_with_less_than_2_components_assessed"
+    situation_affinity:
+      navigation: 0.8
+      recommendation: 0.6
+      scope_management: 0.5
+      
+  - id: T_BREADTH_OVER_DEPTH
+    description: "User exploring many outputs superficially"
+    condition: "5_or_more_outputs_mentioned_none_fully_assessed"
+    situation_affinity:
+      navigation: 0.9
+      discovery: 0.4
 
----
-
-# DROPPED TRIGGERS (Not grounded in system purpose)
-
-# These were removed because they're out of scope:
-# - Calendar/meeting integration (not our job)
-# - Human handoff/escalation (no human in loop)
-# - PPT slides, email drafts (not core value)
-# - RACI, implementation owners (execution tracking, not assessment)
-# - Compliance checklists, security audits (too specialized)
-# - M&A mentions, market changes (not relevant to pilot feasibility)
-# - Sentiment analysis, frustration detection (focus on content, not emotion)
-# - Timezone, currency, region (not needed for assessment)
-# - Silent mode, pause/resume (premature optimization)
-# - Data retention, sharing restrictions (out of scope)
-# - SLA requirements (execution detail, not assessment)
-# - Competitor mentions (not relevant to internal capability)
-# - Cultural norms (too abstract, hard to operationalize)
-
----
-
-# SUMMARY STATISTICS
-
-total_triggers: 41
-  user_explicit: 13
-  user_implicit: 6
-  system_proactive: 11
-  system_reactive: 11
-
-dropped_triggers: ~80 (from original 112)
-drop_rate: 71%
-
-coverage:
-  discovery_phase: 8 triggers
-  assessment_phase: 13 triggers
-  analysis_phase: 5 triggers
-  recommendations_phase: 5 triggers
-  navigation: 5 triggers
-  meta: 3 triggers
-
----
-
-# DESIGN PRINCIPLES APPLIED
-
-1. **Grounded in System Purpose**
-   - Only triggers that serve output-centric factor assessment
-   - No execution tracking, no project management
-   
-2. **Actionable**
-   - Each trigger maps to specific behavior
-   - Clear detection criteria
-   
-3. **Minimal but Complete**
-   - 28 triggers cover all conversation phases
-   - No redundancy, no speculation
-   
-4. **Progressive Disclosure**
-   - First-use triggers for just-in-time education
-   - State-based triggers for phase transitions
-   
-5. **Agenda-Driven**
-   - Proactive triggers extract business context naturally
-   - "Sprinkle, don't survey"
-
----
-
-# NEXT STEPS
-
-1. Define 10-15 atomic behaviors that these triggers activate
-2. Create composition rules (trigger + behavior + knowledge state)
-3. Generate patterns from combinations
-4. Validate with example conversations
+# SYSTEM REACTIVE TRIGGERS (6 triggers)
+system_reactive:
+  - id: T_PATTERN_REPETITION
+    description: "Same pattern triggered 3+ times"
+    response_to: "avoid_repetition_try_different_approach"
+    situation_affinity:
+      error_recovery: 0.6
+      navigation: 0.4
+      
+  - id: T_USER_STUCK
+    description: "No progress in 3+ turns"
+    response_to: "user_not_providing_useful_data"
+    situation_affinity:
+      error_recovery: 0.8
+      navigation: 0.5
+      
+  - id: T_RAPID_CORRECTIONS
+    description: "User corrects multiple times"
+    response_to: "user_says_no_actually_repeatedly"
+    situation_affinity:
+      error_recovery: 0.7
+      assessment: 0.5
+      
+  - id: T_QUESTION_IGNORED
+    description: "User didn't answer question"
+    response_to: "user_changed_topic_or_gave_unrelated_response"
+    situation_affinity:
+      error_recovery: 0.6
+      navigation: 0.4
+      
+  - id: T_SCOPE_CLARIFIED
+    description: "User provided scope signal"
+    response_to: "user_said_all_systems_or_just_salesforce"
+    situation_affinity:
+      scope_management: 0.7
+      assessment: 0.5
+      
+  - id: T_UNDERSTANDING_DEMONSTRATED
+    description: "User uses system terminology"
+    response_to: "user_correctly_uses_bottleneck_MIN_etc"
+    situation_affinity:
+      education: 0.3
+      assessment: 0.7

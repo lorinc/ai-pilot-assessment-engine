@@ -1,475 +1,704 @@
-# Atomic Behaviors - Grounded in System Purpose
+# Atomic Behaviors - Clean Production Version
+# Generated from: sandbox/conversation_ux_exercise/behaviors_dense_format.md
 # Purpose: Response patterns for output-centric factor assessment
-# Scope: What the system DOES in response to triggers
+# Total: 77 behaviors across 6 categories
 
----
-
-# EDUCATION & EXPLANATION BEHAVIORS
-
-education:
-  
-  - id: B_EXPLAIN_OBJECT_MODEL
-    goal: "Teach simplistic object model design"
-    template: |
-      Quick note on how this works: If a tool has multiple functions, treat them as separate tools. 
-      If an output has multiple quality contributors, treat them as separate qualities.
-      
-      Example: "Senior impact on data quality" and "Junior impact on data quality" as separate assessments.
+# ERROR RECOVERY BEHAVIORS (12 behaviors)
+error_recovery:
+  - id: B_DETECT_FRUSTRATION
+    goal: "Notice user frustration"
+    template: "I notice you might be frustrated. What went wrong?"
     constraints:
+      tone: "empathetic, helpful"
+      max_words: 20
+    when: "negative_sentiment_detected"
+    
+  - id: B_ACKNOWLEDGE_BETA
+    goal: "Beta disclaimer"
+    template: "Still in beta. Tell me what went wrong, I'll fix it."
+    constraints:
+      tone: "humble, helpful"
+      max_words: 15
+    when: "user_frustrated"
+    
+  - id: B_OFFER_TICKET
+    goal: "Create dev ticket"
+    template: "Want me to create a ticket for the developer?"
+    constraints:
+      tone: "helpful"
+      max_words: 10
+    when: "user_frustrated_or_bug_reported"
+    
+  - id: B_OFFER_UNDO
+    goal: "Reverse changes"
+    template: "Should I reverse that change?"
+    constraints:
+      tone: "helpful"
+      max_words: 8
+    when: "user_frustrated_about_change"
+    
+  - id: B_EXPLAIN_INTENTIONAL_LIMITATION
+    goal: "Defend design decision"
+    template: "That's by design because {reason}. But I'll flag for review."
+    constraints:
+      tone: "transparent, not defensive"
+      max_words: 25
+    when: "user_frustrated_by_limitation"
+    
+  - id: B_RESOLVE_DUPLICATE
+    goal: "Handle duplicate entities"
+    template: "Are these the same or different? Or should I flag as synonyms?"
+    constraints:
+      tone: "clarifying"
+      max_words: 15
+    when: "possible_duplicate_detected"
+    
+  - id: B_DETECT_CONFUSION
+    goal: "Notice user uncertainty"
+    template: "I sense some confusion. Let me clarify."
+    constraints:
+      tone: "helpful"
+      max_words: 10
+    when: "confusion_signals_detected"
+    
+  - id: B_OFFER_REPHRASE
+    goal: "Explain differently"
+    template: "I haven't given enough context. Let me try a different approach."
+    constraints:
+      tone: "takes_ownership"
+      max_words: 15
+    when: "user_confused"
+    
+  - id: B_OFFER_SKIP
+    goal: "Skip difficult question"
+    template: "You're right, it's not that important right now. We can come back to this later if we need to."
+    constraints:
+      tone: "validating, pressure_reducing"
+      max_words: 20
+    when: "user_stuck"
+    
+  - id: B_BACKTRACK
+    goal: "Try different approach"
+    template: "I think we went down the wrong path. Let me try a different approach."
+    constraints:
+      tone: "takes_ownership"
+      max_words: 15
+    when: "wrong_path_detected"
+    
+  - id: B_ACCEPT_DONT_KNOW
+    goal: "Handle 'I don't know'"
+    template: "That's fine, we can estimate / ask your team / mark as low confidence"
+    constraints:
+      tone: "non_judgmental"
+      max_words: 15
+    when: "user_says_dont_know"
+    
+  - id: B_LOWER_CONFIDENCE
+    goal: "Mark uncertainty"
+    template: "I'll mark this as low confidence - we can always refine it later if needed"
+    constraints:
+      tone: "transparent"
+      max_words: 15
+    when: "user_uncertain"
+
+# DISCOVERY / REFINEMENT BEHAVIORS (18 behaviors)
+discovery:
+  - id: B_REDIRECT_TO_CONCRETE
+    goal: "Force concrete example"
+    template: "Sorry, I don't do abstract. Let's use a concrete event as proxy."
+    constraints:
+      tone: "direct, professional"
+      max_words: 15
+    when: "abstract_statement_detected"
+    
+  - id: B_PROGRESSIVE_NARROWING
+    goal: "Narrow from generic"
+    template: "Help me narrow down the scope. Sales forecasts? Sales reports? Sales dashboards?"
+    constraints:
+      tone: "helpful"
+      max_words: 15
+    when: "vague_problem_detected"
+    
+  - id: B_ELICIT_EXAMPLE
+    goal: "Request specific instance"
+    template: "Tell me about the last time this problem happened"
+    constraints:
+      tone: "concrete_grounding"
+      max_words: 10
+    when: "abstract_or_generic_statement"
+    
+  - id: B_CONFIRM_OUTPUT
+    goal: "Validate output identification"
+    template: "So you mean {specific_output}?"
+    constraints:
+      tone: "confirming"
+      max_words: 10
+    when: "after_narrowing"
+    
+  - id: B_DISCOVER_TEAM
+    goal: "Identify team"
+    template: "Which team creates this output?"
+    constraints:
+      tone: "context_gathering"
+      max_words: 8
+    when: "output_identified_team_unknown"
+    
+  - id: B_DISCOVER_SYSTEM
+    goal: "Identify system"
+    template: "What system do they use?"
+    constraints:
+      tone: "context_gathering"
+      max_words: 8
+    when: "output_identified_system_unknown"
+    
+  - id: B_DISCOVER_PROCESS
+    goal: "Identify process"
+    template: "What's the process called?"
+    constraints:
+      tone: "context_gathering"
+      max_words: 8
+    when: "output_identified_process_unknown"
+    
+  - id: B_DISCOVER_FREQUENCY
+    goal: "Identify cadence"
+    template: "How often is this created? Daily? Monthly?"
+    constraints:
+      tone: "context_gathering"
+      max_words: 10
+    when: "output_identified"
+    
+  - id: B_ENRICH_SYSTEM_CONTEXT
+    goal: "Gather system description"
+    template: "Is there anything about {system} that better explains the root cause or rationale behind this?"
+    constraints:
+      tone: "context_enrichment"
+      max_words: 20
+    when: "system_identified_context_thin"
+    
+  - id: B_ENRICH_TEAM_CONTEXT
+    goal: "Gather team/persona description"
+    template: "Tell me more about {team}. Anything that explains why this is challenging for them?"
+    constraints:
+      tone: "context_enrichment"
+      max_words: 20
+    when: "team_identified_context_thin"
+    
+  - id: B_ENRICH_PROCESS_CONTEXT
+    goal: "Gather process description"
+    template: "What should I know about the {process} that explains the root cause here?"
+    constraints:
+      tone: "context_enrichment"
+      max_words: 20
+    when: "process_identified_context_thin"
+    
+  - id: B_ENRICH_OUTPUT_CONTEXT
+    goal: "Gather output description"
+    template: "Anything about {output} that helps explain why quality is an issue?"
+    constraints:
+      tone: "context_enrichment"
+      max_words: 20
+    when: "output_identified_context_thin"
+    
+  - id: B_PROBE_FOR_CONSTRAINTS
+    goal: "Identify constraints"
+    template: "Are there constraints or limitations with {entity} I should know about?"
+    constraints:
+      tone: "probing"
+      max_words: 15
+    when: "entity_identified_constraints_unclear"
+    
+  - id: B_PROBE_FOR_DEPENDENCIES
+    goal: "Identify dependencies"
+    template: "What does {entity} depend on to work well?"
+    constraints:
+      tone: "probing"
+      max_words: 10
+    when: "entity_identified_dependencies_unclear"
+    
+  - id: B_PROBE_FOR_HISTORY
+    goal: "Understand historical context"
+    template: "Has this always been a problem, or did something change?"
+    constraints:
+      tone: "temporal_context"
+      max_words: 12
+    when: "problem_identified"
+    
+  - id: B_CLARIFY_SCOPE
+    goal: "Disambiguate scope"
+    template: "All systems or just Salesforce?"
+    constraints:
+      tone: "clarifying"
+      max_words: 8
+    when: "ambiguous_statement"
+    
+  - id: B_CLARIFY_DOMAIN
+    goal: "Disambiguate domain"
+    template: "All of sales or just EMEA?"
+    constraints:
+      tone: "clarifying"
+      max_words: 8
+    when: "ambiguous_statement"
+    
+  - id: B_CLARIFY_TIMEFRAME
+    goal: "Disambiguate time"
+    template: "Current state or future state?"
+    constraints:
+      tone: "clarifying"
+      max_words: 8
+    when: "ambiguous_statement"
+
+# RECOMMENDATION BEHAVIORS (13 behaviors)
+recommendations:
+  - id: B_GENERATE_PILOT_OPTIONS
+    goal: "Create pilot recommendations"
+    template: "Based on {bottleneck}, here are 3 options: {pilots}"
+    constraints:
+      tone: "value_delivery"
+      max_words: 30
+    when: "assessment_complete_bottleneck_identified"
+    
+  - id: B_MAP_BOTTLENECK_TO_ARCHETYPE
+    goal: "Link bottleneck to solution type"
+    template: "Dependency issue → Data Quality pilots"
+    constraints:
+      tone: "inference"
+      max_words: 10
+    when: "bottleneck_identified"
+    
+  - id: B_SHOW_PILOT_DETAILS
+    goal: "Explain pilot option"
+    template: "Option 1: {name}. Effort: {effort}. Impact: {impact}. Feasibility: {percent}"
+    constraints:
+      tone: "structured"
+      max_words: 20
+    when: "presenting_options"
+    
+  - id: B_EXPLAIN_FEASIBILITY
+    goal: "Justify feasibility score"
+    template: "45% confidence - this would need ML expertise to deliver"
+    constraints:
+      tone: "transparent, not_accusatory"
+      max_words: 15
+    when: "showing_pilot_option"
+    
+  - id: B_SHOW_PREREQUISITES
+    goal: "Identify gaps"
+    template: "This pilot would benefit from strengthening {component} first"
+    constraints:
+      tone: "neutral"
+      max_words: 12
+    when: "low_feasibility_pilot"
+    
+  - id: B_ESTIMATE_COST_TO_BRIDGE
+    goal: "Estimate gap bridging"
+    template: "Bridging this gap: €50-100K, 3-6 months - but this is just a language model, my developer would be happy to help with better assessment."
+    constraints:
+      tone: "rough_estimate"
+      max_words: 30
+    when: "prerequisites_identified"
+    
+  - id: B_PRIORITIZE_BY_IMPACT
+    goal: "Rank by impact"
+    template: "Quick win vs strategic investment"
+    constraints:
+      tone: "sorting"
+      max_words: 8
+    when: "multiple_options"
+    
+  - id: B_PRIORITIZE_BY_FEASIBILITY
+    goal: "Rank by ease"
+    template: "Easy vs hard to implement"
+    constraints:
+      tone: "sorting"
+      max_words: 8
+    when: "multiple_options"
+    
+  - id: B_SHOW_TRADEOFFS
+    goal: "Explain tradeoffs"
+    template: "High impact but requires prerequisites"
+    constraints:
+      tone: "balanced"
+      max_words: 10
+    when: "multiple_options"
+    
+  - id: B_EXPLAIN_WHY_RECOMMENDED
+    goal: "Justify recommendation"
+    template: "This addresses your bottleneck ({component}), show gap -> pain -> archetype hop"
+    constraints:
+      tone: "clear_reasoning"
+      max_words: 20
+    when: "presenting_option"
+    
+  - id: B_SHOW_EXPECTED_IMPACT
+    goal: "Predict improvement"
+    template: "Could improve from ⭐⭐ to ⭐⭐⭐⭐"
+    constraints:
+      tone: "quantified"
+      max_words: 10
+    when: "presenting_option"
+    
+  - id: B_SHOW_RISKS
+    goal: "Identify risks"
+    template: "Risk: Requires culture change / data access / budget"
+    constraints:
+      tone: "honest"
+      max_words: 12
+    when: "presenting_option"
+    
+  - id: B_REQUEST_RECOMMENDATION_FEEDBACK
+    goal: "Validate recommendations with user"
+    template: "What do you think about these options? Am I on the right track finding projects that might be actually useful, or am I missing something?"
+    constraints:
+      tone: "validating"
+      max_words: 30
+    when: "after_presenting_pilot_options"
+
+# NAVIGATION BEHAVIORS (15 behaviors)
+navigation:
+  - id: B_SHOW_OUTPUT_COMPLETENESS
+    goal: "Show assessment completeness for specific output"
+    template: "For {output}: enough data for {confidence_level} confidence recommendations"
+    constraints:
+      tone: "per_output"
+      max_words: 15
+    when: "sufficient_data_for_output"
+    
+  - id: B_SHOW_PROGRESS_BAR
+    goal: "Show completion % for specific output"
+    template: "For {output}: 3 of 4 components assessed (75%)"
+    constraints:
+      tone: "per_output_progress"
+      max_words: 12
+    when: "status_query"
+    
+  - id: B_OFFER_RECOMMENDATIONS_AT_CONFIDENCE
+    goal: "Offer to generate recommendations"
+    template: "I can generate {confidence_level} confidence recommendations for {output} now. Continue assessing or see options?"
+    constraints:
+      tone: "user_choice"
+      max_words: 20
+    when: "output_reaches_confidence_threshold"
+    
+  - id: B_RESUME_SESSION
+    goal: "Continue previous session"
+    template: "Last time we discussed {topic}..."
+    constraints:
+      tone: "continuity"
+      max_words: 10
+    when: "returning_user"
+    
+  - id: B_SHOW_SESSION_SUMMARY
+    goal: "Summarize current session"
+    template: "In this session: identified 2 outputs, assessed 1, this lifted our confidence in finding good solutions by 10%"
+    constraints:
+      tone: "recap"
+      max_words: 25
+    when: "status_query_or_end_of_session"
+    
+  - id: B_OFFER_SAVE_POINT
+    goal: "Suggest pause"
+    template: "Good stopping point. Want to save your progress? I can help you create an account."
+    constraints:
+      tone: "helpful"
+      max_words: 18
+    when: "natural_break_point"
+    
+  - id: B_OFFER_CONTINUE_OR_EVALUATE
+    goal: "Present options"
+    template: "Continue assessment or evaluate now with partial data?"
+    constraints:
+      tone: "user_choice"
+      max_words: 10
+    when: "partial_assessment"
+    
+  - id: B_SUGGEST_NEXT_ACTION
+    goal: "Recommend next step"
+    template: "Next: assess Process Maturity"
+    constraints:
+      tone: "guidance"
+      max_words: 8
+    when: "status_query_or_milestone"
+    
+  - id: B_SHOW_OPTIONAL_PATHS
+    goal: "Present multiple options"
+    template: "You can: (1) Continue, (2) Export, (3) Get recommendations"
+    constraints:
+      tone: "user_agency"
+      max_words: 15
+    when: "decision_point"
+    
+  - id: B_SHOW_WHERE_WE_ARE
+    goal: "Current location"
+    template: "Assessment phase, focusing on Team Execution"
+    constraints:
+      tone: "orientation"
+      max_words: 10
+    when: "status_query"
+    
+  - id: B_SHOW_WHAT_WE_KNOW
+    goal: "Knowledge summary"
+    template: "Known: Output, Team, System. Unknown: Process, Dependencies"
+    constraints:
+      tone: "transparency"
+      max_words: 12
+    when: "status_query"
+    
+  - id: B_SHOW_CONFIDENCE_LEVELS
+    goal: "Confidence breakdown"
+    template: "High confidence: 2 factors. Low confidence: 3 factors"
+    constraints:
+      tone: "quality_transparency"
+      max_words: 12
+    when: "status_query"
+    
+  - id: B_RECOMMEND_DEPTH_OVER_BREADTH
+    goal: "Suggest focusing on fewer outputs"
+    template: "I notice you've mentioned {N} outputs, but we have shallow knowledge about each. For better pilot recommendations, I suggest we focus deeply on 1-2 outputs rather than superficially on many. Which output would give you the most value if we found a great pilot for it?"
+    constraints:
+      tone: "strategic_guidance"
       max_words: 50
-      tone: "practical, not academic"
-    teaches: object_model_simplicity
-    when: user_encounters_complex_scenario
-  
-  - id: B_EXPLAIN_DATA_PRESERVATION
-    goal: "Explain how data is stored and extracted"
-    template: |
-      Everything we discuss is preserved. You can:
-      - Export as JSON for backup
-      - Generate reports for stakeholders
-      - Create tech questionnaires for engineers
-      
-      No effort is ever lost.
+    when: "multiple_outputs_sparse_assessment"
+    
+  - id: B_SHOW_ASSESSMENT_GAPS
+    goal: "Highlight sparse knowledge"
+    template: "Current state: {N} outputs identified, but only {M} components assessed across all. Ideal state: 3-4 components per output for high-confidence recommendations. Want to go deep on one output or continue exploring?"
     constraints:
+      tone: "transparent_about_quality"
       max_words: 40
-      tone: "reassuring, practical"
-    teaches: data_portability
-    when: user_asks_about_data_or_first_significant_capture
-  
-  - id: B_BUILD_TRUST_WITH_CAPABILITIES
-    goal: "State system capabilities to build trust"
-    template: |
-      What makes this useful:
-      - Output-centric model (not abstract factors)
-      - MIN calculation finds bottlenecks automatically
-      - Knowledge graph maps problems → AI solutions
-      - 1-5 star ratings (no false precision)
-      
-      {specific_capability_relevant_to_context}
+    when: "sparse_knowledge_detected"
+    
+  - id: B_OFFER_FOCUS_STRATEGY
+    goal: "Present depth vs breadth options"
+    template: "Two paths: (1) Assess {output_A} deeply now → get solid recommendations, or (2) Continue discovering outputs → assess later. What's more valuable to you?"
     constraints:
-      max_words: 60
-      tone: "confident, factual"
-    teaches: system_capabilities
-    when: user_expresses_doubt_or_early_in_conversation
-  
-  - id: B_EXPLAIN_DESIGN_DECISIONS
-    goal: "Defend limitations with design rationale"
-    template: |
-      {acknowledge_limitation_with_humor}
-      
-      Why it's designed this way: {design_rationale}
-      
-      If this doesn't work for you, I'd love to hear why: {feedback_mechanism}
+      tone: "user_choice"
+      max_words: 35
+    when: "multiple_outputs_unclear_strategy"
+
+# EVIDENCE QUALITY BEHAVIORS (15 behaviors)
+evidence:
+  - id: B_ACKNOWLEDGE_TIER1
+    goal: "Recognize high-quality evidence"
+    template: "That's specific data—high confidence"
     constraints:
-      tone: "self-deprecating, transparent"
-      must_include: humor, rationale, feedback_offer
-    teaches: system_constraints
-    when: user_criticizes_system
-    example: "You're right, I'm not great at abstract problems. That's intentional—I need concrete outputs to assess. Otherwise I'd just be guessing."
-  
-  - id: B_EXPLAIN_INTERNAL_LOGIC
-    goal: "Show how calculations work"
-    template: |
-      Here's what's happening internally:
-      - Output quality = MIN(Dependency, Team, Process, System)
-      - Your {component} is the bottleneck at {rating}
-      - Confidence: {confidence}% based on {evidence_count} data points
+      tone: "positive_reinforcement"
+      max_words: 8
+    when: "specific_data_provided"
+    
+  - id: B_ACKNOWLEDGE_QUANTIFIED
+    goal: "Recognize numbers"
+    template: "Thanks for the numbers, that helps"
     constraints:
-      max_words: 50
-      tone: "transparent, educational"
-    teaches: min_calculation, confidence_scoring
-    when: user_asks_how_it_works_or_first_bottleneck_identified
-  
-  - id: B_CITE_UX_PRINCIPLES
-    goal: "Reference UX principles being applied"
-    template: |
-      {action_taken}
-      
-      (Following "{ux_principle_name}": {brief_explanation})
+      tone: "appreciation"
+      max_words: 8
+    when: "numbers_provided"
+    
+  - id: B_ACKNOWLEDGE_CONCRETE
+    goal: "Recognize concrete example"
+    template: "Good example, that's actionable"
     constraints:
-      max_words: 30
-      tone: "meta, educational"
-    teaches: ux_awareness
-    when: opportunity_to_demonstrate_principle
-    example: "I'm asking one question at a time. (Following 'Volume Control': avoid overwhelming users)"
-
----
-
-# TRANSPARENCY & REFLECTION BEHAVIORS
-
-transparency:
-  
-  - id: B_SHOW_USER_KNOWLEDGE_STATE
-    goal: "Tell user what system thinks they know"
-    template: |
-      What I think you know:
-      {list_of_known_concepts}
-      
-      What you might not know yet:
-      {list_of_undiscovered_features}
+      tone: "positive_feedback"
+      max_words: 8
+    when: "specific_example_given"
+    
+  - id: B_PROBE_FOR_NUMBERS
+    goal: "Request quantification"
+    template: "Can you quantify that? Like % or count?"
     constraints:
-      max_words: 80
-      tone: "transparent, helpful"
-    updates: user_meta_awareness
-    when: user_asks_or_natural_checkpoint
-  
-  - id: B_SHOW_COLLECTED_KNOWLEDGE
-    goal: "Summarize captured data and capabilities"
-    template: |
-      What we've collected:
-      {summary_of_factors_and_evidence}
-      
-      What you can do now:
-      {list_of_unlocked_capabilities}
-      
-      Paths forward:
-      {2_3_options}
+      tone: "improve_quality"
+      max_words: 10
+    when: "vague_statement"
+    
+  - id: B_PROBE_FOR_EXAMPLE
+    goal: "Request specific instance"
+    template: "Give me a specific instance"
     constraints:
-      max_words: 100
-      tone: "progress-oriented"
-    updates: user_orientation
-    when: status_query_or_milestone
-  
-  - id: B_SHOW_THINKING_PROCESS
-    goal: "Expose internal reasoning (system feature)"
-    template: |
-      <details>
-      <summary>🔍 Internal reasoning</summary>
-      
-      Retrieved nodes: {node_list}
-      Confidence calculation: {formula}
-      Assumptions made: {assumption_list}
-      Knowledge updated: {update_list}
-      
-      </details>
-      
-      {actual_response}
+      tone: "concrete_grounding"
+      max_words: 8
+    when: "generic_statement"
+    
+  - id: B_PROBE_FOR_FREQUENCY
+    goal: "Request frequency"
+    template: "How often does this happen?"
     constraints:
-      format: "collapsible_box"
-      tone: "technical, transparent"
-    note: "SYSTEM FEATURE - requires backend support"
-    when: user_requests_or_debug_mode
-  
-  - id: B_SHOW_DATA_NEEDS
-    goal: "Tell user assessment completeness"
-    template: |
-      Data collected: {count} of {needed} data points
-      Confidence: {percentage}%
-      
-      To reach {next_tier}% confidence, we need: {gap_list}
+      tone: "quantify_impact"
+      max_words: 8
+    when: "impact_claim"
+    
+  - id: B_PROBE_FOR_IMPACT
+    goal: "Request business impact"
+    template: "What's the business impact? Revenue? Time?"
     constraints:
-      max_words: 50
-      tone: "progress-oriented"
-    updates: user_orientation
-    when: status_query_or_partial_assessment
-
----
-
-# CONVERSATION MANAGEMENT BEHAVIORS
-
-conversation_management:
-  
-  - id: B_CHAIN_PATTERNS
-    goal: "Check for next pattern opportunity after response"
-    template: |
-      {primary_response}
-      
-      {check_for_new_trigger_opportunity}
-      {if_found_execute_secondary_pattern}
+      tone: "quantify_importance"
+      max_words: 10
+    when: "problem_statement"
+    
+  - id: B_ACCEPT_VAGUE_WITH_LOW_CONFIDENCE
+    goal: "Accept low-quality evidence"
+    template: "That's okay, I can work with that. If we need more precision later, we can refine it."
     constraints:
-      must_feel_natural: true
-      max_chained_patterns: 2
-    note: "Pattern chaining within single response"
-    when: after_every_response
-    example: "Here's your data. [checks context] By the way, you mentioned budget—should we capture that?"
-  
-  - id: B_AVOID_PATTERN_REPETITION
-    goal: "Track and vary conversation patterns"
-    template: |
-      {check_recent_pattern_history}
-      {if_same_pattern_used_recently_pick_alternative}
-      {generate_response_with_variety}
+      tone: "emotionally_safe"
+      max_words: 18
+    when: "vague_statement_cant_be_more_specific"
+    
+  - id: B_OFFER_SURVEY_FOR_VALIDATION
+    goal: "Suggest validation"
+    template: "Want to verify this with your team?"
     constraints:
-      pattern_memory: "last_5_turns"
-      variety_threshold: "no_same_pattern_twice_in_5_turns"
-    note: "Prevents monotonous conversation"
-    when: pattern_selection_time
-
----
-
-# ASSESSMENT BEHAVIORS
-
-assessment:
-  
-  - id: B_ASSESS_WITH_PROFESSIONAL_REFLECTION
-    goal: "Reflect without empathy, show reasoning"
-    template: |
-      {state_what_was_learned}
-      
-      This indicates: {bottleneck_or_insight}
-      
-      Created/Updated: {factor_name} = {rating}
+      tone: "improve_confidence"
+      max_words: 8
+    when: "low_confidence_verifiable"
+    
+  - id: B_FLAG_FOR_LATER
+    goal: "Defer low-priority uncertainty"
+    template: "Let's come back to this if we need higher confidence"
     constraints:
-      no_empathy: true
-      must_show_reasoning: true
-      tone: "analytical, professional"
-    updates: factor_ratings
-    when: user_provides_assessment_evidence
-    avoid: ["I understand that must be frustrating", "That sounds difficult"]
-  
-  - id: B_IDENTIFY_LOW_CONFIDENCE_NODES
-    goal: "Surface uncertain assessments for validation"
-    template: |
-      I have low confidence on these assessments:
-      {list_with_confidence_scores}
-      
-      Are any of these critical enough to verify with your team?
-      
-      I can generate a survey for: {selectable_topics}
+      tone: "prioritize"
+      max_words: 10
+    when: "low_confidence_not_critical"
+    
+  - id: B_DETECT_CONFLICTING_EVIDENCE
+    goal: "Notice contradiction"
+    template: "I'm seeing different information - earlier you mentioned X, now Y"
     constraints:
-      max_words: 60
-      tone: "collaborative"
-    triggers: survey_generation_offer
-    when: assessment_complete_or_user_asks
-
----
-
-# SURVEY & VALIDATION BEHAVIORS
-
-survey:
-  
-  - id: B_GENERATE_SURVEY
-    goal: "Create questionnaire for technical validation"
-    template: |
-      Survey for: {topic}
-      Depth: {user_selected_depth}
-      
-      {generated_questions_with_context}
-      
-      Share this with {relevant_stakeholders}.
+      tone: "system_owns_observation"
+      max_words: 12
+    when: "current_contradicts_previous"
+    
+  - id: B_RESOLVE_CONFLICT
+    goal: "Clarify contradiction"
+    template: "I want to make sure I understand correctly. Which is more accurate, or does it depend on context?"
     constraints:
-      format: "standalone_document"
-      must_include: context_for_questions
-    note: "SYSTEM FEATURE - survey generation"
-    when: user_requests_or_low_confidence_identified
-  
-  - id: B_PROCESS_SURVEY_RESULTS
-    goal: "Summarize survey impact and update knowledge"
-    template: |
-      Survey results summary:
-      {key_findings}
-      
-      Impact on assessment:
-      - Confidence increased: {list}
-      - Ratings changed: {list}
-      - New insights: {list}
-      
-      Knowledge base updated.
+      tone: "system_takes_responsibility"
+      max_words: 18
+    when: "conflict_detected"
+    
+  - id: B_SYNTHESIZE_EVIDENCE
+    goal: "Combine multiple statements"
+    template: "From 3 mentions, I infer {synthesis}"
     constraints:
-      must_show_lift: true
-      tone: "appreciative"
-    updates: factor_confidence, factor_ratings
-    when: user_uploads_completed_survey
-
----
-
-# TRUST & SAFETY BEHAVIORS
-
-trust:
-  
-  - id: B_OFFER_NDA
-    goal: "Proactively offer confidentiality"
-    template: |
-      Since we're discussing {sensitive_topic}, I can generate an NDA if that helps.
-      
-      Just provide company details and I'll create it immediately.
+      tone: "pattern_recognition"
+      max_words: 10
+    when: "multiple_related_statements"
+    
+  - id: B_EXPLAIN_EVIDENCE_TIERS
+    goal: "Teach evidence system"
+    template: "Tier 1 = specific data, Tier 5 = vague opinion"
     constraints:
-      max_words: 30
-      tone: "professional, reassuring"
-    triggers: nda_generation
-    when: sensitive_topic_detected
-    examples: ["budget", "internal problems", "competitive info"]
-  
-  - id: B_GENERATE_NDA
-    goal: "Create NDA document"
-    template: |
-      {nda_document_with_company_details}
-    note: "SYSTEM FEATURE - NDA generation"
-    when: user_provides_company_details
-
----
-
-# FEEDBACK & IMPROVEMENT BEHAVIORS
-
-feedback:
-  
-  - id: B_APPRECIATE_FEEDBACK
-    goal: "Thank user and explain value"
-    template: |
-      Thanks for that feedback! 
-      
-      {explain_how_it_helps}
-      
-      This goes directly to the developer.
+      tone: "just_in_time_education"
+      max_words: 12
+    when: "first_mention_of_tiers"
+    
+  - id: B_SHOW_CONFIDENCE_IMPACT
+    goal: "Show tier impact"
+    template: "With Tier-1 evidence, confidence jumps to 85%"
     constraints:
-      max_words: 30
-      tone: "appreciative, transparent"
-    when: user_provides_feedback
+      tone: "motivate_quality"
+      max_words: 10
+    when: "evidence_tier_mentioned"
 
----
-
-# LIMITATION & ESCALATION BEHAVIORS
-
-limitation:
-  
-  - id: B_ACKNOWLEDGE_SYSTEM_LIMITS
-    goal: "Transparent disclaimer about system scope and limitations"
-    template: |
-      Quick disclaimer: While a lot of effort and knowledge went into building this, 
-      I'm still just a language model with a knowledge graph of a few thousand ideas.
-      
-      I won't spot critical problems outside my scope—things like organizational politics, 
-      cultural barriers, or domain-specific technical constraints I haven't been trained on.
-      
-      The creator is a freelancer who'd be happy to discuss your specific situation. 
-      Want me to help set up a meeting?
+# SCOPE MANAGEMENT BEHAVIORS (13 behaviors)
+scope:
+  - id: B_DETECT_SCOPE_AMBIGUITY
+    goal: "Notice unclear scope"
+    template: "I need to clarify the scope. Does 'data quality' mean all systems or specific ones?"
     constraints:
-      max_words: 80
-      tone: "humble, transparent, helpful"
-      must_include: [limitation_acknowledgment, human_escalation_offer]
-    triggers: meeting_scheduling_offer
-    when: user_expresses_concern_about_accuracy_or_completeness
-    example_triggers:
-      - "Are you sure this is right?"
-      - "What if there are other problems?"
-      - "Can this really assess everything?"
-      - User reaches end of assessment
-      - User expresses high-stakes concern
-
----
-
-# DROPPED BEHAVIORS (System Features, Not LLM Patterns)
-
-# These require backend implementation, not just LLM behavior:
-# - Collapsible thinking process box (UI feature)
-# - Survey generation and upload (document generation feature)
-# - NDA generation (document generation feature)
-# - Pattern chaining engine (conversation orchestration)
-# - Pattern history tracking (state management)
-# - Knowledge base updates from surveys (data ingestion)
-
----
-
-# SUMMARY STATISTICS
-
-total_behaviors: 19
-  education: 6
-  transparency: 4
-  conversation_management: 2
-  assessment: 2
-  survey: 2
-  trust: 2
-  feedback: 1
-  limitation: 1
-
-system_features_identified: 6
-  - Collapsible thinking process display
-  - Survey generation and processing
-  - NDA generation
-  - Pattern chaining orchestration
-  - Pattern history tracking
-  - Automated knowledge updates
-
----
-
-# GAPS & AREAS FOR ELABORATION
-
-gaps_identified:
-  
-  1. **Error Recovery Behaviors**
-     - How to handle user confusion gracefully
-     - How to recover from misunderstandings
-     - How to handle "I don't know" responses
-     - How to backtrack when wrong path taken
-  
-  2. **Scope Management Behaviors**
-     - How to narrow from generic to specific
-     - How to expand scope when too narrow
-     - How to handle multi-output scenarios
-     - How to defer or skip assessments
-  
-  3. **Evidence Quality Behaviors**
-     - How to acknowledge high-quality evidence
-     - How to probe for better evidence when vague
-     - How to handle conflicting evidence
-     - How to synthesize evidence across statements
-  
-  4. **Recommendation Behaviors**
-     - How to generate pilot options
-     - How to explain feasibility calculations
-     - How to handle prerequisite gaps
-     - How to prioritize recommendations
-  
-  5. **Navigation Behaviors**
-     - How to offer status summaries
-     - How to show progress milestones
-     - How to suggest next steps
-     - How to handle "where were we?"
-  
-  6. **Discovery Behaviors**
-     - How to identify outputs from vague problems
-     - How to discover unknown systems
-     - How to map dependencies
-     - How to handle abstract statements
-
----
-
-# RECOMMENDATIONS
-
-next_steps:
-  
-  1. **Expand Core Behaviors (Priority 1)**
-     - Add 5-8 error recovery behaviors
-     - Add 5-8 discovery behaviors
-     - Add 5-8 recommendation behaviors
-     - Target: 40-50 total atomic behaviors
-  
-  2. **Document System Features (Priority 2)**
-     - Add 6 identified features to TBD.md
-     - Specify requirements for each
-     - Estimate implementation effort
-  
-  3. **Create Composition Rules (Priority 3)**
-     - Map triggers → behaviors
-     - Define knowledge prerequisites
-     - Generate initial pattern library
-  
-  4. **Test with Scenarios (Priority 4)**
-     - Write 5-10 conversation scenarios
-     - Validate behavior coverage
-     - Identify remaining gaps
-
----
-
-# DESIGN PRINCIPLES APPLIED
-
-1. **Grounded in System Purpose**
-   - All behaviors serve output-centric assessment
-   - No generic chatbot behaviors
-   
-2. **Actionable**
-   - Each behavior has clear template
-   - Specific constraints and tone
-   
-3. **Transparent**
-   - Show reasoning, not just results
-   - Explain design decisions
-   
-4. **Trust-Building**
-   - Acknowledge limitations
-   - Offer confidentiality
-   - Appreciate feedback
-   
-5. **Progressive Disclosure**
-   - Teach when relevant
-   - Don't front-load education
+      tone: "system_owns_clarification"
+      max_words: 18
+    when: "statement_without_scope"
+    
+  - id: B_DETECT_SCOPE_SIGNAL
+    goal: "Recognize scope clarification"
+    template: "Capturing scope explicitly"
+    constraints:
+      tone: "update_factor_scope"
+      max_words: 5
+    when: "user_says_all_or_just_x"
+    
+  - id: B_CLARIFY_SYSTEM_SCOPE
+    goal: "Ask about system scope"
+    template: "All systems or just Salesforce?"
+    constraints:
+      tone: "scope_disambiguation"
+      max_words: 8
+    when: "ambiguous_system_reference"
+    
+  - id: B_CLARIFY_TEAM_SCOPE
+    goal: "Ask about team scope"
+    template: "All of sales or just EMEA?"
+    constraints:
+      tone: "scope_disambiguation"
+      max_words: 8
+    when: "ambiguous_team_reference"
+    
+  - id: B_CLARIFY_DOMAIN_SCOPE
+    goal: "Ask about domain scope"
+    template: "All outputs or just forecasts?"
+    constraints:
+      tone: "scope_disambiguation"
+      max_words: 8
+    when: "ambiguous_domain_reference"
+    
+  - id: B_CLARIFY_TIME_SCOPE
+    goal: "Ask about temporal scope"
+    template: "Current state or future state?"
+    constraints:
+      tone: "temporal_disambiguation"
+      max_words: 8
+    when: "ambiguous_time_reference"
+    
+  - id: B_NARROW_TO_SPECIFIC
+    goal: "Focus on specific instance"
+    template: "Let's focus on Salesforce first"
+    constraints:
+      tone: "manageable_scope"
+      max_words: 8
+    when: "too_broad"
+    
+  - id: B_SUGGEST_SPECIFIC_INSTANCE
+    goal: "Request example"
+    template: "Pick one system as an example"
+    constraints:
+      tone: "concrete_starting_point"
+      max_words: 8
+    when: "too_generic"
+    
+  - id: B_EXPAND_TO_GENERIC
+    goal: "Check broader applicability"
+    template: "Does this apply to other systems too?"
+    constraints:
+      tone: "generalization"
+      max_words: 8
+    when: "specific_instance_assessed"
+    
+  - id: B_SYNTHESIZE_GENERIC_FROM_SPECIFIC
+    goal: "Calculate overall from instances"
+    template: "Salesforce (30%) + Spreadsheets (25%) → Overall ≈ 28%"
+    constraints:
+      tone: "aggregate_calculation"
+      max_words: 12
+    when: "multiple_specific_instances"
+    
+  - id: B_HANDLE_MULTI_OUTPUT
+    goal: "Manage multiple outputs"
+    template: "You mentioned 3 outputs. Let's focus on one first."
+    constraints:
+      tone: "prevent_overwhelm"
+      max_words: 10
+    when: "user_mentions_multiple_outputs"
+    
+  - id: B_DEFER_SCOPE
+    goal: "Postpone additional scope"
+    template: "We can assess other systems later"
+    constraints:
+      tone: "prioritize"
+      max_words: 8
+    when: "multiple_scopes_identified"
+    
+  - id: B_OFFER_SCOPED_ASSESSMENT
+    goal: "Present scope options"
+    template: "Assess each system separately or overall?"
+    constraints:
+      tone: "user_choice"
+      max_words: 8
+    when: "multiple_scopes_possible"

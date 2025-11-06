@@ -142,15 +142,26 @@ tests:
 
 ## Success Criteria
 
-✅ Pattern library loaded and validated  
+### Functional Requirements
+✅ Pattern library loaded and validated (77 behaviors, 40 triggers, 28 dimensions)  
 ✅ Trigger detection working for all 4 types  
 ✅ Knowledge state tracking operational  
 ✅ Pattern selection algorithm functional  
-✅ LLM prompt integration complete  
+✅ **LLM prompt integration with selective loading (CRITICAL)**  
 ✅ 20+ semantic tests passing (LLM-as-judge)  
 ✅ 30+ behavioral tests passing (state assertions)  
 ✅ 5+ integration tests passing (end-to-end scenarios)  
 ✅ Pattern matching overhead <5ms
+
+### Cost Efficiency Requirements (MANDATORY)
+✅ **Selective context loading implemented**  
+✅ **Token usage ≤ 310 tokens/turn** (vs 9,747 full YAML)  
+✅ Extract only: goal + template + relevant knowledge + recent history  
+✅ Never send full YAML to LLM  
+✅ Truncate long values in knowledge state  
+✅ Limit conversation history to last 3 turns  
+✅ **Cost target: ~$0.000047/turn** (vs $0.0015 without optimization)  
+✅ **Annual savings: $16,986 at scale** (100K conversations/month)
 
 ---
 

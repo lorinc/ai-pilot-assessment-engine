@@ -6,6 +6,29 @@
 
 ---
 
+## ⚠️ CRITICAL: Cost Optimization Requirement
+
+**MANDATORY IMPLEMENTATION:** Selective context loading for LLM prompts
+
+**Cost Impact:**
+- ❌ **Without selective loading:** $17,544/year (100K conversations/month)
+- ✅ **With selective loading:** $558/year (100K conversations/month)
+- 💰 **Savings: $16,986/year (96.8% token reduction)**
+
+**Token Usage:**
+- Full YAML: 9,747 tokens/turn = $0.0015/turn
+- Selective loading: 310 tokens/turn = $0.000047/turn
+- **31x cost reduction**
+
+**Implementation Rule:**
+> **NEVER send full YAML to LLM. Always use selective context extraction.**
+> Extract only: behavior goal + template + relevant knowledge + recent history
+> Target: ~310 tokens per turn
+
+See `PERFORMANCE_ASSESSMENT.md` for detailed analysis.
+
+---
+
 ## Overview
 
 Build production-ready pattern engine that provides:
@@ -13,11 +36,12 @@ Build production-ready pattern engine that provides:
 2. Trigger detection (4 types)
 3. Knowledge state tracking
 4. Pattern selection by affinity
-5. LLM prompt integration
+5. **LLM prompt integration (with selective loading - CRITICAL)**
 6. Semantic and behavioral testing
 
 **Full Format Spec:** See `PATTERN_FORMAT.md`  
-**Runtime Architecture:** See `PATTERN_RUNTIME_ARCHITECTURE.md`
+**Runtime Architecture:** See `PATTERN_RUNTIME_ARCHITECTURE.md`  
+**Performance Analysis:** See `PERFORMANCE_ASSESSMENT.md`
 
 ---
 
@@ -154,14 +178,130 @@ class PatternSelector:
 ```python
 # src/patterns/llm_integration.py
 class PatternPromptBuilder:
+    """
+    Builds LLM prompts with selective pattern context.
+    
+    PERFORMANCE TARGET:
+    - Full YAML: 9,747 tokens (~$0.0015/turn) ❌
+    - Selective: 310 tokens (~$0.000047/turn) ✅
+    - Reduction: 96.8%
+    """
+    
+    @staticmethod
     def inject_patterns(
         base_prompt: str,
         active_patterns: List[Pattern],
-        situation: Optional[SituationComposition]
+        situation: Optional[Dict[str, float]] = None,
+        knowledge: Optional[Dict[str, Any]] = None,
+        conversation_history: Optional[List[Dict]] = None
     ) -> str:
-        # Add pattern context to LLM prompt
-        # Include situation composition
-        # Add behavior templates
+        """
+        Inject MINIMAL pattern context into LLM prompt.
+        
+        CRITICAL: Only include what's needed for response generation.
+        Do NOT send full YAML - extract minimal context only.
+        
+        Target: ~310 tokens per turn
+        """
+        prompt_parts = [base_prompt]
+        
+        # Add ONLY the selected pattern's essential context (~50 tokens)
+        if active_patterns:
+            # Take only first pattern (most relevant)
+            pattern = active_patterns[0]
+            minimal_context = PatternPromptBuilder._extract_minimal_context(pattern)
+            prompt_parts.append(f"\n\nPattern Guidance:\n{minimal_context}")
+        
+        # Add ONLY relevant knowledge state (~40 tokens)
+        if knowledge and active_patterns:
+            relevant_knowledge = PatternPromptBuilder._extract_relevant_knowledge(
+                knowledge, 
+                active_patterns[0]
+            )
+            prompt_parts.append(f"\n\nRelevant Context:\n{relevant_knowledge}")
+        
+        # Add ONLY recent conversation history (~150 tokens)
+        if conversation_history:
+            recent_history = PatternPromptBuilder._format_recent_history(
+                conversation_history[-3:]  # Last 3 turns only
+            )
+            prompt_parts.append(f"\n\nRecent Conversation:\n{recent_history}")
+        
+        return "\n".join(prompt_parts)
+    
+    @staticmethod
+    def _extract_minimal_context(pattern: Pattern) -> str:
+        """
+        Extract ONLY essential pattern information.
+        
+        Target: ~50 tokens
+        Include: goal, template, key constraints
+        Exclude: metadata, tests, examples, full trigger conditions
+        """
+        behavior = pattern.behavior
+        
+        # Minimal context only
+        context_parts = [
+            f"Goal: {behavior.goal}",
+            f"Template: {behavior.template}",
+        ]
+        
+        # Add only critical constraints
+        if behavior.constraints:
+            if 'max_words' in behavior.constraints:
+                context_parts.append(f"Max words: {behavior.constraints['max_words']}")
+            if 'tone' in behavior.constraints:
+                context_parts.append(f"Tone: {behavior.constraints['tone']}")
+        
+        return "\n".join(context_parts)
+    
+    @staticmethod
+    def _extract_relevant_knowledge(
+        knowledge: Dict[str, Any], 
+        pattern: Pattern
+    ) -> str:
+        """
+        Extract ONLY knowledge dimensions relevant to this pattern.
+        
+        Target: ~40 tokens
+        Include: Only dimensions the pattern needs
+        Exclude: All other knowledge state
+        """
+        relevant = []
+        
+        # Extract only what pattern updates or requires
+        if pattern.updates:
+            for key in pattern.updates.user_knowledge.keys():
+                if key in knowledge.get('user', {}):
+                    relevant.append(f"{key}: {knowledge['user'][key]}")
+            
+            for key in pattern.updates.system_knowledge.keys():
+                if key in knowledge.get('system', {}):
+                    value = knowledge['system'][key]
+                    # Truncate long values
+                    if isinstance(value, (list, dict)) and len(str(value)) > 50:
+                        relevant.append(f"{key}: [truncated]")
+                    else:
+                        relevant.append(f"{key}: {value}")
+        
+        return "\n".join(relevant) if relevant else "No specific context needed"
+    
+    @staticmethod
+    def _format_recent_history(history: List[Dict]) -> str:
+        """
+        Format ONLY recent conversation turns.
+        
+        Target: ~150 tokens (3 turns × 50 tokens)
+        Include: Last 3 turns only
+        Exclude: Full conversation history
+        """
+        formatted = []
+        for turn in history:
+            user_msg = turn.get('user', '')[:100]  # Truncate long messages
+            assistant_msg = turn.get('assistant', '')[:100]
+            formatted.append(f"User: {user_msg}\nAssistant: {assistant_msg}")
+        
+        return "\n".join(formatted)
 ```
 
 **5. Complete Trigger Detection**
