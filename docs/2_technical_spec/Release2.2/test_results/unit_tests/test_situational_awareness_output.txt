@@ -1,0 +1,67 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- /home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/lorinc/CascadeProjects/ai-pilot-assessment-engine
+configfile: pytest.ini
+plugins: asyncio-1.2.0, langsmith-0.4.41, anyio-4.11.0, mock-3.15.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 19 items
+
+tests/patterns/test_situational_awareness.py::TestSituationalAwarenessInitialization::test_initialization_default PASSED [  5%]
+tests/patterns/test_situational_awareness.py::TestSituationalAwarenessInitialization::test_initialization_custom PASSED [ 10%]
+tests/patterns/test_situational_awareness.py::TestCompositionConstraint::test_composition_sums_to_one PASSED [ 15%]
+tests/patterns/test_situational_awareness.py::TestCompositionConstraint::test_composition_after_update PASSED [ 21%]
+tests/patterns/test_situational_awareness.py::TestCompositionConstraint::test_composition_after_multiple_updates PASSED [ 26%]
+tests/patterns/test_situational_awareness.py::TestSignalDetection::test_discovery_signal PASSED [ 31%]
+tests/patterns/test_situational_awareness.py::TestSignalDetection::test_error_recovery_signal PASSED [ 36%]
+tests/patterns/test_situational_awareness.py::TestSignalDetection::test_navigation_signal PASSED [ 42%]
+tests/patterns/test_situational_awareness.py::TestSignalDetection::test_multiple_signals PASSED [ 47%]
+tests/patterns/test_situational_awareness.py::TestDecay::test_decay_reduces_dimensions PASSED [ 52%]
+tests/patterns/test_situational_awareness.py::TestDecay::test_decay_maintains_sum PASSED [ 57%]
+tests/patterns/test_situational_awareness.py::TestDecay::test_multiple_decay_steps PASSED [ 63%]
+tests/patterns/test_situational_awareness.py::TestDimensionMapping::test_discovery_mapping PASSED [ 68%]
+tests/patterns/test_situational_awareness.py::TestDimensionMapping::test_assessment_mapping PASSED [ 73%]
+tests/patterns/test_situational_awareness.py::TestDimensionMapping::test_error_recovery_to_clarification PASSED [ 78%]
+tests/patterns/test_situational_awareness.py::TestDimensionMapping::test_navigation_to_meta PASSED [ 84%]
+tests/patterns/test_situational_awareness.py::TestGetDominantDimensions::test_get_top_dimension PASSED [ 89%]
+tests/patterns/test_situational_awareness.py::TestGetDominantDimensions::test_get_top_three_dimensions PASSED [ 94%]
+tests/patterns/test_situational_awareness.py::TestResetComposition::test_reset_to_default PASSED [100%]
+ERROR: Coverage failure: total of 2 is less than fail-under=80
+
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Name                                            Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------------
+src/__init__.py                                     0      0   100%
+src/app.py                                        161    161     0%   3-303
+src/config/__init__.py                              0      0   100%
+src/config/settings.py                             24     24     0%   3-54
+src/core/__init__.py                                0      0   100%
+src/core/firebase_client.py                       233    233     0%   3-568
+src/core/graph_manager.py                         241    241     0%   3-624
+src/core/llm_client.py                             90     90     0%   3-300
+src/core/session_manager.py                        82     82     0%   3-197
+src/engines/__init__.py                             0      0   100%
+src/engines/assessment.py                         103    103     0%   3-431
+src/engines/bottleneck.py                         113    113     0%   3-362
+src/engines/discovery.py                          175    175     0%   3-405
+src/orchestrator/__init__.py                        0      0   100%
+src/orchestrator/conversation_orchestrator.py     126    126     0%   3-408
+src/patterns/__init__.py                            0      0   100%
+src/patterns/knowledge_tracker.py                  68     68     0%   10-302
+src/patterns/models.py                             89     89     0%   7-217
+src/patterns/pattern_engine.py                    111    111     0%   16-361
+src/patterns/pattern_loader.py                    108    108     0%   7-246
+src/patterns/pattern_selector.py                  123    123     0%   11-350
+src/patterns/response_composer.py                  55     55     0%   10-229
+src/patterns/situational_awareness.py              49      4    92%   95, 171-173
+src/patterns/trigger_detector.py                  160    160     0%   10-603
+src/utils/__init__.py                               0      0   100%
+src/utils/logger.py                                39     39     0%   3-113
+-----------------------------------------------------------------------------
+TOTAL                                            2150   2105     2%
+Coverage HTML written to dir htmlcov
+FAIL Required test coverage of 80% not reached. Total coverage: 2.09%
+============================== 19 passed in 0.40s ==============================

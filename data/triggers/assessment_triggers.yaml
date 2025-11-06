@@ -1,0 +1,53 @@
+triggers:
+- id: T_RATE_EDGE
+  category: assessment
+  priority: high
+  type: user_implicit
+  description: User is providing a rating or evaluation
+  detection:
+    method: semantic_similarity
+    threshold: 0.75
+    examples:
+    - Data quality is 3 stars
+    - The team struggles with this
+    - Process is poor
+    - System support is excellent
+    - I rate it 3 out of 5
+    - Data quality is about 4 stars
+    - Team execution is weak
+    - The process is mediocre
+    - System support is terrible
+    - Quality is good
+    fallback_patterns:
+    - \d+\s*stars?
+    - \d+\s*/\s*\d+
+    - \d+\s+out\s+of\s+\d+
+    - is\s+(poor|terrible|bad|mediocre|okay|good|great|excellent)
+    - (poor|terrible|bad|mediocre|okay|good|great|excellent)\s+(quality|execution|maturity|support)
+    context_keywords:
+    - data quality
+    - team execution
+    - process maturity
+    - system support
+    - quality
+    - team
+    - process
+    - system
+    assessment_indicators:
+    - is
+    - are
+    - rate
+    - rated
+    - rating
+    - about
+    - around
+    - approximately
+    - issue
+    - issues
+    - problem
+    - problems
+    - struggle
+    - struggles
+    - weak
+    - strong
+    - capable

@@ -6,10 +6,20 @@ Detects 4 types of triggers:
 2. User-Implicit: Inferred needs (confusion, contradiction, ambiguity)
 3. System-Proactive: Opportunities (context extraction, education, recommendations)
 4. System-Reactive: State-based (first message, milestones, frustration)
+
+Release 2.2: Added semantic similarity support for intent detection.
 """
 from typing import List, Dict, Any, Optional
 from src.patterns.knowledge_tracker import KnowledgeTracker
 import re
+
+
+# Optional: Import semantic intent detector
+try:
+    from src.patterns.semantic_intent import get_detector
+    SEMANTIC_AVAILABLE = True
+except ImportError:
+    SEMANTIC_AVAILABLE = False
 
 
 class TriggerDetector:
@@ -19,14 +29,27 @@ class TriggerDetector:
     Supports 4 trigger types across 10 pattern categories.
     """
     
-    def __init__(self, trigger_definitions: Optional[List[Dict[str, Any]]] = None):
+    def __init__(self, trigger_definitions: Optional[List[Dict[str, Any]]] = None, use_semantic: bool = True):
         """
         Initialize trigger detector.
         
         Args:
             trigger_definitions: Optional list of trigger definitions from YAML
+            use_semantic: Whether to use semantic similarity (requires OpenAI API key)
         """
         self.trigger_definitions = trigger_definitions or []
+        self.use_semantic = use_semantic and SEMANTIC_AVAILABLE
+        
+        # Initialize semantic detector if available
+        if self.use_semantic:
+            try:
+                self.semantic_detector = get_detector()
+            except Exception:
+                self.use_semantic = False
+                self.semantic_detector = None
+        else:
+            self.semantic_detector = None
+        
         self._init_keyword_patterns()
     
     def _init_keyword_patterns(self):
@@ -228,6 +251,39 @@ class TriggerDetector:
         """Detect user-implicit triggers (inferred needs)"""
         triggers = []
         message_lower = message.lower()
+        
+        # Assessment: Rating detection (CRITICAL - check this FIRST before education)
+        rating_patterns = [
+            r'\d+\s*stars?',  # "3 stars", "3 star"
+            r'\d+\s*out\s*of\s*\d+',  # "3 out of 5"
+            r'\d+/\d+',  # "3/5"
+            r'rate.*\d+',  # "rate it 3"
+            r'is\s+(poor|terrible|bad|mediocre|okay|good|great|excellent)',  # qualitative
+            r'(poor|terrible|bad|mediocre|okay|good|great|excellent)\s+(quality|execution|maturity|support)',  # qualitative with component
+        ]
+        
+        import re
+        has_rating = any(re.search(pattern, message_lower) for pattern in rating_patterns)
+        
+        # Also check for component mentions with assessment context
+        component_keywords = ['data quality', 'team execution', 'team', 'process', 'system support', 'quality']
+        has_component = any(kw in message_lower for kw in component_keywords)
+        
+        assessment_indicators = [
+            'is', 'are', 'rate', 'rated', 'rating', 'about', 'around', 'approximately',
+            'issue', 'issues', 'problem', 'problems', 'struggle', 'struggles', 'weak',
+            'strong', 'capable', 'needs improvement', 'needs work'
+        ]
+        has_assessment_context = any(ind in message_lower for ind in assessment_indicators)
+        
+        if has_rating or (has_component and has_assessment_context):
+            triggers.append({
+                'type': 'user_implicit',
+                'category': 'assessment',
+                'trigger_id': 'T_RATE_EDGE',
+                'priority': 'high',
+                'message': message
+            })
         
         # Confusion signals
         if self._match_keywords(message_lower, self.confusion_keywords):

@@ -1,0 +1,198 @@
+
+🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯
+  INTEGRATED RESPONSE SELECTION DEMO - UAT CHECKPOINT
+🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯
+
+================================================================================
+  Integrated Response Selection - Conversation Flow
+================================================================================
+
+📍 Turn 1: User Mentions Output
+   User: 'We need to assess sales forecasting in our CRM'
+
+Situation After Trigger:
+  discovery       56.5%
+  meta            30.4%
+  assessment       4.3%
+
+🎯 Turn 1 Response Composition:
+
+✅ REACTIVE (trigger-driven):
+   Pattern: PATTERN_IDENTIFY_OUTPUT
+   Category: discovery
+   Priority: high
+
+🚀 PROACTIVE (situation-driven):
+   1. Pattern: PATTERN_EXTRACT_TIMELINE
+      Category: context_extraction
+   2. Pattern: PATTERN_ASK_BUDGET
+      Category: context_extraction
+
+📊 Total Tokens: 310
+
+💬 System Response:
+   REACTIVE: 'Got it - you're talking about Sales Forecasts in the CRM.'
+   PROACTIVE 1: 'When do you need this assessment completed?'
+   PROACTIVE 2: 'What's your budget for implementing improvements?'
+
+📍 Turn 2: User Rates Edge
+   User: 'The sales team creates it, data quality is about 3 stars'
+
+Situation After Trigger:
+  discovery       49.1%
+  meta            26.5%
+  assessment      16.8%
+
+🎯 Turn 2 Response Composition:
+
+✅ REACTIVE (trigger-driven):
+   Pattern: PATTERN_RATE_EDGE
+   Category: assessment
+   Priority: high
+
+🚀 PROACTIVE (situation-driven):
+   1. Pattern: PATTERN_EXTRACT_TIMELINE
+      Category: context_extraction
+   2. Pattern: PATTERN_ASK_BUDGET
+      Category: context_extraction
+
+📊 Total Tokens: 310
+
+💬 System Response:
+   REACTIVE: 'Thanks - I've recorded that data quality is 3 stars.'
+   PROACTIVE 1: 'Who on the sales team is responsible for this?'
+   PROACTIVE 2: 'When do you need this completed?'
+
+📍 Turn 3: User Gets Confused
+   User: 'Wait, I'm confused about what you're asking'
+
+Situation After Trigger (Clarification Spike!):
+  discovery       42.7%
+  meta            23.0%
+  clarification   16.3%
+
+🎯 Turn 3 Response Composition:
+
+✅ REACTIVE (trigger-driven):
+   Pattern: PATTERN_CONFUSION
+   Category: error_recovery
+   Priority: critical
+
+🚀 PROACTIVE (situation-driven):
+   1. Pattern: PATTERN_CLARIFY_CONCEPT
+      Category: education
+   2. Pattern: PATTERN_EXTRACT_TIMELINE
+      Category: context_extraction
+
+📊 Total Tokens: 310
+
+💬 System Response:
+   REACTIVE: 'I notice you might be confused. Let me clarify...'
+   PROACTIVE: 'Let me explain how the assessment works...'
+
+📍 Turn 4: Continue Assessment
+   User: 'Got it. Process is 4 stars, system support is 2 stars'
+
+Situation After Trigger:
+  discovery       37.2%
+  assessment      25.8%
+  meta            20.0%
+
+🎯 Turn 4 Response Composition:
+
+✅ REACTIVE (trigger-driven):
+   Pattern: PATTERN_RATE_EDGE
+   Category: assessment
+   Priority: high
+
+🚀 PROACTIVE (situation-driven):
+   1. Pattern: PATTERN_CLARIFY_CONCEPT
+      Category: education
+   2. Pattern: PATTERN_EXTRACT_TIMELINE
+      Category: context_extraction
+
+📊 Total Tokens: 310
+
+💬 System Response:
+   REACTIVE: 'Thanks - process is 4 stars, system support is 2 stars.'
+   PROACTIVE 1: 'Who maintains the system?'
+   PROACTIVE 2: 'What features are missing?'
+
+📍 Turn 5: Request Recommendations
+   User: 'What AI pilots would help improve this?'
+
+Situation After Trigger:
+  discovery       32.3%
+  assessment      22.4%
+  meta            17.4%
+
+🎯 Turn 5 Response Composition:
+
+✅ REACTIVE (trigger-driven):
+   Pattern: PATTERN_REQUEST_RECOMMENDATIONS
+   Category: recommendation
+   Priority: high
+
+🚀 PROACTIVE (situation-driven):
+   1. Pattern: PATTERN_CLARIFY_CONCEPT
+      Category: education
+   2. Pattern: PATTERN_ASK_TEAM
+      Category: assessment
+
+📊 Total Tokens: 310
+
+💬 System Response:
+   REACTIVE: 'Based on your assessment, here are recommended AI pilots...'
+   PROACTIVE: 'Would you like to explore data quality pilots first?'
+
+
+================================================================================
+  Situation-Driven Proactive Selection
+================================================================================
+
+📍 Scenario 1: High Context Extraction
+Current Situation:
+  context_extraction 40.0%
+  discovery       30.0%
+  assessment      15.0%
+
+Selected Proactive: ['PATTERN_EXTRACT_TIMELINE', 'PATTERN_ASK_TEAM']
+→ PATTERN_EXTRACT_TIMELINE selected (high context_extraction affinity)
+
+📍 Scenario 2: High Assessment
+Current Situation:
+  assessment      45.0%
+  discovery       25.0%
+  context_extraction 10.0%
+
+Selected Proactive: ['PATTERN_ASK_TEAM', 'PATTERN_EXTRACT_TIMELINE']
+→ PATTERN_ASK_TEAM selected (high assessment affinity)
+
+📍 Scenario 3: High Analysis
+Current Situation:
+  analysis        35.0%
+  discovery       20.0%
+  assessment      20.0%
+
+Selected Proactive: ['PATTERN_SUGGEST_ANALYSIS', 'PATTERN_ASK_TEAM']
+→ PATTERN_SUGGEST_ANALYSIS selected (high analysis affinity)
+
+
+================================================================================
+  UAT Summary
+================================================================================
+
+✅ Reactive selection: Driven by triggers (highest priority)
+✅ Proactive selection: Driven by situation (affinity scoring)
+✅ Situation evolves: Based on triggers across turns
+✅ Context jumping prevented: Proactive != reactive category
+✅ Token budget maintained: ≤310 tokens per turn
+✅ Integration working: ResponseComposer + SituationalAwareness
+
+🎯 Integrated Response Selection Ready!
+
+Next Steps:
+  1. Integrate with PatternEngine
+  2. Connect to LLM for actual response generation
+  3. Test end-to-end conversation flows
+

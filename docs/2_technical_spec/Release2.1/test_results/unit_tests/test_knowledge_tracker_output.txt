@@ -1,0 +1,68 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- /home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/lorinc/CascadeProjects/ai-pilot-assessment-engine
+configfile: pytest.ini
+plugins: asyncio-1.2.0, langsmith-0.4.41, anyio-4.11.0, mock-3.15.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 20 items
+
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeTrackerInitialization::test_initialization PASSED [  5%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeTrackerInitialization::test_user_knowledge_defaults PASSED [ 10%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeTrackerInitialization::test_system_knowledge_defaults PASSED [ 15%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeUpdate::test_update_user_knowledge PASSED [ 20%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeUpdate::test_update_system_knowledge PASSED [ 25%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeUpdate::test_update_preserves_other_values PASSED [ 30%]
+tests/patterns/test_knowledge_tracker.py::TestPrerequisiteChecking::test_check_simple_prerequisite PASSED [ 35%]
+tests/patterns/test_knowledge_tracker.py::TestPrerequisiteChecking::test_check_multiple_prerequisites PASSED [ 40%]
+tests/patterns/test_knowledge_tracker.py::TestPrerequisiteChecking::test_check_system_knowledge_prerequisite PASSED [ 45%]
+tests/patterns/test_knowledge_tracker.py::TestPrerequisiteChecking::test_check_no_prerequisites PASSED [ 50%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeState::test_get_state PASSED [ 55%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeState::test_get_state_returns_copy PASSED [ 60%]
+tests/patterns/test_knowledge_tracker.py::TestSerialization::test_serialize PASSED [ 65%]
+tests/patterns/test_knowledge_tracker.py::TestSerialization::test_deserialize PASSED [ 70%]
+tests/patterns/test_knowledge_tracker.py::TestSerialization::test_serialize_deserialize_roundtrip PASSED [ 75%]
+tests/patterns/test_knowledge_tracker.py::TestConversationState::test_track_frustration_level PASSED [ 80%]
+tests/patterns/test_knowledge_tracker.py::TestConversationState::test_update_conversation_state PASSED [ 85%]
+tests/patterns/test_knowledge_tracker.py::TestConversationState::test_decay_frustration PASSED [ 90%]
+tests/patterns/test_knowledge_tracker.py::TestQualityMetrics::test_track_evidence_quality PASSED [ 95%]
+tests/patterns/test_knowledge_tracker.py::TestQualityMetrics::test_increment_evidence_count PASSED [100%]
+ERROR: Coverage failure: total of 3 is less than fail-under=80
+
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Name                                            Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------------
+src/__init__.py                                     0      0   100%
+src/app.py                                        161    161     0%   3-303
+src/config/__init__.py                              0      0   100%
+src/config/settings.py                             24     24     0%   3-54
+src/core/__init__.py                                0      0   100%
+src/core/firebase_client.py                       233    233     0%   3-568
+src/core/graph_manager.py                         241    241     0%   3-624
+src/core/llm_client.py                             90     90     0%   3-300
+src/core/session_manager.py                        82     82     0%   3-197
+src/engines/__init__.py                             0      0   100%
+src/engines/assessment.py                         103    103     0%   3-431
+src/engines/bottleneck.py                         113    113     0%   3-362
+src/engines/discovery.py                          175    175     0%   3-405
+src/orchestrator/__init__.py                        0      0   100%
+src/orchestrator/conversation_orchestrator.py     126    126     0%   3-408
+src/patterns/__init__.py                            0      0   100%
+src/patterns/knowledge_tracker.py                  68      6    91%   171, 196-200, 207, 281
+src/patterns/models.py                             89     89     0%   7-217
+src/patterns/pattern_engine.py                    111    111     0%   16-361
+src/patterns/pattern_loader.py                    108    108     0%   7-246
+src/patterns/pattern_selector.py                  123    123     0%   11-350
+src/patterns/response_composer.py                  55     55     0%   10-229
+src/patterns/situational_awareness.py              49     49     0%   16-173
+src/patterns/trigger_detector.py                  160    160     0%   10-603
+src/utils/__init__.py                               0      0   100%
+src/utils/logger.py                                39     39     0%   3-113
+-----------------------------------------------------------------------------
+TOTAL                                            2150   2088     3%
+Coverage HTML written to dir htmlcov
+FAIL Required test coverage of 80% not reached. Total coverage: 2.88%
+============================== 20 passed in 0.43s ==============================

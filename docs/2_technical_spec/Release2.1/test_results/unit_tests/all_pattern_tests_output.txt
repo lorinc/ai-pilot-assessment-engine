@@ -1,0 +1,234 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- /home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/lorinc/CascadeProjects/ai-pilot-assessment-engine
+configfile: pytest.ini
+plugins: asyncio-1.2.0, langsmith-0.4.41, anyio-4.11.0, mock-3.15.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 151 items
+
+tests/patterns/test_integrated_response_selection.py::TestIntegratedResponseSelection::test_reactive_from_trigger_proactive_from_situation PASSED [  0%]
+tests/patterns/test_integrated_response_selection.py::TestIntegratedResponseSelection::test_situation_drives_proactive_selection PASSED [  1%]
+tests/patterns/test_integrated_response_selection.py::TestIntegratedResponseSelection::test_situation_evolves_across_turns PASSED [  1%]
+tests/patterns/test_integrated_response_selection.py::TestIntegratedResponseSelection::test_no_proactive_during_error_recovery PASSED [  2%]
+tests/patterns/test_integrated_response_selection.py::TestIntegratedResponseSelection::test_decay_affects_proactive_selection PASSED [  3%]
+tests/patterns/test_integrated_response_selection.py::TestSituationAffinity::test_affinity_scoring PASSED [  3%]
+tests/patterns/test_integrated_response_selection.py::TestSituationAffinity::test_multiple_affinity_dimensions PASSED [  4%]
+tests/patterns/test_integrated_response_selection.py::TestEndToEndFlow::test_complete_conversation_flow PASSED [  5%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeTrackerInitialization::test_initialization PASSED [  5%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeTrackerInitialization::test_user_knowledge_defaults PASSED [  6%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeTrackerInitialization::test_system_knowledge_defaults PASSED [  7%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeUpdate::test_update_user_knowledge PASSED [  7%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeUpdate::test_update_system_knowledge PASSED [  8%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeUpdate::test_update_preserves_other_values PASSED [  9%]
+tests/patterns/test_knowledge_tracker.py::TestPrerequisiteChecking::test_check_simple_prerequisite PASSED [  9%]
+tests/patterns/test_knowledge_tracker.py::TestPrerequisiteChecking::test_check_multiple_prerequisites PASSED [ 10%]
+tests/patterns/test_knowledge_tracker.py::TestPrerequisiteChecking::test_check_system_knowledge_prerequisite PASSED [ 11%]
+tests/patterns/test_knowledge_tracker.py::TestPrerequisiteChecking::test_check_no_prerequisites PASSED [ 11%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeState::test_get_state PASSED [ 12%]
+tests/patterns/test_knowledge_tracker.py::TestKnowledgeState::test_get_state_returns_copy PASSED [ 13%]
+tests/patterns/test_knowledge_tracker.py::TestSerialization::test_serialize PASSED [ 13%]
+tests/patterns/test_knowledge_tracker.py::TestSerialization::test_deserialize PASSED [ 14%]
+tests/patterns/test_knowledge_tracker.py::TestSerialization::test_serialize_deserialize_roundtrip PASSED [ 15%]
+tests/patterns/test_knowledge_tracker.py::TestConversationState::test_track_frustration_level PASSED [ 15%]
+tests/patterns/test_knowledge_tracker.py::TestConversationState::test_update_conversation_state PASSED [ 16%]
+tests/patterns/test_knowledge_tracker.py::TestConversationState::test_decay_frustration PASSED [ 17%]
+tests/patterns/test_knowledge_tracker.py::TestQualityMetrics::test_track_evidence_quality PASSED [ 17%]
+tests/patterns/test_knowledge_tracker.py::TestQualityMetrics::test_increment_evidence_count PASSED [ 18%]
+tests/patterns/test_loader.py::TestPatternLoader::test_loader_initialization PASSED [ 19%]
+tests/patterns/test_loader.py::TestPatternLoader::test_load_behaviors PASSED [ 19%]
+tests/patterns/test_loader.py::TestPatternLoader::test_load_triggers PASSED [ 20%]
+tests/patterns/test_loader.py::TestPatternLoader::test_load_knowledge_dimensions PASSED [ 21%]
+tests/patterns/test_loader.py::TestPatternLoader::test_behaviors_have_required_fields PASSED [ 21%]
+tests/patterns/test_loader.py::TestPatternLoader::test_triggers_have_valid_types PASSED [ 22%]
+tests/patterns/test_loader.py::TestPatternLoader::test_load_behaviors_caching PASSED [ 23%]
+tests/patterns/test_loader.py::TestPatternLoader::test_validate_all_patterns PASSED [ 23%]
+tests/patterns/test_loader.py::TestPatternLoader::test_load_specific_behavior_category FAILED [ 24%]
+tests/patterns/test_loader.py::TestPatternLoader::test_loader_handles_missing_directory PASSED [ 25%]
+tests/patterns/test_loader.py::TestPatternLoader::test_loader_handles_invalid_yaml PASSED [ 25%]
+tests/patterns/test_loader.py::TestPatternLoader::test_get_behavior_by_id PASSED [ 26%]
+tests/patterns/test_loader.py::TestPatternLoader::test_get_trigger_by_id PASSED [ 27%]
+tests/patterns/test_loader.py::TestPatternLoader::test_reload_patterns PASSED [ 27%]
+tests/patterns/test_loader.py::TestPatternValidation::test_validate_behavior_structure PASSED [ 28%]
+tests/patterns/test_loader.py::TestPatternValidation::test_validate_trigger_structure PASSED [ 29%]
+tests/patterns/test_loader.py::TestPatternValidation::test_validate_situation_affinity_sums PASSED [ 29%]
+tests/patterns/test_loader.py::TestPatternValidation::test_validate_no_circular_references PASSED [ 30%]
+tests/patterns/test_models.py::TestTriggerType::test_trigger_types_exist PASSED [ 31%]
+tests/patterns/test_models.py::TestTriggerCondition::test_create_trigger_condition PASSED [ 31%]
+tests/patterns/test_models.py::TestTriggerCondition::test_trigger_condition_optional_fields PASSED [ 32%]
+tests/patterns/test_models.py::TestBehaviorSpec::test_create_behavior_spec PASSED [ 33%]
+tests/patterns/test_models.py::TestBehaviorSpec::test_behavior_with_situation_affinity PASSED [ 33%]
+tests/patterns/test_models.py::TestKnowledgeUpdates::test_create_knowledge_updates PASSED [ 34%]
+tests/patterns/test_models.py::TestKnowledgeUpdates::test_empty_knowledge_updates PASSED [ 35%]
+tests/patterns/test_models.py::TestPattern::test_create_complete_pattern PASSED [ 35%]
+tests/patterns/test_models.py::TestPattern::test_pattern_validation PASSED [ 36%]
+tests/patterns/test_models.py::TestPattern::test_pattern_validation_fails_missing_id PASSED [ 37%]
+tests/patterns/test_models.py::TestPattern::test_pattern_to_dict PASSED  [ 37%]
+tests/patterns/test_models.py::TestPattern::test_pattern_from_dict PASSED [ 38%]
+tests/patterns/test_pattern_engine.py::TestPatternEngineInitialization::test_initialization PASSED [ 39%]
+tests/patterns/test_pattern_engine.py::TestPatternEngineInitialization::test_initialization_with_pattern_dir FAILED [ 39%]
+tests/patterns/test_pattern_engine.py::TestSelectiveLoading::test_load_only_selected_pattern PASSED [ 40%]
+tests/patterns/test_pattern_engine.py::TestSelectiveLoading::test_load_only_relevant_knowledge PASSED [ 41%]
+tests/patterns/test_pattern_engine.py::TestSelectiveLoading::test_load_only_recent_conversation_history PASSED [ 41%]
+tests/patterns/test_pattern_engine.py::TestSelectiveLoading::test_token_count_within_budget PASSED [ 42%]
+tests/patterns/test_pattern_engine.py::TestEndToEndFlow::test_process_user_message PASSED [ 43%]
+tests/patterns/test_pattern_engine.py::TestEndToEndFlow::test_first_message_flow FAILED [ 43%]
+tests/patterns/test_pattern_engine.py::TestEndToEndFlow::test_multi_pattern_flow PASSED [ 44%]
+tests/patterns/test_pattern_engine.py::TestKnowledgeUpdates::test_update_user_knowledge PASSED [ 45%]
+tests/patterns/test_pattern_engine.py::TestKnowledgeUpdates::test_update_conversation_state PASSED [ 45%]
+tests/patterns/test_pattern_engine.py::TestKnowledgeUpdates::test_track_pattern_history PASSED [ 46%]
+tests/patterns/test_pattern_engine.py::TestErrorHandling::test_no_pattern_selected PASSED [ 47%]
+tests/patterns/test_pattern_engine.py::TestErrorHandling::test_empty_message PASSED [ 47%]
+tests/patterns/test_pattern_engine.py::TestErrorHandling::test_llm_failure PASSED [ 48%]
+tests/patterns/test_pattern_engine.py::TestTokenOptimization::test_measure_token_savings FAILED [ 49%]
+tests/patterns/test_pattern_engine.py::TestTokenOptimization::test_token_count_tracking PASSED [ 49%]
+tests/patterns/test_pattern_engine.py::TestContextRelevance::test_context_matches_pattern_category PASSED [ 50%]
+tests/patterns/test_pattern_engine.py::TestContextRelevance::test_context_includes_prerequisites PASSED [ 50%]
+tests/patterns/test_pattern_selector.py::TestPatternSelectorInitialization::test_initialization_with_patterns PASSED [ 51%]
+tests/patterns/test_pattern_selector.py::TestPatternSelectorInitialization::test_initialization_empty PASSED [ 52%]
+tests/patterns/test_pattern_selector.py::TestSinglePatternSelection::test_select_pattern_by_trigger PASSED [ 52%]
+tests/patterns/test_pattern_selector.py::TestSinglePatternSelection::test_select_pattern_by_priority PASSED [ 53%]
+tests/patterns/test_pattern_selector.py::TestSinglePatternSelection::test_select_pattern_by_affinity PASSED [ 54%]
+tests/patterns/test_pattern_selector.py::TestSinglePatternSelection::test_no_pattern_selected PASSED [ 54%]
+tests/patterns/test_pattern_selector.py::TestMultiPatternSelection::test_select_two_patterns_same_context PASSED [ 55%]
+tests/patterns/test_pattern_selector.py::TestMultiPatternSelection::test_reject_multi_pattern_context_jump PASSED [ 56%]
+tests/patterns/test_pattern_selector.py::TestMultiPatternSelection::test_multi_pattern_same_output PASSED [ 56%]
+tests/patterns/test_pattern_selector.py::TestPatternHistory::test_track_pattern_usage PASSED [ 57%]
+tests/patterns/test_pattern_selector.py::TestPatternHistory::test_avoid_recent_pattern PASSED [ 58%]
+tests/patterns/test_pattern_selector.py::TestPatternHistory::test_pattern_history_limit PASSED [ 58%]
+tests/patterns/test_pattern_selector.py::TestContextAwareness::test_select_based_on_knowledge_state PASSED [ 59%]
+tests/patterns/test_pattern_selector.py::TestContextAwareness::test_select_based_on_conversation_state PASSED [ 60%]
+tests/patterns/test_pattern_selector.py::TestSituationAffinity::test_calculate_affinity_score PASSED [ 60%]
+tests/patterns/test_pattern_selector.py::TestSituationAffinity::test_default_affinity_score PASSED [ 61%]
+tests/patterns/test_pattern_selector.py::TestEdgeCases::test_empty_triggers PASSED [ 62%]
+tests/patterns/test_pattern_selector.py::TestEdgeCases::test_malformed_pattern PASSED [ 62%]
+tests/patterns/test_pattern_selector.py::TestEdgeCases::test_multiple_triggers_same_priority PASSED [ 63%]
+tests/patterns/test_response_composition.py::TestResponseComponent::test_create_reactive_component PASSED [ 64%]
+tests/patterns/test_response_composition.py::TestResponseComponent::test_create_proactive_component PASSED [ 64%]
+tests/patterns/test_response_composition.py::TestComposedResponse::test_create_composed_response_reactive_only PASSED [ 65%]
+tests/patterns/test_response_composition.py::TestComposedResponse::test_create_composed_response_with_proactive PASSED [ 66%]
+tests/patterns/test_response_composition.py::TestComposedResponse::test_create_composed_response_with_two_proactive PASSED [ 66%]
+tests/patterns/test_response_composition.py::TestResponseComposer::test_select_reactive_only PASSED [ 67%]
+tests/patterns/test_response_composition.py::TestResponseComposer::test_select_reactive_plus_one_proactive PASSED [ 68%]
+tests/patterns/test_response_composition.py::TestResponseComposer::test_select_reactive_plus_two_proactive PASSED [ 68%]
+tests/patterns/test_response_composition.py::TestResponseComposer::test_prevent_context_jumping PASSED [ 69%]
+tests/patterns/test_response_composition.py::TestResponseComposer::test_token_budget_constraint PASSED [ 70%]
+tests/patterns/test_situational_awareness.py::TestSituationalAwarenessInitialization::test_initialization_default PASSED [ 70%]
+tests/patterns/test_situational_awareness.py::TestSituationalAwarenessInitialization::test_initialization_custom PASSED [ 71%]
+tests/patterns/test_situational_awareness.py::TestCompositionConstraint::test_composition_sums_to_one PASSED [ 72%]
+tests/patterns/test_situational_awareness.py::TestCompositionConstraint::test_composition_after_update PASSED [ 72%]
+tests/patterns/test_situational_awareness.py::TestCompositionConstraint::test_composition_after_multiple_updates PASSED [ 73%]
+tests/patterns/test_situational_awareness.py::TestSignalDetection::test_discovery_signal PASSED [ 74%]
+tests/patterns/test_situational_awareness.py::TestSignalDetection::test_error_recovery_signal PASSED [ 74%]
+tests/patterns/test_situational_awareness.py::TestSignalDetection::test_navigation_signal PASSED [ 75%]
+tests/patterns/test_situational_awareness.py::TestSignalDetection::test_multiple_signals PASSED [ 76%]
+tests/patterns/test_situational_awareness.py::TestDecay::test_decay_reduces_dimensions PASSED [ 76%]
+tests/patterns/test_situational_awareness.py::TestDecay::test_decay_maintains_sum PASSED [ 77%]
+tests/patterns/test_situational_awareness.py::TestDecay::test_multiple_decay_steps PASSED [ 78%]
+tests/patterns/test_situational_awareness.py::TestDimensionMapping::test_discovery_mapping PASSED [ 78%]
+tests/patterns/test_situational_awareness.py::TestDimensionMapping::test_assessment_mapping PASSED [ 79%]
+tests/patterns/test_situational_awareness.py::TestDimensionMapping::test_error_recovery_to_clarification PASSED [ 80%]
+tests/patterns/test_situational_awareness.py::TestDimensionMapping::test_navigation_to_meta PASSED [ 80%]
+tests/patterns/test_situational_awareness.py::TestGetDominantDimensions::test_get_top_dimension PASSED [ 81%]
+tests/patterns/test_situational_awareness.py::TestGetDominantDimensions::test_get_top_three_dimensions PASSED [ 82%]
+tests/patterns/test_situational_awareness.py::TestResetComposition::test_reset_to_default PASSED [ 82%]
+tests/patterns/test_trigger_detector.py::TestTriggerDetectorInitialization::test_initialization PASSED [ 83%]
+tests/patterns/test_trigger_detector.py::TestTriggerDetectorInitialization::test_initialization_with_triggers PASSED [ 84%]
+tests/patterns/test_trigger_detector.py::TestUserExplicitTriggers::test_detect_navigation_query PASSED [ 84%]
+tests/patterns/test_trigger_detector.py::TestUserExplicitTriggers::test_detect_help_request PASSED [ 85%]
+tests/patterns/test_trigger_detector.py::TestUserExplicitTriggers::test_detect_review_request PASSED [ 86%]
+tests/patterns/test_trigger_detector.py::TestUserExplicitTriggers::test_no_trigger_on_normal_response PASSED [ 86%]
+tests/patterns/test_trigger_detector.py::TestUserImplicitTriggers::test_detect_confusion PASSED [ 87%]
+tests/patterns/test_trigger_detector.py::TestUserImplicitTriggers::test_detect_contradiction PASSED [ 88%]
+tests/patterns/test_trigger_detector.py::TestUserImplicitTriggers::test_detect_scope_ambiguity PASSED [ 88%]
+tests/patterns/test_trigger_detector.py::TestSystemProactiveTriggers::test_detect_natural_extraction_opportunity PASSED [ 89%]
+tests/patterns/test_trigger_detector.py::TestSystemProactiveTriggers::test_detect_education_opportunity PASSED [ 90%]
+tests/patterns/test_trigger_detector.py::TestSystemProactiveTriggers::test_detect_recommendation_opportunity PASSED [ 90%]
+tests/patterns/test_trigger_detector.py::TestSystemReactiveTriggers::test_detect_first_message PASSED [ 91%]
+tests/patterns/test_trigger_detector.py::TestSystemReactiveTriggers::test_detect_milestone_reached PASSED [ 92%]
+tests/patterns/test_trigger_detector.py::TestSystemReactiveTriggers::test_detect_high_frustration PASSED [ 92%]
+tests/patterns/test_trigger_detector.py::TestTriggerPriority::test_multiple_triggers_sorted_by_priority PASSED [ 93%]
+tests/patterns/test_trigger_detector.py::TestKeywordMatching::test_match_navigation_keywords PASSED [ 94%]
+tests/patterns/test_trigger_detector.py::TestKeywordMatching::test_match_confusion_keywords PASSED [ 94%]
+tests/patterns/test_trigger_detector.py::TestKeywordMatching::test_no_match_on_unrelated_message PASSED [ 95%]
+tests/patterns/test_trigger_detector.py::TestContextAwareness::test_trigger_depends_on_knowledge_state PASSED [ 96%]
+tests/patterns/test_trigger_detector.py::TestProfanityAsEmotionalMultiplier::test_extreme_pain_signal PASSED [ 96%]
+tests/patterns/test_trigger_detector.py::TestProfanityAsEmotionalMultiplier::test_extreme_frustration PASSED [ 97%]
+tests/patterns/test_trigger_detector.py::TestProfanityAsEmotionalMultiplier::test_extreme_satisfaction PASSED [ 98%]
+tests/patterns/test_trigger_detector.py::TestProfanityAsEmotionalMultiplier::test_childish_behavior PASSED [ 98%]
+tests/patterns/test_trigger_detector.py::TestProfanityAsEmotionalMultiplier::test_profanity_escalates_priority PASSED [ 99%]
+tests/patterns/test_trigger_detector.py::TestProfanityAsEmotionalMultiplier::test_normal_frustration_without_profanity PASSED [100%]
+ERROR: Coverage failure: total of 30 is less than fail-under=80
+
+
+=================================== FAILURES ===================================
+____________ TestPatternLoader.test_load_specific_behavior_category ____________
+tests/patterns/test_loader.py:115: in test_load_specific_behavior_category
+    assert len(categories) >= 1
+E   assert 0 >= 1
+E    +  where 0 = len(set())
+_____ TestPatternEngineInitialization.test_initialization_with_pattern_dir _____
+tests/patterns/test_pattern_engine.py:35: in test_initialization_with_pattern_dir
+    assert len(engine.patterns) > 0
+E   assert 0 > 0
+E    +  where 0 = len([])
+E    +    where [] = <src.patterns.pattern_engine.PatternEngine object at 0x7b094f81adb0>.patterns
+___________________ TestEndToEndFlow.test_first_message_flow ___________________
+tests/patterns/test_pattern_engine.py:164: in test_first_message_flow
+    assert response['pattern_used']['category'] == 'onboarding'
+E   AssertionError: assert 'meta' == 'onboarding'
+E     
+E     - onboarding
+E     + meta
+_______________ TestTokenOptimization.test_measure_token_savings _______________
+tests/patterns/test_pattern_engine.py:296: in test_measure_token_savings
+    assert selective_tokens < full_tokens * 0.1  # At least 90% reduction
+    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+E   assert 60.5 < (292.25 * 0.1)
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Name                                            Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------------
+src/__init__.py                                     0      0   100%
+src/app.py                                        161    161     0%   3-303
+src/config/__init__.py                              0      0   100%
+src/config/settings.py                             24     24     0%   3-54
+src/core/__init__.py                                0      0   100%
+src/core/firebase_client.py                       233    233     0%   3-568
+src/core/graph_manager.py                         241    241     0%   3-624
+src/core/llm_client.py                             90     90     0%   3-300
+src/core/session_manager.py                        82     82     0%   3-197
+src/engines/__init__.py                             0      0   100%
+src/engines/assessment.py                         103    103     0%   3-431
+src/engines/bottleneck.py                         113    113     0%   3-362
+src/engines/discovery.py                          175    175     0%   3-405
+src/orchestrator/__init__.py                        0      0   100%
+src/orchestrator/conversation_orchestrator.py     126    126     0%   3-408
+src/patterns/__init__.py                            0      0   100%
+src/patterns/knowledge_tracker.py                  68      6    91%   171, 196-200, 207, 281
+src/patterns/models.py                             89     15    83%   44, 46, 48, 50, 91, 93, 173, 176, 180, 184, 187, 191, 195-198
+src/patterns/pattern_engine.py                    111     34    69%   101-102, 113-146, 241-244, 276-277, 291-303, 308-314, 318, 329, 361
+src/patterns/pattern_loader.py                    108     18    83%   61, 98, 109, 149, 154, 214, 216, 220-227, 234-236, 242-244
+src/patterns/pattern_selector.py                  123      9    93%   110, 113, 152, 156, 200, 205, 237, 287-288
+src/patterns/response_composer.py                  55      2    96%   119, 164
+src/patterns/situational_awareness.py              49      4    92%   95, 171-173
+src/patterns/trigger_detector.py                  160     22    86%   247, 301, 310, 404, 520-542, 578
+src/utils/__init__.py                               0      0   100%
+src/utils/logger.py                                39     39     0%   3-113
+-----------------------------------------------------------------------------
+TOTAL                                            2150   1497    30%
+Coverage HTML written to dir htmlcov
+FAIL Required test coverage of 80% not reached. Total coverage: 30.37%
+=========================== short test summary info ============================
+FAILED tests/patterns/test_loader.py::TestPatternLoader::test_load_specific_behavior_category - assert 0 >= 1
+ +  where 0 = len(set())
+FAILED tests/patterns/test_pattern_engine.py::TestPatternEngineInitialization::test_initialization_with_pattern_dir - assert 0 > 0
+ +  where 0 = len([])
+ +    where [] = <src.patterns.pattern_engine.PatternEngine object at 0x7b094f81adb0>.patterns
+FAILED tests/patterns/test_pattern_engine.py::TestEndToEndFlow::test_first_message_flow - AssertionError: assert 'meta' == 'onboarding'
+  
+  - onboarding
+  + meta
+FAILED tests/patterns/test_pattern_engine.py::TestTokenOptimization::test_measure_token_savings - assert 60.5 < (292.25 * 0.1)
+======================== 4 failed, 147 passed in 2.43s =========================

@@ -279,11 +279,84 @@ Before starting any feature:
 
 ---
 
+## 4. Persist Test Results - MANDATORY
+
+**Principle:** Save test execution output for every release to maintain historical record.
+
+**Why:**
+- Track test evolution over time
+- Debug failures by comparing with previous runs
+- Document what was tested and when
+- Provide evidence of quality for UAT checkpoints
+- Enable regression analysis
+
+**Structure:**
+```
+docs/2_technical_spec/Release{X.Y}/test_results/
+├── unit_tests/
+│   ├── test_trigger_detector_output.txt
+│   ├── test_pattern_selector_output.txt
+│   └── test_situational_awareness_output.txt
+├── integration_tests/
+│   └── test_integrated_response_selection_output.txt
+├── uat_demos/
+│   ├── demo_pattern_engine_output.txt
+│   ├── demo_reactive_proactive_output.txt
+│   └── demo_situational_awareness_output.txt
+└── README.md  # Summary of test results
+```
+
+**When to Save:**
+1. **After each TDD GREEN phase** - Save passing test output
+2. **After UAT checkpoint** - Save demo output
+3. **Before committing** - Ensure latest results saved
+4. **At release completion** - Save final comprehensive test run
+
+**How to Save:**
+```bash
+# Unit tests
+pytest tests/patterns/test_trigger_detector.py -v --tb=short > \
+  docs/2_technical_spec/Release2.1/test_results/unit_tests/test_trigger_detector_output.txt 2>&1
+
+# Integration tests
+pytest tests/patterns/test_integrated_*.py -v --tb=short > \
+  docs/2_technical_spec/Release2.1/test_results/integration_tests/test_integrated_output.txt 2>&1
+
+# UAT demos
+python demo_pattern_engine.py > \
+  docs/2_technical_spec/Release2.1/test_results/uat_demos/demo_pattern_engine_output.txt 2>&1
+```
+
+**Test Results README Template:**
+```markdown
+# Test Results - Release X.Y
+
+**Date:** YYYY-MM-DD  
+**Status:** All tests passing / X failures
+
+## Summary
+- Unit Tests: X/Y passing (Z%)
+- Integration Tests: X/Y passing (Z%)
+- UAT Demos: X/Y working
+
+## Coverage
+- Component A: X%
+- Component B: Y%
+
+## Notes
+- Any important observations
+- Known issues
+- Next steps
+```
+
+---
+
 ## Related Documents
 
 - **Feature Ideas:** Add to `docs/1_functional_spec/TBD.md` (see format there)
 - **Implementation Plans:** `docs/2_technical_spec/`
 - **Progress Tracking:** `docs/2_technical_spec/Release2.1/TDD_PROGRESS.md`
+- **Test Results:** `docs/2_technical_spec/Release{X.Y}/test_results/`
 
 ---
 

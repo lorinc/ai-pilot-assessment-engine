@@ -8,6 +8,11 @@ Orchestrates the entire pattern system:
 4. Generates response using selected pattern + minimal context
 5. Updates knowledge state
 
+Release 2.2 Updates:
+- Integrated SituationalAwareness (8-dimensional composition)
+- Integrated ResponseComposer (reactive + proactive selection)
+- Situation-driven proactive pattern selection
+
 Token Optimization:
 - WITHOUT selective loading: ~9,747 tokens per turn
 - WITH selective loading: ~310 tokens per turn
@@ -18,6 +23,8 @@ from src.patterns.trigger_detector import TriggerDetector
 from src.patterns.pattern_selector import PatternSelector
 from src.patterns.pattern_loader import PatternLoader
 from src.patterns.knowledge_tracker import KnowledgeTracker
+from src.patterns.response_composer import ResponseComposer
+from src.patterns.situational_awareness import SituationalAwareness
 
 
 class PatternEngine:
@@ -37,6 +44,10 @@ class PatternEngine:
         # Initialize components
         self.pattern_loader = PatternLoader()
         self.tracker = KnowledgeTracker()
+        
+        # Release 2.2: Initialize situational awareness and response composer
+        self.situational_awareness = SituationalAwareness()
+        self.response_composer = ResponseComposer()
         
         # Load patterns if directory provided
         self.patterns = []
@@ -85,6 +96,9 @@ class PatternEngine:
                 self.tracker,
                 is_first_message
             )
+            
+            # Step 1.5: Update situational awareness from triggers (Release 2.2)
+            self.situational_awareness.update_from_triggers(triggers)
             
             # Step 2: Select pattern(s)
             if allow_multi_pattern:

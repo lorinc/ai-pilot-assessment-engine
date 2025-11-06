@@ -697,3 +697,396 @@ By the way, is there a deadline driving this assessment?"
 - docs/2_technical_spec/Release2.1/PATTERN_ENGINE_IMPLEMENTATION.md
 
 ---
+
+### 27. No-Progress Detection and Graceful Shutdown
+**Added**: 2025-11-06
+
+**Context**: Users may get stuck, confused, or misuse the system without making real progress. After multiple conversation turns with no knowledge advancement, the system should detect this and gracefully shut down rather than continuing an unproductive conversation.
+
+**Intent**: Implement a no-progress detection mechanism that:
+1. **Tracks knowledge progress** across all 34 knowledge dimensions over conversation turns
+2. **Detects stagnation** when no real progress occurs over 4+ conversation steps
+3. **Escalates tension** by spiking the "inappropriate_use" situation dimension
+4. **Increases pressure** with each additional non-productive step (steps 5-8)
+5. **Graceful shutdown** at step 8 with clear communication
+6. **Offers recovery paths** (error report, contact developer)
+
+**Behavior Progression:**
+- **Steps 1-3:** Normal conversation (no intervention)
+- **Step 4:** Detect no progress → spike inappropriate_use situation to 30%
+- **Step 5:** Still no progress → spike to 50%, system probes: "I notice we're not making progress. What's blocking you?"
+- **Step 6:** Still no progress → spike to 70%, system escalates: "We've been stuck for a while. Should we try a different approach?"
+- **Step 7:** Still no progress → spike to 85%, system warns: "I'm concerned we're not getting anywhere. This might not be the right tool for your needs."
+- **Step 8:** Still no progress → spike to 100%, system shuts down: "Something isn't working. I'm going to stop here. Would you like to send an error report or contact the developer?"
+
+**What Counts as Progress:**
+- ✅ New knowledge dimensions discovered (user_knows or system_knows updated)
+- ✅ Output identified or refined
+- ✅ Edge rated (dependency, team, process, system)
+- ✅ Context extracted (timeline, budget, team size, etc.)
+- ✅ User asks clarifying questions (shows engagement)
+- ❌ Repeated confusion without resolution
+- ❌ Off-topic conversation
+- ❌ User ignoring system questions
+- ❌ Circular conversation (same topics repeatedly)
+
+**Implementation:**
+- Add `no_progress_counter` to conversation state
+- Track knowledge state changes per turn
+- If no changes for 4+ turns → increment counter
+- Map counter to inappropriate_use situation dimension
+- At counter=8 → trigger shutdown behavior
+
+**Shutdown Behavior:**
+- Clear, non-judgmental message
+- Explain what went wrong (no progress detected)
+- Offer error report (capture conversation for debugging)
+- Offer contact developer (human escalation)
+- Provide exit gracefully (don't leave user hanging)
+
+**Benefits:**
+- Prevents wasted time on unproductive conversations
+- Detects system limitations or user confusion early
+- Provides data for improving system (error reports)
+- Maintains professional tone (not blaming user)
+- Offers recovery paths (not dead end)
+
+**Examples:**
+
+**Good Progress (No Intervention):**
+```
+Turn 1: User mentions "sales forecasting" → discovery++
+Turn 2: User rates data quality 3 stars → assessment++
+Turn 3: User mentions team of 5 → context++
+Turn 4: User asks about timeline → engagement++
+→ Progress detected, continue normally
+```
+
+**No Progress (Intervention):**
+```
+Turn 1: User: "I need help"
+Turn 2: System: "What output?" User: "I don't know"
+Turn 3: System: "What team?" User: "Not sure"
+Turn 4: System: "What system?" User: "Maybe CRM?"
+→ No progress detected, spike inappropriate_use to 30%
+
+Turn 5: System: "I notice we're not making progress. What's blocking you?"
+        User: "I'm just exploring"
+→ Still no progress, spike to 50%
+
+Turn 6: System: "We've been stuck for a while. Should we try a different approach?"
+        User: "Sure"
+→ Still no progress, spike to 70%
+
+Turn 7: System: "I'm concerned we're not getting anywhere. This might not be the right tool."
+        User: "OK"
+→ Still no progress, spike to 85%
+
+Turn 8: System: "Something isn't working. I'm going to stop here. 
+                Would you like to send an error report or contact the developer?"
+→ Graceful shutdown
+```
+
+**Related:**
+- TBD #1 (System Self-Awareness)
+- TBD #24 (Meeting Scheduling with Creator)
+- Release 2.2 (Situational Awareness - inappropriate_use dimension)
+- Knowledge Tracker (progress detection)
+
+---
+
+### 28. Semantic Intent Detection (Replace Regex Triggers)
+**Added**: 2025-11-06  
+**Status**: Planned for Week 2 (Release 2.2)
+
+**Context**: Current trigger detection uses regex patterns and keyword lists, making it rigid and hard to maintain. System has drifted from intent detection to pattern matching.
+
+**Problem:**
+- ❌ Brittle regex patterns (misses variations)
+- ❌ Endless keyword lists (maintenance nightmare)
+- ❌ Can't handle novel phrasings
+- ❌ False positives/negatives
+- ❌ Not scalable
+
+**Intent**: Replace regex-based trigger detection with semantic similarity using embeddings.
+
+**Solution: Semantic Similarity with Local Model**
+
+Use sentence-transformers for intent classification:
+
+```python
+class TriggerDetector:
+    def __init__(self):
+        # Load model once at startup (~200 MB, ~2 seconds)
+        self.model = SentenceTransformer('all-MiniLM-L6-v2')
+        
+        # Pre-compute intent embeddings
+        self.intent_embeddings = {
+            'assessment': compute_embeddings(ASSESSMENT_EXAMPLES),
+            'discovery': compute_embeddings(DISCOVERY_EXAMPLES),
+            # ... etc
+        }
+        
+        # Cache for message embeddings
+        self.cache = {}
+    
+    def detect(self, message, tracker, is_first_message):
+        # Get message embedding (cached)
+        msg_emb = self._get_cached_embedding(message)
+        
+        # Find matching intents via similarity
+        for intent, examples_emb in self.intent_embeddings.items():
+            similarity = max_similarity(msg_emb, examples_emb)
+            if similarity > 0.75:
+                triggers.append(create_trigger(intent))
+```
+
+**Performance Impact:**
+- Latency: ~10-30ms per message (first time), ~0ms (cached)
+- Memory: ~200 MB (model) + ~6 MB (embeddings)
+- Cost: $0 (local model)
+- Overhead: <2% vs total response time (LLM is 500-2000ms)
+
+**Benefits:**
+- ✅ Handles novel phrasings naturally
+- ✅ No regex maintenance
+- ✅ More accurate
+- ✅ Flexible to variations
+- ✅ Lower maintenance burden
+
+**Implementation Plan:**
+- Week 2, Day 6-7 (Release 2.2)
+- Effort: ~4-6 hours
+- Keep regex as fallback for obvious cases
+- Gradual migration
+
+**Related:**
+- Release 2.2 (Situational Awareness)
+- TBD #29 (Change Management Pipeline)
+
+---
+
+### 29. Change Management Pipeline for Patterns & Triggers
+**Added**: 2025-11-06  
+**Status**: CRITICAL - Implement immediately after Week 1
+
+**Context**: System is getting complex. We need a standardized pipeline for adding/modifying triggers, behaviors, and patterns without reinventing the wheel each time.
+
+**Problem:**
+- ❌ No standard process for adding triggers
+- ❌ No standard process for adding behaviors
+- ❌ No standard process for updating patterns
+- ❌ Each change requires custom code
+- ❌ Risk of breaking existing functionality
+- ❌ Hard to onboard new developers
+
+**Intent**: Create a declarative, data-driven pipeline for managing patterns, triggers, and behaviors.
+
+**Solution: YAML-Driven Configuration + Hot Reload**
+
+**1. Declarative Trigger Definitions**
+
+```yaml
+# data/triggers/assessment_triggers.yaml
+triggers:
+  - id: T_RATE_EDGE
+    category: assessment
+    priority: high
+    type: user_implicit
+    
+    detection:
+      method: semantic_similarity  # or 'regex' or 'keywords'
+      threshold: 0.75
+      examples:
+        - "Data quality is 3 stars"
+        - "The team struggles with this"
+        - "Process is poor"
+        - "System support is excellent"
+        - "I rate it 3 out of 5"
+    
+    # Optional: Fallback to regex for obvious cases
+    fallback_patterns:
+      - '\d+\s*stars?'
+      - '\d+/\d+'
+      - 'is\s+(poor|good|excellent)'
+```
+
+**2. Declarative Behavior Definitions**
+
+```yaml
+# data/patterns/behaviors/assessment_behaviors.yaml
+behaviors:
+  - id: B_ACKNOWLEDGE_RATING
+    category: assessment
+    response_type: reactive
+    
+    triggers:
+      - T_RATE_EDGE
+    
+    template: |
+      Thanks - I've recorded that {component} is {rating}.
+    
+    knowledge_updates:
+      - type: system_knows
+        dimension: edge_rated
+        value: true
+```
+
+**3. Hot Reload System**
+
+```python
+class PatternEngine:
+    def __init__(self):
+        self.config_watcher = ConfigWatcher('data/')
+        self.config_watcher.on_change(self.reload_patterns)
+    
+    def reload_patterns(self):
+        """Hot reload patterns without restart"""
+        self.patterns = self.pattern_loader.load_all()
+        self.trigger_detector.reload_triggers()
+        print("✅ Patterns reloaded")
+```
+
+**4. Change Pipeline Workflow**
+
+```
+1. Developer creates/modifies YAML file
+   └─> data/triggers/new_trigger.yaml
+
+2. Run validation script
+   └─> python scripts/validate_config.py
+   └─> Checks: syntax, required fields, no conflicts
+
+3. Run test generator
+   └─> python scripts/generate_tests.py
+   └─> Auto-generates test cases from examples
+
+4. Run tests
+   └─> pytest tests/patterns/
+   └─> Validates new trigger works
+
+5. Commit changes
+   └─> Git tracks YAML changes
+   └─> PR review focuses on YAML, not code
+
+6. Deploy
+   └─> Hot reload in production (no restart needed)
+```
+
+**5. Standard Scripts**
+
+```bash
+# scripts/add_trigger.py
+python scripts/add_trigger.py \
+  --id T_NEW_TRIGGER \
+  --category assessment \
+  --examples "example 1" "example 2" "example 3"
+
+# Auto-generates:
+# - YAML file
+# - Test file
+# - Updates documentation
+
+# scripts/validate_config.py
+python scripts/validate_config.py
+# Validates all YAML files
+
+# scripts/generate_tests.py
+python scripts/generate_tests.py
+# Auto-generates tests from examples
+
+# scripts/reload_patterns.py
+python scripts/reload_patterns.py
+# Hot reload without restart
+```
+
+**6. Directory Structure**
+
+```
+data/
+├── triggers/
+│   ├── assessment_triggers.yaml
+│   ├── discovery_triggers.yaml
+│   ├── navigation_triggers.yaml
+│   └── ...
+├── patterns/
+│   ├── behaviors/
+│   │   ├── assessment_behaviors.yaml
+│   │   ├── discovery_behaviors.yaml
+│   │   └── ...
+│   └── knowledge_dimensions.yaml
+└── config/
+    ├── similarity_thresholds.yaml
+    └── priority_rules.yaml
+
+scripts/
+├── add_trigger.py          # Add new trigger
+├── add_behavior.py         # Add new behavior
+├── validate_config.py      # Validate YAML
+├── generate_tests.py       # Auto-generate tests
+└── reload_patterns.py      # Hot reload
+
+tests/
+└── patterns/
+    └── generated/          # Auto-generated tests
+        ├── test_assessment_triggers_generated.py
+        └── ...
+```
+
+**Benefits:**
+- ✅ **No code changes** for new triggers/behaviors
+- ✅ **Declarative** - easy to understand
+- ✅ **Validated** - scripts catch errors
+- ✅ **Tested** - auto-generated tests
+- ✅ **Hot reload** - no restart needed
+- ✅ **Version controlled** - Git tracks changes
+- ✅ **Onboarding friendly** - just edit YAML
+
+**Implementation Plan:**
+1. **Week 2, Day 6:** Create YAML schemas
+2. **Week 2, Day 7:** Implement loader + validator
+3. **Week 2, Day 8:** Create helper scripts
+4. **Week 2, Day 9:** Auto-test generation
+5. **Week 2, Day 10:** Hot reload system
+
+**Effort:** ~2 days (Days 6-7 of Week 2)
+
+**Priority:** HIGH - This unblocks future development
+
+**Examples:**
+
+**Adding a new trigger (2 minutes):**
+```bash
+python scripts/add_trigger.py \
+  --id T_BUDGET_MENTIONED \
+  --category context_extraction \
+  --examples \
+    "Our budget is $50k" \
+    "We have about 100k to spend" \
+    "Budget is tight"
+
+# Auto-generates:
+# ✅ data/triggers/context_extraction_triggers.yaml (updated)
+# ✅ tests/patterns/generated/test_context_triggers.py
+# ✅ Validates syntax
+# ✅ Runs tests
+```
+
+**Modifying a behavior (1 minute):**
+```bash
+# Just edit YAML file
+vim data/patterns/behaviors/assessment_behaviors.yaml
+
+# Validate
+python scripts/validate_config.py
+
+# Reload (no restart)
+python scripts/reload_patterns.py
+```
+
+**Related:**
+- TBD #28 (Semantic Intent Detection)
+- Release 2.2 (Pattern Integration)
+- All future pattern/trigger additions
+
+---
