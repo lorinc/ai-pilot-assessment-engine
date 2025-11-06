@@ -139,7 +139,7 @@ Each edge has:
 
 ## Refactoring Strategy
 
-### Phase 1: Data Model Redesign (8-12 hours)
+### Release 1: Data Model Redesign (8-12 hours)
 
 **Goal:** Implement Alternative B data models
 
@@ -189,7 +189,7 @@ Each edge has:
 
 ---
 
-### Phase 2: Graph Infrastructure (10-14 hours)
+### Release 2: Graph Infrastructure (10-14 hours)
 
 **Goal:** Implement graph storage and traversal
 
@@ -380,8 +380,8 @@ Each edge has:
 ### Total Effort: 40-56 hours (1-1.5 weeks full-time)
 
 **Week 1:**
-- Days 1-2: Phase 1 (Data Model Redesign)
-- Days 3-4: Phase 2 (Graph Infrastructure)
+- Days 1-2: Release 1 (Data Model Redesign)
+- Days 3-4: Release 2 (Graph Infrastructure)
 - Day 5: Phase 3 Start (Evidence Classifier)
 
 **Week 2:**
@@ -455,7 +455,7 @@ Each edge has:
 ## Next Steps
 
 1. **Decision:** Choose Option A, B, or C based on project priorities
-2. **If Option A:** Start with Phase 1 (Data Model Redesign)
+2. **If Option A:** Start with Release 1 (Data Model Redesign)
 3. **If Option B:** Create `HYBRID_APPROACH.md` with detailed plan
 4. **If Option C:** Continue exploring alternatives in `docs/4_model_evolution/`
 

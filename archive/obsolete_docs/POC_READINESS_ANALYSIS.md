@@ -247,7 +247,7 @@
 
 ## 📋 Minimal POC Recommendation
 
-### Phase 1: Core Assessment (Fully Supported)
+### Release 1: Core Assessment (Fully Supported)
 **Steps 1-8 can be implemented immediately with existing data:**
 
 ```
@@ -280,7 +280,7 @@ System: Gap = 2 stars
         Expected Impact: ⭐⭐ → ⭐⭐⭐⭐
 ```
 
-### Phase 2: ROI Estimation (Requires New Data)
+### Release 2: ROI Estimation (Requires New Data)
 **Would need:**
 1. Create `roi_mapping.json` with:
    - Output → KPI mappings
@@ -323,7 +323,7 @@ System: Gap = 2 stars
 
 The only missing piece is **ROI calculation data**, which is:
 - Not required for core assessment flow (Steps 1-8)
-- Can be added later as Phase 2
+- Can be added later as Release 2
 - Requires business context that varies by organization
 
 **Recommendation:** Build POC with Steps 1-8, demonstrate value through pilot recommendations, then add ROI estimation based on customer feedback and real business data.

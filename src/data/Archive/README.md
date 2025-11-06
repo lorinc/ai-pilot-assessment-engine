@@ -1,6 +1,6 @@
 # Archive - Future Phase Data
 
-This folder contains data files that are NOT part of Phase 1 or Phase 2 implementation.
+This folder contains data files that are NOT part of Release 1 or Release 2 implementation.
 
 ## Archived Files
 
@@ -20,15 +20,15 @@ These files support features not yet implemented:
 
 They will be moved back to active use when their respective phases begin.
 
-## Phase 1-2 Active Files
+## Release 1-2 Active Files
 
 Files remaining in `src/data/`:
-- `organizational_templates/functions/*.json` - Output catalog (Phase 2)
-- `organizational_templates/cross_functional/*.json` - System/Process defaults (Phase 2)
-- `component_scales.json` - Rating scale definitions (Phase 2)
-- `inference_rules/output_discovery.json` - Output matching rules (Phase 2)
+- `organizational_templates/functions/*.json` - Output catalog (Release 2)
+- `organizational_templates/cross_functional/*.json` - System/Process defaults (Release 2)
+- `component_scales.json` - Rating scale definitions (Release 2)
+- `inference_rules/output_discovery.json` - Output matching rules (Release 2)
 
 ---
 
 **Last Updated:** 2025-11-05  
-**Reason:** Phase 2 scope cleanup
+**Reason:** Release 2 scope cleanup

@@ -182,8 +182,8 @@ Output Assessment
 
 **Not This (Phase-Based):**
 ```
-Phase 1: Discovery → Identify output
-Phase 2: Assessment → Rate components
+Release 1: Discovery → Identify output
+Release 2: Assessment → Rate components
 Phase 3: Gap Analysis → Calculate MIN()
 Phase 4: Recommendations → Suggest pilots
 ```

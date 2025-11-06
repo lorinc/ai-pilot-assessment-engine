@@ -410,14 +410,14 @@ Epic 13: Knowledge Management
 
 ## Critical Path & Priorities
 
-### Phase 1: Foundation (Epics 1-4)
+### Release 1: Foundation (Epics 1-4)
 **Goal:** Core reasoning engine working end-to-end
 - Epic 01: Knowledge Graph ← **CURRENT**
 - Epic 02: Test Data
 - Epic 03: ReAct Agent
 - Epic 04: Multi-Stage Flow
 
-### Phase 2: User Interface (Epics 5-7)
+### Release 2: User Interface (Epics 5-7)
 **Goal:** Usable demo with transparency
 - Epic 05: Streamlit UI
 - Epic 06: Observability

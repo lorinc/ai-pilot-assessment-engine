@@ -11,7 +11,7 @@ Traditional unit tests verify code correctness but fail for conversational AI:
 - Semantic equivalence ("forecast is wrong" ≈ "predictions are inaccurate")
 - Subjective quality (helpfulness, clarity)
 
-This directory contains semantic evaluation infrastructure for Phase 2 features.
+This directory contains semantic evaluation infrastructure for Release 2 features.
 
 ---
 
@@ -252,6 +252,6 @@ def test_expensive_llm_evaluation():
 
 ---
 
-**Status:** Infrastructure ready, tests to be implemented in Phase 2  
+**Status:** Infrastructure ready, tests to be implemented in Release 2  
 **Dependencies:** sentence-transformers, Gemini API access  
 **Owner:** Technical Lead

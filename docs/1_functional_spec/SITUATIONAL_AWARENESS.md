@@ -1,7 +1,7 @@
 # Situational Awareness Feature
 
 **Date**: 2025-11-05  
-**Status**: DESIGN - Phase 2.5 Feature  
+**Status**: DESIGN - Release 2.5 Feature  
 **Replaces**: Global phase logic (see PHASE_LOGIC_AUDIT.md)
 
 ---
@@ -362,7 +362,7 @@ def select_patterns(situation, available_patterns):
 
 ---
 
-## Integration with Phase 2.5
+## Integration with Release 2.5
 
 ### Conversation Pattern Engine
 
@@ -466,23 +466,23 @@ Active Patterns:
 
 ## Implementation Plan
 
-### Phase 1: Core Situational Awareness
+### Release 1: Core Situational Awareness
 1. Create `SituationalAwareness` class
 2. Implement signal detection
 3. Implement composition calculation
 4. Add to session state
 
-### Phase 2: Pattern Integration
+### Release 2: Pattern Integration
 1. Add `situation_affinity` to pattern definitions
 2. Implement pattern selection algorithm
 3. Test pattern composition
 
-### Phase 3: LLM Integration
+### Release 3: LLM Integration
 1. Add situation to system prompt
 2. Test response quality
 3. Tune weights and thresholds
 
-### Phase 4: Refinement
+### Release 4: Refinement
 1. Log situation over conversations
 2. Analyze effectiveness
 3. Tune decay rates and weights

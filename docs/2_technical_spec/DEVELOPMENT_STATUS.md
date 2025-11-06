@@ -1,28 +1,31 @@
 # Development Status
 
 **Last Updated:** 2025-11-05  
-**Current Phase:** Phase 1.5 Complete → Ready for Phase 2
+**Current Release:** Release 1.5 Complete → Ready for Release 2
 
 ---
 
 ## Quick Status
 
-| Phase | Status | Completion | Next Action |
+| Release | Status | Completion | Next Action |
 |-------|--------|------------|-------------|
-| Phase 1 | ✅ Complete | 100% | - |
-| Phase 1.5 | ✅ Complete | 100% | - |
-| Phase 2 | ✅ Complete | 100% | - |
-| Phase 3 | 📋 Ready to Start | 0% | Context Extraction |
-| Phase 4 | 📋 Planned | 0% | After Phase 3 |
-| Phase 5 | 📋 Planned | 0% | After Phase 4 |
+| Release 1 | ✅ Complete | 100% | - |
+| Release 1.5 | ✅ Complete | 100% | - |
+| Release 2 | ✅ Complete | 100% | - |
+| Release 2.1 | 📋 Ready to Start | 0% | Pattern Engine Foundation |
+| Release 2.2 | 📋 Planned | 0% | Situational Awareness (after 2.1) |
+| Release 2.5 | 📋 Planned | 0% | Semantic Evaluation (parallel with 2.1-2.2) |
+| Release 3 | 📋 Planned | 0% | Context Extraction (after 2.2) |
+| Release 4 | 📋 Planned | 0% | After Release 3 |
+| Release 5 | 📋 Planned | 0% | After Release 4 |
 
 ---
 
-## Phase 1: Core Infrastructure ✅
+## Release 1: Core Infrastructure ✅
 
 **Status:** Complete  
 **Duration:** Weeks 1-2  
-**Documentation:** [Phase1/](Phase1/)
+**Documentation:** [Release1/](Release1/)
 
 ### Delivered
 - ✅ GCP project setup (Firestore, Cloud Storage, Vertex AI, Firebase Auth)
@@ -40,45 +43,45 @@
 - `src/app.py` - Streamlit application
 
 ### Documentation
-- [Phase1/PHASE1_IMPLEMENTATION_PLAN.md](Phase1/PHASE1_IMPLEMENTATION_PLAN.md)
+- [Release1/RELEASE1_IMPLEMENTATION_PLAN.md](Release1/RELEASE1_IMPLEMENTATION_PLAN.md)
 
 ---
 
-## Phase 1.5: Phase 2 Preparation ✅
+## Release 1.5: Release 2 Preparation ✅
 
 **Status:** Complete  
 **Duration:** 2 days (~5 hours)  
-**Documentation:** [Phase1.5/](Phase1.5/)
+**Documentation:** [Release1.5/](Release1.5/)
 
 ### Delivered
 - ✅ Fixed 4 duplicate output IDs (critical blocker)
 - ✅ Validated all 46 outputs with automated script
 - ✅ Decided graph storage architecture (Hybrid: NetworkX + Firestore)
 - ✅ Created 5 conversation test fixtures
-- ✅ Set up Phase 2.5 evaluation framework (LLM-as-judge, semantic similarity)
+- ✅ Set up Release 2.5 evaluation framework (LLM-as-judge, semantic similarity)
 
 ### Key Decisions
-- **Graph Storage:** Hybrid approach documented in [Phase2/GRAPH_STORAGE_ARCHITECTURE.md](Phase2/GRAPH_STORAGE_ARCHITECTURE.md)
+- **Graph Storage:** Hybrid approach documented in [Release2/GRAPH_STORAGE_ARCHITECTURE.md](Release2/GRAPH_STORAGE_ARCHITECTURE.md)
 - **Output IDs:** Domain-specific prefixes (cs_, ops_, it_, sc_)
 - **Test Strategy:** Three-layer evaluation (deterministic, semantic, conversation)
 
 ### Key Deliverables
-- `scripts/validate_phase2_data.py` - Automated data validation
+- `scripts/validate_release2_data.py` - Automated data validation
 - `tests/fixtures/conversations/` - 5 test scenarios
 - `tests/semantic/` - Evaluation framework infrastructure
 
 ### Documentation
-- **Start Here:** [Phase1.5/READY_FOR_PHASE2.md](Phase1.5/READY_FOR_PHASE2.md)
-- **Complete Summary:** [Phase1.5/PHASE2_PREP_FINAL_SUMMARY.md](Phase1.5/PHASE2_PREP_FINAL_SUMMARY.md)
-- **Quick Reference:** [Phase1.5/PHASE2_PREP_QUICK_REFERENCE.md](Phase1.5/PHASE2_PREP_QUICK_REFERENCE.md)
+- **Start Here:** [Release1.5/READY_FOR_PHASE2.md](Release1.5/READY_FOR_PHASE2.md)
+- **Complete Summary:** [Release1.5/RELEASE2_PREP_FINAL_SUMMARY.md](Release1.5/RELEASE2_PREP_FINAL_SUMMARY.md)
+- **Quick Reference:** [Release1.5/RELEASE2_PREP_QUICK_REFERENCE.md](Release1.5/RELEASE2_PREP_QUICK_REFERENCE.md)
 
 ---
 
-## Phase 2: Discovery & Assessment ✅
+## Release 2: Discovery & Assessment ✅
 
 **Status:** Complete (100%)  
 **Duration:** Weeks 3-4 (10 days)  
-**Documentation:** [Phase2/](Phase2/)
+**Documentation:** [Release2/](Release2/)
 
 ### Scope
 - Output discovery from natural language
@@ -125,13 +128,13 @@
 - Error handling and logging
 
 ### Documentation
-- **Implementation Plan:** [Phase2/PHASE2_IMPLEMENTATION_PLAN.md](Phase2/PHASE2_IMPLEMENTATION_PLAN.md)
-- **Architecture:** [Phase2/GRAPH_STORAGE_ARCHITECTURE.md](Phase2/GRAPH_STORAGE_ARCHITECTURE.md)
-- **Days 1-4 Summary:** [Phase2/PHASE2_DAY1-4_SUMMARY.md](Phase2/PHASE2_DAY1-4_SUMMARY.md)
-- **Days 5-9 Summary:** [Phase2/PHASE2_DAY5-9_SUMMARY.md](Phase2/PHASE2_DAY5-9_SUMMARY.md)
-- **Phase 2 Complete:** [Phase2/PHASE2_COMPLETE_SUMMARY.md](Phase2/PHASE2_COMPLETE_SUMMARY.md) ⭐ NEW
-- **Data Cleanup:** [Phase2/CLEANUP_SUMMARY.md](Phase2/CLEANUP_SUMMARY.md)
-- **Salvage Guide:** [Phase2/SALVAGE_FROM_ARCHIVE.md](Phase2/SALVAGE_FROM_ARCHIVE.md)
+- **Implementation Plan:** [Release2/RELEASE2_IMPLEMENTATION_PLAN.md](Release2/RELEASE2_IMPLEMENTATION_PLAN.md)
+- **Architecture:** [Release2/GRAPH_STORAGE_ARCHITECTURE.md](Release2/GRAPH_STORAGE_ARCHITECTURE.md)
+- **Days 1-4 Summary:** [Release2/RELEASE2_DAY1-4_SUMMARY.md](Release2/RELEASE2_DAY1-4_SUMMARY.md)
+- **Days 5-9 Summary:** [Release2/RELEASE2_DAY5-9_SUMMARY.md](Release2/RELEASE2_DAY5-9_SUMMARY.md)
+- **Release 2 Complete:** [Release2/RELEASE2_COMPLETE_SUMMARY.md](Release2/RELEASE2_COMPLETE_SUMMARY.md) ⭐ NEW
+- **Data Cleanup:** [Release2/CLEANUP_SUMMARY.md](Release2/CLEANUP_SUMMARY.md)
+- **Salvage Guide:** [Release2/SALVAGE_FROM_ARCHIVE.md](Release2/SALVAGE_FROM_ARCHIVE.md)
 
 ### Test Infrastructure
 - **Unit Tests:** 70 tests passing (21 graph + 13 discovery + 20 assessment + 16 bottleneck)
@@ -141,11 +144,117 @@
 
 ---
 
-## Phase 2.5: Semantic Evaluation (Cross-Phase)
+## Release 2.1: Pattern Engine Foundation 📋
+
+**Status:** Ready to Start  
+**Duration:** 3 weeks  
+**Documentation:** [Release2.1/](Release2.1/)
+
+### Purpose
+Build production-ready pattern engine that enables dynamic, context-aware conversation management. Required infrastructure for Release 2.2 (Situational Awareness) and Release 2.5 (Semantic Evaluation).
+
+### Scope
+**Week 1: Core Pattern System**
+- Pattern loader (YAML → runtime objects)
+- Knowledge tracker (user + system knowledge)
+- Trigger detector (4 types: explicit, implicit, proactive, reactive)
+- Pattern validation
+
+**Week 2: Behavior Library & Selection**
+- Migrate 77 atomic behaviors from sandbox
+- Add situation affinity scores
+- Pattern selection algorithm
+- LLM prompt integration
+
+**Week 3: Testing Infrastructure**
+- Semantic test framework (LLM-as-judge)
+- Behavioral test framework (state assertions)
+- Integration test scenarios
+- CI/CD pipeline
+
+### Key Components
+- **Pattern Format:** Dual-use YAML (runtime + testing)
+- **Knowledge Tracking:** Replaces global phase/release logic
+- **Trigger Detection:** 4 types covering all conversation scenarios
+- **Pattern Selection:** Score by situation affinity, priority resolution
+- **Runtime Architecture:** Compiled index + LRU cache (<5ms overhead)
+
+### Documentation
+- **Overview:** [Release2.1/README.md](Release2.1/README.md)
+- **Implementation Plan:** [Release2.1/PATTERN_ENGINE_IMPLEMENTATION.md](Release2.1/PATTERN_ENGINE_IMPLEMENTATION.md)
+- **Pattern Format:** [Release2.1/PATTERN_FORMAT.md](Release2.1/PATTERN_FORMAT.md)
+- **Runtime Architecture:** [Release2.1/PATTERN_RUNTIME_ARCHITECTURE.md](Release2.1/PATTERN_RUNTIME_ARCHITECTURE.md)
+- **UX Principles:** [Release2.1/UX_PRINCIPLES.md](Release2.1/UX_PRINCIPLES.md)
+
+### Data Migration
+- `sandbox/conversation_ux_exercise/` → `data/patterns/` (behaviors, triggers, knowledge dimensions)
+- 77 atomic behaviors organized by category
+- 40+ triggers organized by type
+
+### Prerequisites
+- Release 2 complete (conversation orchestrator, session manager)
+
+### Enables
+- Release 2.2 (Situational Awareness needs pattern selection)
+- Release 2.5 (Semantic Evaluation needs test infrastructure)
+
+---
+
+## Release 2.2: Situational Awareness 📋
+
+**Status:** Ready to Start  
+**Duration:** 4 weeks  
+**Documentation:** [Release2.2/](Release2.2/)
+
+### Purpose
+Replace broken global release/phase logic with dynamic situational awareness system that enables:
+- Non-linear conversation flows
+- Multi-output assessment
+- User agency preservation
+- Natural conversation patterns
+
+### Scope
+**Week 1: Core Infrastructure**
+- `SituationalAwareness` class with 8 dimensions
+- Remove `phase`/`release` property from session
+- Composition always sums to 100%
+
+**Week 2: Pattern Integration**
+- Add `situation_affinity` to behaviors
+- Pattern selection algorithm
+- LLM prompt integration
+
+**Week 3: Intent Detection**
+- Replace release-based routing with intent detection
+- Enable non-linear conversation
+- Multi-output support
+
+**Week 4: Refinement**
+- Tune weights and decay rates
+- Performance optimization
+- Documentation
+
+### Documentation
+- **Overview:** [Release2.2/README.md](Release2.2/README.md)
+- **Implementation Plan:** [Release2.2/SITUATIONAL_AWARENESS_IMPLEMENTATION.md](Release2.2/SITUATIONAL_AWARENESS_IMPLEMENTATION.md)
+- **Design Rationale:** [Release2.2/appendix/NO_GLOBAL_RELEASES.md](Release2.2/appendix/NO_GLOBAL_RELEASES.md)
+- **Code Audit:** [Release2.2/appendix/RELEASE_LOGIC_AUDIT.md](Release2.2/appendix/RELEASE_LOGIC_AUDIT.md)
+
+### Prerequisites
+- Release 2 complete (graph operations, MIN calculation)
+- **Release 2.1 complete (pattern engine, trigger detection, knowledge tracking)**
+
+### Blocks
+- Release 3 (context extraction needs intent detection)
+- Release 4 (recommendations need multi-output support)
+
+---
+
+## Release 2.5: Semantic Evaluation (Cross-Phase)
 
 **Status:** Infrastructure Ready  
 **Type:** Quality Assurance (runs alongside all phases)  
-**Documentation:** [Phase2.5/](Phase2.5/)
+**Documentation:** [Release2.5/](Release2.5/)
 
 ### Purpose
 Automated semantic evaluation for conversational AI using:
@@ -161,13 +270,13 @@ Automated semantic evaluation for conversational AI using:
 - Regression detection
 
 ### Documentation
-- **Overview:** [Phase2.5/README.md](Phase2.5/README.md)
-- **Quality Monitoring:** [Phase2.5/LLM_QA_MONITORING.md](Phase2.5/LLM_QA_MONITORING.md)
-- **Interaction Patterns:** [Phase2.5/USER_INTERACTION_PATTERNS.md](Phase2.5/USER_INTERACTION_PATTERNS.md)
+- **Overview:** [Release2.5/README.md](Release2.5/README.md)
+- **Quality Monitoring:** [Release2.5/LLM_QA_MONITORING.md](Release2.5/LLM_QA_MONITORING.md)
+- **Interaction Patterns:** [Release2.5/USER_INTERACTION_PATTERNS.md](Release2.5/USER_INTERACTION_PATTERNS.md)
 
 ---
 
-## Phase 3: Context Extraction 📋
+## Release 3: Context Extraction 📋
 
 **Status:** Planned  
 **Duration:** Week 5  
@@ -180,11 +289,11 @@ Automated semantic evaluation for conversational AI using:
 - Contradiction detection and resolution
 
 ### Prerequisites
-- Phase 2 complete (output identified, edges assessed, bottlenecks found)
+- Release 2 complete (output identified, edges assessed, bottlenecks found)
 
 ---
 
-## Phase 4: Recommendation Engine 📋
+## Release 4: Recommendation Engine 📋
 
 **Status:** Planned  
 **Duration:** Weeks 6-7  
@@ -197,11 +306,11 @@ Automated semantic evaluation for conversational AI using:
 - Pilot ranking with business constraints
 
 ### Prerequisites
-- Phase 3 complete (business context extracted)
+- Release 3 complete (business context extracted)
 
 ---
 
-## Phase 5: Report Generation 📋
+## Release 5: Report Generation 📋
 
 **Status:** Planned  
 **Duration:** Week 8  
@@ -216,11 +325,11 @@ Automated semantic evaluation for conversational AI using:
 - Staged approach
 
 ### Prerequisites
-- Phase 4 complete (recommendations generated)
+- Release 4 complete (recommendations generated)
 
 ---
 
-## Phase 6: Polish & Testing 📋
+## Release 6: Polish & Testing 📋
 
 **Status:** Planned  
 **Duration:** Weeks 9-10  
@@ -239,13 +348,13 @@ Automated semantic evaluation for conversational AI using:
 
 ### Implementation
 - **Master Plan:** [IMPLEMENTATION_DEPLOYMENT_PLAN.md](IMPLEMENTATION_DEPLOYMENT_PLAN.md)
-- **Current Phase:** [Phase2/PHASE2_IMPLEMENTATION_PLAN.md](Phase2/PHASE2_IMPLEMENTATION_PLAN.md)
+- **Current Phase:** [Release2/RELEASE2_IMPLEMENTATION_PLAN.md](Release2/RELEASE2_IMPLEMENTATION_PLAN.md)
 
 ### Data
-- **Validation Script:** `../../scripts/validate_phase2_data.py`
+- **Validation Script:** `../../scripts/validate_release2_data.py`
 - **Data Structure:** `../../src/data/README.md`
 - **Active Data:** `../../src/data/organizational_templates/`
-- **Archived Data:** `../../src/data/Archive/` (Phase 3+ files)
+- **Archived Data:** `../../src/data/Archive/` (Release 3+ files)
 
 ### Testing
 - **Test Fixtures:** `../../tests/fixtures/conversations/`
@@ -263,41 +372,41 @@ Automated semantic evaluation for conversational AI using:
 
 ## Next Steps
 
-### Immediate (Phase 2 Day 1)
-1. **Review readiness:** [Phase1.5/READY_FOR_PHASE2.md](Phase1.5/READY_FOR_PHASE2.md)
-2. **Start implementation:** [Phase2/PHASE2_IMPLEMENTATION_PLAN.md](Phase2/PHASE2_IMPLEMENTATION_PLAN.md)
+### Immediate (Release 2 Day 1)
+1. **Review readiness:** [Release1.5/READY_FOR_PHASE2.md](Release1.5/READY_FOR_PHASE2.md)
+2. **Start implementation:** [Release2/RELEASE2_IMPLEMENTATION_PLAN.md](Release2/RELEASE2_IMPLEMENTATION_PLAN.md)
 3. **Use test fixtures:** `../../tests/fixtures/conversations/`
-4. **Run validation:** `python3 ../../scripts/validate_phase2_data.py`
+4. **Run validation:** `python3 ../../scripts/validate_release2_data.py`
 
-### During Phase 2
+### During Release 2
 - Track progress daily
 - Write tests alongside implementation (TDD)
 - Run semantic evaluation as features complete
 - Update this status document
 
-### After Phase 2
+### After Release 2
 - Document learnings
-- Measure quality using Phase 2.5 framework
-- Plan Phase 3 based on Phase 2 experience
+- Measure quality using Release 2.5 framework
+- Plan Release 3 based on Release 2 experience
 
 ---
 
 ## Quality Gates
 
-### Phase 1 ✅
+### Release 1 ✅
 - [x] Firebase Auth working
 - [x] Firestore persistence operational
 - [x] Gemini streaming functional
 - [x] Session management working
 - [x] Technical logging operational
 
-### Phase 1.5 ✅
+### Release 1.5 ✅
 - [x] Data validated (46 unique outputs)
 - [x] Architecture decided (hybrid graph storage)
 - [x] Test fixtures created (5 scenarios)
 - [x] Evaluation framework ready
 
-### Phase 2 ✅
+### Release 2 ✅
 - [x] Graph infrastructure operational (Days 1-2)
 - [x] Output discovery >80% accuracy (Days 3-4)
 - [x] Graph persists across sessions
@@ -314,19 +423,19 @@ Automated semantic evaluation for conversational AI using:
 ## Risk Status
 
 ### Mitigated ✅
-- ✅ Duplicate output IDs (fixed in Phase 1.5)
-- ✅ Graph storage uncertainty (decided in Phase 1.5)
-- ✅ No test infrastructure (created in Phase 1.5)
-- ✅ No quality measurement (Phase 2.5 framework ready)
+- ✅ Duplicate output IDs (fixed in Release 1.5)
+- ✅ Graph storage uncertainty (decided in Release 1.5)
+- ✅ No test infrastructure (created in Release 1.5)
+- ✅ No quality measurement (Release 2.5 framework ready)
 
 ### Active ⚠️
-- ⚠️ Phase 2 complexity (mitigated by TDD approach)
+- ⚠️ Release 2 complexity (mitigated by TDD approach)
 - ⚠️ Semantic evaluation new territory (framework ready)
 
 ### Future 📋
-- 📋 Recommendation quality (Phase 4)
-- 📋 Report generation complexity (Phase 5)
-- 📋 User testing feedback (Phase 6)
+- 📋 Recommendation quality (Release 4)
+- 📋 Report generation complexity (Release 5)
+- 📋 User testing feedback (Release 6)
 
 ---
 
@@ -334,16 +443,16 @@ Automated semantic evaluation for conversational AI using:
 
 **Current Status:** 🟢 HIGH (90%)
 
-**Phase 2 Ready:** YES
+**Release 2 Ready:** YES
 - Data clean and validated
 - Architecture decided and documented
 - Test infrastructure in place
 - Evaluation framework ready
 
 **Overall Project:** 🟢 ON TRACK
-- Phase 1 complete and stable
-- Phase 1.5 thorough preparation
-- Clear path forward for Phase 2-6
+- Release 1 complete and stable
+- Release 1.5 thorough preparation
+- Clear path forward for Release 2-6
 
 ---
 

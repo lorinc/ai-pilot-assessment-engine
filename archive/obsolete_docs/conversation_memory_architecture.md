@@ -1413,13 +1413,13 @@ def get_context_for_question(question: str, user_id: str):
 
 ## Implementation Roadmap
 
-### Phase 1: Core Journal System (Week 1-2)
+### Release 1: Core Journal System (Week 1-2)
 1. **Define factor taxonomy** - List all trackable factors
 2. **Implement FactorJournalStore** - Basic CRUD operations
 3. **Set up Firestore collections** - `/factors/{id}` and `/factors/{id}/journal/{entry_id}`
 4. **Test basic logging** - Create journal entries, retrieve current state
 
-### Phase 2: LLM Integration (Week 3-4)
+### Release 2: LLM Integration (Week 3-4)
 1. **Extract factor updates from conversation** - Parse LLM reasoning for value changes
 2. **Auto-generate rationales** - LLM summarizes why value changed
 3. **Create conversation excerpts** - Format relevant exchanges

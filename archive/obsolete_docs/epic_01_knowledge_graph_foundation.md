@@ -183,7 +183,7 @@ Build the foundational knowledge layer that combines a NetworkX-based knowledge 
 
 ## Technical Implementation Plan
 
-### Phase 1: Data Preparation (Story 1.1)
+### Release 1: Data Preparation (Story 1.1)
 ```
 data/
 ├── knowledge/
@@ -215,7 +215,7 @@ data/
 }
 ```
 
-### Phase 2: Graph Construction (Story 1.1, 1.3)
+### Release 2: Graph Construction (Story 1.1, 1.3)
 ```python
 # src/knowledge/graph_builder.py
 import networkx as nx

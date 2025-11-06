@@ -85,13 +85,13 @@ Existing taxonomies (`AI_use_case_taxonomy.json`, `AI_dependency_taxonomy.json`)
 
 ### 2. Implementation Phases
 
-**Phase 1: Core Factor Definition (Day 1-2)** 🚨 CRITICAL
+**Release 1: Core Factor Definition (Day 1-2)** 🚨 CRITICAL
 - Define 15 core factors with complete 0-100 scales
 - Add scope dimensions and inference hints
 - **Deliverable:** `organizational_factors.json`
 - **Estimated Time:** 12-16 hours
 
-**Phase 2: Factor-to-Capability Mapping (Day 2-3)** 🚨 CRITICAL
+**Release 2: Factor-to-Capability Mapping (Day 2-3)** 🚨 CRITICAL
 - Define 6 AI capabilities
 - Map factors to capabilities with weights
 - **Deliverable:** `factor_capability_mapping.json`
@@ -300,14 +300,14 @@ ORGANIZATIONAL_FACTOR
 ### Immediate
 1. **Review roadmap** - Confirm scope and priorities
 2. **Assign owner** - Who will execute Phases 1-6?
-3. **Begin Phase 1** - Core factor definition (12-16 hours)
+3. **Begin Release 1** - Core factor definition (12-16 hours)
 
-### After Phase 1-2 (2-3 days)
+### After Release 1-2 (2-3 days)
 1. Update knowledge graph builder
 2. Create validation test suite
 3. Begin Epic 1 implementation
 
-### After Phase 1-4 (4-5 days)
+### After Release 1-4 (4-5 days)
 1. Full knowledge graph construction
 2. Project feasibility evaluation
 3. Epic 2-3 implementation
@@ -351,4 +351,4 @@ Comprehensive gap analysis complete. Clear path forward defined. Ready to procee
 
 **Status:** Planning Complete, Ready for Execution  
 **Blocker Status:** Identified and Roadmap Created  
-**Next Step:** Review and begin Phase 1 (Core Factor Definition)
+**Next Step:** Review and begin Release 1 (Core Factor Definition)

@@ -311,7 +311,7 @@ Results: JSON from LLM
 
 ## Validation Methodology
 
-### Phase 1: Structural Validation
+### Release 1: Structural Validation
 
 ```
 ✓ Graph constructs without errors
@@ -320,7 +320,7 @@ Results: JSON from LLM
 ✓ No isolated nodes
 ```
 
-### Phase 2: Reasoning Validation
+### Release 2: Reasoning Validation
 
 ```
 ✓ Paths exist between related nodes
@@ -329,7 +329,7 @@ Results: JSON from LLM
 ✓ Dependency strengths consistent
 ```
 
-### Phase 3: Domain Expert Review
+### Release 3: Domain Expert Review
 
 **Checklist:**
 - [ ] All major use cases covered?
@@ -345,7 +345,7 @@ Results: JSON from LLM
 4. Iterate
 ```
 
-### Phase 4: End-to-End Testing
+### Release 4: End-to-End Testing
 
 Test realistic scenarios:
 - New user exploration

@@ -353,14 +353,14 @@ LLM: "Recommendation: Go with Option 2. Reasoning: ..."
 
 ## Implementation Checklist
 
-### Phase 1: Vector Store Setup
+### Release 1: Vector Store Setup
 - [ ] Chunk taxonomies at meaningful boundaries
 - [ ] Embed chunks with text-embedding-004
 - [ ] Add rich metadata to each chunk
 - [ ] Create separate collections per taxonomy type
 - [ ] Test retrieval quality with sample queries
 
-### Phase 2: Retrieval Functions
+### Release 2: Retrieval Functions
 - [ ] Implement `semantic_search()` with metadata filtering
 - [ ] Implement `get_context_for_stage()` with stage routing
 - [ ] Implement `get_user_constraints()` for organizational context

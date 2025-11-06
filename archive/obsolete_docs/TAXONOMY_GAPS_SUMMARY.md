@@ -112,7 +112,7 @@ CONVERSATION → FACTOR → PREREQUISITE → CAPABILITY → ARCHETYPE
 
 ## The Fix: 6-Phase Roadmap
 
-### Phase 1-2: Minimum Viable (2-3 days) 🚨
+### Release 1-2: Minimum Viable (2-3 days) 🚨
 - Define 15 factors with scales
 - Map factors to 6 capabilities
 - **Unblocks:** Epic 1 implementation
@@ -244,7 +244,7 @@ CONVERSATION → FACTOR → PREREQUISITE → CAPABILITY → ARCHETYPE
 
 1. **Review** - Confirm scope (minimum/recommended/complete)
 2. **Assign** - Who will execute the phases?
-3. **Execute** - Begin Phase 1 (Core Factor Definition)
+3. **Execute** - Begin Release 1 (Core Factor Definition)
 
 **Detailed roadmap:** See `docs/taxonomy_enrichment_roadmap.md`
 

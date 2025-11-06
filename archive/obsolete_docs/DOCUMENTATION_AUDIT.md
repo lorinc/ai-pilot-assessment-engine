@@ -15,7 +15,7 @@ Identify obsolete documentation and salvage still-relevant decisions before crea
 - ✅ File structure and dependencies
 - ✅ Mock mode configuration
 - ✅ GCP project details
-- ❌ Phase 2-4 task descriptions (wrong model)
+- ❌ Release 2-4 task descriptions (wrong model)
 
 ### `/docs/2_technical_spec/scoped_factor_model.md`
 **Status:** OBSOLETE - Abstract factors  
@@ -68,7 +68,7 @@ Identify obsolete documentation and salvage still-relevant decisions before crea
 - ✅ Infrastructure requirements
 - ✅ API design patterns
 - ✅ Data persistence strategy
-- ❌ Conversation flow diagrams (if phase-based)
+- ❌ Conversation flow diagrams (if release-based)
 
 ### `/docs/2_technical_spec/gcp_data_schemas.md`
 **Status:** PARTIALLY OBSOLETE  

@@ -56,7 +56,7 @@ Challenge:
 
 ---
 
-## Phase 1: Unknown System Detection
+## Release 1: Unknown System Detection
 
 ### Detection Strategy
 
@@ -130,7 +130,7 @@ def is_system_context(entity, statement):
 
 ---
 
-## Phase 2: KG-Based Question Generation
+## Release 2: KG-Based Question Generation
 
 ### Query Knowledge Graph for Context
 
@@ -623,13 +623,13 @@ Which of these are you seeing?
 
 ## Implementation Checklist
 
-### Phase 1: Detection
+### Release 1: Detection
 - [ ] Implement NER-based system detection
 - [ ] Implement LLM-based system detection
 - [ ] Add context analysis for system mentions
 - [ ] Test with various user inputs
 
-### Phase 2: Question Generation
+### Release 2: Question Generation
 - [ ] Query KG for domains, categories, purposes
 - [ ] Generate question templates from KG structure
 - [ ] Add option handling (predefined + custom)

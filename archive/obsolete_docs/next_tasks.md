@@ -118,7 +118,7 @@ System updates:
 
 ### Implementation Approach
 
-**Phase 1: Unknown System Detection**
+**Release 1: Unknown System Detection**
 ```python
 def detect_unknown_system(user_statement):
     """
@@ -133,7 +133,7 @@ def detect_unknown_system(user_statement):
     return unknown
 ```
 
-**Phase 2: KG-Based Question Generation**
+**Release 2: KG-Based Question Generation**
 ```python
 def generate_system_discovery_questions(unknown_system, context):
     """

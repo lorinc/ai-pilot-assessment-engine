@@ -283,7 +283,7 @@ The `interim_data_files/` directory contains **high-quality taxonomies** from th
 
 ## Immediate Action Plan
 
-### Phase 1: Expand Function Coverage (High Priority)
+### Release 1: Expand Function Coverage (High Priority)
 **Goal:** Go from 3 functions to 20+ functions
 
 1. **Create 17 new function templates** using `business_core_function_taxonomy.json`:
@@ -316,7 +316,7 @@ The `interim_data_files/` directory contains **high-quality taxonomies** from th
 
 ---
 
-### Phase 2: Enrich Pain Points (High Priority)
+### Release 2: Enrich Pain Points (High Priority)
 **Goal:** Improve inference accuracy with detailed pain points
 
 1. **Create `pain_point_mapping.json`:**
@@ -392,10 +392,10 @@ The `interim_data_files/` directory contains **high-quality taxonomies** from th
 - **100+ capabilities** for assessment depth
 
 ### Recommended Priority
-1. **Phase 1** (Expand Functions) - Highest ROI
-2. **Phase 2** (Enrich Pain Points) - Improves core inference
+1. **Release 1** (Expand Functions) - Highest ROI
+2. **Release 2** (Enrich Pain Points) - Improves core inference
 3. **Phase 3** (Technical Depth) - Adds credibility
 4. **Phase 4** (Pilot Catalog) - Adds value
 5. **Phase 5** (Capabilities) - Nice to have
 
-**Next Step:** Should I start with Phase 1 and create the first few new function templates (e.g., Marketing, Customer Success, HR)?
+**Next Step:** Should I start with Release 1 and create the first few new function templates (e.g., Marketing, Customer Success, HR)?

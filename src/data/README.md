@@ -1,11 +1,11 @@
 # Data Taxonomy Documentation
 
-**Phase Scope:** Phase 1-2 Active Files Only  
+**Phase Scope:** Release 1-2 Active Files Only  
 **Last Updated:** 2025-11-05
 
 ## Overview
 
-This directory contains taxonomies and templates for Phase 1-2 implementation: output discovery and edge-based assessment.
+This directory contains taxonomies and templates for Release 1-2 implementation: output discovery and edge-based assessment.
 
 **Phase 3+ files moved to:** `Archive/` (recommendations, feasibility, context extraction)
 

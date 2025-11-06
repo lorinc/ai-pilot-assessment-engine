@@ -8,7 +8,7 @@
 
 ## 🎯 Current Objective
 
-Refactor POC from phase-based conversation flow to output-centric factor model with single-conversation assessment.
+Refactor POC from release-based conversation flow to output-centric factor model with single-conversation assessment.
 
 **Target:** Implement Increment 1 (Single Output Assessment) from IMPLEMENTATION_ROADMAP.md
 
@@ -16,7 +16,7 @@ Refactor POC from phase-based conversation flow to output-centric factor model w
 
 ## ✅ What's Built and Working
 
-### Infrastructure (Phase 1 - COMPLETE)
+### Infrastructure (Release 1 - COMPLETE)
 
 #### Core Components
 - ✅ **GeminiClient** (`core/gemini_client.py`)
@@ -75,7 +75,7 @@ Refactor POC from phase-based conversation flow to output-centric factor model w
   - **ACTION:** Rebuild for output-centric model
 
 - ✅ **AssessmentSession** (`models/data_models.py`)
-  - **NEEDS UPDATE:** Remove phase-based fields
+  - **NEEDS UPDATE:** Remove release-based fields
   - **ACTION:** Add factor field
 
 ### Testing Infrastructure

@@ -331,9 +331,9 @@ def assess_feasibility(pilot, user_context):
 
 ---
 
-## 4. Implementation Phases
+## 4. Implementation Releases
 
-### Phase 1: Core Infrastructure (Weeks 1-2)
+### Release 1: Core Infrastructure (Weeks 1-2)
 
 **Deliverables:**
 - GCP project setup (Firestore, Cloud Storage, Vertex AI, Firebase Auth)
@@ -355,7 +355,7 @@ def assess_feasibility(pilot, user_context):
 ✅ Firebase auth working  
 ✅ Firestore connection established
 
-### Phase 2: Discovery & Assessment (Weeks 3-4)
+### Release 2: Discovery & Assessment (Weeks 3-4)
 
 **Deliverables:**
 - Output discovery from natural language
@@ -378,7 +378,7 @@ def assess_feasibility(pilot, user_context):
 ✅ Correctly calculates MIN() and identifies bottlenecks  
 ✅ Evidence properly weighted by tier
 
-### Phase 3: Context Extraction (Week 5)
+### Release 3: Context Extraction (Week 5)
 
 **Deliverables:**
 - Natural business context extraction
@@ -397,7 +397,7 @@ def assess_feasibility(pilot, user_context):
 ✅ Asks for missing critical factors before recommendations  
 ✅ Handles contradictions gracefully
 
-### Phase 4: Recommendation Engine (Weeks 6-7)
+### Release 4: Recommendation Engine (Weeks 6-7)
 
 **Deliverables:**
 - LLM semantic inference for recommendations
@@ -419,7 +419,7 @@ def assess_feasibility(pilot, user_context):
 ✅ Checks feasibility and identifies gaps  
 ✅ Respects business constraints (cost, timeline)
 
-### Phase 5: Report Generation (Week 8)
+### Release 5: Report Generation (Week 8)
 
 **Deliverables:**
 - Comprehensive assessment report (PDF)
@@ -438,7 +438,7 @@ def assess_feasibility(pilot, user_context):
 ✅ Includes all 7 sections  
 ✅ Downloadable from UI
 
-### Phase 6: Polish & Testing (Weeks 9-10)
+### Release 6: Polish & Testing (Weeks 9-10)
 
 **Deliverables:**
 - Error handling
@@ -711,7 +711,7 @@ User: "Support tickets take forever to resolve"
 
 **Total Duration:** 10 weeks (2.5 months)
 
-| Phase | Duration | Deliverable |
+| Release | Duration | Deliverable |
 |-------|----------|-------------|
 | 1. Infrastructure | Weeks 1-2 | GCP setup, basic chat |
 | 2. Discovery & Assessment | Weeks 3-4 | Output ID, edge rating, MIN calc |
@@ -732,7 +732,7 @@ User: "Support tickets take forever to resolve"
 
 1. **Review & Approve:** Stakeholder review of this plan
 2. **Infrastructure Setup:** Run `deployment/setup-infrastructure.sh`
-3. **Kickoff Phase 1:** Set up development environment
+3. **Kickoff Release 1:** Set up development environment
 4. **Weekly Check-ins:** Progress review every Friday
 5. **Demo at Week 10:** Stakeholder demo
 

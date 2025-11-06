@@ -1,4 +1,4 @@
-# Quick Start Guide - Phase 1
+# Quick Start Guide - Release 1
 
 Get the AI Pilot Assessment Engine running in under 5 minutes.
 
@@ -41,7 +41,7 @@ streamlit run src/app.py
 4. See mock LLM response stream in real-time
 5. Check technical log in sidebar
 
-**That's it!** You're running Phase 1 infrastructure.
+**That's it!** You're running Release 1 infrastructure.
 
 ---
 
@@ -168,7 +168,7 @@ streamlit run src/app.py --server.port 8502
 
 ---
 
-## What's Working in Phase 1
+## What's Working in Release 1
 
 ✅ Streamlit chat interface  
 ✅ LLM streaming (mock mode)  
@@ -180,7 +180,7 @@ streamlit run src/app.py --server.port 8502
 
 ---
 
-## What's Coming in Phase 2
+## What's Coming in Release 2
 
 🔜 Output discovery from natural language  
 🔜 Edge-based assessment engine  
@@ -195,5 +195,5 @@ streamlit run src/app.py --server.port 8502
 
 - **Documentation:** See `src/README.md`
 - **Implementation Plan:** See `docs/2_technical_spec/IMPLEMENTATION_DEPLOYMENT_PLAN.md`
-- **Phase 1 Details:** See `docs/2_technical_spec/phase1_core_infrastructure.md`
-- **Completion Report:** See `PHASE1_COMPLETION.md`
+- **Release 1 Details:** See `docs/2_technical_spec/release1_core_infrastructure.md`
+- **Completion Report:** See `RELEASE1_COMPLETION.md`

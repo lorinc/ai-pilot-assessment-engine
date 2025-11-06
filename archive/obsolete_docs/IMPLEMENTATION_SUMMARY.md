@@ -256,13 +256,13 @@ What sounds good?"
 
 ## Migration Path
 
-### Phase 1: Core Exploratory Flow (Weeks 1-2)
+### Release 1: Core Exploratory Flow (Weeks 1-2)
 1. Implement unconfirmed inferences tracking
 2. Build always-proceed evaluation
 3. Add "what's next" with ROI
 4. Update orientative patterns
 
-### Phase 2: Enhanced Context (Weeks 3-4)
+### Release 2: Enhanced Context (Weeks 3-4)
 1. Auto-populate from factor journal
 2. Multi-session continuity
 3. Flexible entry points
@@ -306,7 +306,7 @@ What sounds good?"
 ## Next Steps
 
 1. **Review** this summary with team
-2. **Prioritize** Phase 1 implementation tasks
+2. **Prioritize** Release 1 implementation tasks
 3. **Define** factor taxonomy (categories, scales)
 4. **Implement** `FactorJournalStore` extensions
 5. **Build** evaluation and suggestion logic

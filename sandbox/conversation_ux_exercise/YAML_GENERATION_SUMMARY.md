@@ -117,7 +117,7 @@
 - Anti-pattern filtering: ~30% reduction → 517 viable
 - Cooldown/repetition: ~20% reduction → **~400 viable patterns**
 
-**Phase 1 Target**: Top 100 patterns for initial implementation
+**Release 1 Target**: Top 100 patterns for initial implementation
 
 ---
 
@@ -166,7 +166,7 @@ Every confusion, correction, or backtracking pattern:
 
 ## Next Steps for Implementation
 
-### Phase 2.5 Week 1: Core Infrastructure
+### Release 2.5 Week 1: Core Infrastructure
 **Files to use**:
 - `generated_triggers.yaml` - Detection patterns
 - `generated_knowledge_dimensions.yaml` - State tracking
@@ -185,7 +185,7 @@ Every confusion, correction, or backtracking pattern:
    - Semantic detection (LLM-based)
    - Condition evaluation
 
-### Phase 2.5 Week 2: Pattern Integration
+### Release 2.5 Week 2: Pattern Integration
 **Files to use**:
 - `generated_behaviors.yaml` - Behavior templates
 - `generated_triggers.yaml` - Trigger-behavior mappings
@@ -201,17 +201,17 @@ Every confusion, correction, or backtracking pattern:
    - Include active patterns
    - Include behavior templates
 
-### Phase 2.5 Week 3: Intent Detection
+### Release 2.5 Week 3: Intent Detection
 **Files to use**:
 - `generated_triggers.yaml` - All trigger types
 
 **Tasks**:
 1. Implement intent detection (LLM + heuristics)
-2. Replace phase-based routing
+2. Replace release-based routing
 3. Enable non-linear conversation
 4. Support multi-output assessment
 
-### Phase 2.5 Week 4: Refinement
+### Release 2.5 Week 4: Refinement
 **Tasks**:
 1. Log situation over conversations
 2. Analyze effectiveness
@@ -307,7 +307,7 @@ Total:                            1,827 lines (~73 KB)
 - ✅ Psychological safety principles applied
 - ✅ ~400 viable patterns after composition
 
-### Phase 2.5 Success (Future)
+### Release 2.5 Success (Future)
 - ⏳ No global phase logic in codebase
 - ⏳ Situation always sums to 100%
 - ⏳ User can assess multiple outputs
@@ -317,6 +317,6 @@ Total:                            1,827 lines (~73 KB)
 
 ---
 
-**Status**: ✅ YAML generation complete. Ready for Phase 2.5 implementation.
+**Status**: ✅ YAML generation complete. Ready for Release 2.5 implementation.
 
 **Next**: Review generated YAML files, then proceed with Week 1 implementation (Core Infrastructure).

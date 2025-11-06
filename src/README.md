@@ -1,4 +1,4 @@
-# Source Code - Phase 1: Core Infrastructure
+# Source Code - Release 1: Core Infrastructure
 
 This directory contains the production implementation of the AI Pilot Assessment Engine.
 
@@ -10,7 +10,7 @@ src/
 │   ├── llm_client.py      # Gemini LLM integration with streaming
 │   ├── firebase_client.py # Firebase Auth & Firestore persistence
 │   ├── session_manager.py # Session state management
-│   └── graph_manager.py   # NetworkX ↔ Firestore sync (Phase 2)
+│   └── graph_manager.py   # NetworkX ↔ Firestore sync (Release 2)
 ├── utils/                  # Utilities
 │   └── logger.py          # Technical logging
 ├── config/                 # Configuration
@@ -19,7 +19,7 @@ src/
 └── app.py                 # Streamlit application entry point
 ```
 
-## Phase 1 Components
+## Release 1 Components
 
 ### Core Modules
 
@@ -127,9 +127,9 @@ In mock mode:
 - Firebase operations succeed without real database
 - No GCP API calls or costs
 
-## Next Steps (Phase 2)
+## Next Steps (Release 2)
 
-Phase 2 will add:
+Release 2 will add:
 - Output discovery from natural language
 - Edge-based assessment engine
 - Evidence tracking with Bayesian aggregation

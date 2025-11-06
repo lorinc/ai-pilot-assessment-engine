@@ -666,13 +666,13 @@ def export_factors_for_colleague(
 
 ## Implementation Priority
 
-### Phase 1: Core Exploratory Flow (Week 1-2)
+### Release 1: Core Exploratory Flow (Week 1-2)
 1. ✅ Drop linear process enforcement
 2. ✅ Always-proceed project evaluation with confidence
 3. ✅ Unconfirmed inferences tracking
 4. ✅ "What's next" with ROI calculation
 
-### Phase 2: Enhanced Context (Week 3-4)
+### Release 2: Enhanced Context (Week 3-4)
 1. ✅ Auto-populate from factor journal
 2. ✅ Multi-session continuity patterns
 3. ✅ Flexible entry points

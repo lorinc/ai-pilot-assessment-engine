@@ -279,7 +279,7 @@ gcloud logging read 'resource.type="cloud_firestore_database"' \
 - **Expected:** $0.14 - $1.00
 - **Worst Case:** $5.00 (if testing heavily)
 
-### Next 90 Days (Phase 2-3 Development)
+### Next 90 Days (Release 2-3 Development)
 - **Expected:** $5 - $20
 - **Worst Case:** $50 (if running extensive tests)
 

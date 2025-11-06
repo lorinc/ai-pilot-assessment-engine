@@ -22,7 +22,7 @@ class LogFormatter:
         "taxonomy_search": "Searching taxonomy: {query} → {result_count} results",
         "output_identified": "Output identified: {output_name} (confidence: {confidence})",
         "context_inferred": "Context inferred: team={team}, system={system}",
-        "phase_transition": "Phase transition: {from_phase} → {to_phase}",
+        "release_transition": "Phase transition: {from_phase} → {to_phase}",
         "error": "Error: {error_message}",
         "warning": "Warning: {warning_message}",
     }

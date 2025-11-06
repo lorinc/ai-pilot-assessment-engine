@@ -19,7 +19,9 @@ A **conversational AI pilot recommendation system** that helps organizations ide
   
 - **Technical Specification:** [`docs/2_technical_spec/`](docs/2_technical_spec/)
   - [Implementation & Deployment Plan](docs/2_technical_spec/IMPLEMENTATION_DEPLOYMENT_PLAN.md) - Complete technical roadmap
-  - [Phase 2.5: UX & Quality Infrastructure](docs/2_technical_spec/Phase2.5/README.md) - Situational awareness + semantic evaluation
+  - [Release 2.1: Pattern Engine](docs/2_technical_spec/Release2.1/README.md) - Conversation pattern system
+  - [Release 2.2: Situational Awareness](docs/2_technical_spec/Release2.2/README.md) - Dynamic conversation management
+  - [Release 2.5: Semantic Evaluation](docs/2_technical_spec/Release2.5/README.md) - Quality monitoring infrastructure
 
 **🎯 Key Concepts:**
 - [What This System Does](#what-this-system-does)
@@ -234,7 +236,7 @@ Business Context:
 
 ## Conversation UX
 
-### Situational Awareness (Phase 2.5)
+### Situational Awareness (Release 2.5)
 
 **Problem**: Traditional chatbots use global phases (DISCOVERY → ASSESSMENT → ANALYSIS → RECOMMENDATIONS) that:
 - ❌ Force linear progression
@@ -311,7 +313,7 @@ User gets confused: {assessment: 30%, error_recovery: 40%, navigation: 15%, educ
 
 **Pattern Composition**: ~400 viable patterns after filtering by situation affinity, knowledge gates, and anti-patterns.
 
-### Quality Assurance (Phase 2.5)
+### Quality Assurance (Release 2.5)
 
 **Three-Layer Evaluation**:
 1. **Deterministic Tests (30%)**: Graph operations, MIN calculation, Bayesian aggregation
@@ -440,23 +442,30 @@ User gets confused: {assessment: 30%, error_recovery: 40%, navigation: 15%, educ
 
 ## Implementation Timeline
 
-**Total Duration:** 14 weeks (3.5 months)
+**Total Duration:** 17 weeks (4.25 months)
 
-| Phase | Duration | Deliverable |
+| Release | Duration | Deliverable |
 |-------|----------|-------------|
 | 1. Infrastructure | Weeks 1-2 | GCP setup, basic chat |
 | 2. Discovery & Assessment | Weeks 3-4 | Output ID, edge rating, MIN calc |
-| **2.5. UX & Quality Infrastructure** | **Weeks 5-8** | **Situational awareness, pattern system, semantic evaluation** |
-| 3. Context Extraction | Week 9 | Business context extraction |
-| 4. Recommendations | Weeks 10-11 | LLM inference, feasibility |
-| 5. Report Generation | Week 12 | PDF report |
-| 6. Polish & Testing | Weeks 13-14 | Demo-ready |
+| **2.1. Pattern Engine** | **Weeks 5-7** | **Conversation pattern system, trigger detection** |
+| **2.2. Situational Awareness** | **Weeks 8-11** | **Dynamic conversation management, intent detection** |
+| 2.5. Semantic Evaluation | Parallel (Weeks 6-11) | Quality monitoring infrastructure |
+| 3. Context Extraction | Week 12 | Business context extraction |
+| 4. Recommendations | Weeks 13-14 | LLM inference, feasibility |
+| 5. Report Generation | Week 15 | PDF report |
+| 6. Polish & Testing | Weeks 16-17 | Demo-ready |
 
-**Phase 2.5 Details** (4 weeks parallel tracks):
-- **Week 5**: Core infrastructure (SituationalAwareness class, remove phase logic)
-- **Week 6**: Pattern integration (40 triggers, 77 behaviors, situation affinity)
-- **Week 7**: Intent detection (replace phase routing, enable non-linear conversation)
-- **Week 8**: Refinement + semantic evaluation (tune weights, 3-layer testing)
+**Release 2.1 Details** (3 weeks):
+- **Week 5**: Core pattern system (loading, validation, knowledge tracking)
+- **Week 6**: Behavior library & selection (77 behaviors, selection algorithm)
+- **Week 7**: Testing infrastructure (semantic + behavioral + integration)
+
+**Release 2.2 Details** (4 weeks):
+- **Week 8**: Core infrastructure (SituationalAwareness class, remove release logic)
+- **Week 9**: Pattern integration (situation affinity, pattern selection)
+- **Week 10**: Intent detection (replace release routing, enable non-linear conversation)
+- **Week 11**: Refinement (tune weights, performance optimization)
 
 ---
 
@@ -469,17 +478,17 @@ User gets confused: {assessment: 30%, error_recovery: 40%, navigation: 15%, educ
 
 **Technical Specification:** ✅ Complete
 - Implementation and deployment plan documented
-- Phase 2.5 UX infrastructure specified
+- Release 2.5 UX infrastructure specified
 - Pattern system designed (40 triggers, 77 behaviors, 30 knowledge dimensions)
 
 **Pattern System:** ✅ Generated
 - `sandbox/conversation_ux_exercise/generated_triggers.yaml` (547 lines)
 - `sandbox/conversation_ux_exercise/generated_behaviors.yaml` (805 lines)
 - `sandbox/conversation_ux_exercise/generated_knowledge_dimensions.yaml` (475 lines)
-- Ready for Phase 2.5 implementation
+- Ready for Release 2.5 implementation
 
 **Implementation:** 📋 Ready to begin
 - See [Implementation Plan](docs/2_technical_spec/IMPLEMENTATION_DEPLOYMENT_PLAN.md)
-- See [Phase 2.5 Plan](docs/2_technical_spec/Phase2.5/README.md)
+- See [Release 2.5 Plan](docs/2_technical_spec/Release2.5/README.md)
 
 **Deployment:** 📋 Planned - Cloud Run serverless deployment with scale-to-zero cost optimization

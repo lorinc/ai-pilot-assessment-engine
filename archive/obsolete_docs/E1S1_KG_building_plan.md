@@ -1,4 +1,4 @@
-### Phase 1: Rapid Knowledge Integration and Graph Definition (Day 1)
+### Release 1: Rapid Knowledge Integration and Graph Definition (Day 1)
 Since the core building blocks (taxonomies) are already available in the sources, the first step is to integrate them quickly into a structured format that allows for querying relationships (the graph structure).
 #### 1. Define Core Nodes and Edges
 The project should focus on structuring the following three core dimensions into nodes:
@@ -10,7 +10,7 @@ The crucial edges (relationships) are already defined in the `automation_opportu
 For a few-days project, avoid complex ML model development. Instead, integrate the **Dependency Taxonomy** to create a crucial feasibility layer, addressing the requirement to consider organizational capabilities.
 * **Feasibility Layer:** Append the `AI_Implementation_Prerequisites` (Data Quality, Technical Expertise, Infrastructure, etc.) as attributes or linked dependency nodes to the `AI_Use_Case_Archetype` nodes.
 * *Example:* The **Classification** archetype requires **Labeled training data** and may depend on a **Feature Store**. This allows the KG to automatically list the prerequisites needed if a solution is selected.
-### Phase 2: Prioritize Low-Dependency Prototyping (Day 2-3)
+### Release 2: Prioritize Low-Dependency Prototyping (Day 2-3)
 Given the time constraints, the project should focus on proving the value proposition of the KG using use cases that rely on readily available models or pre-trained assets, minimizing the need for heavy data labeling, GPU compute, or MLOps expertise.
 #### 1. Focus on Retrieval and Generation Archetypes
 These archetypes often leverage **Pre-trained models or APIs** or **Third-party LLM services**, making them feasible for rapid prototyping in a solo project, especially when using **Open-source frameworks and libraries**.

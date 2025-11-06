@@ -1,6 +1,6 @@
-# Phase 2 Test Conversation Fixtures
+# Release 2 Test Conversation Fixtures
 
-**Purpose:** Test data for Phase 2 output discovery and assessment features
+**Purpose:** Test data for Release 2 output discovery and assessment features
 
 ---
 
@@ -130,7 +130,7 @@ def test_full_assessment_flow():
     assert agent.calculated_quality == fixture["expected_outcomes"]["calculated_quality"]["min_score"]
 ```
 
-### Semantic Evaluation (Phase 2.5)
+### Semantic Evaluation (Release 2.5)
 ```python
 def test_rating_inference_quality():
     fixture = load_fixture("finance_budget_contradictory")
@@ -218,8 +218,8 @@ def test_rating_inference_quality():
 
 ## Next Steps
 
-1. **Phase 2 Implementation:** Use these fixtures for TDD
-2. **Phase 2.5 Evaluation:** Build semantic tests around these scenarios
+1. **Release 2 Implementation:** Use these fixtures for TDD
+2. **Release 2.5 Evaluation:** Build semantic tests around these scenarios
 3. **Expand Coverage:** Add more edge cases as discovered
 4. **Real User Data:** Eventually supplement with anonymized real conversations
 
@@ -227,4 +227,4 @@ def test_rating_inference_quality():
 
 **Status:** ✅ 5 fixtures complete  
 **Coverage:** Happy path, vague input, contradictions, multi-bottleneck, edge cases  
-**Ready for:** Phase 2 implementation
+**Ready for:** Release 2 implementation

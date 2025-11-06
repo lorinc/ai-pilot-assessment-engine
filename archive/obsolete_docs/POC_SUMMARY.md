@@ -106,11 +106,11 @@
    - Create .env.template
 
 ### Week 1 (Days 1-3)
-- Complete Phase 1: Core Infrastructure
+- Complete Release 1: Core Infrastructure
 - Deliverable: Basic Streamlit app with Gemini integration
 
 ### Week 2 (Days 4-12)
-- Complete Phase 2: Discovery Engine
+- Complete Release 2: Discovery Engine
 - Complete Phase 3: Assessment Engine
 - Deliverable: Can complete Steps 1-7
 

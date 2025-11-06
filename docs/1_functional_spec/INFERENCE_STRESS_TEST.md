@@ -665,13 +665,13 @@ def infer_dependency_chain(user_message: str, graph: Graph) -> List[Edge]:
 - **Risk:** Poor inference quality, low user confidence, failed pilots
 
 ### Option B: Fill Critical Gaps First (RECOMMENDED)
-**Phase 1: Fill Data (4-5 days)**
+**Release 1: Fill Data (4-5 days)**
 1. Add dependency graph to 46 outputs (~8h)
 2. Map 100+ pain points to outputs (~16h)
 3. Add evidence tier examples (~4h)
 4. Document archetype prerequisites for 27 archetypes (~54h)
 
-**Phase 2: Implement (1.5-2 weeks)**
+**Release 2: Implement (1.5-2 weeks)**
 5. Build graph infrastructure
 6. Implement inference algorithms
 7. Implement feasibility checker
@@ -745,4 +745,4 @@ def infer_dependency_chain(user_message: str, graph: Graph) -> List[Edge]:
 - Implementation: 120-160 hours (~3-4 weeks)
 - **Total: 200-240 hours (~5-6 weeks)**
 
-**Recommendation:** Fill critical data gaps (Phase 1) before implementing graph model (Phase 2). Alternative B is production-ready design with clear implementation path.
+**Recommendation:** Fill critical data gaps (Release 1) before implementing graph model (Release 2). Alternative B is production-ready design with clear implementation path.

@@ -302,13 +302,13 @@ data_quality: 35% (60% confident, based on 4 mentions: 3 negative, 1 positive ab
 
 ## Implementation Priority
 
-### Phase 1: Core Mechanism (Week 1)
+### Release 1: Core Mechanism (Week 1)
 1. ✅ Remove `inferred_from_conversation` field
 2. ✅ Implement `recalculate_factor_from_journal()`
 3. ✅ Update `get_unconfirmed_factors()` to show evidence count
 4. ✅ Update status responses to show cumulative evidence
 
-### Phase 2: LLM Synthesis (Week 2)
+### Release 2: LLM Synthesis (Week 2)
 1. 🔲 Build LLM synthesis prompt
 2. 🔲 Implement consistency checking
 3. 🔲 Add recency weighting

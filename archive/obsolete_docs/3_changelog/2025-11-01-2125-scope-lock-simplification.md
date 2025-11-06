@@ -229,7 +229,7 @@ Output_Factor = MIN(Dependency_Quality, Team_Execution, Process_Maturity, System
 ## Next Steps
 
 1. ~~Answer open questions 1-6~~ ✅ COMPLETE
-2. Begin Phase 1: Data Model implementation (1-5 star schema)
+2. Begin Release 1: Data Model implementation (1-5 star schema)
 3. Implement MIN() factor calculation logic
 4. Prototype dependency graph engine (with loop detection)
 5. Test with synthetic data before user testing
@@ -251,7 +251,7 @@ Output_Factor = MIN(Dependency_Quality, Team_Execution, Process_Maturity, System
 
 ### Files Updated
 
-**Phase 1: Critical Documents (Core References)**
+**Release 1: Critical Documents (Core References)**
 1. `entity_relationship_model.md` (v1.1 → v1.2)
    - Updated all factor values from 0-100 to 1-5 stars
    - Added output-centric model reference
@@ -267,7 +267,7 @@ Output_Factor = MIN(Dependency_Quality, Team_Execution, Process_Maturity, System
    - Updated all 0-100 references to 1-5 stars
    - Added MIN() calculation references
 
-**Phase 2: Implementation Documents**
+**Release 2: Implementation Documents**
 4. `scoped_factor_model.md` (v1.0 → v1.1)
    - Marked as superseded
    - Updated all examples to star ratings
