@@ -253,3 +253,28 @@ quality_metrics:
     type: "integer"
     updated_by: "error_recovery"
     default: 0
+    
+  off_topic_count:
+    description: "Number of off-topic attempts"
+    type: "integer"
+    updated_by: "inappropriate_use_detection"
+    default: 0
+    
+  redirect_escalation_level:
+    description: "Escalation level of redirects (0=none, 1=gentle, 2=educational, 3=firm, 4=critical)"
+    type: "integer"
+    values: "0-4"
+    updated_by: "inappropriate_use_behaviors"
+    default: 0
+    
+  user_understands_purpose:
+    description: "User has been educated about system purpose"
+    type: "boolean"
+    updated_by: "inappropriate_use_education"
+    default: false
+    
+  humor_allowed:
+    description: "System allows brief humor/levity"
+    type: "boolean"
+    updated_by: "conversation_tone_management"
+    default: true

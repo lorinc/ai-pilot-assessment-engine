@@ -528,3 +528,172 @@ Want me to help set up a meeting?
 - T_REQUEST_HUMAN_CONSULTATION
 
 ---
+
+### 25. Multi-Pattern Responses (Merged or Sequential)
+**Added**: 2025-11-06
+
+**Context**: When the situation allows (i.e., the LLM does not have to transfer a lot of information in the next reply), the system could use TWO patterns at once, either merged or in sequence within a single answer.
+
+**Intent**: Enable the system to combine multiple conversation patterns in one response when appropriate. This adds significant freedom in guiding the conversation, feels more natural and intelligent, and reduces the number of back-and-forth exchanges.
+
+**Examples:**
+
+**Merged Pattern (Single Cohesive Response):**
+```
+User: "We need to assess sales forecasting"
+
+System combines:
+- B_IDENTIFY_OUTPUT (discovery)
+- B_CONFIRM_OUTPUT_DETAILS (discovery)
+
+Response: "Got it—Sales Forecast. Just to confirm: is this the forecast that 
+your Sales Team maintains in Salesforce, or a different forecasting process?"
+```
+
+**Why this works:** Both patterns are about the SAME output. No context jump—just natural clarification.
+
+**Another Good Example (Same Component):**
+```
+User: "The sales team is really junior"
+
+System combines:
+- B_ACKNOWLEDGE_EVIDENCE (assessment)
+- B_ASK_TEAM_SIZE (discovery)
+
+Response: "Got it—marking Team Execution as ⭐⭐ due to junior skill level. 
+How many people are on the sales team?"
+```
+
+**Why this works:** Both patterns focus on the SAME component (Team). Natural progression from quality to quantity.
+
+**Sequential Pattern (Two Distinct Parts):**
+```
+User: "The data quality is terrible"
+
+System combines:
+- B_ACKNOWLEDGE_EVIDENCE (assessment)
+- B_EXPLAIN_MIN_CALCULATION (education)
+
+Response: "That's important evidence—I'm marking Dependency Quality as ⭐⭐.
+
+By the way, since you mentioned data quality: the system uses MIN calculation, 
+meaning your output quality is limited by the weakest component. Even if your 
+team is excellent, poor data quality will cap the overall rating."
+```
+
+**Why this works:** Education is directly relevant to the evidence just provided (data quality → MIN calculation explains impact).
+
+**❌ BAD Example (Context Jumping):**
+```
+User: "The data quality is terrible"
+
+System combines:
+- B_ACKNOWLEDGE_EVIDENCE (assessment)
+- B_EXTRACT_TIMELINE (context_extraction)
+
+Response: "That's important evidence—I'm marking Dependency Quality as ⭐⭐.
+
+By the way, is there a deadline driving this assessment?"
+```
+
+**Why this FAILS:** Jumps from data quality to timeline—completely unrelated. Extremely jarring UX. User is thinking about data, suddenly asked about deadlines.
+
+---
+
+**When to Use Multi-Pattern:**
+1. **Low information density**: Primary response is brief (< 50 words)
+2. **Natural opportunity**: Secondary pattern feels like natural follow-up
+3. **High-priority secondary**: Context extraction or education opportunity
+4. **User engagement**: Keeps conversation flowing efficiently
+5. **Pattern compatibility**: Both patterns can coexist without confusion
+6. **CRITICAL: High relevance**: Secondary pattern MUST be highly relevant to the first. No context-jumping—very bad UX
+
+**When NOT to Use:**
+1. **High information density**: Primary response is complex or detailed
+2. **User overwhelm risk**: Too much information at once
+3. **Critical decision point**: User needs to focus on one thing
+4. **Pattern conflict**: Patterns have incompatible tones or goals
+5. **CRITICAL: Context jumping**: Secondary pattern changes topic or focus area—extremely jarring UX
+
+**Technical Requirements:**
+- **Pattern relevance scoring**: Measure semantic similarity between patterns (same output, same component, same context)
+- Pattern compatibility matrix (which patterns work well together)
+- Token budget estimation (ensure combined response fits context)
+- Priority scoring (which secondary patterns are worth including)
+- Natural transition generation (smooth flow between patterns)
+- Pattern history tracking (avoid repetitive combinations)
+- **Context continuity check**: Prevent topic/focus changes between patterns
+
+**Implementation Guidelines:**
+- Maximum 2 patterns per response (primary + secondary)
+- **CRITICAL: Check relevance first** - Secondary must relate to same output/component/context as primary
+- Secondary pattern should be lower priority or complementary
+- Total response should feel cohesive, not disjointed
+- Use transitions only when natural: "By the way..." (for related topics), NOT for topic changes
+- Monitor user feedback for overwhelm signals
+- **When in doubt, use single pattern** - Better to be focused than jarring
+
+**Benefits:**
+- More efficient conversations (fewer turns)
+- Feels more natural and intelligent
+- Opportunistic context extraction ("Sprinkle, don't survey")
+- Better user experience (less back-and-forth)
+- System appears more capable and aware
+
+**Related:**
+- TBD #20 (Pattern Chaining and Orchestration Engine)
+- TBD #21 (Pattern History and Variety Tracking)
+- PATTERN_RUNTIME_ARCHITECTURE.md (pattern selection algorithm)
+
+---
+
+### 26. Profanity as Emotional Intensity Multiplier (IMPLEMENTED)
+**Added**: 2025-11-06  
+**Status**: ✅ IMPLEMENTED in Release 2.1
+
+**Context**: Profanity in user messages needs proper interpretation. It's not a standalone signal of hostility or inappropriate behavior—it's an emotional intensity multiplier that amplifies whatever the user is expressing.
+
+**Intent**: The system must recognize that profanity shows strong emotion behind the message:
+
+**Examples:**
+1. **Extreme Pain Signal** (profanity + pain + assessment-related)
+   - "Our marketing automation is a fucking scam, does nothing, just bullshit"
+   - → EXTREME_PAIN_SIGNAL (critical priority, discovery category)
+   - → This is GOLD for us! User revealing major pain point
+
+2. **Extreme Frustration** (profanity + frustration + assessment-related)
+   - "Where the fuck is the sales data report quality list?"
+   - → FRUSTRATION_DETECTED (critical priority, error recovery)
+   - → User needs help NOW
+
+3. **Extreme Satisfaction** (profanity + satisfaction)
+   - "That's fucking awesome, mate! This works perfectly!"
+   - → EXTREME_SATISFACTION (low priority, acknowledge briefly)
+   - → Positive feedback, don't over-respond
+
+4. **Childish/Inappropriate** (profanity + no meaningful content)
+   - "Fucklala trallala fuck fuckety prumm prumm"
+   - → CHILDISH_BEHAVIOR (medium priority, inappropriate use)
+   - → No meaningful content to work with
+
+**Implementation:**
+- Profanity detection is NOT a standalone trigger
+- Profanity escalates priority of base emotions (frustration, pain, satisfaction)
+- System distinguishes between:
+  - Pure abuse (profanity without meaningful content) → CHILDISH_BEHAVIOR
+  - Frustrated questions (profanity + legitimate question) → EXTREME_FRUSTRATION
+  - Pain signals (profanity + dissatisfaction + assessment) → EXTREME_PAIN_SIGNAL
+  - Positive feedback (profanity + satisfaction) → EXTREME_SATISFACTION
+
+**Benefits:**
+- Captures critical pain signals that users express with strong emotion
+- Distinguishes between different types of emotional expression
+- Responds appropriately to context (pain vs frustration vs satisfaction)
+- Doesn't treat all profanity as hostile or inappropriate
+
+**Related:**
+- src/patterns/trigger_detector.py (implementation)
+- tests/patterns/test_trigger_detector.py::TestProfanityAsEmotionalMultiplier
+- docs/2_technical_spec/Release2.1/PATTERN_ENGINE_IMPLEMENTATION.md
+
+---

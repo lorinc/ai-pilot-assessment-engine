@@ -116,6 +116,19 @@ user_implicit:
       discovery: 0.7
       assessment: 0.5
       
+  - id: T_USER_CORRECTS_SYSTEM
+    description: "User points out system mistake"
+    keywords:
+      - "that's wrong"
+      - "no, that's not right"
+      - "you misunderstood"
+      - "actually"
+      - "correction"
+      - "that doesn't make sense"
+    priority: critical
+    situation_affinity:
+      error_recovery: 1.0
+      
   - id: T_MENTION_TEAM
     description: "User mentions team/people"
     signals:
@@ -381,3 +394,63 @@ system_reactive:
     situation_affinity:
       education: 0.3
       assessment: 0.7
+
+# INAPPROPRIATE USE TRIGGERS (8 triggers)
+inappropriate_use:
+  - id: T_OFF_TOPIC_DETECTED
+    type: user_implicit
+    description: "User message is unrelated to AI assessment"
+    keywords: ["weather", "joke", "story", "recipe", "game", "chat", "talk about"]
+    priority: medium
+    situation_affinity:
+      inappropriate_use: 1.0
+      
+  - id: T_REPEATED_OFF_TOPIC
+    type: system_reactive
+    description: "User has gone off-topic multiple times"
+    condition: "off_topic_count >= 2"
+    priority: high
+    situation_affinity:
+      inappropriate_use: 1.0
+      
+  - id: T_TESTING_LIMITS
+    type: user_implicit
+    description: "User is testing system boundaries"
+    keywords: ["can you", "will you", "are you able", "what if", "try this"]
+    priority: medium
+    situation_affinity:
+      inappropriate_use: 0.8
+      
+  - id: T_NONSENSE_INPUT
+    type: user_implicit
+    description: "User input is gibberish or nonsensical"
+    pattern: "random_characters_or_repeated_words"
+    priority: high
+    situation_affinity:
+      inappropriate_use: 1.0
+      
+  - id: T_HUMOR_DETECTED
+    type: user_implicit
+    description: "User is being funny but off-topic"
+    keywords: ["haha", "lol", "joke", "kidding", "just messing"]
+    priority: low
+    situation_affinity:
+      inappropriate_use: 0.5
+      error_recovery: 0.3
+      
+  - id: T_PERSISTENT_MISUSE
+    type: system_reactive
+    description: "User continues inappropriate use after redirects"
+    condition: "off_topic_count >= 4"
+    priority: critical
+    situation_affinity:
+      inappropriate_use: 1.0
+      
+  - id: T_NO_PROGRESS_MADE
+    type: system_reactive
+    description: "Multiple turns without assessment progress"
+    condition: "turns_since_progress >= 5 AND no_outputs_identified"
+    priority: high
+    situation_affinity:
+      inappropriate_use: 0.7
+      navigation: 0.6

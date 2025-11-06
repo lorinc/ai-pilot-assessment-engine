@@ -106,7 +106,12 @@ class KnowledgeTracker:
             
             # Progress tracking
             'turns_since_progress': 0,
-            'needs_navigation': False
+            'needs_navigation': False,
+            
+            # Inappropriate use tracking
+            'off_topic_count': 0,
+            'redirect_escalation_level': 0,
+            'humor_allowed': True
         }
     
     def _init_quality_metrics(self) -> Dict[str, Any]:

@@ -9,7 +9,12 @@ A **conversational AI pilot recommendation system** that helps organizations ide
 ## Quick Links
 
 **📖 Documentation:**
+- **Development Guidelines:** [`docs/dev_env_instructions/`](docs/dev_env_instructions/)
+  - [Development Workflow](docs/dev_env_instructions/DEVELOPMENT_WORKFLOW.md) - Vertical slicing, UAT checkpoints
+  - [Feature Ideas](docs/dev_env_instructions/FEATURE_IDEAS.md) - How to handle feature requests
+  
 - **Functional Specification:** [`docs/1_functional_spec/`](docs/1_functional_spec/)
+  - [TBD (To Be Decided)](docs/1_functional_spec/TBD.md) - Feature ideas and design decisions
   - [User Interaction Patterns](docs/1_functional_spec/USER_INTERACTION_PATTERNS.md) - Canonical conversation examples
   - [Situational Awareness](docs/1_functional_spec/SITUATIONAL_AWARENESS.md) - Dynamic conversation management (no global phases)
   - [Representation Model](docs/1_functional_spec/REPRESENTATION.md) - Edge-based factor model
@@ -488,18 +493,20 @@ User gets confused: {assessment: 30%, error_recovery: 40%, navigation: 15%, educ
 - Clean, validated YAML files regenerated from sandbox
 - Token usage optimized: 310 tokens/turn (96.8% reduction from 9,747)
 
-**Release 2.1 Implementation:** 🔄 In Progress (Week 1 Complete)
-- ✅ **Day 1-2: Data Models** - 12/12 tests passing (83% coverage)
-- ✅ **Day 3-4: Pattern Loader** - 17/18 tests passing (83% coverage)
-- ✅ **Day 5: Knowledge Tracker** - 20/20 tests passing (91% coverage)
-- ⏳ **Week 2**: Trigger Detector, Pattern Selector, LLM Integration
-- ⏳ **Week 3**: Testing Infrastructure
-- **Progress:** 33.3% complete (5/15 days)
-- **Tests:** 49/50 passing (98% pass rate)
-- **Cost Optimization:** Selective loading saves $16,986/year at scale
+**Release 2.1 Implementation:** ✅ **COMPLETE!**
+- **Week 1:** Data Models, Pattern Loader, Knowledge Tracker
+- **Week 2:** Trigger Detector, Pattern Selector, LLM Integration
+- **Week 3:** Testing, Documentation, Development Guidelines
+- **100% done** (15/15 days)
+- **104/108 tests passing (96%)**
+- Pattern YAML files production-ready (87 behaviors, 48 triggers, 34 knowledge dimensions)
+- **Token optimization: 96.8% reduction** (9,747 → 310 tokens per turn)
+- **Cost Impact:** ~$16,986/year savings at scale (100 conversations/day)
+- Development guidelines established: TDD + Vertical Slicing + UAT Checkpoints
 
-**Implementation:** 📋 Ready to begin
+**Implementation:** 
 - See [Implementation Plan](docs/2_technical_spec/IMPLEMENTATION_DEPLOYMENT_PLAN.md)
 - See [Release 2.5 Plan](docs/2_technical_spec/Release2.5/README.md)
 
-**Deployment:** 📋 Planned - Cloud Run serverless deployment with scale-to-zero cost optimization
+**Deployment:** 
+- Cloud Run serverless deployment with scale-to-zero cost optimization
