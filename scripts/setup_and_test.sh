@@ -38,7 +38,7 @@ echo "   ✓ Dependencies installed (pydantic, networkx, pytest)"
 echo ""
 echo "3. Running graph construction tests..."
 echo ""
-python3 scripts/test_graph_construction.py
+python3 scripts/one-shot/test_graph_construction.py
 
 # Store exit code
 TEST_EXIT_CODE=$?

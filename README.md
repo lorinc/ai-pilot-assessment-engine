@@ -7,7 +7,7 @@
 
 ---
 
-Look, I'll try to explain what's happening here, but honestly, it's a mess and I'm not even sure where to start. We have this whole chain of forecasts and plans that flow from marketing through sales to production planning, and somewhere along the way everything gets distorted, but nobody can tell me exactly where or why.
+<i>Look, I'll try to explain what's happening here, but honestly, it's a mess and I'm not even sure where to start. We have this whole chain of forecasts and plans that flow from marketing through sales to production planning, and somewhere along the way everything gets distorted, but nobody can tell me exactly where or why.
 
 So it starts with marketing. They create these campaign performance forecasts in HubSpot - you know, expected leads per campaign, conversion estimates, that kind of thing. The problem is, their forecasts are based on historical data that's scattered across three different tools. Some of it lives in HubSpot, some in Google Analytics, and some in this old Excel dashboard that nobody maintains anymore. The marketing team pulls numbers from wherever they can find them, but there's no single source of truth. Half the time they're working with stale data because nobody updates the Excel file, and the Google Analytics integration keeps breaking. So their campaign forecasts are already questionable before they even hand them off.
 
@@ -27,19 +27,18 @@ So we're stuck in this situation where everything kinda works - we do produce pr
 
 I've tried to map this out, to understand the flow, but it's like trying to untangle a ball of yarn. Marketing's campaign forecasts affect sales pipeline projections, which affect production orders, which affect inventory levels. But there are also informal processes - sales managers calling production planning directly to rush orders, marketing running campaigns that never make it into the forecast, production planning holding back capacity "just in case". None of this is documented, none of this is tracked.
 
-What I really need is to understand the whole system - not just the outputs, but how each team's work affects the next team's inputs, how each tool's limitations create workarounds, how each informal process introduces errors. Because right now, we're flying blind. We know we're overproducing, we know we're overstocked, but we don't know where to intervene to fix it. Do we need better marketing data? Better sales discipline? Better production planning tools? All of the above? I honestly don't know, and that's what's keeping me up at night.
-
-**→ The system turns this conversation into:**
-
-![Operational Visualization](ops_viz.png)
-
-*A clear graph showing dependencies, bottlenecks, and cascading failures across teams and systems*
+What I really need is to understand the whole system - not just the outputs, but how each team's work affects the next team's inputs, how each tool's limitations create workarounds, how each informal process introduces errors. Because right now, we're flying blind. We know we're overproducing, we know we're overstocked, but we don't know where to intervene to fix it. Do we need better marketing data? Better sales discipline? Better production planning tools? All of the above? I honestly don't know, and that's what's keeping me up at night.</i>
 
 ---
 
 </details>
 
 ---
+**→ The system turns this conversation into:**
+
+![Operational Visualization](docs/ops_viz.png)
+
+*A clear graph showing dependencies, bottlenecks, and cascading failures across teams and systems*
 
 A **conversational AI pilot recommendation system** that helps organizations identify AI opportunities through natural dialogue. The system assesses organizational outputs (deliverables, work products) through their contributing factors, identifies bottlenecks, and recommends targeted AI pilots to address them.
 
@@ -61,7 +60,7 @@ Release 3.0  ░░░░░░░░░░░░░░░░░░░░   0% �
 
 **Current Status:** Days 1-12 complete | 79/79 tests passing (100%)  
 **Latest:** Intent Detection with Gemini embeddings (Day 11-12) ✅  
-**📋 [Complete Feature Map](FEATURE_MAP.md)** - All features (implemented, in-progress, planned, future)  
+**📋 [Complete Feature Map](docs/FEATURE_MAP.md)** - All features (implemented, in-progress, planned, future)  
 **🧪 [Test Documentation](tests/README.md)** - Comprehensive test guide and results
 
 ---
@@ -619,13 +618,13 @@ User gets confused: {assessment: 30%, error_recovery: 40%, navigation: 15%, educ
 
 ### Future Features 💡
 
-21 features in ideation phase - see [Feature Map](FEATURE_MAP.md) for complete catalog
+21 features in ideation phase - see [Feature Map](docs/FEATURE_MAP.md) for complete catalog
 
 ---
 
 ## Documentation
 
-- **📋 [Feature Map](FEATURE_MAP.md)** - Complete feature catalog with progress tracking
+- **📋 [Feature Map](docs/FEATURE_MAP.md)** - Complete feature catalog with progress tracking
 - **🧪 [Test Documentation](tests/README.md)** - Comprehensive test guide
 - **🛠️ [Configuration Management](scripts/config_management/README.md)** - CRUD for patterns/triggers
 - **📖 [Implementation Plan](docs/2_technical_spec/IMPLEMENTATION_DEPLOYMENT_PLAN.md)** - Technical roadmap

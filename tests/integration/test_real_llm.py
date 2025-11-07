@@ -21,7 +21,7 @@ def real_llm_client():
     """Create LLM client with real Vertex AI.
     
     Note: Requires MOCK_LLM=false to be set BEFORE pytest starts.
-    Run with: ./run_real_tests.sh
+    Run with: ./tests/run_real_tests.sh
     """
     logger = TechnicalLogger(max_entries=10)
     client = LLMClient(logger=logger)

@@ -30,7 +30,7 @@ pytest tests/unit/ tests/integration/ -v
 
 ### Real GCP Tests (Manual - Requires Credentials)
 ```bash
-./run_real_tests.sh
+./tests/run_real_tests.sh
 ```
 
 **Results:**
@@ -87,7 +87,7 @@ pytest tests/unit/ tests/integration/ -v
 
 ### Pre-Release Validation (Real GCP Tests)
 ```bash
-./run_real_tests.sh
+./tests/run_real_tests.sh
 # 17 tests, ~10 seconds, ~$0.05 cost
 ```
 

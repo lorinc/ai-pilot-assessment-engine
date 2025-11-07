@@ -21,7 +21,7 @@ def real_firebase_client():
     """Create Firebase client with real credentials.
     
     Note: Requires MOCK_FIREBASE=false to be set BEFORE pytest starts.
-    Run with: ./run_real_tests.sh
+    Run with: ./tests/run_real_tests.sh
     """
     logger = TechnicalLogger(max_entries=10)
     client = FirebaseClient(logger=logger)

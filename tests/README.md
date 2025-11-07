@@ -404,7 +404,7 @@ open htmlcov/index.html
 - Check this README
 - Review test files for examples
 - See [Development Workflow](../docs/dev_env_instructions/DEVELOPMENT_WORKFLOW.md)
-- Consult [Feature Map](../FEATURE_MAP.md) for feature status
+- Consult [Feature Map](../docs/FEATURE_MAP.md) for feature status
 
 ---
 
