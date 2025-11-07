@@ -1,105 +1,97 @@
 """
-Semantic Intent Detection using OpenAI Embeddings
+Semantic Intent Detection using Gemini Embeddings
 
 Replaces regex-based trigger detection with semantic similarity.
-Uses OpenAI text-embedding-3-small for high-quality, low-cost embeddings.
+Uses Gemini text-embedding-004 via existing LLMClient infrastructure.
 
 Performance:
 - Latency: ~50-100ms per message (first time), ~0ms (cached)
-- Cost: $0.02 per 1M tokens (~$0.0000004 per message)
+- Cost: Gemini embeddings via Vertex AI
 - Quality: Better than regex, handles novel phrasings
+
+Day 11 Refactoring: Switched from OpenAI to Gemini for architectural consistency.
 """
 import os
+import sys
 import json
 import hashlib
+import yaml
 from pathlib import Path
-from typing import List, Dict, Any, Optional
+from typing import List, Dict, Any, Optional, Tuple
 import numpy as np
-from openai import OpenAI
+
+# Fix import path
+if __name__ != "__main__":
+    from src.core.llm_client import LLMClient
+else:
+    sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', '..'))
+    from src.core.llm_client import LLMClient
 
 
 class SemanticIntentDetector:
     """
-    Detects user intent using semantic similarity with OpenAI embeddings.
+    Detects user intent using semantic similarity with Gemini embeddings.
     
     Features:
-    - Embedding cache (avoid repeated API calls)
+    - Embedding cache (via LLMClient)
     - Cosine similarity scoring
     - Threshold-based matching
     - Fallback to regex for obvious cases
+    
+    Day 11: Refactored to use LLMClient instead of OpenAI.
     """
     
-    def __init__(self, cache_dir: str = '.cache/embeddings'):
+    def __init__(self, llm_client: Optional[LLMClient] = None, intent_examples_path: Optional[str] = None):
         """
         Initialize semantic intent detector.
         
         Args:
-            cache_dir: Directory to cache embeddings
+            llm_client: Optional LLMClient instance (creates new one if not provided)
+            intent_examples_path: Path to intent examples YAML file
         """
-        self.client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
-        self.cache_dir = Path(cache_dir)
-        self.cache_dir.mkdir(parents=True, exist_ok=True)
+        self.client = llm_client or LLMClient()
         
-        # In-memory cache for this session
-        self.embedding_cache: Dict[str, List[float]] = {}
+        # Load intent examples
+        if intent_examples_path is None:
+            # Default path
+            intent_examples_path = os.path.join(
+                os.path.dirname(__file__), '..', 'data', 'intent_examples.yaml'
+            )
         
-        # Load persistent cache
-        self._load_cache()
+        self.intent_examples = self._load_intent_examples(intent_examples_path)
+        
+        # Note: Caching is now handled by LLMClient
+        # No need for separate cache management
+    
+    def _load_intent_examples(self, path: str) -> Dict[str, List[str]]:
+        """Load intent examples from YAML file"""
+        try:
+            with open(path, 'r') as f:
+                data = yaml.safe_load(f)
+            
+            # Extract just the examples for each intent
+            examples = {}
+            for intent, config in data.items():
+                examples[intent] = config.get('examples', [])
+            
+            return examples
+        except Exception as e:
+            print(f"Warning: Could not load intent examples from {path}: {e}")
+            return {}
     
     def get_embedding(self, text: str, use_cache: bool = True) -> List[float]:
         """
-        Get embedding for text.
+        Get embedding for text using LLMClient.
         
         Args:
             text: Text to embed
-            use_cache: Whether to use cache
+            use_cache: Whether to use cache (always True, handled by LLMClient)
             
         Returns:
-            Embedding vector (1536 dimensions)
+            Embedding vector (768 dimensions for Gemini)
         """
-        # Normalize text
-        text = text.strip().lower()
-        
-        # Check in-memory cache
-        if use_cache and text in self.embedding_cache:
-            return self.embedding_cache[text]
-        
-        # Check persistent cache
-        cache_key = self._get_cache_key(text)
-        cache_file = self.cache_dir / f"{cache_key}.json"
-        
-        if use_cache and cache_file.exists():
-            with open(cache_file, 'r') as f:
-                data = json.load(f)
-                embedding = data['embedding']
-                self.embedding_cache[text] = embedding
-                return embedding
-        
-        # Get from API
-        try:
-            response = self.client.embeddings.create(
-                model="text-embedding-3-small",
-                input=text
-            )
-            embedding = response.data[0].embedding
-            
-            # Cache it
-            self.embedding_cache[text] = embedding
-            
-            if use_cache:
-                with open(cache_file, 'w') as f:
-                    json.dump({
-                        'text': text,
-                        'embedding': embedding,
-                        'model': 'text-embedding-3-small'
-                    }, f)
-            
-            return embedding
-            
-        except Exception as e:
-            print(f"Error getting embedding: {e}")
-            # Return zero vector as fallback
-            return [0.0] * 1536
+        # Delegate to LLMClient (handles caching internally)
+        return self.client.generate_embedding(text, caller="semantic_intent")
     
     def cosine_similarity(self, vec1: List[float], vec2: List[float]) -> float:
         """
@@ -128,11 +120,85 @@ class SemanticIntentDetector:
     def detect_intent(
         self,
         message: str,
+        threshold: float = 0.65
+    ) -> str:
+        """
+        Detect user intent from message using loaded examples.
+        
+        Args:
+            message: User message
+            threshold: Similarity threshold (0.0-1.0)
+            
+        Returns:
+            Intent name (e.g., 'discovery', 'assessment', 'analysis')
+        """
+        # Get message embedding
+        message_emb = self.get_embedding(message)
+        
+        # Compare against all intent examples
+        best_intent = 'clarification'  # Default fallback
+        best_similarity = 0.0
+        
+        for intent, examples in self.intent_examples.items():
+            for example in examples:
+                example_emb = self.get_embedding(example)
+                similarity = self.cosine_similarity(message_emb, example_emb)
+                
+                if similarity > best_similarity:
+                    best_similarity = similarity
+                    best_intent = intent
+        
+        # If similarity is too low, default to clarification
+        if best_similarity < threshold:
+            return 'clarification'
+        
+        return best_intent
+    
+    def detect_intent_with_confidence(
+        self,
+        message: str,
+        threshold: float = 0.65
+    ) -> Tuple[str, float]:
+        """
+        Detect user intent with confidence score.
+        
+        Args:
+            message: User message
+            threshold: Similarity threshold (0.0-1.0)
+            
+        Returns:
+            (intent, confidence) tuple
+        """
+        # Get message embedding
+        message_emb = self.get_embedding(message)
+        
+        # Compare against all intent examples
+        best_intent = 'clarification'
+        best_similarity = 0.0
+        
+        for intent, examples in self.intent_examples.items():
+            for example in examples:
+                example_emb = self.get_embedding(example)
+                similarity = self.cosine_similarity(message_emb, example_emb)
+                
+                if similarity > best_similarity:
+                    best_similarity = similarity
+                    best_intent = intent
+        
+        # If similarity is too low, default to clarification
+        if best_similarity < threshold:
+            return 'clarification', best_similarity
+        
+        return best_intent, best_similarity
+    
+    def detect_intent_legacy(
+        self,
+        message: str,
         examples: List[str],
         threshold: float = 0.75
     ) -> tuple[bool, float]:
         """
-        Detect if message matches intent based on examples.
+        Legacy method: Detect if message matches intent based on examples.
         
         Args:
             message: User message
@@ -162,91 +228,14 @@ class SemanticIntentDetector:
         
         Args:
             examples: List of example messages
-            force: Force recomputation even if cached
+            force: Force recomputation (ignored, LLMClient handles caching)
         """
         print(f"Precomputing embeddings for {len(examples)} examples...")
         for i, example in enumerate(examples, 1):
-            if force:
-                # Clear cache for this example first
-                text = example.strip().lower()
-                if text in self.embedding_cache:
-                    del self.embedding_cache[text]
-                cache_key = self._get_cache_key(text)
-                cache_file = self.cache_dir / f"{cache_key}.json"
-                if cache_file.exists():
-                    cache_file.unlink()
-            
             self.get_embedding(example)
             if i % 10 == 0:
                 print(f"  {i}/{len(examples)} done")
         print("✅ Precomputation complete")
-    
-    def _get_cache_key(self, text: str) -> str:
-        """Get cache key for text"""
-        return hashlib.md5(text.encode()).hexdigest()
-    
-    def _load_cache(self):
-        """Load persistent cache into memory"""
-        if not self.cache_dir.exists():
-            return
-        
-        for cache_file in self.cache_dir.glob('*.json'):
-            try:
-                with open(cache_file, 'r') as f:
-                    data = json.load(f)
-                    text = data['text']
-                    embedding = data['embedding']
-                    self.embedding_cache[text] = embedding
-            except Exception:
-                # Skip corrupted cache files
-                pass
-    
-    def clear_cache(self, examples: Optional[List[str]] = None):
-        """
-        Clear embedding cache.
-        
-        Args:
-            examples: If provided, clear only these examples. Otherwise clear all.
-        """
-        if examples:
-            # Clear specific examples
-            count = 0
-            for example in examples:
-                text = example.strip().lower()
-                
-                # Clear from memory
-                if text in self.embedding_cache:
-                    del self.embedding_cache[text]
-                    count += 1
-                
-                # Clear from disk
-                cache_key = self._get_cache_key(text)
-                cache_file = self.cache_dir / f"{cache_key}.json"
-                if cache_file.exists():
-                    cache_file.unlink()
-            
-            print(f"✅ Cleared {count} cached embeddings")
-        else:
-            # Clear all
-            self.embedding_cache.clear()
-            
-            # Clear persistent cache
-            count = 0
-            for cache_file in self.cache_dir.glob('*.json'):
-                cache_file.unlink()
-                count += 1
-            
-            print(f"✅ Cleared all {count} cached embeddings")
-    
-    def get_cache_stats(self) -> Dict[str, Any]:
-        """Get cache statistics"""
-        persistent_count = len(list(self.cache_dir.glob('*.json')))
-        
-        return {
-            'in_memory_count': len(self.embedding_cache),
-            'persistent_count': persistent_count,
-            'cache_dir': str(self.cache_dir)
-        }
 
 
 # Global instance (singleton pattern)

@@ -6,6 +6,57 @@
 
 ## Core Principles
 
+### 0. CRITICAL: Never Artificially Make Tests Pass
+
+**STOP AND ASK when tests fail for real reasons.**
+
+**What NOT to do:**
+- ❌ Mock away real dependencies just to make tests pass
+- ❌ Add fallback values (like `api_key='test-key'`) to bypass authentication
+- ❌ Skip real integration testing "for convenience"
+- ❌ Create pretty progress reports while burying bugs
+- ❌ Assume "it will work in production" without real testing
+
+**What TO do:**
+- ✅ **STOP** when tests fail for real reasons (missing API keys, missing services, etc.)
+- ✅ **ASK** the user what to do:
+  - Get real credentials/services?
+  - Redesign tests with proper mocking?
+  - Use different testing approach?
+- ✅ Test with **REAL** dependencies when possible (especially for integration/UAT)
+- ✅ Only mock when testing **isolation** is the goal, not convenience
+- ✅ Be **honest** about test limitations in reports
+
+**Purpose of Tests:**
+- Catch problems **EARLY**
+- Verify **REAL** behavior
+- Build **GENUINE** confidence
+- **NOT** to create pretty reports
+- **NOT** to hide bugs under hundreds of lines of code
+
+**When to Mock vs Real:**
+- **Mock:** Unit tests for isolated logic (e.g., testing prompt building without calling OpenAI)
+- **Real:** Integration tests, UAT demos, end-to-end flows
+- **Always document** what's mocked and why
+
+**Example - What I Did Wrong:**
+```python
+# BAD: Bypassing authentication to make tests pass
+api_key = api_key or os.getenv('OPENAI_API_KEY', 'test-key')  # ❌ WRONG!
+```
+
+**Example - What I Should Do:**
+```
+Tests failing: Need OpenAI API key.
+
+STOP. Ask user:
+1. Get API key to run real tests?
+2. Redesign with proper mocking?
+3. Different approach?
+```
+
+---
+
 ### 1. Test-Driven Development (TDD) - MANDATORY
 
 **RED → GREEN → REFACTOR**

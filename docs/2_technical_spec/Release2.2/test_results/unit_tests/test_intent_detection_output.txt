@@ -1,0 +1,82 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- /home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/lorinc/CascadeProjects/ai-pilot-assessment-engine
+configfile: pytest.ini
+plugins: asyncio-1.2.0, langsmith-0.4.41, anyio-4.11.0, mock-3.15.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 26 items
+
+tests/patterns/test_intent_routing.py::TestIntentDetection::test_detect_discovery_intent PASSED [  3%]
+tests/patterns/test_intent_routing.py::TestIntentDetection::test_detect_assessment_intent PASSED [  7%]
+tests/patterns/test_intent_routing.py::TestIntentDetection::test_detect_analysis_intent PASSED [ 11%]
+tests/patterns/test_intent_routing.py::TestIntentDetection::test_detect_recommendation_intent PASSED [ 15%]
+tests/patterns/test_intent_routing.py::TestIntentDetection::test_detect_navigation_intent PASSED [ 19%]
+tests/patterns/test_intent_routing.py::TestIntentDetection::test_detect_clarification_intent PASSED [ 23%]
+tests/patterns/test_intent_routing.py::TestNonLinearRouting::test_jump_from_discovery_to_analysis PASSED [ 26%]
+tests/patterns/test_intent_routing.py::TestNonLinearRouting::test_return_to_discovery_from_assessment PASSED [ 30%]
+tests/patterns/test_intent_routing.py::TestNonLinearRouting::test_multiple_intent_switches PASSED [ 34%]
+tests/patterns/test_intent_routing.py::TestIntentConfidence::test_high_confidence_detection PASSED [ 38%]
+tests/patterns/test_intent_routing.py::TestIntentConfidence::test_low_confidence_detection PASSED [ 42%]
+tests/patterns/test_intent_routing.py::TestIntentConfidence::test_fallback_to_clarification_on_low_confidence PASSED [ 46%]
+tests/patterns/test_intent_routing.py::TestIntentExamples::test_load_intent_examples PASSED [ 50%]
+tests/patterns/test_intent_routing.py::TestIntentExamples::test_match_against_examples PASSED [ 53%]
+tests/core/test_llm_embeddings.py::TestEmbeddingGeneration::test_generate_embedding_returns_vector PASSED [ 57%]
+tests/core/test_llm_embeddings.py::TestEmbeddingGeneration::test_generate_embedding_different_texts_different_vectors PASSED [ 61%]
+tests/core/test_llm_embeddings.py::TestEmbeddingGeneration::test_generate_embedding_similar_texts_similar_vectors PASSED [ 65%]
+tests/core/test_llm_embeddings.py::TestEmbeddingGeneration::test_generate_embedding_empty_text PASSED [ 69%]
+tests/core/test_llm_embeddings.py::TestEmbeddingGeneration::test_generate_embedding_with_caller_id PASSED [ 73%]
+tests/core/test_llm_embeddings.py::TestEmbeddingCaching::test_same_text_uses_cache PASSED [ 76%]
+tests/core/test_llm_embeddings.py::TestEmbeddingCaching::test_cache_key_case_insensitive PASSED [ 80%]
+tests/core/test_llm_embeddings.py::TestEmbeddingCaching::test_cache_key_strips_whitespace PASSED [ 84%]
+tests/core/test_llm_embeddings.py::TestEmbeddingBatchGeneration::test_generate_embeddings_batch PASSED [ 88%]
+tests/core/test_llm_embeddings.py::TestEmbeddingBatchGeneration::test_batch_generation_faster_than_sequential PASSED [ 92%]
+tests/core/test_llm_embeddings.py::TestEmbeddingErrorHandling::test_generate_embedding_api_error PASSED [ 96%]
+tests/core/test_llm_embeddings.py::TestEmbeddingErrorHandling::test_generate_embedding_with_logger PASSED [100%]
+ERROR: Coverage failure: total of 6 is less than fail-under=80
+
+
+=============================== warnings summary ===============================
+venv/lib/python3.12/site-packages/google/cloud/aiplatform/models.py:52
+  /home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/lib/python3.12/site-packages/google/cloud/aiplatform/models.py:52: FutureWarning: Support for google-cloud-storage < 3.0.0 will be removed in a future version of google-cloud-aiplatform. Please upgrade to google-cloud-storage >= 3.0.0.
+    from google.cloud.aiplatform.utils import gcs_utils
+
+-- Docs: https://docs.pytest.org/en/stable/how-to/capture-warnings.html
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Name                                            Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------------
+src/__init__.py                                     0      0   100%
+src/app.py                                        161    161     0%   3-303
+src/config/__init__.py                              0      0   100%
+src/config/settings.py                             24      5    79%   35-42, 50
+src/core/__init__.py                                0      0   100%
+src/core/firebase_client.py                       233    233     0%   3-568
+src/core/graph_manager.py                         241    241     0%   3-624
+src/core/llm_client.py                            129     77    40%   47-52, 77-107, 144-188, 215-253, 274-297, 321, 343-344, 358-368, 403
+src/core/session_manager.py                        82     82     0%   3-197
+src/engines/__init__.py                             0      0   100%
+src/engines/assessment.py                         103    103     0%   3-431
+src/engines/bottleneck.py                         113    113     0%   3-362
+src/engines/discovery.py                          175    175     0%   3-405
+src/orchestrator/__init__.py                        0      0   100%
+src/orchestrator/conversation_orchestrator.py     126    126     0%   3-408
+src/patterns/__init__.py                            0      0   100%
+src/patterns/knowledge_tracker.py                  68     68     0%   10-302
+src/patterns/llm_response_generator.py             75     75     0%   18-227
+src/patterns/models.py                             89     89     0%   7-217
+src/patterns/pattern_engine.py                    122    122     0%   21-384
+src/patterns/pattern_loader.py                    108    108     0%   7-246
+src/patterns/pattern_selector.py                  175    175     0%   11-454
+src/patterns/response_composer.py                  55     55     0%   10-229
+src/patterns/semantic_intent.py                    89     25    72%   27-28, 78-80, 116, 153, 190, 212-223, 233-238, 248-250
+src/patterns/situational_awareness.py              49     49     0%   16-173
+src/patterns/trigger_detector.py                  182    182     0%   12-659
+src/utils/__init__.py                               0      0   100%
+src/utils/logger.py                                39     21    46%   26-27, 45-57, 61, 65, 69, 73, 85-87, 91, 100-113
+-----------------------------------------------------------------------------
+TOTAL                                            2438   2285     6%
+Coverage HTML written to dir htmlcov
+FAIL Required test coverage of 80% not reached. Total coverage: 6.28%
+======================== 26 passed, 1 warning in 5.38s =========================

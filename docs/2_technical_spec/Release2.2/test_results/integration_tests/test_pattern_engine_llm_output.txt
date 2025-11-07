@@ -1,0 +1,55 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- /home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/bin/python3
+cachedir: .pytest_cache
+rootdir: /home/lorinc/CascadeProjects/ai-pilot-assessment-engine
+configfile: pytest.ini
+plugins: asyncio-1.2.0, langsmith-0.4.41, anyio-4.11.0, mock-3.15.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 5 items
+
+tests/patterns/test_pattern_engine_llm.py::TestPatternEngineLLMIntegration::test_pattern_engine_uses_llm_generator PASSED [ 20%]
+tests/patterns/test_pattern_engine_llm.py::TestPatternEngineLLMIntegration::test_process_message_generates_llm_response PASSED [ 40%]
+tests/patterns/test_pattern_engine_llm.py::TestPatternEngineLLMIntegration::test_llm_receives_composed_response PASSED [ 60%]
+tests/patterns/test_pattern_engine_llm.py::TestPatternEngineLLMIntegration::test_llm_receives_selective_context PASSED [ 80%]
+tests/patterns/test_pattern_engine_llm.py::TestLLMFallback::test_fallback_on_llm_error PASSED [100%]
+ERROR: Coverage failure: total of 20 is less than fail-under=80
+
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Name                                            Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------------
+src/__init__.py                                     0      0   100%
+src/app.py                                        161    161     0%   3-303
+src/config/__init__.py                              0      0   100%
+src/config/settings.py                             24     24     0%   3-54
+src/core/__init__.py                                0      0   100%
+src/core/firebase_client.py                       233    233     0%   3-568
+src/core/graph_manager.py                         241    241     0%   3-624
+src/core/llm_client.py                             90     90     0%   3-300
+src/core/session_manager.py                        82     82     0%   3-197
+src/engines/__init__.py                             0      0   100%
+src/engines/assessment.py                         103    103     0%   3-431
+src/engines/bottleneck.py                         113    113     0%   3-362
+src/engines/discovery.py                          175    175     0%   3-405
+src/orchestrator/__init__.py                        0      0   100%
+src/orchestrator/conversation_orchestrator.py     126    126     0%   3-408
+src/patterns/__init__.py                            0      0   100%
+src/patterns/knowledge_tracker.py                  68     41    40%   144, 153, 162, 171, 184-209, 218, 232, 250-261, 273-288, 300-302
+src/patterns/llm_response_generator.py             69     58    16%   42-44, 61-89, 106-164, 173, 195, 215-220
+src/patterns/models.py                             89     41    54%   40-51, 56, 85-94, 99, 122, 130, 169-200, 204, 217
+src/patterns/pattern_engine.py                    122     29    76%   58-61, 92, 107-118, 168-169, 219, 246-247, 257-267, 298-300, 326, 345-352, 360, 384
+src/patterns/pattern_loader.py                    108     89    18%   43-70, 74, 92-118, 123-130, 148-166, 178-179, 191-192, 196-198, 207-246
+src/patterns/pattern_selector.py                  175    117    33%   78, 104-123, 136-175, 188-208, 220-239, 271-290, 336, 367, 375-391, 403-420, 424-446
+src/patterns/response_composer.py                  55      5    91%   119, 155-164, 220
+src/patterns/semantic_intent.py                   111     89    20%   40-47, 61-102, 115-126, 146-157, 167-182, 186, 190-202, 211-239, 243-245, 261
+src/patterns/situational_awareness.py              49     15    69%   80, 122-133, 145-150, 154-155, 171-173
+src/patterns/trigger_detector.py                  182     59    68%   21-22, 51, 216, 226, 236, 280, 290-299, 303, 315-317, 327, 348, 357, 366, 381, 392, 413, 425-427, 438, 449, 460, 496, 509, 519, 531, 544, 557-563, 574-598, 609-611, 622, 634
+src/utils/__init__.py                               0      0   100%
+src/utils/logger.py                                39     39     0%   3-113
+-----------------------------------------------------------------------------
+TOTAL                                            2415   1930    20%
+Coverage HTML written to dir htmlcov
+FAIL Required test coverage of 80% not reached. Total coverage: 20.08%
+============================== 5 passed in 1.14s ===============================

@@ -1,0 +1,72 @@
+# Intent Examples for Semantic Intent Detection
+# Day 11 - Release 2.2
+
+# These examples are used to detect user intent via semantic similarity
+
+discovery:
+  description: "User wants to identify which output to work on (starting point)"
+  examples:
+    - "I want to work on sales forecasting"
+    - "We need to look at our CRM predictions"
+    - "Can you help me with revenue forecasting?"
+    - "Let's examine our customer churn prediction"
+    - "I'd like to work on inventory management"
+    - "We're trying to improve demand forecasting"
+    - "Which output should we start with?"
+    - "I need to identify an output"
+
+assessment:
+  description: "User is providing a rating or score (contains numbers/stars)"
+  examples:
+    - "The data quality is about 3 stars"
+    - "I'd rate the team execution as 4 out of 5"
+    - "Process maturity is pretty low, maybe 2 stars"
+    - "The system support is excellent, 5 stars"
+    - "Data quality is poor, 1 star"
+    - "Team capability is average, 3 out of 5"
+    - "I'd give it a 4"
+    - "That's a 2 out of 5"
+
+analysis:
+  description: "User wants analysis, insights, or bottleneck identification"
+  examples:
+    - "What's the bottleneck?"
+    - "Show me the analysis"
+    - "What's limiting our output quality?"
+    - "Where are we weakest?"
+    - "What should we focus on improving?"
+    - "What's the root cause?"
+
+recommendations:
+  description: "User wants AI pilot recommendations or solutions"
+  examples:
+    - "What AI solutions would help?"
+    - "Recommend some AI pilots"
+    - "What should we build?"
+    - "What AI could improve this?"
+    - "Suggest some solutions"
+    - "What would you recommend?"
+
+navigation:
+  description: "User wants to navigate, restart, or switch context (contains 'different', 'another', 'back', 'restart')"
+  examples:
+    - "Let's go back to the beginning"
+    - "I want to work on a different output"
+    - "Can we restart?"
+    - "Start over"
+    - "Go back"
+    - "Let's try something else"
+    - "Switch to another output"
+    - "Let's move to a different topic"
+
+clarification:
+  description: "User is confused or asking for help"
+  examples:
+    - "I don't understand"
+    - "What do you mean by that?"
+    - "Can you explain?"
+    - "I'm confused"
+    - "Help me understand"
+    - "What does that mean?"
+    - "Huh?"
+    - "What?"

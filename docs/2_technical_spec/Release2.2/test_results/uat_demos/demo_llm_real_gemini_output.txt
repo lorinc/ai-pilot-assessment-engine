@@ -1,0 +1,74 @@
+/home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/lib/python3.12/site-packages/google/cloud/aiplatform/models.py:52: FutureWarning: Support for google-cloud-storage < 3.0.0 will be removed in a future version of google-cloud-aiplatform. Please upgrade to google-cloud-storage >= 3.0.0.
+  from google.cloud.aiplatform.utils import gcs_utils
+/home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/lib/python3.12/site-packages/vertexai/generative_models/_generative_models.py:433: UserWarning: This feature is deprecated as of June 24, 2025 and will be removed on June 24, 2026. For details, see https://cloud.google.com/vertex-ai/generative-ai/docs/deprecations/genai-vertexai-sdk.
+  warning_logs.show_deprecation_warning()
+
+🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯
+  REAL GEMINI INTEGRATION TEST - Day 10 UAT (Refactored)
+🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯
+
+⚠️  This test makes REAL Gemini API calls via Vertex AI
+   Cost: ~$0.0001 per test run (Gemini is cheaper than OpenAI)
+
+📋 Architecture:
+   - Uses existing src/core/llm_client.py (Gemini via Vertex AI)
+   - Consistent with project infrastructure
+   - No duplicate LLM providers
+
+
+================================================================================
+  REAL Gemini Integration Test
+================================================================================
+
+Initializing Gemini via Vertex AI...
+✅ LLMClient initialized: gemini-2.5-flash
+   Project: ai-assessment-engine-476709
+   Location: europe-west1
+
+✅ LLMResponseGenerator initialized with Gemini
+
+📍 Test 1: Simple Reactive Response
+   User: 'We need to assess sales forecasting in our CRM'
+
+   Calling Gemini API...
+
+   ✅ Response received:
+   "Sales forecasting in your CRM is a great area to explore for an AI pilot. To ensure I'm on the right track, are you primarily looking to improve the accuracy of your current sales forecasts, predict future sales trends more effectively, or perhaps automate parts of the forecasting process?"
+
+   Length: 290 characters (~49 words)
+
+📍 Test 2: Reactive + Proactive Response
+   User: 'The data quality is about 3 stars'
+
+   Calling Gemini API...
+
+   ✅ Response received:
+   "Understood. I've noted your 3-star rating for data quality.
+
+To help us understand this better, which team or department is primarily responsible for managing and improving data quality within your organization?"
+
+   Length: 211 characters (~31 words)
+
+📊 Verification:
+
+   ✅ Both responses generated successfully
+   ✅ Responses are contextually different
+   ✅ Token budgets respected (~49 and ~31 words)
+
+================================================================================
+  ✅ REAL GEMINI INTEGRATION TEST PASSED
+================================================================================
+
+
+✅ Day 10 LLM Integration: VERIFIED WITH REAL GEMINI API
+
+🎉 Refactoring Complete:
+  - Removed OpenAI dependency
+  - Using existing Gemini/Vertex AI infrastructure
+  - Consistent with project architecture
+  - All tests passing
+
+Next Steps:
+  - Day 11-12: Intent detection
+  - Day 13: Multi-output support
+

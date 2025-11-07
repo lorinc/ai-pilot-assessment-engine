@@ -25,6 +25,7 @@ from src.patterns.pattern_loader import PatternLoader
 from src.patterns.knowledge_tracker import KnowledgeTracker
 from src.patterns.response_composer import ResponseComposer
 from src.patterns.situational_awareness import SituationalAwareness
+from src.patterns.llm_response_generator import LLMResponseGenerator
 
 
 class PatternEngine:
@@ -45,9 +46,10 @@ class PatternEngine:
         self.pattern_loader = PatternLoader()
         self.tracker = KnowledgeTracker()
         
-        # Release 2.2: Initialize situational awareness and response composer
+        # Release 2.2: Initialize situational awareness, response composer, and LLM generator
         self.situational_awareness = SituationalAwareness()
         self.response_composer = ResponseComposer()
+        self.llm_generator = LLMResponseGenerator()
         
         # Load patterns if directory provided
         self.patterns = []
@@ -129,10 +131,17 @@ class PatternEngine:
             # Step 3: Load selective context (CRITICAL for token optimization)
             context = self.load_selective_context(primary_pattern, self.tracker)
             
-            # Step 4: Generate LLM response (simulated for now)
+            # Step 3.5: Compose response (reactive + proactive) - Release 2.2
+            composed_response = self.response_composer.select_components(
+                triggers,
+                self.situational_awareness.composition,
+                self.patterns
+            )
+            
+            # Step 4: Generate LLM response using composed components
+            context['message'] = message
             llm_response = self._generate_llm_response(
-                message,
-                patterns_used,
+                composed_response,
                 context
             )
             
@@ -276,19 +285,19 @@ class PatternEngine:
     
     def _generate_llm_response(
         self,
-        message: str,
-        patterns: List[Dict[str, Any]],
+        composed_response,
         context: Dict[str, Any]
     ) -> str:
         """
-        Generate LLM response using pattern(s) and selective context.
+        Generate LLM response using composed components and selective context.
         
-        NOTE: This is a placeholder. In production, this would call
-        the actual LLM API with the selective context.
+        Release 2.2: Uses LLMResponseGenerator with reactive + proactive composition.
         """
-        # Simulated response for testing
-        pattern_ids = [p['id'] for p in patterns]
-        return f"Response using patterns: {', '.join(pattern_ids)}"
+        try:
+            return self.llm_generator.generate_response(composed_response, context)
+        except Exception as e:
+            # Fallback on error
+            return f"I encountered an error: {str(e)}. Let me try to help you anyway."
     
     def _update_turn_count(self):
         """Update turn count"""

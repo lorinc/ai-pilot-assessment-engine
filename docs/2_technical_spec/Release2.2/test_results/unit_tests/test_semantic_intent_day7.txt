@@ -1,0 +1,63 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- /home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/lorinc/CascadeProjects/ai-pilot-assessment-engine
+configfile: pytest.ini
+plugins: asyncio-1.2.0, langsmith-0.4.41, anyio-4.11.0, mock-3.15.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 1 item
+
+tests/patterns/test_semantic_intent.py::TestSemanticIntentDetector::test_cosine_similarity FAILED [100%]
+ERROR: Coverage failure: total of 1 is less than fail-under=80
+
+
+=================================== FAILURES ===================================
+______________ TestSemanticIntentDetector.test_cosine_similarity _______________
+tests/patterns/test_semantic_intent.py:49: in test_cosine_similarity
+    detector = SemanticIntentDetector()
+               ^^^^^^^^^^^^^^^^^^^^^^^^
+src/patterns/semantic_intent.py:39: in __init__
+    self.client = OpenAI(api_key=os.getenv('OPENAI_API_KEY'))
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+venv/lib/python3.12/site-packages/openai/_client.py:137: in __init__
+    raise OpenAIError(
+E   openai.OpenAIError: The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Name                                            Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------------
+src/__init__.py                                     0      0   100%
+src/app.py                                        161    161     0%   3-303
+src/config/__init__.py                              0      0   100%
+src/config/settings.py                             24     24     0%   3-54
+src/core/__init__.py                                0      0   100%
+src/core/firebase_client.py                       233    233     0%   3-568
+src/core/graph_manager.py                         241    241     0%   3-624
+src/core/llm_client.py                             90     90     0%   3-300
+src/core/session_manager.py                        82     82     0%   3-197
+src/engines/__init__.py                             0      0   100%
+src/engines/assessment.py                         103    103     0%   3-431
+src/engines/bottleneck.py                         113    113     0%   3-362
+src/engines/discovery.py                          175    175     0%   3-405
+src/orchestrator/__init__.py                        0      0   100%
+src/orchestrator/conversation_orchestrator.py     126    126     0%   3-408
+src/patterns/__init__.py                            0      0   100%
+src/patterns/knowledge_tracker.py                  68     68     0%   10-302
+src/patterns/models.py                             89     89     0%   7-217
+src/patterns/pattern_engine.py                    116    116     0%   21-375
+src/patterns/pattern_loader.py                    108    108     0%   7-246
+src/patterns/pattern_selector.py                  175    175     0%   11-454
+src/patterns/response_composer.py                  55     55     0%   10-229
+src/patterns/semantic_intent.py                   111     91    18%   40-47, 61-102, 115-126, 146-157, 167-182, 186, 190-202, 211-239, 243-245, 259-261
+src/patterns/situational_awareness.py              49     49     0%   16-173
+src/patterns/trigger_detector.py                  182    182     0%   12-659
+src/utils/__init__.py                               0      0   100%
+src/utils/logger.py                                39     39     0%   3-113
+-----------------------------------------------------------------------------
+TOTAL                                            2340   2320     1%
+Coverage HTML written to dir htmlcov
+FAIL Required test coverage of 80% not reached. Total coverage: 0.85%
+=========================== short test summary info ============================
+FAILED tests/patterns/test_semantic_intent.py::TestSemanticIntentDetector::test_cosine_similarity - openai.OpenAIError: The api_key client option must be set either by passing api_key to the client or by setting the OPENAI_API_KEY environment variable
+============================== 1 failed in 1.00s ===============================

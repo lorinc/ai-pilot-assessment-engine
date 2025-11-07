@@ -1,9 +1,11 @@
 """LLM client for Gemini integration via Vertex AI."""
 
 import os
-from typing import Iterator, Optional, Dict, Any
+import hashlib
+from typing import Iterator, Optional, Dict, Any, List
 import vertexai
 from vertexai.generative_models import GenerativeModel, GenerationConfig
+from vertexai.language_models import TextEmbeddingModel
 
 from config.settings import settings
 from utils.logger import TechnicalLogger, LogLevel
@@ -37,18 +39,25 @@ class LLMClient:
         self.model_name = model_name or settings.GEMINI_MODEL
         self.logger = logger
         
+        # Embedding cache (in-memory)
+        self.embedding_cache: Dict[str, List[float]] = {}
+        
         # Initialize Vertex AI
         if not settings.MOCK_LLM:
             vertexai.init(project=self.project_id, location=self.location)
             self.model = GenerativeModel(self.model_name)
+            # Initialize embedding model (text-embedding-004 for Gemini)
+            self.embedding_model = TextEmbeddingModel.from_pretrained("text-embedding-004")
             if self.logger:
                 self.logger.info("llm_init", f"Initialized Gemini: {self.model_name}", {
                     "project": self.project_id,
                     "location": self.location,
-                    "model": self.model_name
+                    "model": self.model_name,
+                    "embedding_model": "text-embedding-004"
                 })
         else:
             self.model = None
+            self.embedding_model = None
             if self.logger:
                 self.logger.warning("llm_init", "Mock mode enabled - no real LLM calls", {
                     "mock_mode": True
@@ -286,6 +295,100 @@ class LLMClient:
         parts.append(user_message)
         
         return "\n".join(parts)
+    
+    def generate_embedding(
+        self,
+        text: str,
+        caller: str = "unknown"
+    ) -> List[float]:
+        """
+        Generate embedding vector for text using Gemini embeddings.
+        
+        Args:
+            text: Text to embed
+            caller: Caller ID for logging
+            
+        Returns:
+            Embedding vector (768 dimensions for text-embedding-004)
+        """
+        # Normalize text for caching
+        normalized_text = text.strip().lower()
+        
+        # Check cache first
+        cache_key = hashlib.md5(normalized_text.encode()).hexdigest()
+        if cache_key in self.embedding_cache:
+            if self.logger:
+                self.logger.debug("embedding_cache_hit", f"Cache hit for text", {
+                    "caller": caller,
+                    "text_length": len(text),
+                    "cache_key": cache_key
+                })
+            return self.embedding_cache[cache_key]
+        
+        # Handle empty text
+        if not normalized_text:
+            zero_vector = [0.0] * 768
+            self.embedding_cache[cache_key] = zero_vector
+            return zero_vector
+        
+        # Generate embedding
+        try:
+            if settings.MOCK_LLM or self.embedding_model is None:
+                # Return mock embedding for testing
+                import random
+                random.seed(hash(normalized_text))
+                embedding = [random.random() for _ in range(768)]
+            else:
+                # Call Gemini embedding API
+                embeddings = self.embedding_model.get_embeddings([text])
+                embedding = embeddings[0].values
+            
+            # Cache the result
+            self.embedding_cache[cache_key] = embedding
+            
+            if self.logger:
+                self.logger.info("embedding_generated", f"Generated embedding", {
+                    "caller": caller,
+                    "text_length": len(text),
+                    "embedding_dim": len(embedding)
+                })
+            
+            return embedding
+            
+        except Exception as e:
+            if self.logger:
+                self.logger.error("embedding_error", f"Error generating embedding: {e}", {
+                    "caller": caller,
+                    "text_length": len(text),
+                    "error": str(e)
+                })
+            # Return zero vector as fallback
+            zero_vector = [0.0] * 768
+            self.embedding_cache[cache_key] = zero_vector
+            return zero_vector
+    
+    def generate_embeddings_batch(
+        self,
+        texts: List[str],
+        caller: str = "unknown"
+    ) -> List[List[float]]:
+        """
+        Generate embeddings for multiple texts efficiently.
+        
+        Args:
+            texts: List of texts to embed
+            caller: Caller ID for logging
+            
+        Returns:
+            List of embedding vectors
+        """
+        embeddings = []
+        
+        for text in texts:
+            embedding = self.generate_embedding(text, caller=caller)
+            embeddings.append(embedding)
+        
+        return embeddings
     
     def _mock_generate(self, prompt: str) -> str:
         """

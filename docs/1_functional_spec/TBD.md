@@ -1090,3 +1090,49 @@ python scripts/reload_patterns.py
 - All future pattern/trigger additions
 
 ---
+
+### 30. Enhanced Intent Detection Beyond Semantic Similarity
+**Added**: 2025-11-06
+
+**Context**: Day 11-12 implementation uses semantic similarity (embeddings) to detect user intent from messages. Current approach compares user message against example phrases for each intent type (discovery, assessment, analysis, recommendations, navigation, clarification). While this works for MVP, it has limitations when examples share vocabulary (e.g., "assess" appears in both discovery and navigation contexts).
+
+**Problem**: Pure semantic similarity can conflate intents when:
+- Examples use overlapping vocabulary but different meanings
+- User messages are ambiguous without context
+- Intent depends on entities (e.g., presence of ratings/numbers)
+- Dialogue acts matter (statement vs question vs command)
+
+**Current Mitigation**: Better training examples that avoid vocabulary overlap. For example:
+- Discovery: "I want to work on sales forecasting" (not "assess")
+- Assessment: "The data quality is 3 stars" (contains rating)
+- Navigation: "I want to work on a different output" (contains "different")
+
+**Future Improvements** (if needed):
+1. **Hybrid approach**: Semantic similarity + regex patterns for specific markers
+   - Detect ratings/numbers → likely assessment intent
+   - Detect "different", "another", "back" → likely navigation intent
+   - Detect question words → likely clarification/analysis intent
+
+2. **Entity extraction**: Identify what the user is talking about
+   - Output name → discovery
+   - Factor name + rating → assessment
+   - "bottleneck", "root cause" → analysis
+
+3. **Multi-stage classification**:
+   - Stage 1: Broad category (informing vs requesting vs navigating)
+   - Stage 2: Specific intent within category
+   - Stage 3: Entity extraction
+
+4. **Conversation state awareness** (NOT as anchor, but as disambiguation):
+   - If user says "3 stars" without context, check what was just asked
+   - Use state to break ties, not as primary signal
+
+**Decision**: Accept current semantic similarity approach for Release 2.2. Revisit if user testing shows frequent misclassifications.
+
+**Related:**
+- Release 2.2 Day 11-12 (Intent Detection)
+- `src/patterns/semantic_intent.py`
+- `src/data/intent_examples.yaml`
+- TBD #28 (Semantic Intent Detection - original)
+
+---

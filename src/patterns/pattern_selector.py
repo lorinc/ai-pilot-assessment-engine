@@ -303,22 +303,33 @@ class PatternSelector:
         - Situation affinity (how well pattern fits situation)
         - Trigger priority
         - Pattern history (avoid repetition)
+        - Pattern priority (critical patterns score higher)
         """
         score = 0.0
         
         # Situation affinity score (0.0 - 1.0)
-        affinity = self.calculate_affinity_score(pattern, trigger)
+        affinity = self.calculate_affinity_score(pattern, trigger, tracker)
         score += affinity * 10  # Weight: 10
         
         # Trigger priority bonus
-        priority = trigger.get('priority', 'medium')
-        priority_bonus = {
+        trigger_priority = trigger.get('priority', 'medium')
+        trigger_priority_bonus = {
             'critical': 5,
             'high': 3,
             'medium': 1,
             'low': 0
         }
-        score += priority_bonus.get(priority, 0)
+        score += trigger_priority_bonus.get(trigger_priority, 0)
+        
+        # Pattern priority bonus (new)
+        pattern_priority = pattern.get('priority', 'medium')
+        pattern_priority_bonus = {
+            'critical': 8,  # Critical patterns (confusion, errors) must fire
+            'high': 4,
+            'medium': 2,
+            'low': 0
+        }
+        score += pattern_priority_bonus.get(pattern_priority, 0)
         
         # Penalty for recently used patterns
         if avoid_recent and pattern['id'] in self.pattern_history:
@@ -329,17 +340,110 @@ class PatternSelector:
     def calculate_affinity_score(
         self,
         pattern: Dict[str, Any],
-        trigger: Dict[str, Any]
+        trigger: Dict[str, Any],
+        tracker: Optional[Any] = None
     ) -> float:
         """
         Calculate situation affinity score.
         
-        Returns affinity value for trigger's category, or default.
+        Enhanced to use knowledge dimensions for weighted scoring.
+        
+        Args:
+            pattern: Pattern definition
+            trigger: Detected trigger
+            tracker: Optional KnowledgeTracker for dimension-based scoring
+            
+        Returns:
+            Affinity score (0.0 - 1.0)
         """
         situation_affinity = pattern.get('situation_affinity', {})
         trigger_category = trigger.get('category', '')
         
-        return situation_affinity.get(trigger_category, self.default_affinity)
+        # Base affinity from trigger category
+        base_affinity = situation_affinity.get(trigger_category, self.default_affinity)
+        
+        # If no tracker, return base affinity
+        if not tracker:
+            return base_affinity
+        
+        # Enhanced: Weight by knowledge dimensions
+        dimension_weights = pattern.get('dimension_weights', {})
+        if not dimension_weights:
+            return base_affinity
+        
+        # Calculate weighted score based on knowledge state
+        weighted_score = 0.0
+        total_weight = 0.0
+        
+        for dimension, weight in dimension_weights.items():
+            # Get dimension value from tracker
+            dim_value = self._get_dimension_value(tracker, dimension)
+            if dim_value is not None:
+                weighted_score += dim_value * weight
+                total_weight += weight
+        
+        # Combine base affinity with dimension-weighted score
+        if total_weight > 0:
+            dimension_score = weighted_score / total_weight
+            # 70% base affinity, 30% dimension score
+            return (base_affinity * 0.7) + (dimension_score * 0.3)
+        
+        return base_affinity
+    
+    def _get_dimension_value(self, tracker: Any, dimension: str) -> Optional[float]:
+        """
+        Get normalized dimension value (0.0 - 1.0) from tracker.
+        
+        Handles different dimension types:
+        - Boolean: True=1.0, False=0.0
+        - Numeric: Normalized to 0.0-1.0
+        - Categorical: Mapped to numeric
+        """
+        # Try system knowledge first
+        if hasattr(tracker, 'system_knowledge'):
+            value = tracker.system_knowledge.get(dimension)
+            if value is not None:
+                return self._normalize_value(value)
+        
+        # Try user knowledge
+        if hasattr(tracker, 'user_knowledge'):
+            value = tracker.user_knowledge.get(dimension)
+            if value is not None:
+                return self._normalize_value(value)
+        
+        # Try conversation state
+        if hasattr(tracker, 'conversation_state'):
+            value = tracker.conversation_state.get(dimension)
+            if value is not None:
+                return self._normalize_value(value)
+        
+        return None
+    
+    def _normalize_value(self, value: Any) -> float:
+        """Normalize value to 0.0-1.0 range"""
+        if isinstance(value, bool):
+            return 1.0 if value else 0.0
+        elif isinstance(value, (int, float)):
+            # Assume already normalized or normalize to 0-1
+            if 0.0 <= value <= 1.0:
+                return float(value)
+            elif 0 <= value <= 5:  # Star rating
+                return value / 5.0
+            elif 0 <= value <= 100:  # Percentage
+                return value / 100.0
+            else:
+                return 0.5  # Unknown range, use default
+        else:
+            # Categorical - map common values
+            value_str = str(value).lower()
+            if value_str in ['high', 'yes', 'true', 'good']:
+                return 1.0
+            elif value_str in ['low', 'no', 'false', 'poor']:
+                return 0.0
+            elif value_str in ['medium', 'moderate', 'ok']:
+                return 0.5
+            else:
+                return 0.5  # Unknown, use default
     
     def record_pattern_usage(self, pattern_id: str):
         """

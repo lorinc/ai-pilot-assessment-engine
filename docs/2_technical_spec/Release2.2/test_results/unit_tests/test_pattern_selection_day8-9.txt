@@ -1,0 +1,69 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- /home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/lorinc/CascadeProjects/ai-pilot-assessment-engine
+configfile: pytest.ini
+plugins: asyncio-1.2.0, langsmith-0.4.41, anyio-4.11.0, mock-3.15.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 20 items
+
+tests/patterns/test_pattern_selection_enhanced.py::TestDimensionWeightedScoring::test_affinity_with_dimension_weights PASSED [  5%]
+tests/patterns/test_pattern_selection_enhanced.py::TestDimensionWeightedScoring::test_affinity_without_tracker PASSED [ 10%]
+tests/patterns/test_pattern_selection_enhanced.py::TestDimensionWeightedScoring::test_affinity_without_dimension_weights PASSED [ 15%]
+tests/patterns/test_pattern_selection_enhanced.py::TestValueNormalization::test_normalize_boolean_true PASSED [ 20%]
+tests/patterns/test_pattern_selection_enhanced.py::TestValueNormalization::test_normalize_boolean_false PASSED [ 25%]
+tests/patterns/test_pattern_selection_enhanced.py::TestValueNormalization::test_normalize_float_in_range PASSED [ 30%]
+tests/patterns/test_pattern_selection_enhanced.py::TestValueNormalization::test_normalize_star_rating PASSED [ 35%]
+tests/patterns/test_pattern_selection_enhanced.py::TestValueNormalization::test_normalize_percentage PASSED [ 40%]
+tests/patterns/test_pattern_selection_enhanced.py::TestValueNormalization::test_normalize_categorical_high PASSED [ 45%]
+tests/patterns/test_pattern_selection_enhanced.py::TestValueNormalization::test_normalize_categorical_low PASSED [ 50%]
+tests/patterns/test_pattern_selection_enhanced.py::TestValueNormalization::test_normalize_categorical_medium PASSED [ 55%]
+tests/patterns/test_pattern_selection_enhanced.py::TestPatternPrioritySystem::test_critical_pattern_scores_highest PASSED [ 60%]
+tests/patterns/test_pattern_selection_enhanced.py::TestPatternPrioritySystem::test_pattern_priority_levels PASSED [ 65%]
+tests/patterns/test_pattern_selection_enhanced.py::TestContextJumpingPrevention::test_same_category_allows_combination PASSED [ 70%]
+tests/patterns/test_pattern_selection_enhanced.py::TestContextJumpingPrevention::test_different_category_blocks_combination PASSED [ 75%]
+tests/patterns/test_pattern_selection_enhanced.py::TestContextJumpingPrevention::test_shared_output_allows_combination PASSED [ 80%]
+tests/patterns/test_pattern_selection_enhanced.py::TestScoringWeights::test_affinity_weight_dominates PASSED [ 85%]
+tests/patterns/test_pattern_selection_enhanced.py::TestScoringWeights::test_recent_pattern_penalty PASSED [ 90%]
+tests/patterns/test_pattern_selection_enhanced.py::TestIntegration::test_select_best_pattern_with_dimensions PASSED [ 95%]
+tests/patterns/test_pattern_selection_enhanced.py::TestIntegration::test_critical_pattern_always_wins PASSED [100%]
+ERROR: Coverage failure: total of 6 is less than fail-under=80
+
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Name                                            Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------------
+src/__init__.py                                     0      0   100%
+src/app.py                                        161    161     0%   3-303
+src/config/__init__.py                              0      0   100%
+src/config/settings.py                             24     24     0%   3-54
+src/core/__init__.py                                0      0   100%
+src/core/firebase_client.py                       233    233     0%   3-568
+src/core/graph_manager.py                         241    241     0%   3-624
+src/core/llm_client.py                             90     90     0%   3-300
+src/core/session_manager.py                        82     82     0%   3-197
+src/engines/__init__.py                             0      0   100%
+src/engines/assessment.py                         103    103     0%   3-431
+src/engines/bottleneck.py                         113    113     0%   3-362
+src/engines/discovery.py                          175    175     0%   3-405
+src/orchestrator/__init__.py                        0      0   100%
+src/orchestrator/conversation_orchestrator.py     126    126     0%   3-408
+src/patterns/__init__.py                            0      0   100%
+src/patterns/knowledge_tracker.py                  68     39    43%   144, 171, 184-209, 218, 232, 250-261, 273-288, 300-302
+src/patterns/models.py                             89     89     0%   7-217
+src/patterns/pattern_engine.py                    116    116     0%   21-375
+src/patterns/pattern_loader.py                    108    108     0%   7-246
+src/patterns/pattern_selector.py                  175     67    62%   52, 78, 104-123, 136-175, 205, 220-239, 271-290, 391, 412, 420, 435, 446
+src/patterns/response_composer.py                  55     55     0%   10-229
+src/patterns/semantic_intent.py                   111    111     0%   12-261
+src/patterns/situational_awareness.py              49     49     0%   16-173
+src/patterns/trigger_detector.py                  182    182     0%   12-659
+src/utils/__init__.py                               0      0   100%
+src/utils/logger.py                                39     39     0%   3-113
+-----------------------------------------------------------------------------
+TOTAL                                            2340   2203     6%
+Coverage HTML written to dir htmlcov
+FAIL Required test coverage of 80% not reached. Total coverage: 5.85%
+============================== 20 passed in 0.41s ==============================

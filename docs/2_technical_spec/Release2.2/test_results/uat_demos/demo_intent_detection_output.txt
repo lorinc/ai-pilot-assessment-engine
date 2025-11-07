@@ -1,0 +1,159 @@
+/home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/lib/python3.12/site-packages/google/cloud/aiplatform/models.py:52: FutureWarning: Support for google-cloud-storage < 3.0.0 will be removed in a future version of google-cloud-aiplatform. Please upgrade to google-cloud-storage >= 3.0.0.
+  from google.cloud.aiplatform.utils import gcs_utils
+/home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/lib/python3.12/site-packages/vertexai/generative_models/_generative_models.py:433: UserWarning: This feature is deprecated as of June 24, 2025 and will be removed on June 24, 2026. For details, see https://cloud.google.com/vertex-ai/generative-ai/docs/deprecations/genai-vertexai-sdk.
+  warning_logs.show_deprecation_warning()
+/home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/lib/python3.12/site-packages/vertexai/_model_garden/_model_garden_models.py:278: UserWarning: This feature is deprecated as of June 24, 2025 and will be removed on June 24, 2026. For details, see https://cloud.google.com/vertex-ai/generative-ai/docs/deprecations/genai-vertexai-sdk.
+  warning_logs.show_deprecation_warning()
+/home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/lib/python3.12/site-packages/vertexai/generative_models/_generative_models.py:433: UserWarning: This feature is deprecated as of June 24, 2025 and will be removed on June 24, 2026. For details, see https://cloud.google.com/vertex-ai/generative-ai/docs/deprecations/genai-vertexai-sdk.
+  warning_logs.show_deprecation_warning()
+/home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/lib/python3.12/site-packages/vertexai/_model_garden/_model_garden_models.py:278: UserWarning: This feature is deprecated as of June 24, 2025 and will be removed on June 24, 2026. For details, see https://cloud.google.com/vertex-ai/generative-ai/docs/deprecations/genai-vertexai-sdk.
+  warning_logs.show_deprecation_warning()
+
+🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯
+  UAT DEMO: Intent Detection - Day 11-12 (Release 2.2)
+🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯🎯
+
+================================================================================
+  Demo 1: Basic Intent Detection
+================================================================================
+
+Testing each intent type:
+
+✅ Message: "I want to work on sales forecasting"
+   Expected: discovery
+   Got: discovery (confidence: 1.00)
+
+✅ Message: "The data quality is 3 stars"
+   Expected: assessment
+   Got: assessment (confidence: 0.98)
+
+✅ Message: "What's the bottleneck?"
+   Expected: analysis
+   Got: analysis (confidence: 1.00)
+
+✅ Message: "What AI solutions would help?"
+   Expected: recommendations
+   Got: recommendations (confidence: 1.00)
+
+✅ Message: "I want to work on a different output"
+   Expected: navigation
+   Got: navigation (confidence: 1.00)
+
+✅ Message: "I don't understand"
+   Expected: clarification
+   Got: clarification (confidence: 1.00)
+
+
+================================================================================
+  Demo 2: Non-Linear Conversation Flow
+================================================================================
+
+Simulating a conversation where user jumps around:
+
+Turn 1:
+📝 User: "I want to work on sales forecasting"
+🎯 Intent: discovery
+
+Turn 2:
+📝 User: "What's the bottleneck?"
+🎯 Intent: analysis
+
+Turn 3:
+📝 User: "The data quality is 3 stars"
+🎯 Intent: assessment
+
+Turn 4:
+📝 User: "What AI solutions would help?"
+🎯 Intent: recommendations
+
+Turn 5:
+📝 User: "I want to work on a different output"
+🎯 Intent: navigation
+
+Turn 6:
+📝 User: "Can you explain?"
+🎯 Intent: clarification
+
+
+================================================================================
+  Demo 3: Handling Ambiguous Cases
+================================================================================
+
+Testing potentially ambiguous messages:
+
+📝 User: "I want to assess sales forecasting"
+🎯 Intent: discovery (confidence: 0.78)
+
+📝 User: "Let's go back"
+🎯 Intent: navigation (confidence: 0.87)
+
+📝 User: "The team is doing well"
+🎯 Intent: assessment (confidence: 0.67)
+
+📝 User: "What should we do?"
+🎯 Intent: clarification (confidence: 0.63)
+
+
+================================================================================
+  Demo 4: Confidence Scoring
+================================================================================
+
+Comparing confidence scores for clear vs ambiguous messages:
+
+🟢 CLEAR MESSAGES (high confidence):
+   "I want to work on sales forecasting"
+   → discovery (confidence: 1.00)
+
+   "The data quality is 3 stars"
+   → assessment (confidence: 0.98)
+
+   "What's the bottleneck?"
+   → analysis (confidence: 1.00)
+
+🟡 AMBIGUOUS MESSAGES (lower confidence):
+   "hmm"
+   → clarification (confidence: 0.68)
+
+   "okay"
+   → clarification (confidence: 0.53)
+
+   "asdfghjkl"
+   → clarification (confidence: 0.52)
+
+
+================================================================================
+  Demo 5: Comparison - Old vs New System
+================================================================================
+
+OLD SYSTEM (Phase-based routing):
+  ❌ User must follow: DISCOVERY → ASSESSMENT → ANALYSIS → RECOMMENDATIONS
+  ❌ Cannot jump around
+  ❌ Hard-coded phase transitions
+  ❌ AssessmentPhase enum
+
+NEW SYSTEM (Intent-based routing):
+  ✅ User can jump to any intent at any time
+  ✅ Non-linear conversation flow
+  ✅ Semantic understanding (not just keywords)
+  ✅ Flexible and natural
+
+Example conversation showing the difference:
+
+✅ Turn 1: "I want to work on sales forecasting" → discovery
+✅ Turn 2: "What's the bottleneck?" → analysis
+✅ Turn 3: "The data quality is 3 stars" → assessment
+✅ Turn 4: "What AI solutions would help?" → recommendations
+
+💡 This non-linear flow would be IMPOSSIBLE with the old phase-based system!
+
+================================================================================
+  ✅ Demo Complete!
+================================================================================
+
+Key Achievements:
+  ✅ Intent detection working with Gemini embeddings
+  ✅ Non-linear conversation flow enabled
+  ✅ Architectural consistency (single LLM provider)
+  ✅ No OpenAI dependencies
+  ✅ All 26 tests passing (12 embedding + 14 intent routing)
+

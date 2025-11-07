@@ -1,0 +1,67 @@
+============================= test session starts ==============================
+platform linux -- Python 3.12.3, pytest-8.4.2, pluggy-1.6.0 -- /home/lorinc/CascadeProjects/ai-pilot-assessment-engine/venv/bin/python
+cachedir: .pytest_cache
+rootdir: /home/lorinc/CascadeProjects/ai-pilot-assessment-engine
+configfile: pytest.ini
+plugins: asyncio-1.2.0, langsmith-0.4.41, anyio-4.11.0, mock-3.15.1, cov-7.0.0
+asyncio: mode=Mode.AUTO, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 18 items
+
+tests/config_management/test_manage.py::TestTriggerCRUD::test_create_trigger PASSED [  5%]
+tests/config_management/test_manage.py::TestTriggerCRUD::test_create_duplicate_trigger PASSED [ 11%]
+tests/config_management/test_manage.py::TestTriggerCRUD::test_show_trigger PASSED [ 16%]
+tests/config_management/test_manage.py::TestTriggerCRUD::test_show_nonexistent_trigger PASSED [ 22%]
+tests/config_management/test_manage.py::TestTriggerCRUD::test_list_triggers PASSED [ 27%]
+tests/config_management/test_manage.py::TestTriggerCRUD::test_list_triggers_by_category PASSED [ 33%]
+tests/config_management/test_manage.py::TestTriggerCRUD::test_update_trigger_add_example PASSED [ 38%]
+tests/config_management/test_manage.py::TestTriggerCRUD::test_update_trigger_remove_example PASSED [ 44%]
+tests/config_management/test_manage.py::TestTriggerCRUD::test_update_trigger_priority PASSED [ 50%]
+tests/config_management/test_manage.py::TestTriggerCRUD::test_update_trigger_threshold PASSED [ 55%]
+tests/config_management/test_manage.py::TestTriggerCRUD::test_update_nonexistent_trigger PASSED [ 61%]
+tests/config_management/test_manage.py::TestTriggerCRUD::test_delete_trigger PASSED [ 66%]
+tests/config_management/test_manage.py::TestTriggerCRUD::test_delete_without_confirm PASSED [ 72%]
+tests/config_management/test_manage.py::TestPatternCRUD::test_create_pattern PASSED [ 77%]
+tests/config_management/test_manage.py::TestPatternCRUD::test_show_pattern PASSED [ 83%]
+tests/config_management/test_manage.py::TestValidation::test_validate_valid_file PASSED [ 88%]
+tests/config_management/test_manage.py::TestIsolation::test_uses_temp_directory PASSED [ 94%]
+tests/config_management/test_manage.py::TestIsolation::test_temp_cleanup PASSED [100%]
+ERROR: Coverage failure: total of 1 is less than fail-under=80
+
+
+================================ tests coverage ================================
+_______________ coverage: platform linux, python 3.12.3-final-0 ________________
+
+Name                                            Stmts   Miss  Cover   Missing
+-----------------------------------------------------------------------------
+src/__init__.py                                     0      0   100%
+src/app.py                                        161    161     0%   3-303
+src/config/__init__.py                              0      0   100%
+src/config/settings.py                             24     24     0%   3-54
+src/core/__init__.py                                0      0   100%
+src/core/firebase_client.py                       233    233     0%   3-568
+src/core/graph_manager.py                         241    241     0%   3-624
+src/core/llm_client.py                             90     90     0%   3-300
+src/core/session_manager.py                        82     82     0%   3-197
+src/engines/__init__.py                             0      0   100%
+src/engines/assessment.py                         103    103     0%   3-431
+src/engines/bottleneck.py                         113    113     0%   3-362
+src/engines/discovery.py                          175    175     0%   3-405
+src/orchestrator/__init__.py                        0      0   100%
+src/orchestrator/conversation_orchestrator.py     126    126     0%   3-408
+src/patterns/__init__.py                            0      0   100%
+src/patterns/knowledge_tracker.py                  68     68     0%   10-302
+src/patterns/models.py                             89     89     0%   7-217
+src/patterns/pattern_engine.py                    116    116     0%   21-375
+src/patterns/pattern_loader.py                    108    108     0%   7-246
+src/patterns/pattern_selector.py                  175    175     0%   11-454
+src/patterns/response_composer.py                  55     55     0%   10-229
+src/patterns/semantic_intent.py                   111     89    20%   40-47, 61-102, 115-126, 146-157, 167-182, 186, 190-202, 211-239, 243-245, 261
+src/patterns/situational_awareness.py              49     49     0%   16-173
+src/patterns/trigger_detector.py                  182    182     0%   12-659
+src/utils/__init__.py                               0      0   100%
+src/utils/logger.py                                39     39     0%   3-113
+-----------------------------------------------------------------------------
+TOTAL                                            2340   2318     1%
+Coverage HTML written to dir htmlcov
+FAIL Required test coverage of 80% not reached. Total coverage: 0.94%
+============================== 18 passed in 1.16s ==============================
