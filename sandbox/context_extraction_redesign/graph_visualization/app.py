@@ -36,7 +36,8 @@ def main():
         st.subheader("Load Graph")
         graph_file = st.selectbox(
             "Select graph:",
-            ["example_cascading_failures_graph.json"]
+            ["example_cascading_failures_graph_enriched.json", "example_cascading_failures_graph.json"],
+            help="Enriched version includes processes and organizational constraints"
         )
         
         # Layout options
